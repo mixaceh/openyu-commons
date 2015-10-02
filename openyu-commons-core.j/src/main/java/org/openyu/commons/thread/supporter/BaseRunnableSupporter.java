@@ -24,8 +24,7 @@ import org.openyu.commons.util.AssertHelper;
  */
 public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(BaseRunnableSupporter.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(BaseRunnableSupporter.class);
 
 	// /** 取消 */
 	// private boolean cancel;
@@ -64,21 +63,17 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 
 	public void run() {
 		try {
-			LOGGER.info(new StringBuilder()
-					.append("T[" + Thread.currentThread().getId() + "] ")
-					.append("Running ")
+			LOGGER.info(new StringBuilder().append("Running ").append("T[" + Thread.currentThread().getId() + "] ")
 					.append(ClassHelper.getSimpleName(getClass())).toString());
 			// --------------------------------------------------
 			doRun();
 			// --------------------------------------------------
 		} catch (Throwable e) {
-			LOGGER.error(
-					new StringBuilder("Exception encountered during run()")
-							.toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during run()").toString(), e);
 		}
 		//
 		if (this.shutdown) {
-			LOGGER.info(new StringBuilder().append("Interrupted ")
+			LOGGER.info(new StringBuilder().append("Interrupted ").append("T[" + Thread.currentThread().getId() + "] ")
 					.append(ClassHelper.getSimpleName(getClass())).toString());
 		}
 	}
@@ -99,8 +94,7 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 			this.shutdown = false;
 			this.executorService.submit(this);
 		} else {
-			AssertHelper.notNull(null,
-					"ThreadService or ExecutorService must not be null");
+			AssertHelper.notNull(null, "ThreadService or ExecutorService must not be null");
 		}
 	}
 
@@ -168,7 +162,6 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 	// }
 
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.MULTI_LINE_STYLE);
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 }

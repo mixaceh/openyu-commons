@@ -1,18 +1,13 @@
 package org.openyu.commons.security.impl;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-
-import java.util.UUID;
 
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
-import org.openyu.commons.security.AuthKey;
-import org.openyu.commons.security.impl.AuthKeyServiceImpl;
-import org.openyu.commons.thread.ThreadHelper;
+import org.openyu.commons.security.AuthKeyService;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
@@ -22,16 +17,17 @@ public class AuthKeyServiceConfigurerTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static AuthKeyServiceConfigurer authKeyServiceConfigurer;
+	private static AuthKeyService authKeyServiceConfigurer;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		applicationContext = new ClassPathXmlApplicationContext(new String[] { "applicationContext-init.xml", //
+		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
+				"applicationContext-init.xml", //
 				"org/openyu/commons/thread/applicationContext-thread.xml", //
 				"org/openyu/commons/service/applicationContext-service.xml", //
 				"org/openyu/commons/security/applicationContext-security.xml",//
 		});
-		authKeyServiceConfigurer = (AuthKeyServiceConfigurer) applicationContext.getBean("authKeyServiceConfigurer");
+		authKeyServiceConfigurer = (AuthKeyService) applicationContext.getBean("authKeyServiceConfigurer");
 	}
 
 	@Test

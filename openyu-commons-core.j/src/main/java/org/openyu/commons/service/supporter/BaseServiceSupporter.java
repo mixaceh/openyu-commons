@@ -17,6 +17,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.ResourceLoader;
 import org.openyu.commons.lang.event.EventAttach;
 import org.openyu.commons.lang.event.EventHelper;
 import org.openyu.commons.mark.Supporter;
@@ -44,20 +46,25 @@ import org.openyu.commons.util.LocaleHelper;
  * 參考 com.google.common.util.concurrent.AbstractService
  *
  */
-public abstract class BaseServiceSupporter extends BaseModelSupporter implements
-		BaseService, Supporter, ApplicationContextAware, BeanFactoryAware,
-		InitializingBean, DisposableBean, BeanNameAware {
+public abstract class BaseServiceSupporter extends BaseModelSupporter
+		implements BaseService, Supporter, ApplicationContextAware, BeanFactoryAware, InitializingBean, DisposableBean,
+		BeanNameAware, ResourceLoaderAware {
 
 	private static final long serialVersionUID = 5282015590204095456L;
 
 	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(BaseServiceSupporter.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseServiceSupporter.class);
 
 	protected transient ApplicationContext applicationContext;
 
 	protected transient DefaultListableBeanFactory beanFactory;
 
+	/**
+	 * bean id
+	 */
+	private String beanId;
+
+	protected transient ResourceLoader resourceLoader;
 	/**
 	 * start/shutdown/restart lock
 	 */
@@ -112,11 +119,6 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 	 * 是否使用createInstance()建構
 	 */
 	private static final int CREATE_INSTANCE = 0x00000200;// 1 << 9 = 512
-
-	/**
-	 * bean id
-	 */
-	private String beanId;
 
 	/**
 	 * 顯示名稱
@@ -185,6 +187,10 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 
 	public void setBeanName(String beanName) {
 		this.beanId = beanName;
+	}
+
+	public void setResourceLoader(ResourceLoader resourceLoader) {
+		this.resourceLoader = resourceLoader;
 	}
 
 	/**
@@ -316,8 +322,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 
 	public String getMessage(String key, Object[] params, Locale locale) {
 		if (locale == null) {
-			return this.applicationContext.getMessage(key, params,
-					LocaleHelper.getLocale());
+			return this.applicationContext.getMessage(key, params, LocaleHelper.getLocale());
 		}
 		return this.applicationContext.getMessage(key, params, locale);
 	}
@@ -329,9 +334,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 	 * @return
 	 */
 	public final boolean addServiceCallback(ServiceCallback... actions) {
-		AssertHelper.notNull(actions,
-				new StringBuilder().append("ServiceCallbacks must not be null")
-						.toString());
+		AssertHelper.notNull(actions, new StringBuilder().append("ServiceCallbacks must not be null").toString());
 		//
 		boolean result = false;
 		for (ServiceCallback action : actions) {
@@ -347,9 +350,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 	 * @return
 	 */
 	public final boolean addServiceCallback(ServiceCallback action) {
-		AssertHelper.notNull(action,
-				new StringBuilder().append("ServiceCallback must not be null")
-						.toString());
+		AssertHelper.notNull(action, new StringBuilder().append("ServiceCallback must not be null").toString());
 		//
 		try {
 			this.lock.lockInterruptibly();
@@ -364,22 +365,16 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 					throw new ServiceException("Can not add ServiceCallback");
 				}
 			} catch (ServiceException e) {
-				LOGGER.error(new StringBuilder(
-						"Exception encountered during addServiceCallback()")
-						.toString(), e);
+				LOGGER.error(new StringBuilder("Exception encountered during addServiceCallback()").toString(), e);
 				throw e;
 			} catch (Throwable e) {
-				LOGGER.error(new StringBuilder(
-						"Exception encountered during addServiceCallback()")
-						.toString(), e);
+				LOGGER.error(new StringBuilder("Exception encountered during addServiceCallback()").toString(), e);
 				throw new ServiceException(e);
 			} finally {
 				this.lock.unlock();
 			}
 		} catch (InterruptedException e) {
-			LOGGER.error(new StringBuilder(
-					"Exception encountered during addServiceCallback()")
-					.toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during addServiceCallback()").toString(), e);
 			throw new ServiceException(e);
 		}
 	}
@@ -421,21 +416,18 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 			this.lock.lockInterruptibly();
 			try {
 				if (isStates(STARTING)) {
-					throw new IllegalStateException(new StringBuilder()
-							.append(getDisplayName()).append(" is starting")
-							.toString());
+					throw new IllegalStateException(
+							new StringBuilder().append(getDisplayName()).append(" is starting").toString());
 				}
 				//
 				if (isStates(STARTED)) {
-					throw new IllegalStateException(new StringBuilder()
-							.append(getDisplayName())
-							.append(" was already started").toString());
+					throw new IllegalStateException(
+							new StringBuilder().append(getDisplayName()).append(" was already started").toString());
 				}
 				//
 				// this.starting = true;
 				addStates(STARTING);
-				LOGGER.info(new StringBuilder().append("Starting ")
-						.append(getDisplayName()).toString());
+				LOGGER.info(new StringBuilder().append("Starting ").append(getDisplayName()).toString());
 				// --------------------------------------------------
 				doStart();
 				// 2015/09/19 多加callback方式
@@ -461,19 +453,16 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 				// value.put(new Integer(i), new String("Object_" + i));
 				// }
 			} catch (ServiceException e) {
-				LOGGER.error(new StringBuilder(
-						"Exception encountered during start()").toString(), e);
+				LOGGER.error(new StringBuilder("Exception encountered during start()").toString(), e);
 				throw e;
 			} catch (Throwable e) {
-				LOGGER.error(new StringBuilder(
-						"Exception encountered during start()").toString(), e);
+				LOGGER.error(new StringBuilder("Exception encountered during start()").toString(), e);
 				throw new ServiceException(e);
 			} finally {
 				this.lock.unlock();
 			}
 		} catch (InterruptedException e) {
-			LOGGER.error(new StringBuilder(
-					"Exception encountered during start()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during start()").toString(), e);
 			throw new ServiceException(e);
 		}
 	}
@@ -482,9 +471,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 	 * 內部啟動
 	 */
 	protected final void doStartCallback(StartCallback action) throws Exception {
-		AssertHelper.notNull(action,
-				new StringBuilder().append("StartCallback must not be null")
-						.toString());
+		AssertHelper.notNull(action, new StringBuilder().append("StartCallback must not be null").toString());
 		//
 		try {
 			action.doInAction();
@@ -500,9 +487,8 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 	 */
 	public synchronized void checkStarted() {
 		if (!isStates(STARTED)) {
-			throw new IllegalStateException(new StringBuilder()
-					.append(getDisplayName())
-					.append(" not start. Call start()").toString());
+			throw new IllegalStateException(
+					new StringBuilder().append(getDisplayName()).append(" not start. Call start()").toString());
 		}
 	}
 
@@ -523,21 +509,18 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 			this.lock.lockInterruptibly();
 			try {
 				if (isStates(SHUTTINGDOWN)) {
-					throw new IllegalStateException(new StringBuilder()
-							.append(getDisplayName())
-							.append(" is shuttingdown").toString());
+					throw new IllegalStateException(
+							new StringBuilder().append(getDisplayName()).append(" is shuttingdown").toString());
 				}
 				//
 				if (isStates(SHUTDOWN)) {
-					throw new IllegalStateException(new StringBuilder()
-							.append(getDisplayName())
-							.append(" was already shutdown").toString());
+					throw new IllegalStateException(
+							new StringBuilder().append(getDisplayName()).append(" was already shutdown").toString());
 				}
 				//
 				// this.shuttingdown = true;
 				addStates(SHUTTINGDOWN);
-				LOGGER.info(new StringBuilder().append("Shutting down ")
-						.append(getDisplayName()).toString());
+				LOGGER.info(new StringBuilder().append("Shutting down ").append(getDisplayName()).toString());
 				// --------------------------------------------------
 				doShutdown();
 				// 2015/09/19 多加callback方式
@@ -553,21 +536,16 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 				// this.started = false;
 				removeStates(STARTED);
 			} catch (ServiceException e) {
-				LOGGER.error(new StringBuilder(
-						"Exception encountered during shutdown()").toString(),
-						e);
+				LOGGER.error(new StringBuilder("Exception encountered during shutdown()").toString(), e);
 				throw e;
 			} catch (Throwable e) {
-				LOGGER.error(new StringBuilder(
-						"Exception encountered during shutdown()").toString(),
-						e);
+				LOGGER.error(new StringBuilder("Exception encountered during shutdown()").toString(), e);
 				throw new ServiceException(e);
 			} finally {
 				this.lock.unlock();
 			}
 		} catch (InterruptedException e) {
-			LOGGER.error(new StringBuilder(
-					"Exception encountered during shutdown()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during shutdown()").toString(), e);
 			throw new ServiceException(e);
 		}
 	}
@@ -580,11 +558,8 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 	/**
 	 * 內部關閉
 	 */
-	protected final void doShutdownCallback(ShutdownCallback action)
-			throws Exception {
-		AssertHelper.notNull(action,
-				new StringBuilder().append("ShutdownCallback must not be null")
-						.toString());
+	protected final void doShutdownCallback(ShutdownCallback action) throws Exception {
+		AssertHelper.notNull(action, new StringBuilder().append("ShutdownCallback must not be null").toString());
 		//
 		try {
 			action.doInAction();
@@ -605,23 +580,20 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 			this.lock.lockInterruptibly();
 			try {
 				if (isStates(RESTARTING)) {
-					throw new IllegalStateException(new StringBuilder()
-							.append(getDisplayName()).append(" is restarting")
-							.toString());
+					throw new IllegalStateException(
+							new StringBuilder().append(getDisplayName()).append(" is restarting").toString());
 				}
 				//
 				if (isStates(RESTARTED)) {
-					throw new IllegalStateException(new StringBuilder()
-							.append(getDisplayName())
-							.append(" was already restarted").toString());
+					throw new IllegalStateException(
+							new StringBuilder().append(getDisplayName()).append(" was already restarted").toString());
 				}
 				// 檢查是否有啟動
 				checkStarted();
 				//
 				// this.restarting = true;
 				addStates(RESTARTING);
-				LOGGER.info(new StringBuilder().append("Restarting ")
-						.append(getDisplayName()).toString());
+				LOGGER.info(new StringBuilder().append("Restarting ").append(getDisplayName()).toString());
 				// --------------------------------------------------
 				shutdown();
 				start();
@@ -635,19 +607,16 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 				// this.restarting = false;
 				removeStates(RESTARTING);
 			} catch (ServiceException e) {
-				LOGGER.error(new StringBuilder(
-						"Exception encountered during restart()").toString(), e);
+				LOGGER.error(new StringBuilder("Exception encountered during restart()").toString(), e);
 				throw e;
 			} catch (Throwable e) {
-				LOGGER.error(new StringBuilder(
-						"Exception encountered during restart()").toString(), e);
+				LOGGER.error(new StringBuilder("Exception encountered during restart()").toString(), e);
 				throw new ServiceException(e);
 			} finally {
 				this.lock.unlock();
 			}
 		} catch (InterruptedException e) {
-			LOGGER.error(new StringBuilder(
-					"Exception encountered during restart()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during restart()").toString(), e);
 			throw new ServiceException(e);
 		}
 	}
@@ -664,11 +633,8 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 	/**
 	 * 內部重啟
 	 */
-	protected final void doRestartCallback(RestartCallback action)
-			throws Exception {
-		AssertHelper.notNull(action,
-				new StringBuilder().append("RestartCallback must not be null")
-						.toString());
+	protected final void doRestartCallback(RestartCallback action) throws Exception {
+		AssertHelper.notNull(action, new StringBuilder().append("RestartCallback must not be null").toString());
 		//
 		try {
 			action.doInAction();
@@ -690,8 +656,8 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 	 * @param newValue
 	 * @return EventAttach
 	 */
-	protected <OLD_VALUE, NEW_VALUE> EventAttach<OLD_VALUE, NEW_VALUE> eventAttach(
-			OLD_VALUE oldValue, NEW_VALUE newValue) {
+	protected <OLD_VALUE, NEW_VALUE> EventAttach<OLD_VALUE, NEW_VALUE> eventAttach(OLD_VALUE oldValue,
+			NEW_VALUE newValue) {
 		return EventHelper.eventAttach(oldValue, newValue);
 	}
 }

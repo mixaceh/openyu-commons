@@ -22,11 +22,9 @@ import org.openyu.commons.util.AssertHelper;
  *
  * 2.或是 ExecutorService
  */
-public abstract class BaseCallableSupporter<V> implements BaseCallable<V>,
-		Supporter {
+public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Supporter {
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(BaseCallableSupporter.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(BaseCallableSupporter.class);
 
 	// private boolean cancel;
 
@@ -64,21 +62,17 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>,
 
 	public V call() {
 		try {
-			LOGGER.info(new StringBuilder()
-					.append("T[" + Thread.currentThread().getId() + "] ")
-					.append("Calling ")
+			LOGGER.info(new StringBuilder().append("Calling ").append("T[" + Thread.currentThread().getId() + "] ")
 					.append(ClassHelper.getSimpleName(getClass())).toString());
 			// --------------------------------------------------
 			return doCall();
 			// --------------------------------------------------
 		} catch (Throwable e) {
-			LOGGER.error(
-					new StringBuilder("Exception encountered during run()")
-							.toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during run()").toString(), e);
 		}
 		//
 		if (this.shutdown) {
-			LOGGER.info(new StringBuilder().append("Interrupted ")
+			LOGGER.info(new StringBuilder().append("Interrupted ").append("T[" + Thread.currentThread().getId() + "] ")
 					.append(ClassHelper.getSimpleName(getClass())).toString());
 		}
 		return null;
@@ -100,8 +94,7 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>,
 			this.shutdown = false;
 			this.executorService.submit(this);
 		} else {
-			AssertHelper.notNull(null,
-					"ThreadService or ExecutorService must not be null");
+			AssertHelper.notNull(null, "ThreadService or ExecutorService must not be null");
 		}
 	}
 
@@ -168,7 +161,6 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>,
 	// }
 
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.MULTI_LINE_STYLE);
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 }

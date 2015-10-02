@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
+/**
+ * 認證碼服務工廠
+ */
 public class AuthKeyServiceFactoryImpl extends BaseServiceSupporter implements AuthKeyServiceFactory {
 
 	private static final long serialVersionUID = -1141743296689645013L;
@@ -42,17 +45,15 @@ public class AuthKeyServiceFactoryImpl extends BaseServiceSupporter implements A
 	public AuthKeyService createInstance() {
 		AuthKeyServiceImpl result = null;
 		try {
-			result = new AuthKeyServiceImpl();
-			//
+			// 接外部設定檔
 			Properties props = new Properties();
-			// 外部設定檔
 			PropertiesLoaderUtils.fillProperties(props, this.configLocation);
-			//
 			if (this.properties != null) {
 				props.putAll(this.properties);
 			}
+			//
+			result = new AuthKeyServiceImpl();
 			// TODO set props
-			
 			result.setThreadService(threadService);
 			result.setCreateInstance(true);
 			// 啟動
@@ -64,7 +65,7 @@ public class AuthKeyServiceFactoryImpl extends BaseServiceSupporter implements A
 		return result;
 	}
 
-	public static AuthKeyService shutdownInstance(AuthKeyService authKeyService) {
+	public AuthKeyService shutdownInstance(AuthKeyService authKeyService) {
 		try {
 			if (authKeyService instanceof AuthKeyService) {
 				AuthKeyService oldInstance = authKeyService;

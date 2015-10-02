@@ -1,8 +1,12 @@
 package org.openyu.commons.security.impl;
 
 import org.openyu.commons.security.AuthKeyService;
+import org.springframework.beans.factory.FactoryBean;
 
-public class AuthKeyServiceConfigurer extends AuthKeyServiceFactoryImpl {
+/**
+ * 認證碼服務設定器
+ */
+public class AuthKeyServiceConfigurer extends AuthKeyServiceFactoryImpl  implements FactoryBean{
 
 	private static final long serialVersionUID = 9107182237672400201L;
 
@@ -37,5 +41,26 @@ public class AuthKeyServiceConfigurer extends AuthKeyServiceFactoryImpl {
 	@Override
 	protected void doShutdown() throws Exception {
 		super.doShutdown();
+		if (authKeyService != null) {
+			shutdownInstance(authKeyService);
+		}
+	}
+
+	@Override
+	public Object getObject() throws Exception {
+		// TODO Auto-generated method stub
+		return authKeyService;
+	}
+
+	@Override
+	public Class getObjectType() {
+		// TODO Auto-generated method stub
+		return AuthKeyService.class;
+	}
+
+	@Override
+	public boolean isSingleton() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

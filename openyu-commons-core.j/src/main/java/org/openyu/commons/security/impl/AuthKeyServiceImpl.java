@@ -3,6 +3,7 @@ package org.openyu.commons.security.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -57,6 +58,8 @@ public class AuthKeyServiceImpl extends BaseServiceSupporter implements AuthKeyS
 	 */
 	private long listenMills = DEFAULT_LISTEN_MILLS;
 
+	private Properties properties;
+
 	/** 安全性 */
 	private transient SecurityProcessor securityProcessor = new SecurityProcessorImpl();
 
@@ -82,7 +85,7 @@ public class AuthKeyServiceImpl extends BaseServiceSupporter implements AuthKeyS
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		
+
 	}
 
 	/**

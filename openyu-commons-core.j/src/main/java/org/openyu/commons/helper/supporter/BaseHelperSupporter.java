@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 輔助類,以下1種建構方式
+ * 輔助器,以下1種建構方式
  * 
  * 1.有的無法用 spring 配置建構
  * 
