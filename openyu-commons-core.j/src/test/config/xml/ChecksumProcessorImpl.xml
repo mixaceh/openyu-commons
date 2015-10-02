@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<checksumProcessor>
+    <checksumTypes key="CRC32">1</checksumTypes>
+    <checksumTypes key="ADLER32">2</checksumTypes>
+    <checksum>true</checksum>
+    <checksumType>ADLER32</checksumType>
+    <checksumKey>LongLongAgo</checksumKey>
+</checksumProcessor>

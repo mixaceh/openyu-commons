@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- Cassandra Thrift Connection Pool -->
+	<!-- ctcp -->
+	<bean
+		id="ctDataSource"
+		class="org.openyu.commons.cassandra.thrift.impl.CtDataSourceImpl"
+		destroy-method="close">
+		<property name="ip">
+			<value>${ctcp.ip}</value>
+		</property>
+		<property name="port">
+			<value>${ctcp.port}</value>
+		</property>
+		<property name="timeout">
+			<value>${ctcp.timeout}</value>
+		</property>
+		<property name="nonblocking">
+			<value>${ctcp.nonblocking}</value>
+		</property>
+		<property name="compactProtocol">
+			<value>${ctcp.compactProtocol}</value>
+		</property>
+		<property name="retryNumber">
+			<value>${ctcp.retryNumber}</value>
+		</property>
+		<property name="retryPauseMills">
+			<value>${ctcp.retryPauseMills}</value>
+		</property>
+		<property name="initialSize">
+			<value>${ctcp.initialSize}</value>
+		</property>
+		<property name="maxActive">
+			<value>${ctcp.maxActive}</value>
+		</property>
+		<property name="maxIdle">
+			<value>${ctcp.maxIdle}</value>
+		</property>
+		<property name="minIdle">
+			<value>${ctcp.minIdle}</value>
+		</property>
+		<property name="maxWait">
+			<value>${ctcp.maxWait}</value>
+		</property>
+		<property name="timeBetweenEvictionRunsMillis">
+			<value>${ctcp.timeBetweenEvictionRunsMillis}</value>
+		</property>
+		<property name="numTestsPerEvictionRun">
+			<value>${ctcp.numTestsPerEvictionRun}</value>
+		</property>
+		<property name="minEvictableIdleTimeMillis">
+			<value>${ctcp.minEvictableIdleTimeMillis}</value>
+		</property>
+	</bean>
+
+	<bean
+		id="ctSessionFactory"
+		class="org.openyu.commons.cassandra.thrift.impl.CtSessionFactoryImpl"
+		p:ctDataSource-ref="ctDataSource" />
+
+	<!--  
+	<bean
+		id="ctTemplate"
+		class="org.openyu.commons.bao.hbase.impl.HtTemplateImpl"
+		p:ctSessionFactory-ref="ctSessionFactory" />
+	-->		
+
+	<!-- bao supporter, use ctSessionFactory 
+	<bean
+		id="ctBaoSupporter"
+		class="org.openyu.commons.bao.hbase.supporter.CtBaoSupporter"
+		p:ctSessionFactory-ref="ctSessionFactory" />
+	-->	
+
+	<!-- bao supporter, use ctTemplate 
+	<bean
+		id="ctBaoSupporter"
+		class="org.openyu.commons.bao.hbase.supporter.CtBaoSupporter"
+		p:ctTemplate-ref="ctTemplate" />
+	-->
+</beans>

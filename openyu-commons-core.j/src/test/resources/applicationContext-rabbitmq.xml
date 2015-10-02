@@ -1,0 +1,41 @@
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+	<!-- 
+	<bean id="rabbitConnectionFactory"
+		class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+		<constructor-arg index="0" value="172.22.31.11" />
+		<constructor-arg index="1" value="5672" />
+		<property name="username" value="guest" />
+		<property name="password" value="guest" />
+	</bean>
+	-->
+
+	<rabbit:connection-factory
+		id="rabbitConnectionFactory"
+		host="${rmcp.ip}"
+		port="${rmcp.port}"
+		username="${rmcp.username}"
+		password="${rmcp.password}" />
+
+	<rabbit:template
+		id="rabbitTemplate"
+		connection-factory="rabbitConnectionFactory" />
+
+	<rabbit:admin
+		id="rabbitAdmin"
+		connection-factory="rabbitConnectionFactory" />
+		
+	<!-- mqo supporter, use rabbitTemplate -->
+	<bean
+		id="rmMqoSupporter"
+		class="org.openyu.commons.mqo.rabbitmq.supporter.RmMqoSupporter"
+		p:rabbitTemplate-ref="rabbitTemplate"
+		p:rabbitAdmin-ref="rabbitAdmin" />
+
+</beans>

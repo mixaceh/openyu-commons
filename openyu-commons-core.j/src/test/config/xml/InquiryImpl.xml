@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<inquiry>
+    <pagination>
+        <pageSizes>10</pageSizes>
+        <pageSizes>20</pageSizes>
+        <pageSizes>50</pageSizes>
+        <pageSizes>100</pageSizes>
+    </pagination>
+    <sorts>
+        <names>
+            <entry key="zh_TW">測試排序</entry>
+            <entry key="zh_CN">测试排序</entry>
+            <entry key="en_US">Test sort</entry>
+        </names>
+        <id>sort</id>
+        <order>
+            <names/>
+        </order>
+    </sorts>
+    <orders>
+        <names>
+            <entry key="zh_TW">測試排序方向</entry>
+            <entry key="zh_CN">测试排序方向</entry>
+            <entry key="en_US">Test order</entry>
+        </names>
+        <id>ASC</id>
+    </orders>
+    <export>false</export>
+</inquiry>

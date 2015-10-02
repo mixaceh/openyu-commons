@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+
+		<!--  
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/commons</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">1111</property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		-->
+
+		<property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>
+		<property name="hibernate.connection.url">jdbc:hsqldb:hsql://localhost:9001/commons</property>
+		<property name="hibernate.connection.username">SA</property>
+		<property name="hibernate.connection.password"></property>
+		<property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
+		
+		<property name="hibernate.connection.isolation">2</property>
+
+		<!-- autocommit = true, just for test -->
+		<property name="hibernate.connection.autocommit">false</property>
+		<property name="hibernate.transaction.auto_close_session">false</property>
+
+		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+
+		<property name="hibernate.generate_statistics">false</property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.format_sql">false</property>
+
+		<!--
+		For Hibernate 4,use 
+		org.hibernate.cache.ehcache.EhCacheRegionFactory instead of 
+		net.sf.ehcache.hibernate.EhCacheRegionFactory
+		 
+		and
+		org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory instead of 
+		net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory. 
+		 -->
+		
+		<!-- hibernate 3
+		<property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.EhCacheProvider"/>
+		<prop key="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider
+		</prop>
+		-->
+	
+		<!-- hibernate 4 
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>
+		-->
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+		<property name="hibernate.cache.use_query_cache">true</property>
+		<property name="hibernate.cache.use_structured_entries">true</property>
+		<property name="net.sf.ehcache.configurationResourceName">/ehcache.xml</property>
+
+		<property name="hibernate.bytecode.provider">cglib</property>
+		<property name="hibernate.jdbc.batch_size">50</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<!--  
+		<property name="hibernate.current_session_context_class">thread</property>
+		-->
+		
+
+		<!-- hibernate 3  
+		<property name="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</property>
+		-->
+		
+		<!-- hibernate 4 -->
+		<property name="hibernate.search.default.directory_provider">filesystem</property>
+		<property name="hibernate.search.default.indexBase">search</property>
+		<property name="javax.persistence.validation.mode">none</property>
+
+		<!-- test -->
+		<mapping class="org.openyu.commons.po.impl.DogPoImpl" />
+		<mapping class="org.openyu.commons.po.impl.CatPoImpl" />
+	</session-factory>
+
+</hibernate-configuration>

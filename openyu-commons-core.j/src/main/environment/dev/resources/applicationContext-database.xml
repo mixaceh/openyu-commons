@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<!-- bonecp -->
+	<bean id="dataSourceTarget" class="com.jolbox.bonecp.BoneCPDataSource"
+		destroy-method="close">
+		<property name="driverClass">
+			<value>${bonecp.driverClass}</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>${bonecp.jdbcUrl}</value>
+		</property>
+		<property name="username">
+			<value>${bonecp.username}</value>
+		</property>
+		<property name="password">
+			<value>${bonecp.password}</value>
+		</property>
+		<property name="initSQL">
+			<value>${bonecp.initSQL}</value>
+		</property>
+		<property name="idleConnectionTestPeriodInMinutes">
+			<value>${bonecp.idleConnectionTestPeriodInMinutes}</value>
+		</property>
+		<property name="idleMaxAgeInMinutes">
+			<value>${bonecp.idleMaxAgeInMinutes}</value>
+		</property>
+		<property name="maxConnectionsPerPartition">
+			<value>${bonecp.maxConnectionsPerPartition}</value>
+		</property>
+		<property name="minConnectionsPerPartition">
+			<value>${bonecp.minConnectionsPerPartition}</value>
+		</property>
+		<property name="partitionCount">
+			<value>${bonecp.partitionCount}</value>
+		</property>
+		<property name="acquireIncrement">
+			<value>${bonecp.acquireIncrement}</value>
+		</property>
+		<property name="statementsCacheSize">
+			<value>${bonecp.statementsCacheSize}</value>
+		</property>
+		<!-- bonecp 0.8 deprecated  
+		<property name="releaseHelperThreads">
+			<value>${bonecp.releaseHelperThreads}</value>
+		</property>
+		-->
+		<property name="connectionTimeoutInMs">
+			<value>${bonecp.connectionTimeoutInMs}</value>
+		</property>
+	</bean>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy"
+		p:targetDataSource-ref="dataSourceTarget" />
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	    <!-- hibernate 3 
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		-->
+		<!--
+		<property name="configLocation" value="hibernate.cfg.xml" /> 
+		-->
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<!-- database.properties -->
+				<!-- hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect -->
+
+				<prop key="hibernate.dialect">${bonecp.hibernate.dialect}</prop>
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop> -->
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop> -->
+
+				<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
+
+				<prop key="hibernate.generate_statistics">${bonecp.hibernate.generate_statistics}</prop>
+				<prop key="hibernate.show_sql">${bonecp.hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${bonecp.hibernate.format_sql}</prop>
+				
+				<!--  hibernate 3  
+				<prop key="hibernate.cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider
+				</prop>
+				<prop key="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider
+				</prop>
+				-->
+				
+				<!-- hibernate 4 
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop>
+				-->
+
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.cache.use_structured_entries">true</prop>
+				<prop key="net.sf.ehcache.configurationResourceName">/ehcache.xml</prop>
+
+				<prop key="hibernate.bytecode.provider">cglib</prop>
+				<prop key="hibernate.jdbc.batch_size">${bonecp.hibernate.jdbc.batch_size}</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+
+				<!-- no jta -->
+				<prop key="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory
+				</prop>
+				
+				<!-- jta
+				<prop key="hibernate.transaction.factory_class">hibernate.transaction.factory_class=org.hibernate.transaction.JTATransactionFactory 
+				</prop>
+				 -->
+
+				<!-- hibernate 3 
+				<prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
+				-->
+				<prop key="hibernate.search.default.directory_provider">filesystem</prop>
+				<prop key="hibernate.search.default.indexBase">${bonecp.hibernate.search.default.indexBase}</prop>
+				<prop key="javax.persistence.validation.mode">none</prop>
+
+			</props>
+		</property>
+		<!-- hibernate 3  
+		<property name="lobHandler">
+			<ref bean="lobHandler" />
+		</property>
+		-->
+		<property name="packagesToScan">
+			<list>
+				<value>org.openyu.commons.po.impl</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate"
+		p:sessionFactory-ref="sessionFactory" />
+
+	<!--  
+	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler"
+		lazy-init="true" />
+	-->
+
+	<!--  
+	<bean id="hibernateInterceptor" class="org.springframework.orm.hibernate3.HibernateInterceptor">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	-->
+
+	<!-- Hibernate transaction manager -->
+	<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"
+		p:sessionFactory-ref="sessionFactory" />
+
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="is*" read-only="true" />
+			<tx:method name="search*" read-only="true" />
+
+			<tx:method name="insert*" rollback-for="java.lang.Exception"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="update*" rollback-for="java.lang.Exception"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="delete*" rollback-for="java.lang.Exception"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="save*" rollback-for="java.lang.Exception"
+				propagation="REQUIRED" read-only="false" />
+		</tx:attributes>
+	</tx:advice>
+
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<!-- dao supporter, use sessionFactory
+	<bean
+		id="ojDaoSupporter"
+		class="org.openyu.commons.dao.supporter.OjDaoSupporter"
+		p:sessionFactory-ref="sessionFactory" />
+	-->
+
+	<bean id="ojDaoSupporter" class="org.openyu.commons.dao.supporter.OjDaoSupporter"
+		p:hibernateTemplate-ref="hibernateTemplate" />
+		
+
+	<!-- service supporter -->
+	<bean id="ojServiceSupporter" parent="baseServiceSupporter"
+		class="org.openyu.commons.service.supporter.OjServiceSupporter" />
+
+</beans>

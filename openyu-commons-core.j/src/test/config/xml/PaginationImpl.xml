@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<pagination>
+    <pageSizes>10</pageSizes>
+    <pageSizes>20</pageSizes>
+    <pageSizes>50</pageSizes>
+    <pageSizes>100</pageSizes>
+</pagination>

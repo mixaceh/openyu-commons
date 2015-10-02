@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- thread -->
+	<import resource="classpath:org/openyu/commons/thread/applicationContext-thread.xml" />
+
+	<!-- service -->
+	<import resource="classpath:org/openyu/commons/service/applicationContext-service.xml" />
+
+	<!-- aop -->
+	<import resource="classpath:org/openyu/commons/aop/applicationContext-aop.xml" />
+
+	<!-- lang -->
+	<import resource="classpath:org/openyu/commons/lang/applicationContext-lang.xml" />
+
+	<!-- util -->
+	<import resource="classpath:org/openyu/commons/util/applicationContext-util.xml" />
+
+	<!-- web -->
+	<import resource="classpath:org/openyu/commons/web/applicationContext-web.xml" />
+	
+	<!-- ws -->
+	<import resource="classpath:org/openyu/commons/ws/applicationContext-ws.xml" />
+
+	<!-- security -->
+	<import resource="classpath:org/openyu/commons/security/applicationContext-security.xml" />
+
+	<!-- freemarker -->
+	<import
+		resource="classpath:org/openyu/commons/freemarker/applicationContext-freemarker.xml" />
+
+</beans>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<config>
+	<classHelper>
+		<!-- po應對表 -->
+		<!-- 1.先使用慣例轉換 -->
+		<!-- 2.若找不到, 才會使用此應對表 -->
+		<poMapping>
+			<entry>
+				<key>org.openyu.commons.lang.ClassHelperTest$PlayerPo</key>
+				<value>org.openyu.commons.lang.ClassHelperTest$Player</value>
+			</entry>
+			<entry>
+				<key>org.openyu.commons.lang.ClassHelperTest$PlayerPoName</key>
+				<value>org.openyu.commons.lang.ClassHelperTest$PlayerName</value>
+			</entry>
+		</poMapping>
+	</classHelper>
+
+	<color>紅</color>
+	<color>綠</color>
+	<color>藍</color>
+
+	<year>2011</year>
+	<year>2012</year>
+	<year>2013</year>
+
+</config>

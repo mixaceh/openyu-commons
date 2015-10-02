@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<!-- action supporter -->
+	<bean id="baseActionSupporter" class="org.openyu.commons.web.struts2.supporter.BaseActionSupporter">
+	</bean>
+
+	<bean id="listActionSupporter" class="org.openyu.commons.web.struts2.supporter.ListActionSupporter"
+		abstract="true" parent="baseActionSupporter">
+	</bean>
+
+	<!-- user session -->
+	<bean id="baseSessionSupporter" class="org.openyu.commons.web.struts2.supporter.BaseSessionSupporter"
+		abstract="true" parent="baseActionSupporter">
+	</bean>
+
+	<bean id="baseWebInterceptorSupporter"
+		class="org.openyu.commons.web.struts2.supporter.BaseWebInterceptorSupporter"
+		abstract="true">
+		<property name="disable" value="false" />
+		<property name="logEnable" value="false" />
+	</bean>
+</beans>

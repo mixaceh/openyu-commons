@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<securityProcessor>
+    <securityTypes key="DES">DES</securityTypes>
+    <securityTypes key="DES_CBC_PKCS5Padding">DES/CBC/PKCS5Padding</securityTypes>
+    <securityTypes key="DES_ECB_PKCS5Padding">DES/ECB/PKCS5Padding</securityTypes>
+    <securityTypes key="DESede">DESede</securityTypes>
+    <securityTypes key="DESede_CBC_PKCS5Padding">DESede/CBC/PKCS5Padding</securityTypes>
+    <securityTypes key="DESede_ECB_PKCS5Padding">DESede/ECB/PKCS5Padding</securityTypes>
+    <securityTypes key="AES">AES</securityTypes>
+    <securityTypes key="AES_CBC_PKCS5Padding">AES/CBC/PKCS5Padding</securityTypes>
+    <securityTypes key="AES_ECB_PKCS5Padding">AES/ECB/PKCS5Padding</securityTypes>
+    <securityTypes key="MD5">MD5</securityTypes>
+    <securityTypes key="SHA_1">SHA-1</securityTypes>
+    <securityTypes key="SHA_256">SHA-256</securityTypes>
+    <securityTypes key="HmacMD5">HmacMD5</securityTypes>
+    <securityTypes key="HmacSHA1">HmacSHA1</securityTypes>
+    <securityTypes key="HmacSHA256">HmacSHA256</securityTypes>
+    <security>true</security>
+    <securityType>DES_ECB_PKCS5Padding</securityType>
+    <securityKey>NotFarAway</securityKey>
+</securityProcessor>

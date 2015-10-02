@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<seqIdAuditNamesBean>
+    <id>o</id>
+    <names>
+        <entry key="zh_TW">測試名稱</entry>
+        <entry key="zh_CN">测试名称</entry>
+        <entry key="en_US">Test name</entry>
+    </names>
+</seqIdAuditNamesBean>

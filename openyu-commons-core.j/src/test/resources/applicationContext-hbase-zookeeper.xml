@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- HBase Zookeeper Connection Pool -->
+	<!-- hzcp -->
+	<bean
+		id="hzDataSource"
+		class="org.openyu.commons.hbase.impl.HzDataSourceImpl"
+		destroy-method="close">
+		<property name="initialSize">
+			<value>${hzcp.initialSize}</value>
+		</property>
+		<property name="maxActive">
+			<value>${hzcp.maxActive}</value>
+		</property>
+		<property name="maxIdle">
+			<value>${hzcp.maxIdle}</value>
+		</property>
+		<property name="minIdle">
+			<value>${hzcp.minIdle}</value>
+		</property>
+		<property name="maxWait">
+			<value>${hzcp.maxWait}</value>
+		</property>
+		<property name="timeBetweenEvictionRunsMillis">
+			<value>${hzcp.timeBetweenEvictionRunsMillis}</value>
+		</property>
+		<property name="numTestsPerEvictionRun">
+			<value>${hzcp.numTestsPerEvictionRun}</value>
+		</property>
+		<property name="minEvictableIdleTimeMillis">
+			<value>${hzcp.minEvictableIdleTimeMillis}</value>
+		</property>
+		<property name="properties">
+			<props>
+				<prop key="hbase.zookeeper.quorum">${hzcp.hbase.zookeeper.quorum}</prop>
+				<prop key="hbase.zookeeper.property.clientPort">${hzcp.hbase.zookeeper.property.clientPort}
+				</prop>
+				<prop key="hbase.zookeeper.property.maxClientCnxns">${hzcp.hbase.zookeeper.property.maxClientCnxns}</prop>
+				<prop key="hbase.client.retries.number">${hzcp.hbase.client.retries.number}</prop>
+				<prop key="hbase.client.pause">${hzcp.hbase.client.pause}</prop>
+				<prop key="hbase.client.scanner.caching">${hzcp.hbase.client.scanner.caching}</prop>
+				<prop key="hbase.htable.threads.max">${hzcp.hbase.htable.threads.max}</prop>
+				<prop key="hbase.htable.threads.keepalivetime">${hzcp.hbase.htable.threads.keepalivetime}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean
+		id="hzSessionFactory"
+		class="org.openyu.commons.hbase.impl.HzSessionFactoryImpl"
+		p:hzDataSource-ref="hzDataSource" />
+
+	<bean
+		id="hzTemplate"
+		class="org.openyu.commons.bao.hbase.impl.HzTemplateImpl"
+		p:hzSessionFactory-ref="hzSessionFactory" />
+
+	<!-- bao supporter, use hzSessionFactory 
+	<bean
+		id="hzBaoSupporter"
+		class="org.openyu.commons.bao.hbase.supporter.HzBaoSupporter"
+		p:hzSessionFactory-ref="hzSessionFactory" />
+	-->	
+
+	<!-- bao supporter, use hzTemplate -->
+	<bean
+		id="hzBaoSupporter"
+		class="org.openyu.commons.bao.hbase.supporter.HzBaoSupporter"
+		p:hzTemplate-ref="hzTemplate" />
+
+</beans>

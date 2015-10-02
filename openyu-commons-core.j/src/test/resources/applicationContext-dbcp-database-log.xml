@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<!-- dbcp 
+	<bean id="logDataSourceTarget" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName">
+			<value>${log.dbcp.driverClassName}</value>
+		</property>
+		<property name="url">
+			<value>${log.dbcp.url}</value>
+		</property>
+		<property name="username">
+			<value>${log.dbcp.username}</value>
+		</property>
+		<property name="password">
+			<value>${log.dbcp.password}</value>
+		</property>
+		<property name="initialSize">
+			<value>${log.dbcp.initialSize}</value>
+		</property>
+		<property name="maxActive">
+			<value>${log.dbcp.maxActive}</value>
+		</property>
+		<property name="maxIdle">
+			<value>${log.dbcp.maxIdle}</value>
+		</property>
+		<property name="minIdle">
+			<value>${log.dbcp.minIdle}</value>
+		</property>
+		<property name="maxWait">
+			<value>${log.dbcp.maxWait}</value>
+		</property>
+		<property name="validationQuery">
+			<value>${log.dbcp.validationQuery}</value>
+		</property>
+		<property name="removeAbandoned">
+			<value>${log.dbcp.removeAbandoned}</value>
+		</property>
+		<property name="removeAbandonedTimeout">
+			<value>${log.dbcp.removeAbandonedTimeout}</value>
+		</property>
+		<property name="logAbandoned">
+			<value>${log.dbcp.logAbandoned}</value>
+		</property>
+		<property name="timeBetweenEvictionRunsMillis">
+			<value>${log.dbcp.timeBetweenEvictionRunsMillis}</value>
+		</property>
+		<property name="minEvictableIdleTimeMillis">
+			<value>${log.dbcp.minEvictableIdleTimeMillis}</value>
+		</property>
+	</bean>
+	-->
+
+	<!-- bonecp -->
+	<bean id="logDataSourceTarget" class="com.jolbox.bonecp.BoneCPDataSource"
+		destroy-method="close">
+		<property name="driverClass">
+			<value>${log.bonecp.driverClass}</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>${log.bonecp.jdbcUrl}</value>
+		</property>
+		<property name="username">
+			<value>${log.bonecp.username}</value>
+		</property>
+		<property name="password">
+			<value>${log.bonecp.password}</value>
+		</property>
+		<property name="initSQL">
+			<value>${log.bonecp.initSQL}</value>
+		</property>
+		<property name="idleConnectionTestPeriod">
+			<value>${log.bonecp.idleConnectionTestPeriod}</value>
+		</property>
+		<property name="idleMaxAge">
+			<value>${log.bonecp.idleMaxAge}</value>
+		</property>
+		<property name="maxConnectionsPerPartition">
+			<value>${log.bonecp.maxConnectionsPerPartition}</value>
+		</property>
+		<property name="minConnectionsPerPartition">
+			<value>${log.bonecp.minConnectionsPerPartition}</value>
+		</property>
+		<property name="partitionCount">
+			<value>${log.bonecp.partitionCount}</value>
+		</property>
+		<property name="acquireIncrement">
+			<value>${log.bonecp.acquireIncrement}</value>
+		</property>
+		<property name="statementsCacheSize">
+			<value>${log.bonecp.statementsCacheSize}</value>
+		</property>
+		<property name="releaseHelperThreads">
+			<value>${log.bonecp.releaseHelperThreads}</value>
+		</property>
+		<property name="connectionTimeout">
+			<value>${log.bonecp.connectionTimeout}</value>
+		</property>
+	</bean>
+
+	<bean id="logDataSource"
+		class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource">
+			<ref local="logDataSourceTarget" />
+		</property>
+	</bean>
+
+	<bean id="logSessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<!--<property name="configLocation" value="hibernate.cfg.xml" /> -->
+		<property name="dataSource" ref="logDataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<!-- jdbc.properties -->
+				<!-- hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect -->
+
+				<prop key="hibernate.dialect">${log.hibernate.dialect}</prop>
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop> -->
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop> -->
+
+				<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
+				<prop key="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider
+				</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.cache.use_structured_entries">true</prop>
+
+				<prop key="hibernate.generate_statistics">true</prop>
+				<prop key="hibernate.show_sql">${log.hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${log.hibernate.format_sql}</prop>
+				<prop key="hibernate.bytecode.provider">cglib</prop>
+				<prop key="hibernate.jdbc.batch_size">${log.hibernate.jdbc.batch_size}</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+
+				<!-- no jta -->
+				<prop key="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory
+				</prop>
+				<!-- jta <prop key="hibernate.transaction.factory_class">hibernate.transaction.factory_class=org.hibernate.transaction.JTATransactionFactory 
+					</prop> -->
+
+				<prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
+				<prop key="hibernate.search.default.indexBase">${log.hibernate.search.default.indexBase}</prop>
+				<prop key="javax.persistence.validation.mode">none</prop>
+				<!-- <prop key="hibernate.generate_statistics">${log.hibernate.generate_statistics}</prop> -->
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Hibernate transaction manager -->
+	<bean id="logTxManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="logSessionFactory" />
+	</bean>
+
+	<tx:advice id="logTxAdvice" transaction-manager="logTxManager">
+		<tx:attributes>
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="is*" read-only="true" />
+			<tx:method name="search*" read-only="true" />
+			<tx:method name="insert*" rollback-for="java.lang.Exception"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="update*" rollback-for="java.lang.Exception"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="delete*" rollback-for="java.lang.Exception"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="save*" rollback-for="java.lang.Exception"
+				propagation="REQUIRED" read-only="false" />
+		</tx:attributes>
+	</tx:advice>
+
+	<tx:annotation-driven transaction-manager="logTxManager" />
+
+	<!-- log dao supporter -->
+	<bean id="logHibernateDaoSupporter" class="org.openyu.commons.dao.supporter.HibernateDaoSupporter">
+		<property name="sessionFactory">
+			<ref bean="logSessionFactory" />
+		</property>
+		<property name="threadService">
+			<ref bean="threadService" />
+		</property>
+	</bean>
+
+	<bean id="logJdbcDaoSupporter" class="org.openyu.commons.dao.supporter.JdbcDaoSupporter">
+		<property name="dataSource">
+			<ref bean="logDataSource" />
+		</property>
+		<property name="threadService">
+			<ref bean="threadService" />
+		</property>
+	</bean>
+
+	<bean id="queueService" class="org.openyu.commons.service.impl.LogServiceImpl"
+		parent="baseServiceSupporter">
+		<property name="threadService">
+			<ref bean="threadService" />
+		</property>
+	</bean>
+
+	<bean id="baseLogServiceSupporter"
+		class="org.openyu.commons.service.supporter.BaseLogServiceSupporter"
+		parent="baseServiceSupporter">
+		<property name="queueService">
+			<ref bean="queueService" />
+		</property>
+	</bean>
+
+	<!-- tx advisor -->
+	<aop:config>
+		<aop:pointcut id="logServiceTxPointcut" expression="bean(logService)" />
+		<aop:advisor id="logServiceTxAdvisor" advice-ref="logTxAdvice"
+			pointcut-ref="logServiceTxPointcut" />
+	</aop:config>
+</beans>

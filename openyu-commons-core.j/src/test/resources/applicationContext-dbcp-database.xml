@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<!-- dbcp
+	<bean id="dataSourceTarget" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName">
+			<value>${dbcp.driverClassName}</value>
+		</property>
+		<property name="url">
+			<value>${dbcp.url}</value>
+		</property>
+		<property name="username">
+			<value>${dbcp.username}</value>
+		</property>
+		<property name="password">
+			<value>${dbcp.password}</value>
+		</property>
+		<property name="initialSize">
+			<value>${dbcp.initialSize}</value>
+		</property>
+		<property name="maxActive">
+			<value>${dbcp.maxActive}</value>
+		</property>
+		<property name="maxIdle">
+			<value>${dbcp.maxIdle}</value>
+		</property>
+		<property name="minIdle">
+			<value>${dbcp.minIdle}</value>
+		</property>
+		<property name="maxWait">
+			<value>${dbcp.maxWait}</value>
+		</property>
+		<property name="validationQuery">
+			<value>${dbcp.validationQuery}</value>
+		</property>
+		<property name="removeAbandoned">
+			<value>${dbcp.removeAbandoned}</value>
+		</property>
+		<property name="removeAbandonedTimeout">
+			<value>${dbcp.removeAbandonedTimeout}</value>
+		</property>
+		<property name="logAbandoned">
+			<value>${dbcp.logAbandoned}</value>
+		</property>
+		<property name="timeBetweenEvictionRunsMillis">
+			<value>${dbcp.timeBetweenEvictionRunsMillis}</value>
+		</property>
+		<property name="minEvictableIdleTimeMillis">
+			<value>${dbcp.minEvictableIdleTimeMillis}</value>
+		</property>
+	</bean>
+-->
+
+	<!-- bonecp -->
+	<bean id="dataSourceTarget" class="com.jolbox.bonecp.BoneCPDataSource"
+		destroy-method="close">
+		<property name="driverClass">
+			<value>${bonecp.driverClass}</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>${bonecp.jdbcUrl}</value>
+		</property>
+		<property name="username">
+			<value>${bonecp.username}</value>
+		</property>
+		<property name="password">
+			<value>${bonecp.password}</value>
+		</property>
+		<property name="initSQL">
+			<value>${bonecp.initSQL}</value>
+		</property>
+		<property name="idleConnectionTestPeriod">
+			<value>${bonecp.idleConnectionTestPeriod}</value>
+		</property>
+		<property name="idleMaxAge">
+			<value>${bonecp.idleMaxAge}</value>
+		</property>
+		<property name="maxConnectionsPerPartition">
+			<value>${bonecp.maxConnectionsPerPartition}</value>
+		</property>
+		<property name="minConnectionsPerPartition">
+			<value>${bonecp.minConnectionsPerPartition}</value>
+		</property>
+		<property name="partitionCount">
+			<value>${bonecp.partitionCount}</value>
+		</property>
+		<property name="acquireIncrement">
+			<value>${bonecp.acquireIncrement}</value>
+		</property>
+		<property name="statementsCacheSize">
+			<value>${bonecp.statementsCacheSize}</value>
+		</property>
+		<property name="releaseHelperThreads">
+			<value>${bonecp.releaseHelperThreads}</value>
+		</property>
+		<property name="connectionTimeout">
+			<value>${bonecp.connectionTimeout}</value>
+		</property>
+	</bean>
+	
+   <bean id="dataSource"
+        class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+        <property name="targetDataSource">
+            <ref local="dataSourceTarget" />
+        </property>
+    </bean>
+    	
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<!--<property name="configLocation" value="hibernate.cfg.xml" /> -->
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<!-- jdbc.properties -->
+				<!-- hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect -->
+
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop> -->
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop> -->
+
+				<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
+
+				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+
+				<prop key="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider
+				</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.cache.use_structured_entries">true</prop>
+
+				<prop key="hibernate.bytecode.provider">cglib</prop>
+				<prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+
+				<!-- no jta -->
+				<prop key="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory 
+				</prop> 
+				<!-- jta <prop key="hibernate.transaction.factory_class">hibernate.transaction.factory_class=org.hibernate.transaction.JTATransactionFactory 
+					</prop> -->
+ 
+				<prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
+				<prop key="hibernate.search.default.indexBase">${hibernate.search.default.indexBase}</prop>
+				<prop key="javax.persistence.validation.mode">none</prop>
+ 				
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>org.openyu.commons.po.impl</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="hibernateInterceptor" class="org.springframework.orm.hibernate3.HibernateInterceptor">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<!-- Hibernate transaction manager -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="is*" read-only="true" />
+			<tx:method name="search*" read-only="true" />
+			<tx:method name="insert*" rollback-for="java.lang.Exception"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="update*" rollback-for="java.lang.Exception"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="delete*" rollback-for="java.lang.Exception"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="save*" rollback-for="java.lang.Exception"
+				propagation="REQUIRED" read-only="false" />
+		</tx:attributes>
+	</tx:advice>
+
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<!-- dao supporter -->
+	<bean id="hibernateDaoSupporter" class="org.openyu.commons.dao.supporter.HibernateDaoSupporter">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+		<property name="threadService">
+			<ref bean="threadService" />
+		</property>
+	</bean>
+
+	<bean id="jdbcDaoSupporter" class="org.openyu.commons.dao.supporter.JdbcDaoSupporter">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="threadService">
+			<ref bean="threadService" />
+		</property>
+	</bean>
+
+	<!-- service supporter -->
+	<bean id="jdbcServiceSupporter" parent="baseServiceSupporter"
+		class="org.openyu.commons.service.supporter.JdbcServiceSupporter" />
+
+	<bean id="ojServiceSupporter" parent="baseServiceSupporter"
+		class="org.openyu.commons.service.supporter.OjServiceSupporter">
+	</bean>
+
+</beans>

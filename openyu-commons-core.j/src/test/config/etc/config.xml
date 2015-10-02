@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration>
+	<system />
+	<xml
+		fileName="config-init.xml"
+		encoding="UTF-8">
+		<reloadingStrategy
+			refreshDelay="5000"
+			config-class="org.apache.commons.configuration.reloading.FileChangedReloadingStrategy" />
+	</xml>
+
+	<xml
+		fileName="config-op.xml"
+		encoding="UTF-8">
+		<reloadingStrategy
+			refreshDelay="5000"
+			config-class="org.apache.commons.configuration.reloading.FileChangedReloadingStrategy" />
+	</xml>
+
+	<xml
+		fileName="config-debug.xml"
+		encoding="UTF-8">
+		<reloadingStrategy
+			refreshDelay="5000"
+			config-class="org.apache.commons.configuration.reloading.FileChangedReloadingStrategy" />
+	</xml>
+</configuration>

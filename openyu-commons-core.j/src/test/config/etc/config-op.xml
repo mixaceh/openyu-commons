@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<config>
+	<!-- 營運階段用 -->
+	<!-- 語系 -->
+	<localeHelper>
+		<locale>zh_TW</locale>
+	</localeHelper>
+
+	<!-- 時區 -->
+	<timeZoneHelper>
+		<timeZone>GMT+8</timeZone>
+	</timeZoneHelper>
+
+	<!-- 設定 -->
+	<configHelper>
+		<!-- checksum -->
+		<checksum>true</checksum>
+		<checksumType>ADLER32</checksumType>
+		<checksumKey>LongLongAgo</checksumKey>
+		
+		<!-- serialize -->
+		<serialize>true</serialize>
+		<serializeType>KRYO</serializeType>
+		
+		<!-- security -->
+		<security>true</security>
+		<securityType>DES_ECB_PKCS5Padding</securityType>
+		<securityKey>NotFarAway</securityKey>
+		
+		<!-- compress -->
+		<compress>true</compress>
+		<compressType>LZ4</compressType>
+	</configHelper>
+</config>

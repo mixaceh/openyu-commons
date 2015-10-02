@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<idBean>
+    <id>TEST_ID</id>
+    <dataId>DATA_ID</dataId>
+    <only>false</only>
+</idBean>

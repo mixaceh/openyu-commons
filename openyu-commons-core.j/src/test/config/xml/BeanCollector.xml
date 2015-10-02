@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<beanCollector>
+    <id>org.openyu.commons.bean.BeanCollector</id>
+    <trueFalseTypes key="FALSE">false</trueFalseTypes>
+    <trueFalseTypes key="TRUE">true</trueFalseTypes>
+    <whetherTypes key="ALL">all</whetherTypes>
+    <whetherTypes key="FALSE">false</whetherTypes>
+    <whetherTypes key="TRUE">true</whetherTypes>
+    <orderTypes key="NATURAL">natural</orderTypes>
+    <orderTypes key="ASC">asc</orderTypes>
+    <orderTypes key="DESC">desc</orderTypes>
+    <inquiry>
+        <pagination>
+            <pageSizes>10</pageSizes>
+            <pageSizes>20</pageSizes>
+            <pageSizes>50</pageSizes>
+            <pageSizes>100</pageSizes>
+        </pagination>
+        <sorts>
+            <names>
+                <entry key="zh_TW">序號</entry>
+                <entry key="zh_CN">序号</entry>
+                <entry key="en_US">Sequence</entry>
+            </names>
+            <id>seq</id>
+            <order>
+                <names/>
+            </order>
+        </sorts>
+        <orders>
+            <names>
+                <entry key="zh_TW">升冪</entry>
+                <entry key="zh_CN">升幂</entry>
+                <entry key="en_US">Ascending</entry>
+            </names>
+            <id>ASC</id>
+        </orders>
+        <orders>
+            <names>
+                <entry key="zh_TW">降冪</entry>
+                <entry key="zh_CN">降幂</entry>
+                <entry key="en_US">Descending</entry>
+            </names>
+            <id>DESC</id>
+        </orders>
+        <export>false</export>
+    </inquiry>
+    <trueFalseOptions>
+        <names>
+            <entry key="zh_TW">是</entry>
+            <entry key="zh_CN">是</entry>
+            <entry key="en_US">True</entry>
+        </names>
+        <id>TRUE</id>
+    </trueFalseOptions>
+    <trueFalseOptions>
+        <names>
+            <entry key="zh_TW">否</entry>
+            <entry key="zh_CN">否</entry>
+            <entry key="en_US">False</entry>
+        </names>
+        <id>FALSE</id>
+    </trueFalseOptions>
+    <whetherOptions>
+        <names>
+            <entry key="zh_TW">全部</entry>
+            <entry key="zh_CN">全部</entry>
+            <entry key="en_US">All</entry>
+        </names>
+        <id>ALL</id>
+    </whetherOptions>
+    <whetherOptions>
+        <names>
+            <entry key="zh_TW">是</entry>
+            <entry key="zh_CN">是</entry>
+            <entry key="en_US">True</entry>
+        </names>
+        <id>TRUE</id>
+    </whetherOptions>
+    <whetherOptions>
+        <names>
+            <entry key="zh_TW">否</entry>
+            <entry key="zh_CN">否</entry>
+            <entry key="en_US">False</entry>
+        </names>
+        <id>FALSE</id>
+    </whetherOptions>
+</beanCollector>

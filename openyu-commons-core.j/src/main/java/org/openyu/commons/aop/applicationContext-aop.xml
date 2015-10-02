@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<!-- advice supporter -->
+	<bean
+		id="baseMethodInterceptorSupporter"
+		abstract="true"
+		class="org.openyu.commons.aop.supporter.BaseMethodInterceptorSupporter"
+		parent="baseServiceSupporter">
+		<property
+			name="cancel"
+			value="false" />
+	</bean>
+
+	<bean
+		id="debugAdvice"
+		class="org.springframework.aop.interceptor.DebugInterceptor" />
+	<bean
+		id="performanceMonitorAdvice"
+		class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor" />
+
+	<bean
+		id="blockingThreadAdvice"
+		class="org.openyu.commons.aop.impl.BlockingThreadAdvice"
+		parent="baseMethodInterceptorSupporter">
+	</bean>
+
+	<bean
+		id="nonBlockingThreadAdvice"
+		class="org.openyu.commons.aop.impl.NonBlockingThreadAdvice"
+		parent="baseMethodInterceptorSupporter">
+	</bean>
+
+</beans>

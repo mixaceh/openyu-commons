@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- HBase Zookeeper Connection Pool -->
+	<!-- use PropertyOverrideConfigurer in applicationContext-init.xml -->
+	<bean
+		id="hzDataSource"
+		class="org.openyu.commons.hbase.impl.HzDataSourceImpl"
+		destroy-method="close">
+		<property name="initialSize">
+			<value>1</value>
+		</property>
+		<property name="maxActive">
+			<value>10</value>
+		</property>
+		<property name="maxIdle">
+			<value>10</value>
+		</property>
+		<property name="minIdle">
+			<value>1</value>
+		</property>
+		<property name="maxWait">
+			<value>10000</value>
+		</property>
+		<property name="timeBetweenEvictionRunsMillis">
+			<value>60000</value>
+		</property>
+		<property name="numTestsPerEvictionRun">
+			<value>3</value>
+		</property>
+		<property name="minEvictableIdleTimeMillis">
+			<value>60000</value>
+		</property>
+		<property name="properties">
+			<props>
+				<prop key="hbase.zookeeper.quorum">172.22.30.11,172.22.30.12,172.22.30.13,172.22.30.14,172.22.30.15
+				</prop>
+				<prop key="hbase.zookeeper.property.clientPort">2181</prop>
+				<prop key="hbase.zookeeper.property.maxClientCnxns">10</prop>
+				<prop key="hbase.client.retries.number">3</prop>
+				<prop key="hbase.client.pause">1000</prop>
+				<prop key="hbase.client.scanner.caching">200</prop>
+				<prop key="hbase.htable.threads.max">10</prop>
+				<prop key="hbase.htable.threads.keepalivetime">60</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean
+		id="hzSessionFactory"
+		class="org.openyu.commons.hbase.impl.HzSessionFactoryImpl"
+		p:hzDataSource-ref="hzDataSource" />
+
+	<bean
+		id="hzTemplate"
+		class="org.openyu.commons.bao.hbase.impl.HzTemplateImpl"
+		p:hzSessionFactory-ref="hzSessionFactory" />
+
+	<!-- bao supporter, use hzSessionFactory 
+	<bean
+		id="hzBaoSupporter"
+		class="org.openyu.commons.bao.hbase.supporter.HzBaoSupporter"
+		p:hzSessionFactory-ref="hzSessionFactory" />
+	-->	
+
+	<!-- bao supporter, use hzTemplate -->
+	<bean
+		id="hzBaoSupporter"
+		class="org.openyu.commons.bao.hbase.supporter.HzBaoSupporter"
+		p:hzTemplate-ref="hzTemplate" />
+
+</beans>

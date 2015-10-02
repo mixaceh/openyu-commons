@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sort>
+    <names>
+        <entry key="zh_TW">測試排序</entry>
+        <entry key="zh_CN">测试排序</entry>
+        <entry key="en_US">Test sort</entry>
+    </names>
+    <id>sort</id>
+    <order>
+        <names/>
+    </order>
+</sort>

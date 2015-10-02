@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<serializeProcessor>
+    <serializeTypes key="JGROUP">1</serializeTypes>
+    <serializeTypes key="JDK">2</serializeTypes>
+    <serializeTypes key="FST">3</serializeTypes>
+    <serializeTypes key="KRYO">4</serializeTypes>
+    <serializeTypes key="JACKSON">5</serializeTypes>
+    <serializeTypes key="SMILE">6</serializeTypes>
+    <serializeTypes key="SMILE_JAXRS">7</serializeTypes>
+    <serialize>true</serialize>
+    <serializeType>JDK</serializeType>
+</serializeProcessor>

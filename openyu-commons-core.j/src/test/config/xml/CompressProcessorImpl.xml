@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<compressProcessor>
+    <compressTypes key="LZMA">1</compressTypes>
+    <compressTypes key="GZIP">2</compressTypes>
+    <compressTypes key="DEFLATE">3</compressTypes>
+    <compressTypes key="DEFLATER">4</compressTypes>
+    <compressTypes key="SNAPPY">5</compressTypes>
+    <compressTypes key="LZF">6</compressTypes>
+    <compressTypes key="LZ4">7</compressTypes>
+    <compress>true</compress>
+    <compressType>LZ4</compressType>
+</compressProcessor>

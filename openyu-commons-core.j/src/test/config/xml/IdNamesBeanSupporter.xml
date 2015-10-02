@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<idNamesBean>
+    <id>
+        <id>TEST_ID</id>
+        <dataId>DATA_ID</dataId>
+        <only>false</only>
+    </id>
+    <names>
+        <entry key="zh_TW">測試使用者</entry>
+        <entry key="en_US">Test user</entry>
+    </names>
+</idNamesBean>

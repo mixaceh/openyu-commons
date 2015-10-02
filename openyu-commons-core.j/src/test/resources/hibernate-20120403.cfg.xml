@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/erp</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">1111</property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.isolation">2</property>
+
+		<!-- autocommit = true, just for test -->
+		<property name="hibernate.connection.autocommit">true</property>
+		<property name="hibernate.transaction.auto_close_session">false</property>
+
+		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+
+		<property name="hibernate.generate_statistics">true</property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.format_sql">false</property>
+
+		<property name="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+		<property name="hibernate.cache.use_query_cache">true</property>
+		<property name="hibernate.cache.use_structured_entries">true</property>
+
+		<property name="hibernate.bytecode.provider">cglib</property>
+		<property name="hibernate.jdbc.batch_size">50</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+
+		<property name="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</property>
+		<property name="hibernate.search.default.indexBase">search</property>
+		<property name="javax.persistence.validation.mode">none</property>
+
+		<!-- test -->
+		<mapping class="org.openyu.commons.entity.DogPo" />
+
+	</session-factory>
+
+</hibernate-configuration>

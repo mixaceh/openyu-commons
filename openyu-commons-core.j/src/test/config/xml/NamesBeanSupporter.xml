@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<namesBean>
+    <names>
+        <entry key="zh_TW">測試使用者</entry>
+        <entry key="en_US">Test user</entry>
+    </names>
+</namesBean>

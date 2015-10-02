@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<dogCollector>
+    <dogList>
+        <code>DOG_01</code>
+        <names xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="baseBeanSupporter"/>
+        <audit/>
+    </dogList>
+    <dogList>
+        <code>DOG_02</code>
+        <names xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="baseBeanSupporter"/>
+        <audit/>
+    </dogList>
+    <dogMap>
+        <entry>
+            <key>DOG_01</key>
+            <value>
+                <code>DOG_01</code>
+                <names xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="baseBeanSupporter"/>
+                <audit/>
+            </value>
+        </entry>
+        <entry>
+            <key>DOG_02</key>
+            <value>
+                <code>DOG_02</code>
+                <names xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="baseBeanSupporter"/>
+                <audit/>
+            </value>
+        </entry>
+    </dogMap>
+</dogCollector>
