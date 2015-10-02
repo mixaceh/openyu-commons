@@ -14,7 +14,6 @@ import org.openyu.commons.security.SecurityType;
 import org.openyu.commons.security.SecurityProcessor;
 import org.openyu.commons.service.ShutdownCallback;
 import org.openyu.commons.service.StartCallback;
-import org.openyu.commons.service.ex.ServiceException;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 import org.openyu.commons.thread.ThreadHelper;
 import org.openyu.commons.thread.ThreadService;

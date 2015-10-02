@@ -262,7 +262,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 		return "";
 	}
 
-	protected final void setGetInstance(boolean getInstance) {
+	public final void setGetInstance(boolean getInstance) {
 		if (getInstance) {
 			addStates(GET_INSTANCE);
 		} else {
@@ -270,7 +270,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter implements
 		}
 	}
 
-	protected final void setCreateInstance(boolean createInstance) {
+	public final void setCreateInstance(boolean createInstance) {
 		if (createInstance) {
 			addStates(CREATE_INSTANCE);
 		} else {

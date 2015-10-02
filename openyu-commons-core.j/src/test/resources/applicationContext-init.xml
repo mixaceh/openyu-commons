@@ -103,6 +103,12 @@
 		<property name="templateLoaderPath" value="file:custom/template/ftl" />
 		<property name="configLocation" value="file:src/test/config/etc/freemarker.properties" />
 	</bean>
+	
+	<bean id="authKeyServiceConfigurer"
+		class="org.openyu.commons.security.impl.AuthKeyServiceConfigurer">
+		<property name="configLocation" value="file:src/test/config/etc/authKeyService.properties" />
+	</bean>
+	
 
 	<!-- autowired -->
 	<bean
