@@ -12,9 +12,14 @@
 		class="org.openyu.commons.blank.BlankServiceImpl"
 		parent="baseServiceSupporter" />
 
+	<bean
+		id="blankFactoryBean"
+		class="org.openyu.commons.blank.BlankFactoryBean"
+		parent="baseServiceSupporter" />
+
 	<!--  
 	<bean
 		id="blankHelper"
 		class="org.openyu.commons.blank.BlankHelper" />
-	-->	
+	-->
 </beans>

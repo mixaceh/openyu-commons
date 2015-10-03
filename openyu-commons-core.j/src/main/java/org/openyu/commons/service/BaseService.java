@@ -1,6 +1,5 @@
 package org.openyu.commons.service;
 
-import java.util.Locale;
 import org.openyu.commons.model.BaseModel;
 
 /**
@@ -14,29 +13,29 @@ import org.openyu.commons.model.BaseModel;
  */
 public interface BaseService extends BaseModel {
 
-	/**
-	 * Gets the message.
-	 *
-	 * @param key
-	 *            the key
-	 * @param locale
-	 *            the locale
-	 * @return the message
-	 */
-	String getMessage(String key, Locale locale);
-
-	/**
-	 * Gets the message.
-	 *
-	 * @param key
-	 *            the key
-	 * @param params
-	 *            the params
-	 * @param locale
-	 *            the locale
-	 * @return the message
-	 */
-	String getMessage(String key, Object[] params, Locale locale);
+	// /**
+	// * Gets the message.
+	// *
+	// * @param key
+	// * the key
+	// * @param locale
+	// * the locale
+	// * @return the message
+	// */
+	// String getMessage(String key, Locale locale);
+	//
+	// /**
+	// * Gets the message.
+	// *
+	// * @param key
+	// * the key
+	// * @param params
+	// * the params
+	// * @param locale
+	// * the locale
+	// * @return the message
+	// */
+	// String getMessage(String key, Object[] params, Locale locale);
 
 	/**
 	 * 啟動

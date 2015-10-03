@@ -10,7 +10,7 @@ import org.openyu.commons.service.supporter.BaseServiceSupporter;
 public final class BlankServiceImpl extends BaseServiceSupporter implements BlankService {
 
 	private static final long serialVersionUID = -1401366707657809071L;
-	/** The Constant LOGGER. */
+
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(BlankServiceImpl.class);
 
 	private static BlankServiceImpl instance;
@@ -106,8 +106,8 @@ public final class BlankServiceImpl extends BaseServiceSupporter implements Blan
 				blankService = null;
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance(BlankService)")
-					.toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance(BlankService)").toString(),
+					e);
 		}
 		return blankService;
 	}
@@ -124,9 +124,7 @@ public final class BlankServiceImpl extends BaseServiceSupporter implements Blan
 				oldInstance.restart();
 			}
 		} catch (Exception e) {
-			LOGGER.error(
-					new StringBuilder("Exception encountered during restartInstance(BlankService)").toString(),
-					e);
+			LOGGER.error(new StringBuilder("Exception encountered during restartInstance(BlankService)").toString(), e);
 		}
 		return blankService;
 	}

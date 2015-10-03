@@ -3,7 +3,7 @@ package org.openyu.commons.collector;
 import org.openyu.commons.model.BaseModel;
 
 /**
- * 收集器
+ * 收集類
  */
 public interface BaseCollector extends BaseModel {
 

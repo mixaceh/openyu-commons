@@ -52,7 +52,6 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 
 	private static final long serialVersionUID = 5282015590204095456L;
 
-	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseServiceSupporter.class);
 
 	protected transient ApplicationContext applicationContext;
@@ -60,9 +59,9 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	protected transient DefaultListableBeanFactory beanFactory;
 
 	/**
-	 * bean id
+	 * bean名稱,等於id
 	 */
-	private String beanId;
+	protected String beanName;
 
 	protected transient ResourceLoader resourceLoader;
 	/**
@@ -156,9 +155,9 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	public BaseServiceSupporter() {
 	}
 
-	public ApplicationContext getApplicationContext() {
-		return applicationContext;
-	}
+	// public ApplicationContext getApplicationContext() {
+	// return applicationContext;
+	// }
 
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
@@ -177,16 +176,8 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 		}
 	}
 
-	public String getBeanId() {
-		return getBeanName();
-	}
-
-	public String getBeanName() {
-		return beanId;
-	}
-
 	public void setBeanName(String beanName) {
-		this.beanId = beanName;
+		this.beanName = beanName;
 	}
 
 	public void setResourceLoader(ResourceLoader resourceLoader) {
@@ -316,11 +307,26 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	// return (this.states & CREATE_INSTANCE) != 0;
 	// }
 
-	public String getMessage(String key, Locale locale) {
+	/**
+	 * 取得國際化訊息
+	 * 
+	 * @param key
+	 * @param locale
+	 * @return
+	 */
+	protected String getMessage(String key, Locale locale) {
 		return getMessage(key, null, locale);
 	}
 
-	public String getMessage(String key, Object[] params, Locale locale) {
+	/**
+	 * 取得國際化訊息
+	 * 
+	 * @param key
+	 * @param params
+	 * @param locale
+	 * @return
+	 */
+	protected String getMessage(String key, Object[] params, Locale locale) {
 		if (locale == null) {
 			return this.applicationContext.getMessage(key, params, LocaleHelper.getLocale());
 		}
@@ -379,13 +385,17 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 		}
 	}
 
+	/**
+	 * 取得顯示名稱
+	 * @return
+	 */
 	protected String getDisplayName() {
 		if (displayName == null) {
 			StringBuilder buff = new StringBuilder();
 			buff.append(getClass().getSimpleName());
-			if (this.beanId != null) {
+			if (this.beanName != null) {
 				buff.append(" '");
-				buff.append(this.beanId);
+				buff.append(this.beanName);
 				buff.append("'");
 			} else {
 				if (isStates(GET_INSTANCE)) {

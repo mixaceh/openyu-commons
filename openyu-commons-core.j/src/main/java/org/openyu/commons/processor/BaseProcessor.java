@@ -3,7 +3,7 @@ package org.openyu.commons.processor;
 import org.openyu.commons.model.BaseModel;
 
 /**
- * 處理器
+ * 處理類
  * 
  * 與collector(靜態)不同,processor是動態可改變,所以不會從.ser讀取回來,而是從bean注入設定
  * 
