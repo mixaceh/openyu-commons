@@ -386,7 +386,44 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	}
 
 	/**
+	 * 移除callback
+	 * 
+	 * @param action
+	 * @return
+	 */
+	public final boolean removeServiceCallback(ServiceCallback action) {
+		AssertHelper.notNull(action, new StringBuilder().append("ServiceCallback must not be null").toString());
+		//
+		try {
+			this.lock.lockInterruptibly();
+			try {
+				if (action instanceof StartCallback) {
+					return startCallbacks.remove(action);
+				} else if (action instanceof ShutdownCallback) {
+					return shutdownCallbacks.remove(action);
+				} else if (action instanceof RestartCallback) {
+					return restartCallbacks.remove(action);
+				} else {
+					throw new ServiceException("Can not remove ServiceCallback");
+				}
+			} catch (ServiceException e) {
+				LOGGER.error(new StringBuilder("Exception encountered during removeServiceCallback()").toString(), e);
+				throw e;
+			} catch (Throwable e) {
+				LOGGER.error(new StringBuilder("Exception encountered during removeServiceCallback()").toString(), e);
+				throw new ServiceException(e);
+			} finally {
+				this.lock.unlock();
+			}
+		} catch (InterruptedException e) {
+			LOGGER.error(new StringBuilder("Exception encountered during addServiceCallback()").toString(), e);
+			throw new ServiceException(e);
+		}
+	}
+
+	/**
 	 * 取得顯示名稱
+	 * 
 	 * @return
 	 */
 	protected String getDisplayName() {
@@ -439,11 +476,11 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 				addStates(STARTING);
 				LOGGER.info(new StringBuilder().append("Starting ").append(getDisplayName()).toString());
 				// --------------------------------------------------
-				doStart();
 				// 2015/09/19 多加callback方式
 				for (StartCallback action : startCallbacks) {
 					doStartCallback(action);
 				}
+				doStart();
 				// --------------------------------------------------
 				// this.starting = false;
 				// this.started = true;
@@ -532,11 +569,11 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 				addStates(SHUTTINGDOWN);
 				LOGGER.info(new StringBuilder().append("Shutting down ").append(getDisplayName()).toString());
 				// --------------------------------------------------
-				doShutdown();
 				// 2015/09/19 多加callback方式
 				for (ShutdownCallback action : shutdownCallbacks) {
 					doShutdownCallback(action);
 				}
+				doShutdown();
 				// --------------------------------------------------
 				// this.shuttingdown = false;
 				// this.shutdown = true;
@@ -607,12 +644,12 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 				// --------------------------------------------------
 				shutdown();
 				start();
-				// 2015/09/22 不宣告為抽象方法
-				doRestart();
 				// 2015/09/23 多加callback方式
 				for (RestartCallback action : restartCallbacks) {
 					doRestartCallback(action);
 				}
+				// 2015/09/22 不宣告為抽象方法
+				doRestart();
 				// --------------------------------------------------
 				// this.restarting = false;
 				removeStates(RESTARTING);

@@ -15,7 +15,16 @@
 	<bean
 		id="blankFactoryBean"
 		class="org.openyu.commons.blank.BlankFactoryBean"
-		parent="baseServiceSupporter" />
+		parent="baseServiceSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/blank-service.properties" />
+		<property name="properties">
+			<props>
+				<prop key="org.openyu.blank.BlankService.aliveMills">180000</prop>
+			</props>
+		</property>
+	</bean>
 
 	<!--  
 	<bean

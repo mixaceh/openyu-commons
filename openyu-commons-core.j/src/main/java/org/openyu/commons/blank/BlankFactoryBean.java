@@ -19,67 +19,16 @@ public final class BlankFactoryBean extends BaseFactorySupporter<BlankService> {
 	}
 
 	/**
-	 * 建構
-	 *
-	 * @return
-	 */
-	public BlankService createInstance() {
-		BlankServiceImpl result = null;
-		try {
-			result = new BlankServiceImpl();
-			result.setCreateInstance(true);
-			// 啟動
-			result.start();
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during createInstance()").toString(), e);
-			result = (BlankServiceImpl) shutdownInstance(result);
-		}
-		return result;
-	}
-
-	/**
-	 * 關閉
-	 * 
-	 * @return
-	 */
-	public BlankService shutdownInstance(BlankService blankService) {
-		try {
-			if (blankService instanceof BlankService) {
-				BlankService oldInstance = blankService;
-				//
-				oldInstance.shutdown();
-				blankService = null;
-			}
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance(BlankService)").toString(),
-					e);
-		}
-		return blankService;
-	}
-
-	/**
-	 * 重啟
-	 * 
-	 * @return
-	 */
-	public BlankService restartInstance(BlankService blankService) {
-		try {
-			if (blankService instanceof BlankService) {
-				BlankService oldInstance = blankService;
-				oldInstance.restart();
-			}
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during restartInstance(BlankService)").toString(), e);
-		}
-		return blankService;
-	}
-
-	/**
 	 * 內部啟動
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		// blankService.start();
+		BlankServiceImpl impl = new BlankServiceImpl();
+		impl.setCreateInstance(true);
+		// 啟動
+		impl.start();
+		//
+		blankService = impl;
 	}
 
 	/**
@@ -87,7 +36,9 @@ public final class BlankFactoryBean extends BaseFactorySupporter<BlankService> {
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		blankService.shutdown();
+		BlankService oldInstance = blankService;
+		oldInstance.shutdown();
+		blankService = null;
 	}
 
 	@Override
