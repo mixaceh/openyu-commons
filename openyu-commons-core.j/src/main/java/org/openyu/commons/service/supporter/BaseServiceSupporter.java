@@ -462,6 +462,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 				}
 			}
 			//
+			buff.append(" @" + Integer.toHexString(hashCode()));
 			displayName = buff.toString();
 		}
 		return displayName;

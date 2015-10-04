@@ -84,10 +84,10 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 			System.out.println(service);
 			assertNotNull(service);
 			//
-			service = factoryBean.shutdownInstance();
+			service = factoryBean.shutdownInstance(service);
 			assertNull(service);
 			// 多次,不會丟出ex
-			service = factoryBean.shutdownInstance();
+			service = factoryBean.shutdownInstance(service);
 			assertNull(service);
 		}
 
@@ -99,9 +99,12 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 			System.out.println(service);
 			assertNotNull(service);
 			//
-			service = factoryBean.restartInstance();
+			service = factoryBean.restartInstance(service);
+			assertNotNull(service);
+			// 多次,不會丟出ex
+			service = factoryBean.restartInstance(service);
+			assertNotNull(service);
 		}
-
 	}
 
 }
