@@ -23,17 +23,17 @@ public abstract class BaseFactorySupporter<T> extends BaseServiceSupporter imple
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseFactorySupporter.class);
 
-	private Resource configLocation;
+	private transient Resource configLocation;
 
-	private Properties properties;
+	private transient Properties properties;
 
 	/**
-	 * 改用ExtendedProperties
+	 * properties改成使用ExtendedProperties
 	 */
-	protected ExtendedProperties extendedProperties;
+	protected transient ExtendedProperties extendedProperties;
 
 	public BaseFactorySupporter() {
-		addServiceCallback(new StartCallbacker());
+		addServiceCallback("StartCallbacker", new StartCallbacker());
 	}
 
 	public void setConfigLocation(Resource configLocation) {
@@ -58,18 +58,23 @@ public abstract class BaseFactorySupporter<T> extends BaseServiceSupporter imple
 	/**
 	 * 合併設定
 	 * 
+	 * properties改成使用 extendedProperties 取屬性
+	 * 
 	 * @throws Exception
 	 */
 	protected void mergeProperties() throws Exception {
 		Properties props = new Properties();
 		if (this.configLocation != null) {
+			LOGGER.debug("configLocation: " + configLocation);
 			PropertiesLoaderUtils.fillProperties(props, this.configLocation);
 		}
 		if (this.properties != null) {
+			LOGGER.debug("properties: " + properties);
 			props.putAll(this.properties);
 			this.properties.clear();
 		}
 		//
 		this.extendedProperties = ExtendedProperties.convertProperties(props);
+		LOGGER.info("Props: " + extendedProperties);
 	}
 }

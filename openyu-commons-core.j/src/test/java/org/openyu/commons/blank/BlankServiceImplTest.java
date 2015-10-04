@@ -21,16 +21,15 @@ public class BlankServiceImplTest extends BaseTestSupporter {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		applicationContext = new ClassPathXmlApplicationContext(new String[] {//
-				//"applicationContext-init.xml", //
-				//"org/openyu/commons/thread/applicationContext-thread.xml", //
+		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
+				// "applicationContext-init.xml", //
+				// "org/openyu/commons/thread/applicationContext-thread.xml", //
 				"org/openyu/commons/service/applicationContext-service.xml", //
 				"org/openyu/commons/blank/applicationContext-blank.xml",//
 
 		});
 
-		blankServiceImpl = (BlankServiceImpl) applicationContext
-				.getBean("blankService");
+		blankServiceImpl = (BlankServiceImpl) applicationContext.getBean("blankService");
 	}
 
 	@Test
@@ -178,110 +177,6 @@ public class BlankServiceImplTest extends BaseTestSupporter {
 			// 多次,不會丟出ex
 			instance = BlankServiceImpl.restartInstance();
 			assertNotNull(instance);
-		}
-	}
-
-	/**
-	 * CreateInstanceTest
-	 */
-	public static class CreateInstanceTest extends BaseTestSupporter {
-
-		@Rule
-		public BenchmarkRule benchmarkRule = new BenchmarkRule();
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void newInstance() throws Exception {
-			BlankServiceImpl impl = new BlankServiceImpl();
-			// 啟動
-			impl.start();
-			System.out.println(impl);
-			assertNotNull(impl);
-		}
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void createInstance() {
-			BlankService service = BlankServiceImpl.createInstance();
-			System.out.println(service);
-			assertNotNull(service);
-		}
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void shutdownInstance() {
-			BlankService service = BlankServiceImpl.createInstance();
-			System.out.println(service);
-			assertNotNull(service);
-			//
-			service = BlankServiceImpl.shutdownInstance(service);
-			assertNull(service);
-			// 多次,不會丟出ex
-			service = BlankServiceImpl.shutdownInstance(service);
-			assertNull(service);
-		}
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void restartInstance() {
-			BlankService service = BlankServiceImpl.createInstance();
-			System.out.println(service);
-			assertNotNull(service);
-			//
-			service = BlankServiceImpl.restartInstance(service);
-			assertNotNull(service);
-			// 多次,不會丟出ex
-			service = BlankServiceImpl.restartInstance(service);
-			assertNotNull(service);
-		}
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void startWithException() throws Exception {
-			BlankServiceImpl impl = new BlankServiceImpl();
-			// 多次,會丟出ex
-			// java.lang.IllegalStateException: BlankServiceImpl 'blankService'
-			// was already started
-			impl.start();
-			impl.start();
-		}
-
-		@Test()
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void shutdownWithException() throws Exception {
-			BlankServiceImpl impl = new BlankServiceImpl();
-			impl.start();
-			System.out.println(impl);
-			assertNotNull(impl);
-			// 多次,會丟出ex
-			// java.lang.IllegalStateException: BlankServiceImpl 'blankService'
-			// was already shutdown
-			impl.shutdown();
-			impl.shutdown();
-		}
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void restartWithException() throws Exception {
-			// 沒啟動直接調用重啟,會丟出ex
-			BlankServiceImpl impl = new BlankServiceImpl();
-			// java.lang.IllegalStateException: BlankServiceImpl (new) not
-			// start. Call start()
-			impl.restart();
-		}
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void checkStarted() {
-			BlankServiceImpl impl = new BlankServiceImpl();
-			// 一開始沒啟動,有可能是忘了call start()
-			// impl.start();
-			System.out.println(impl);
-			assertNotNull(impl);
-			// 會丟出ex
-			// java.lang.IllegalStateException: BlankServiceImpl (new) not
-			// start. Call start()
-			impl.checkStarted();
 		}
 	}
 }

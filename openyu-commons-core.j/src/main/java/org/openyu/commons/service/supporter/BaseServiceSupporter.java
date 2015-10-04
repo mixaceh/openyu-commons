@@ -1,8 +1,8 @@
 package org.openyu.commons.service.supporter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -139,18 +139,24 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 
 	/**
 	 * 啟動callback
+	 * 
+	 * <className,callback>
 	 */
-	private transient List<StartCallback> startCallbacks = new ArrayList<StartCallback>();
+	private transient Map<String, StartCallback> startCallbacks = new LinkedHashMap<String, StartCallback>();
 
 	/**
 	 * 關閉callback
+	 *
+	 * <className,callback>
 	 */
-	private transient List<ShutdownCallback> shutdownCallbacks = new ArrayList<ShutdownCallback>();
+	private transient Map<String, ShutdownCallback> shutdownCallbacks = new LinkedHashMap<String, ShutdownCallback>();
 
 	/**
 	 * 重啟callback
+	 * 
+	 * <className,callback>
 	 */
-	private transient List<RestartCallback> restartCallbacks = new ArrayList<RestartCallback>();
+	private transient Map<String, RestartCallback> restartCallbacks = new LinkedHashMap<String, RestartCallback>();
 
 	public BaseServiceSupporter() {
 	}
@@ -163,9 +169,9 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 		this.applicationContext = applicationContext;
 	}
 
-	public BeanFactory getBeanFactory() {
-		return beanFactory;
-	}
+	// public BeanFactory getBeanFactory() {
+	// return beanFactory;
+	// }
 
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
 		this.beanFactory = (DefaultListableBeanFactory) beanFactory;
@@ -184,6 +190,9 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 		this.resourceLoader = resourceLoader;
 	}
 
+	// --------------------------------------------------
+	// life cycle states
+	// --------------------------------------------------
 	/**
 	 * 取得狀態
 	 * 
@@ -339,12 +348,19 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	 * @param actions
 	 * @return
 	 */
-	public final boolean addServiceCallback(ServiceCallback... actions) {
+	public final boolean addServiceCallback(String[] classNames, ServiceCallback... actions) {
 		AssertHelper.notNull(actions, new StringBuilder().append("ServiceCallbacks must not be null").toString());
 		//
 		boolean result = false;
-		for (ServiceCallback action : actions) {
-			result &= addServiceCallback(action);
+
+		// for (ServiceCallback action : actions) {
+		// result &= addServiceCallback(action);
+		// }
+
+		int len = classNames.length;
+		for (int i = 0; i < len; i++) {
+			ServiceCallback buff = addServiceCallback(classNames[i], actions[i]);
+			result &= (buff != null);
 		}
 		return result;
 	}
@@ -355,20 +371,20 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	 * @param action
 	 * @return
 	 */
-	public final boolean addServiceCallback(ServiceCallback action) {
+	public final ServiceCallback addServiceCallback(String className, ServiceCallback action) {
 		AssertHelper.notNull(action, new StringBuilder().append("ServiceCallback must not be null").toString());
 		//
 		try {
 			this.lock.lockInterruptibly();
 			try {
 				if (action instanceof StartCallback) {
-					return startCallbacks.add((StartCallback) action);
+					return startCallbacks.put(className, (StartCallback) action);
 				} else if (action instanceof ShutdownCallback) {
-					return shutdownCallbacks.add((ShutdownCallback) action);
+					return shutdownCallbacks.put(className, (ShutdownCallback) action);
 				} else if (action instanceof RestartCallback) {
-					return restartCallbacks.add((RestartCallback) action);
+					return restartCallbacks.put(className, (RestartCallback) action);
 				} else {
-					throw new ServiceException("Can not add ServiceCallback");
+					throw new ServiceException("Can not add " + className + ", ServiceCallback");
 				}
 			} catch (ServiceException e) {
 				LOGGER.error(new StringBuilder("Exception encountered during addServiceCallback()").toString(), e);
@@ -391,20 +407,20 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	 * @param action
 	 * @return
 	 */
-	public final boolean removeServiceCallback(ServiceCallback action) {
-		AssertHelper.notNull(action, new StringBuilder().append("ServiceCallback must not be null").toString());
+	public final ServiceCallback removeServiceCallback(String className) {
+		AssertHelper.notNull(className, new StringBuilder().append("ClassName must not be null").toString());
 		//
 		try {
 			this.lock.lockInterruptibly();
 			try {
-				if (action instanceof StartCallback) {
-					return startCallbacks.remove(action);
-				} else if (action instanceof ShutdownCallback) {
-					return shutdownCallbacks.remove(action);
-				} else if (action instanceof RestartCallback) {
-					return restartCallbacks.remove(action);
+				if (startCallbacks.containsKey(className)) {
+					return startCallbacks.remove(className);
+				} else if (shutdownCallbacks.containsKey(className)) {
+					return shutdownCallbacks.remove(className);
+				} else if (restartCallbacks.containsKey(className)) {
+					return restartCallbacks.remove(className);
 				} else {
-					throw new ServiceException("Can not remove ServiceCallback");
+					throw new ServiceException("Can not remove " + className + ", ServiceCallback");
 				}
 			} catch (ServiceException e) {
 				LOGGER.error(new StringBuilder("Exception encountered during removeServiceCallback()").toString(), e);
@@ -477,9 +493,10 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 				LOGGER.info(new StringBuilder().append("Starting ").append(getDisplayName()).toString());
 				// --------------------------------------------------
 				// 2015/09/19 多加callback方式
-				for (StartCallback action : startCallbacks) {
+				for (StartCallback action : startCallbacks.values()) {
 					doStartCallback(action);
 				}
+				// for implement
 				doStart();
 				// --------------------------------------------------
 				// this.starting = false;
@@ -570,9 +587,10 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 				LOGGER.info(new StringBuilder().append("Shutting down ").append(getDisplayName()).toString());
 				// --------------------------------------------------
 				// 2015/09/19 多加callback方式
-				for (ShutdownCallback action : shutdownCallbacks) {
+				for (ShutdownCallback action : shutdownCallbacks.values()) {
 					doShutdownCallback(action);
 				}
+				//for implement
 				doShutdown();
 				// --------------------------------------------------
 				// this.shuttingdown = false;
@@ -645,7 +663,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 				shutdown();
 				start();
 				// 2015/09/23 多加callback方式
-				for (RestartCallback action : restartCallbacks) {
+				for (RestartCallback action : restartCallbacks.values()) {
 					doRestartCallback(action);
 				}
 				// 2015/09/22 不宣告為抽象方法

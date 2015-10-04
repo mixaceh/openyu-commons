@@ -1,13 +1,14 @@
 package org.openyu.commons.blank;
 
+import org.openyu.commons.service.BaseService;
+import org.openyu.commons.service.supporter.BaseFactorySupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openyu.commons.service.supporter.BaseFactorySupporter;
 
 /**
  * Blank服務
  */
-public final class BlankFactoryBean extends BaseFactorySupporter<BlankService> {
+public final class BlankFactoryBean<T> extends BaseFactorySupporter<BlankService> {
 
 	private static final long serialVersionUID = -1401366707657809071L;
 
@@ -19,16 +20,73 @@ public final class BlankFactoryBean extends BaseFactorySupporter<BlankService> {
 	}
 
 	/**
+	 * 建構
+	 * 
+	 * @return
+	 */
+	@Override
+	public BlankService createInstance() {
+		BlankServiceImpl result = null;
+		try {
+			result = new BlankServiceImpl();
+			result.setCreateInstance(true);
+			// TODO for extendedProperties
+
+			// 啟動
+			result.start();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during createInstance()").toString(), e);
+			result = (BlankServiceImpl) shutdownInstance();
+		}
+		return result;
+	}
+
+	/**
+	 * 關閉
+	 *
+	 * @return
+	 */
+	@Override
+	public BlankService shutdownInstance() {
+		try {
+			BlankService oldInstance = blankService;
+			//
+			if (oldInstance != null) {
+				oldInstance.shutdown();
+			}
+			blankService = null;
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance()").toString(), e);
+		}
+		return blankService;
+
+	}
+
+	/**
+	 * 重啟
+	 *
+	 * @return
+	 */
+	@Override
+	public BlankService restartInstance() {
+		try {
+			BlankService oldInstance = blankService;
+			//
+			if (oldInstance != null) {
+				oldInstance.restart();
+			}
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during restartInstance()").toString(), e);
+		}
+		return blankService;
+	}
+
+	/**
 	 * 內部啟動
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		BlankServiceImpl impl = new BlankServiceImpl();
-		impl.setCreateInstance(true);
-		// 啟動
-		impl.start();
-		//
-		blankService = impl;
+		blankService = createInstance();
 	}
 
 	/**
@@ -36,9 +94,12 @@ public final class BlankFactoryBean extends BaseFactorySupporter<BlankService> {
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		BlankService oldInstance = blankService;
-		oldInstance.shutdown();
-		blankService = null;
+		this.blankService = shutdownInstance();
+	}
+
+	@Override
+	protected void doRestart() throws Exception {
+		this.blankService = restartInstance();
 	}
 
 	@Override
@@ -55,4 +116,5 @@ public final class BlankFactoryBean extends BaseFactorySupporter<BlankService> {
 	public boolean isSingleton() {
 		return true;
 	}
+
 }

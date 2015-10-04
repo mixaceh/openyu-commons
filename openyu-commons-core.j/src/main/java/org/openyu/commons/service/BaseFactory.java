@@ -11,10 +11,10 @@ import org.springframework.beans.factory.FactoryBean;
  */
 public interface BaseFactory<T> extends BaseService, FactoryBean<T> {
 
-//	T createInstance();
-//
-//	T shutdownInstance(T t);
-//
-//	T restartInstance(T t);
+	T createInstance();
+
+	T shutdownInstance();
+
+	T restartInstance();
 
 }

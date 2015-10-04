@@ -59,4 +59,49 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 		applicationContext.refresh();
 	}
 
+	/**
+	 * CreateInstanceTest
+	 */
+	public static class CreateInstanceTest extends BaseTestSupporter {
+
+		@Rule
+		public BenchmarkRule benchmarkRule = new BenchmarkRule();
+
+		@Test
+		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+		public void createInstance() {
+			BlankFactoryBean<BlankService> factoryBean = new BlankFactoryBean<BlankService>();
+			BlankService service = factoryBean.createInstance();
+			System.out.println(service);
+			assertNotNull(service);
+		}
+
+		@Test
+		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+		public void shutdownInstance() {
+			BlankFactoryBean<BlankService> factoryBean = new BlankFactoryBean<BlankService>();
+			BlankService service = factoryBean.createInstance();
+			System.out.println(service);
+			assertNotNull(service);
+			//
+			service = factoryBean.shutdownInstance();
+			assertNull(service);
+			// 多次,不會丟出ex
+			service = factoryBean.shutdownInstance();
+			assertNull(service);
+		}
+
+		@Test
+		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+		public void restartInstance() {
+			BlankFactoryBean<BlankService> factoryBean = new BlankFactoryBean<BlankService>();
+			BlankService service = factoryBean.createInstance();
+			System.out.println(service);
+			assertNotNull(service);
+			//
+			service = factoryBean.restartInstance();
+		}
+
+	}
+
 }

@@ -74,62 +74,6 @@ public final class BlankServiceImpl extends BaseServiceSupporter implements Blan
 	}
 
 	/**
-	 * 建構
-	 * 
-	 * @return
-	 */
-	public static BlankService createInstance() {
-		BlankServiceImpl result = null;
-		try {
-			result = new BlankServiceImpl();
-			result.setCreateInstance(true);
-			// 啟動
-			result.start();
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during createInstance()").toString(), e);
-			result = (BlankServiceImpl) shutdownInstance(result);
-		}
-		return result;
-	}
-
-	/**
-	 * 關閉
-	 * 
-	 * @return
-	 */
-	public static BlankService shutdownInstance(BlankService blankService) {
-		try {
-			if (blankService instanceof BlankService) {
-				BlankService oldInstance = blankService;
-				//
-				oldInstance.shutdown();
-				blankService = null;
-			}
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance(BlankService)").toString(),
-					e);
-		}
-		return blankService;
-	}
-
-	/**
-	 * 重啟
-	 * 
-	 * @return
-	 */
-	public static BlankService restartInstance(BlankService blankService) {
-		try {
-			if (blankService instanceof BlankService) {
-				BlankService oldInstance = blankService;
-				oldInstance.restart();
-			}
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during restartInstance(BlankService)").toString(), e);
-		}
-		return blankService;
-	}
-
-	/**
 	 * 內部啟動
 	 */
 	@Override
