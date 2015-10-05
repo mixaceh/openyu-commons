@@ -23,23 +23,24 @@ public final class BlankFactoryBean<T> extends BaseFactorySupporter<BlankService
 	 * 
 	 * @return
 	 */
-	public BlankService createInstance() {
+	protected BlankService createInstance() {
 		BlankServiceImpl result = null;
 		try {
 			result = new BlankServiceImpl();
 			result.setCreateInstance(true);
-			
+
 			// 1.extendedProperties
-			//LOGGER.info("" + extendedProperties.getLong("org.openyu.blank.BlankService.aliveMills"));
-			//LOGGER.info("" + extendedProperties.getLong("org.openyu.blank.BlankService.listenMills"));
+			// LOGGER.info("" +
+			// extendedProperties.getLong("org.openyu.blank.BlankService.aliveMills"));
+			// LOGGER.info("" +
+			// extendedProperties.getLong("org.openyu.blank.BlankService.listenMills"));
 			// 2. injectiion
-			
 
 			// 啟動
 			result.start();
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during createInstance()").toString(), e);
-			result = (BlankServiceImpl) shutdownInstance(this.blankService);
+			result = (BlankServiceImpl) shutdownInstance();
 		}
 		return result;
 	}
@@ -49,19 +50,17 @@ public final class BlankFactoryBean<T> extends BaseFactorySupporter<BlankService
 	 *
 	 * @return
 	 */
-	public BlankService shutdownInstance(BlankService blankService) {
+	protected BlankService shutdownInstance() {
 		try {
-			if (blankService instanceof BlankService) {
+			if (this.blankService != null) {
 				BlankService oldInstance = blankService;
-				//
 				oldInstance.shutdown();
-				blankService = null;
+				this.blankService = null;
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance(BlankService)").toString(),
-					e);
+			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance()").toString(), e);
 		}
-		return blankService;
+		return this.blankService;
 
 	}
 
@@ -70,16 +69,16 @@ public final class BlankFactoryBean<T> extends BaseFactorySupporter<BlankService
 	 *
 	 * @return
 	 */
-	public BlankService restartInstance(BlankService blankService) {
+	public BlankService restartInstance() {
 		try {
-			if (blankService instanceof BlankService) {
+			if (this.blankService != null) {
 				BlankService oldInstance = blankService;
 				oldInstance.restart();
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during restartInstance(BlankService)").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during restartInstance()").toString(), e);
 		}
-		return blankService;
+		return this.blankService;
 	}
 
 	/**
@@ -95,12 +94,12 @@ public final class BlankFactoryBean<T> extends BaseFactorySupporter<BlankService
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		this.blankService = shutdownInstance(this.blankService);
+		this.blankService = shutdownInstance();
 	}
 
 	@Override
 	protected void doRestart() throws Exception {
-		this.blankService = restartInstance(this.blankService);
+		this.blankService = restartInstance();
 	}
 
 	@Override

@@ -69,7 +69,7 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void createInstance() {
+		public void createInstance() throws Exception {
 			BlankFactoryBean<BlankService> factoryBean = new BlankFactoryBean<BlankService>();
 			BlankService service = factoryBean.createInstance();
 			System.out.println(service);
@@ -78,31 +78,33 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void shutdownInstance() {
+		public void shutdownInstance() throws Exception {
 			BlankFactoryBean<BlankService> factoryBean = new BlankFactoryBean<BlankService>();
-			BlankService service = factoryBean.createInstance();
+			factoryBean.start();
+			BlankService service = factoryBean.getObject();
 			System.out.println(service);
 			assertNotNull(service);
 			//
-			service = factoryBean.shutdownInstance(service);
+			service = factoryBean.shutdownInstance();
 			assertNull(service);
 			// 多次,不會丟出ex
-			service = factoryBean.shutdownInstance(service);
+			service = factoryBean.shutdownInstance();
 			assertNull(service);
 		}
 
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void restartInstance() {
+		public void restartInstance() throws Exception {
 			BlankFactoryBean<BlankService> factoryBean = new BlankFactoryBean<BlankService>();
-			BlankService service = factoryBean.createInstance();
+			factoryBean.start();
+			BlankService service = factoryBean.getObject();
 			System.out.println(service);
 			assertNotNull(service);
 			//
-			service = factoryBean.restartInstance(service);
+			service = factoryBean.restartInstance();
 			assertNotNull(service);
 			// 多次,不會丟出ex
-			service = factoryBean.restartInstance(service);
+			service = factoryBean.restartInstance();
 			assertNotNull(service);
 		}
 	}

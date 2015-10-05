@@ -9,7 +9,7 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
              ">
 
-	<!-- 2015/10/02 改用 AuthKeyServiceConfigurer in applicationContext-init.xml
+	<!-- 2015/10/02 改用 AuthKeyServiceFactoryBean in applicationContext-init.xml
 	<bean
 		id="authKeyService"
 		class="org.openyu.commons.security.impl.AuthKeyServiceImpl"
