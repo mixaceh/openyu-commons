@@ -345,6 +345,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	/**
 	 * 加入callbacks
 	 * 
+	 * @param classNames
 	 * @param actions
 	 * @return
 	 */
@@ -368,6 +369,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	/**
 	 * 加入callback
 	 * 
+	 * @param className
 	 * @param action
 	 * @return
 	 */
@@ -591,9 +593,13 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 				for (ShutdownCallback action : shutdownCallbacks.values()) {
 					doShutdownCallback(action);
 				}
-				//for implement
+				// for implement
 				doShutdown();
 				// --------------------------------------------------
+				// 移除callback
+				this.startCallbacks.clear();
+				this.shutdownCallbacks.clear();
+				this.restartCallbacks.clear();
 				// this.shuttingdown = false;
 				// this.shutdown = true;
 				removeStates(SHUTTINGDOWN);

@@ -3,7 +3,6 @@ package org.openyu.commons.security.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -43,7 +42,7 @@ public class AuthKeyServiceImpl extends BaseServiceSupporter implements AuthKeyS
 	/**
 	 * 預設key存活毫秒, 3分鐘
 	 */
-	private static final long DEFAULT_ALIVE_MILLS = 180 * 1000L;
+	public static final long DEFAULT_ALIVE_MILLS = 180 * 1000L;
 	/**
 	 * key存活毫秒
 	 */
@@ -52,15 +51,15 @@ public class AuthKeyServiceImpl extends BaseServiceSupporter implements AuthKeyS
 	/**
 	 * 預設監聽毫秒, 10秒
 	 */
-	private static final long DEFAULT_LISTEN_MILLS = 10 * 1000L;
+	public static final long DEFAULT_LISTEN_MILLS = 10 * 1000L;
 	/**
 	 * 監聽毫秒
 	 */
 	private long listenMills = DEFAULT_LISTEN_MILLS;
 
-	private Properties properties;
-
-	/** 安全性 */
+	/**
+	 * 安全性處理器
+	 */
 	private transient SecurityProcessor securityProcessor = new SecurityProcessorImpl();
 
 	private Map<String, AuthKey> authKeys = new ConcurrentHashMap<String, AuthKey>();
@@ -72,8 +71,8 @@ public class AuthKeyServiceImpl extends BaseServiceSupporter implements AuthKeyS
 
 	public AuthKeyServiceImpl() {
 		// 2015/09/19 多加callback方式
-		addServiceCallback(new StartCallbacker());
-		addServiceCallback(new ShutdownCallbacker());
+		addServiceCallback("StartCallbacker", new StartCallbacker());
+		addServiceCallback("ShutdownCallbacker", new ShutdownCallbacker());
 	}
 
 	public void setThreadService(ThreadService threadService) {

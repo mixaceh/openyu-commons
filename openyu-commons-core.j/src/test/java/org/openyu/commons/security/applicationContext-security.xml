@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+             ">
+	<bean
+		id="propsConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property
+			name="order"
+			value="2" />
+		<property
+			name="ignoreUnresolvablePlaceholders"
+			value="true" />
+		<property name="locations">
+			<list>
+				<value>file:src/test/config/etc/AuthKeyService.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean
+		id="authKeyService"
+		class="org.openyu.commons.security.impl.AuthKeyServiceImpl"
+		parent="baseServiceSupporter"
+		p:aliveMills="${org.openyu.commons.security.AuthKeyService.aliveMills}"
+		p:listenMills="${org.openyu.commons.security.AuthKeyService.listenMills}"
+		p:security="${org.openyu.commons.security.AuthKeyService.security}"
+		p:securityType="${org.openyu.commons.security.AuthKeyService.securityType}"
+		p:securityKey="${org.openyu.commons.security.AuthKeyService.securityKey}" />
+
+	<bean
+		id="authKeyFactoryBean"
+		class="org.openyu.commons.security.impl.AuthKeyFactoryBean"
+		parent="baseServiceSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/AuthKeyService.properties" />
+	</bean>
+
+</beans>

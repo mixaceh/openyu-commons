@@ -1,4 +1,4 @@
-package org.openyu.commons.blank;
+package org.openyu.commons.security.impl;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -11,13 +11,15 @@ import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
+import org.openyu.commons.security.AuthKeyService;
+import org.openyu.commons.thread.impl.ThreadServiceImpl;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BlankFactoryBeanTest extends BaseTestSupporter {
+public class AuthKeyFactoryBeanTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static BlankServiceImpl blankServiceImpl;
+	private static AuthKeyServiceImpl authKeyServiceImpl;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -25,24 +27,24 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 				"applicationContext-init.xml", // test目錄下
 				"org/openyu/commons/thread/applicationContext-thread.xml", // test目錄下
 				"org/openyu/commons/service/applicationContext-service.xml", //
-				"org/openyu/commons/blank/applicationContext-blank.xml",//
+				"org/openyu/commons/security/applicationContext-security.xml",// test目錄下
 
 		});
-		blankServiceImpl = (BlankServiceImpl) applicationContext.getBean("blankFactoryBean");
+		authKeyServiceImpl = (AuthKeyServiceImpl) applicationContext.getBean("authKeyFactoryBean");
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void blankServiceImpl() {
-		System.out.println(blankServiceImpl);
-		assertNotNull(blankServiceImpl);
+	public void authKeyServiceImpl() {
+		System.out.println(authKeyServiceImpl);
+		assertNotNull(authKeyServiceImpl);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void close() {
-		System.out.println(blankServiceImpl);
-		assertNotNull(blankServiceImpl);
+		System.out.println(authKeyServiceImpl);
+		assertNotNull(authKeyServiceImpl);
 		applicationContext.close();
 		// 多次,不會丟出ex
 		applicationContext.close();
@@ -51,8 +53,8 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void refresh() {
-		System.out.println(blankServiceImpl);
-		assertNotNull(blankServiceImpl);
+		System.out.println(authKeyServiceImpl);
+		assertNotNull(authKeyServiceImpl);
 		applicationContext.refresh();
 		// 多次,不會丟出ex
 		applicationContext.refresh();
@@ -69,8 +71,10 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 		public void createInstance() throws Exception {
-			BlankFactoryBean<BlankService> factoryBean = new BlankFactoryBean<BlankService>();
-			BlankService service = factoryBean.createInstance();
+			AuthKeyFactoryBean<AuthKeyService> factoryBean = new AuthKeyFactoryBean<AuthKeyService>();
+			factoryBean.setThreadService(ThreadServiceImpl.getInstance());
+			//
+			AuthKeyService service = factoryBean.createInstance();
 			System.out.println(service);
 			assertNotNull(service);
 		}
@@ -78,9 +82,11 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 		public void shutdownInstance() throws Exception {
-			BlankFactoryBean<BlankService> factoryBean = new BlankFactoryBean<BlankService>();
+			AuthKeyFactoryBean<AuthKeyService> factoryBean = new AuthKeyFactoryBean<AuthKeyService>();
+			factoryBean.setThreadService(ThreadServiceImpl.getInstance());
+			//
 			factoryBean.start();
-			BlankService service = factoryBean.getObject();
+			AuthKeyService service = factoryBean.getObject();
 			System.out.println(service);
 			assertNotNull(service);
 			//
@@ -94,9 +100,11 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 		public void restartInstance() throws Exception {
-			BlankFactoryBean<BlankService> factoryBean = new BlankFactoryBean<BlankService>();
+			AuthKeyFactoryBean<AuthKeyService> factoryBean = new AuthKeyFactoryBean<AuthKeyService>();
+			factoryBean.setThreadService(ThreadServiceImpl.getInstance());
+			//
 			factoryBean.start();
-			BlankService service = factoryBean.getObject();
+			AuthKeyService service = factoryBean.getObject();
 			System.out.println(service);
 			assertNotNull(service);
 			//

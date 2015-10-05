@@ -155,15 +155,6 @@
 			name="configLocation"
 			value="file:src/test/config/etc/freemarker.properties" />
 	</bean>
-	
-	<!-- authKeyService -->
-	<bean
-		id="authKeyServiceConfigurer"
-		class="org.openyu.commons.security.impl.AuthKeyServiceConfigurer">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/authKey-service.properties" />
-	</bean>
 
 	<!-- autowired -->
 	<bean

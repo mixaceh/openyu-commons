@@ -63,7 +63,8 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 	public V call() {
 		try {
 			LOGGER.info(new StringBuilder().append("Calling ").append("T[" + Thread.currentThread().getId() + "] ")
-					.append(ClassHelper.getSimpleName(getClass())).toString());
+					.append(ClassHelper.getSimpleName(getClass())).append(" @" + Integer.toHexString(hashCode()))
+					.toString());
 			// --------------------------------------------------
 			return doCall();
 			// --------------------------------------------------
@@ -73,7 +74,8 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 		//
 		if (this.shutdown) {
 			LOGGER.info(new StringBuilder().append("Interrupted ").append("T[" + Thread.currentThread().getId() + "] ")
-					.append(ClassHelper.getSimpleName(getClass())).toString());
+					.append(ClassHelper.getSimpleName(getClass())).append(" @" + Integer.toHexString(hashCode()))
+					.toString());
 		}
 		return null;
 	}

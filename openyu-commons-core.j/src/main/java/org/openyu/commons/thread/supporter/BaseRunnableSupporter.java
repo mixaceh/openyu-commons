@@ -64,7 +64,8 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 	public void run() {
 		try {
 			LOGGER.info(new StringBuilder().append("Running ").append("T[" + Thread.currentThread().getId() + "] ")
-					.append(ClassHelper.getSimpleName(getClass())).toString());
+					.append(ClassHelper.getSimpleName(getClass())).append(" @" + Integer.toHexString(hashCode()))
+					.toString());
 			// --------------------------------------------------
 			doRun();
 			// --------------------------------------------------
@@ -74,7 +75,8 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 		//
 		if (this.shutdown) {
 			LOGGER.info(new StringBuilder().append("Interrupted ").append("T[" + Thread.currentThread().getId() + "] ")
-					.append(ClassHelper.getSimpleName(getClass())).toString());
+					.append(ClassHelper.getSimpleName(getClass())).append(" @" + Integer.toHexString(hashCode()))
+					.toString());
 		}
 	}
 

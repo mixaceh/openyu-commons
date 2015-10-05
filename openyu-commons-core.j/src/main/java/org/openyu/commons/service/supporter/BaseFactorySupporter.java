@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.apache.commons.collections.ExtendedProperties;
 import org.openyu.commons.service.BaseFactory;
+import org.openyu.commons.service.ShutdownCallback;
 import org.openyu.commons.service.StartCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +31,11 @@ public abstract class BaseFactorySupporter<T> extends BaseServiceSupporter imple
 	/**
 	 * properties改成使用ExtendedProperties
 	 */
-	protected transient ExtendedProperties extendedProperties;
+	protected transient ExtendedProperties extendedProperties = new ExtendedProperties();
 
 	public BaseFactorySupporter() {
 		addServiceCallback("StartCallbacker", new StartCallbacker());
+		addServiceCallback("ShutdownCallbacker", new ShutdownCallbacker());
 	}
 
 	public void setConfigLocation(Resource configLocation) {
@@ -65,16 +67,32 @@ public abstract class BaseFactorySupporter<T> extends BaseServiceSupporter imple
 	protected void mergeProperties() throws Exception {
 		Properties props = new Properties();
 		if (this.configLocation != null) {
-			LOGGER.debug("configLocation: " + configLocation);
+			LOGGER.info(new StringBuilder().append("Loading config from ").append(this.configLocation).toString());
 			PropertiesLoaderUtils.fillProperties(props, this.configLocation);
 		}
 		if (this.properties != null) {
-			LOGGER.debug("properties: " + properties);
+			LOGGER.info(new StringBuilder().append("Loading properties from setProperties(Properties)").toString());
 			props.putAll(this.properties);
+			// 清除原properties,省mem,因之後會使用extendedProperties了
 			this.properties.clear();
 		}
 		//
-		this.extendedProperties = ExtendedProperties.convertProperties(props);
-		LOGGER.info("Props are " + extendedProperties);
+		if (props.size() > 0) {
+			this.extendedProperties = ExtendedProperties.convertProperties(props);
+			if (this.extendedProperties.size() > 0) {
+				LOGGER.info(new StringBuilder().append("Merged properties are " + extendedProperties).toString());
+			}
+		}
+	}
+
+	/**
+	 * 內部關閉
+	 */
+	protected class ShutdownCallbacker implements ShutdownCallback {
+
+		@Override
+		public void doInAction() throws Exception {
+			extendedProperties.clear();
+		}
 	}
 }

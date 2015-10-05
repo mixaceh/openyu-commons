@@ -21,13 +21,11 @@ import org.slf4j.LoggerFactory;
 
 @XmlRootElement(name = "securityProcessor")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SecurityProcessorImpl extends BaseProcessorSupporter implements
-		SecurityProcessor {
+public class SecurityProcessorImpl extends BaseProcessorSupporter implements SecurityProcessor {
 
 	private static final long serialVersionUID = 8889147664445576044L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(SecurityProcessorImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(SecurityProcessorImpl.class);
 
 	// --------------------------------------------------
 	// 此有系統預設值,只是為了轉出xml,並非給企劃編輯用
@@ -40,14 +38,33 @@ public class SecurityProcessorImpl extends BaseProcessorSupporter implements
 
 	// --------------------------------------------------
 
-	/** 是否安全性 */
-	private boolean security;
+	/**
+	 * 預設是否加密
+	 */
+	public static final boolean DEFAULT_SECURITY = true;
 
-	/** 安全性類別 */
-	private SecurityType securityType;
+	/** 是否加密 */
+	private boolean security = DEFAULT_SECURITY;;
 
-	/** 安全性key */
-	private String securityKey;
+	/**
+	 * 預設加密類型
+	 */
+	public static final SecurityType DEFAULT_SECURITY_TYPE = SecurityType.HmacSHA1;
+
+	/**
+	 * 加密類別
+	 */
+	private SecurityType securityType = DEFAULT_SECURITY_TYPE;
+
+	/**
+	 * 預設加密key
+	 */
+	public static final String DEFAULT_SECURITY_KEY = "encrypt";
+
+	/**
+	 * 加密key
+	 */
+	private String securityKey = DEFAULT_SECURITY_KEY;
 
 	static {
 		// 此有系統預設值,只是為了轉出xml,並非給企劃編輯用
@@ -122,8 +139,7 @@ public class SecurityProcessorImpl extends BaseProcessorSupporter implements
 	 * @return
 	 */
 	public byte[] encrypt(String securityTypeValue, byte[] value) {
-		SecurityType securityType = EnumHelper.valueOf(SecurityType.class,
-				securityTypeValue);
+		SecurityType securityType = EnumHelper.valueOf(SecurityType.class, securityTypeValue);
 		AssertHelper.notNull(securityType, "The SecurityType must not be null");
 		this.securityType = securityType;
 		return encrypt(value);
@@ -152,49 +168,40 @@ public class SecurityProcessorImpl extends BaseProcessorSupporter implements
 		case DES_CBC_PKCS5Padding:
 			// case DES_ECB_NoPadding:
 		case DES_ECB_PKCS5Padding: {
-			AssertHelper.isTrue(securityKey.length() >= 8,
-					"The SecurityKey length must be greater than 8");
+			AssertHelper.isTrue(securityKey.length() >= 8, "The SecurityKey length must be greater than 8");
 			//
-			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey,
-					SecurityType.DES.getValue());
-			result = SecurityHelper.encrypt(value, secretKey,
-					securityType.getValue());
+			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey, SecurityType.DES.getValue());
+			result = SecurityHelper.encrypt(value, secretKey, securityType.getValue());
 			break;
 		}
 
-		// DESede
+			// DESede
 		case DESede:
 			// case DES_CBC_NoPadding:
 		case DESede_CBC_PKCS5Padding:
 			// case DES_ECB_NoPadding:
 		case DESede_ECB_PKCS5Padding: {
-			AssertHelper.isTrue(securityKey.length() >= 24,
-					"The SecurityKey length must be greater than 24");
+			AssertHelper.isTrue(securityKey.length() >= 24, "The SecurityKey length must be greater than 24");
 			//
-			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey,
-					SecurityType.DESede.getValue());
-			result = SecurityHelper.encrypt(value, secretKey,
-					securityType.getValue());
+			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey, SecurityType.DESede.getValue());
+			result = SecurityHelper.encrypt(value, secretKey, securityType.getValue());
 			break;
 		}
 
-		// AES
+			// AES
 		case AES:
 			// case AES_CBC_NoPadding:
 		case AES_CBC_PKCS5Padding:
 			// case AES_ECB_NoPadding:
 		case AES_ECB_PKCS5Padding: {
-			AssertHelper.isTrue(securityKey.length() >= 16,
-					"The SecurityKey length must be greater than 16");
+			AssertHelper.isTrue(securityKey.length() >= 16, "The SecurityKey length must be greater than 16");
 			//
-			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey,
-					SecurityType.AES.getValue());
-			result = SecurityHelper.encrypt(value, secretKey,
-					securityType.getValue());
+			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey, SecurityType.AES.getValue());
+			result = SecurityHelper.encrypt(value, secretKey, securityType.getValue());
 			break;
 		}
 
-		// MD
+			// MD
 		case MD5:
 		case SHA_1:
 		case SHA_256: {
@@ -202,19 +209,16 @@ public class SecurityProcessorImpl extends BaseProcessorSupporter implements
 			break;
 		}
 
-		// Hmac
+			// Hmac
 		case HmacMD5:
 		case HmacSHA1:
 		case HmacSHA256: {
-			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey,
-					securityType.getValue());
-			result = SecurityHelper.mac(value, secretKey,
-					securityType.getValue());
+			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey, securityType.getValue());
+			result = SecurityHelper.mac(value, secretKey, securityType.getValue());
 			break;
 		}
 		default: {
-			AssertHelper.unsupported("The SecurityType [" + securityType
-					+ "] is unsupported");
+			AssertHelper.unsupported("The SecurityType [" + securityType + "] is unsupported");
 			break;
 		}
 		}
@@ -231,8 +235,7 @@ public class SecurityProcessorImpl extends BaseProcessorSupporter implements
 	 * @return
 	 */
 	public byte[] decrypt(String securityTypeValue, byte[] value) {
-		SecurityType securityType = EnumHelper.valueOf(SecurityType.class,
-				securityTypeValue);
+		SecurityType securityType = EnumHelper.valueOf(SecurityType.class, securityTypeValue);
 		AssertHelper.notNull(securityType, "The SecurityType must not be null");
 		this.securityType = securityType;
 		return decrypt(value);
@@ -261,50 +264,40 @@ public class SecurityProcessorImpl extends BaseProcessorSupporter implements
 		case DES_CBC_PKCS5Padding:
 			// case DES_ECB_NoPadding:
 		case DES_ECB_PKCS5Padding: {
-			AssertHelper.isTrue(securityKey.length() >= 8,
-					"The SecurityKey length must be greater than 8");
+			AssertHelper.isTrue(securityKey.length() >= 8, "The SecurityKey length must be greater than 8");
 			//
-			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey,
-					SecurityType.DES.getValue());
-			result = SecurityHelper.decrypt(value, secretKey,
-					securityType.getValue());
+			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey, SecurityType.DES.getValue());
+			result = SecurityHelper.decrypt(value, secretKey, securityType.getValue());
 			break;
 		}
 
-		// DESede
+			// DESede
 		case DESede:
 			// case DES_CBC_NoPadding:
 		case DESede_CBC_PKCS5Padding:
 			// case DES_ECB_NoPadding:
 		case DESede_ECB_PKCS5Padding: {
-			AssertHelper.isTrue(securityKey.length() >= 24,
-					"The SecurityKey length must be greater than 24");
+			AssertHelper.isTrue(securityKey.length() >= 24, "The SecurityKey length must be greater than 24");
 			//
-			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey,
-					SecurityType.DESede.getValue());
-			result = SecurityHelper.decrypt(value, secretKey,
-					securityType.getValue());
+			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey, SecurityType.DESede.getValue());
+			result = SecurityHelper.decrypt(value, secretKey, securityType.getValue());
 			break;
 		}
 
-		// AES
+			// AES
 		case AES:
 			// case AES_CBC_NoPadding:
 		case AES_CBC_PKCS5Padding:
 			// case AES_ECB_NoPadding:
 		case AES_ECB_PKCS5Padding: {
-			AssertHelper.isTrue(securityKey.length() >= 16,
-					"The SecurityKey length must be greater than 16");
+			AssertHelper.isTrue(securityKey.length() >= 16, "The SecurityKey length must be greater than 16");
 			//
-			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey,
-					SecurityType.AES.getValue());
-			result = SecurityHelper.decrypt(value, secretKey,
-					securityType.getValue());
+			SecretKey secretKey = SecurityHelper.createSecretKey(securityKey, SecurityType.AES.getValue());
+			result = SecurityHelper.decrypt(value, secretKey, securityType.getValue());
 			break;
 		}
 		default: {
-			AssertHelper.unsupported("The SecurityType [" + securityType
-					+ "] is unsupported");
+			AssertHelper.unsupported("The SecurityType [" + securityType + "] is unsupported");
 			break;
 		}
 		}

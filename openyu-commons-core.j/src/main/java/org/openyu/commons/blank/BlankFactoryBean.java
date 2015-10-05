@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Blank服務
+ * Blank服務工廠
  */
 public final class BlankFactoryBean<T> extends BaseFactorySupporter<BlankService> {
 
@@ -75,7 +75,7 @@ public final class BlankFactoryBean<T> extends BaseFactorySupporter<BlankService
 	 *
 	 * @return
 	 */
-	public BlankService restartInstance() throws Exception {
+	protected BlankService restartInstance() throws Exception {
 		try {
 			if (this.blankService != null) {
 				BlankService oldInstance = this.blankService;

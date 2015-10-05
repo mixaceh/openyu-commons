@@ -28,32 +28,32 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 	/**
 	 * 預設executor的最大數目
 	 */
-	private static final int DEFAULT_MAX_EXECUTOR_SIZE = 1;
+	public static final int DEFAULT_MAX_EXECUTOR_SIZE = 1;
 
 	/**
 	 * executor的最大數目
 	 */
 	private int maxExecutorSize = DEFAULT_MAX_EXECUTOR_SIZE;
 
-	private static final int DEFAULT_CORE_POOL_SIZE = 8;
+	public static final int DEFAULT_CORE_POOL_SIZE = 8;
 
 	private int corePoolSize = DEFAULT_CORE_POOL_SIZE;
 
-	private static final int DEFAULT_KEEP_ALIVE_SECONDS = 60;
+	public static final int DEFAULT_KEEP_ALIVE_SECONDS = 60;
 
 	private int keepAliveSeconds = DEFAULT_KEEP_ALIVE_SECONDS;
 
 	/**
 	 * 預設thread的最大數目
 	 */
-	private static final int DEFAULT_MAX_POOL_SIZE = 8;
+	public static final int DEFAULT_MAX_POOL_SIZE = 8;
 
 	/**
 	 * thread的最大數目
 	 */
 	private int maxPoolSize = DEFAULT_MAX_POOL_SIZE;
 
-	private static final int DEFAULT_QUEUE_CAPACITY = 8;
+	public static final int DEFAULT_QUEUE_CAPACITY = 8;
 
 	private int queueCapacity = DEFAULT_QUEUE_CAPACITY;
 
@@ -98,13 +98,18 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 		this.queueCapacity = queueCapacity;
 
 		// 2015/09/19 多加callback方式
-		addServiceCallback(new StartCallbacker());
-		addServiceCallback(new ShutdownCallbacker());
+		addServiceCallback("StartCallbacker", new StartCallbacker());
+		addServiceCallback("ShutdownCallbacker", new ShutdownCallbacker());
 	}
 
 	public ThreadServiceImpl() {
 		this(DEFAULT_MAX_EXECUTOR_SIZE, DEFAULT_CORE_POOL_SIZE, DEFAULT_KEEP_ALIVE_SECONDS, DEFAULT_MAX_POOL_SIZE,
 				DEFAULT_QUEUE_CAPACITY);
+	}
+
+	public synchronized static ThreadService getInstance() {
+		return getInstance(DEFAULT_MAX_EXECUTOR_SIZE, DEFAULT_CORE_POOL_SIZE, DEFAULT_KEEP_ALIVE_SECONDS,
+				DEFAULT_MAX_POOL_SIZE, DEFAULT_QUEUE_CAPACITY);
 	}
 
 	/**
@@ -197,8 +202,8 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 				threadService = null;
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance(ThreadService)")
-					.toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance(ThreadService)").toString(),
+					e);
 		}
 		return threadService;
 	}
@@ -215,8 +220,7 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 				oldInstance.restart();
 			}
 		} catch (Exception e) {
-			LOGGER.error(
-					new StringBuilder("Exception encountered during restartInstance(ThreadService)").toString(),
+			LOGGER.error(new StringBuilder("Exception encountered during restartInstance(ThreadService)").toString(),
 					e);
 		}
 		return threadService;
@@ -359,13 +363,12 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 		public void doInAction() throws Exception {
 			for (int i = 0; i < taskExecutors.length; i++) {
 				ThreadPoolTaskExecutor oldExecutor = taskExecutors[i];
-				taskExecutors[i] = null;
 				//
 				if (oldExecutor != null) {
 					oldExecutor.shutdown();
+					taskExecutors[i] = null;
 				}
 			}
 		}
 	}
-
 }
