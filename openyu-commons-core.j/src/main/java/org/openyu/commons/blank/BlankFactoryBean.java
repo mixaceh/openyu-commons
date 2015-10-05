@@ -23,7 +23,7 @@ public final class BlankFactoryBean<T> extends BaseFactorySupporter<BlankService
 	 * 
 	 * @return
 	 */
-	protected BlankService createInstance() {
+	protected BlankService createInstance() throws Exception {
 		BlankServiceImpl result = null;
 		try {
 			result = new BlankServiceImpl();
@@ -40,7 +40,12 @@ public final class BlankFactoryBean<T> extends BaseFactorySupporter<BlankService
 			result.start();
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during createInstance()").toString(), e);
-			result = (BlankServiceImpl) shutdownInstance();
+			try {
+				result = (BlankServiceImpl) shutdownInstance();
+			} catch (Exception sie) {
+				throw sie;
+			}
+			throw e;
 		}
 		return result;
 	}
@@ -50,15 +55,16 @@ public final class BlankFactoryBean<T> extends BaseFactorySupporter<BlankService
 	 *
 	 * @return
 	 */
-	protected BlankService shutdownInstance() {
+	protected BlankService shutdownInstance() throws Exception {
 		try {
 			if (this.blankService != null) {
-				BlankService oldInstance = blankService;
+				BlankService oldInstance = this.blankService;
 				oldInstance.shutdown();
 				this.blankService = null;
 			}
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance()").toString(), e);
+			throw e;
 		}
 		return this.blankService;
 
@@ -69,14 +75,15 @@ public final class BlankFactoryBean<T> extends BaseFactorySupporter<BlankService
 	 *
 	 * @return
 	 */
-	public BlankService restartInstance() {
+	public BlankService restartInstance() throws Exception {
 		try {
 			if (this.blankService != null) {
-				BlankService oldInstance = blankService;
+				BlankService oldInstance = this.blankService;
 				oldInstance.restart();
 			}
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during restartInstance()").toString(), e);
+			throw e;
 		}
 		return this.blankService;
 	}

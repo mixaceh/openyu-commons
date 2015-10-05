@@ -75,6 +75,6 @@ public abstract class BaseFactorySupporter<T> extends BaseServiceSupporter imple
 		}
 		//
 		this.extendedProperties = ExtendedProperties.convertProperties(props);
-		LOGGER.info(getDisplayName() + " Props: " + extendedProperties);
+		LOGGER.info("Props are " + extendedProperties);
 	}
 }
