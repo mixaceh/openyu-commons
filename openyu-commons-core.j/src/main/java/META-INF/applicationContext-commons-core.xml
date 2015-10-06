@@ -6,8 +6,9 @@
 	xsi:schemaLocation="
              http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
-	<!-- thread -->
+	<!-- thread 
 	<import resource="classpath:org/openyu/commons/thread/applicationContext-thread.xml" />
+	-->
 
 	<!-- service -->
 	<import resource="classpath:org/openyu/commons/service/applicationContext-service.xml" />
@@ -18,8 +19,9 @@
 	<!-- lang -->
 	<import resource="classpath:org/openyu/commons/lang/applicationContext-lang.xml" />
 
-	<!-- util -->
+	<!-- util 
 	<import resource="classpath:org/openyu/commons/util/applicationContext-util.xml" />
+	-->
 
 	<!-- web -->
 	<import resource="classpath:org/openyu/commons/web/applicationContext-web.xml" />
@@ -27,8 +29,9 @@
 	<!-- ws -->
 	<import resource="classpath:org/openyu/commons/ws/applicationContext-ws.xml" />
 
-	<!-- security -->
+	<!-- security 
 	<import resource="classpath:org/openyu/commons/security/applicationContext-security.xml" />
+	-->
 
 	<!-- freemarker -->
 	<import

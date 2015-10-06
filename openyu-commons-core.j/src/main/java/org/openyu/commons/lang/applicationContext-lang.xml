@@ -6,7 +6,8 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
 	<!-- listener supporter -->
-	<bean id="baseListenerSupporter" class="org.openyu.commons.lang.event.supporter.BaseListenerSupporter">
+	<bean id="baseListenerSupporter"
+		class="org.openyu.commons.lang.event.supporter.BaseListenerSupporter">
 	</bean>
 
 </beans>
