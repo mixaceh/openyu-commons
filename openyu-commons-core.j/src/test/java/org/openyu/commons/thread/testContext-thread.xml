@@ -9,6 +9,23 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
 	<bean
+		id="testConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property
+			name="order"
+			value="2" />
+		<property
+			name="ignoreUnresolvablePlaceholders"
+			value="true" />
+		<property name="locations">
+			<list>
+				<value>file:src/test/config/etc/ThreadService.properties</value>
+				<value>file:src/test/config/etc/BlockingThreadService.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean
 		id="threadService"
 		class="org.openyu.commons.thread.impl.ThreadServiceImpl"
 		p:maxExecutorSize="2"
@@ -16,7 +33,16 @@
 		p:keepAliveSeconds="300"
 		p:maxPoolSize="50"
 		p:queueCapacity="25" />
-		
+
+	<bean
+		id="threadServiceFactoryBean"
+		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
+		parent="baseServiceSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/ThreadService.properties" />
+	</bean>
+
 	<bean
 		id="blockingThreadService"
 		class="org.openyu.commons.thread.impl.ThreadServiceImpl"
@@ -24,6 +50,15 @@
 		p:corePoolSize="50"
 		p:keepAliveSeconds="300"
 		p:maxPoolSize="50"
-		p:queueCapacity="25" />		
-		
+		p:queueCapacity="25" />
+
+	<bean
+		id="blockingThreadServiceFactoryBean"
+		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
+		parent="baseServiceSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/BlockingThreadService.properties" />
+	</bean>
+
 </beans>

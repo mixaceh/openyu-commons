@@ -13,8 +13,7 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 
-public class VelocityHelper extends BaseHelperSupporter
-{
+public class VelocityHelper extends BaseHelperSupporter {
 
 	private static transient final Logger log = LogManager.getLogger(VelocityHelper.class);
 
@@ -23,87 +22,64 @@ public class VelocityHelper extends BaseHelperSupporter
 	// velocity 設定檔
 	public static final String DEFAULT_CONFIG_FILE_NAME = "velocity.properties";
 
-	public VelocityHelper()
-	{}
+	public VelocityHelper() {
+	}
 
-	public static synchronized VelocityHelper getInstance()
-	{
-		if (instance == null)
-		{
+	public static synchronized VelocityHelper getInstance() {
+		if (instance == null) {
 			instance = new VelocityHelper();
 		}
 		return instance;
 	}
 
-	public static boolean configure()
-	{
+	public static boolean configure() {
 		return configure((File) null);
 	}
 
-	public static boolean configure(URL url)
-	{
-		if (url != null)
-		{
+	public static boolean configure(URL url) {
+		if (url != null) {
 			return configure(url.getFile());
 		}
 		return configure((File) null);
 	}
 
-	public static boolean configure(String fileName)
-	{
-		if (fileName != null)
-		{
+	public static boolean configure(String fileName) {
+		if (fileName != null) {
 			return configure(new File(fileName));
-		}
-		else
-		{
+		} else {
 			return configure((File) null);
 		}
 	}
 
-	public static boolean configure(File file)
-	{
+	public static boolean configure(File file) {
 		boolean result = false;
-		try
-		{
-			if (file != null)
-			{
+		try {
+			if (file != null) {
 				Velocity.init(file.getAbsolutePath());
-			}
-			else
-			{
+			} else {
 				// default
 				// org/apache/velocity/runtime/defaults/velocity.properties
 				Velocity.init();
 			}
 			result = true;
-		}
-		catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return result;
 	}
 
-	public static boolean configure(Properties properties)
-	{
+	public static boolean configure(Properties properties) {
 		boolean result = false;
-		try
-		{
-			if (properties != null)
-			{
+		try {
+			if (properties != null) {
 				Velocity.init(properties);
-			}
-			else
-			{
+			} else {
 				// default
 				// org/apache/velocity/runtime/defaults/velocity.properties
 				Velocity.init();
 			}
 			result = true;
-		}
-		catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return result;
@@ -115,39 +91,29 @@ public class VelocityHelper extends BaseHelperSupporter
 	 * @param name
 	 * @return
 	 */
-	public static Template createTemplate(String name)
-	{
+	public static Template createTemplate(String name) {
 		Template result = null;
-		try
-		{
+		try {
 			result = Velocity.getTemplate(name);
-		}
-		catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return result;
 	}
 
-	public static VelocityContext createContext()
-	{
+	public static VelocityContext createContext() {
 		return new VelocityContext();
 	}
 
-	public static boolean merge(Template template, Context context, Writer writer)
-	{
+	public static boolean merge(Template template, Context context, Writer writer) {
 		boolean result = false;
 		//
-		try
-		{
-			if (template != null && context != null && writer != null)
-			{
+		try {
+			if (template != null && context != null && writer != null) {
 				template.merge(context, writer);
 				result = true;
 			}
-		}
-		catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return result;

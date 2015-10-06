@@ -62,7 +62,7 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 		// 多次,不會丟出ex
 		applicationContext.close();
 	}
-	
+
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void refresh() {
@@ -72,7 +72,6 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 		// 多次,不會丟出ex
 		applicationContext.refresh();
 	}
-
 
 	/**
 	 * GetInstanceTest
@@ -116,61 +115,6 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 			// 多次,不會丟出ex
 			instance = ThreadServiceImpl.restartInstance();
 			assertNotNull(instance);
-		}
-	}
-
-	/**
-	 * CreateInstanceTest
-	 */
-	public static class CreateInstanceTest extends BaseTestSupporter {
-
-		@Rule
-		public BenchmarkRule benchmarkRule = new BenchmarkRule();
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void newInstance() throws Exception {
-			ThreadServiceImpl impl = new ThreadServiceImpl();
-			// 啟動
-			impl.start();
-			System.out.println(impl);
-			assertNotNull(impl);
-		}
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void createInstance() {
-			ThreadService service = ThreadServiceImpl.createInstance();
-			System.out.println(service);
-			assertNotNull(service);
-		}
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-		public void shutdownInstance() {
-			ThreadService service = ThreadServiceImpl.createInstance();
-			System.out.println(service);
-			assertNotNull(service);
-			//
-			service = ThreadServiceImpl.shutdownInstance(service);
-			assertNull(service);
-			// 多次,不會丟出ex
-			service = ThreadServiceImpl.shutdownInstance(service);
-			assertNull(service);
-		}
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void restartInstance() {
-			ThreadService service = ThreadServiceImpl.createInstance();
-			System.out.println(service);
-			assertNotNull(service);
-			//
-			service = ThreadServiceImpl.restartInstance(service);
-			assertNotNull(service);
-			// 多次,不會丟出ex
-			service = ThreadServiceImpl.restartInstance(service);
-			assertNotNull(service);
 		}
 	}
 

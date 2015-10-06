@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Blank服務工廠
+ * BlankService工廠
  */
 public final class BlankServiceFactoryBean<T> extends BaseFactorySupporter<BlankService> {
 

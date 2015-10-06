@@ -8,6 +8,22 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
 	<bean
+		id="testConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property
+			name="order"
+			value="2" />
+		<property
+			name="ignoreUnresolvablePlaceholders"
+			value="true" />
+		<property name="locations">
+			<list>
+				<value>file:src/test/config/etc/BlankService.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean
 		id="blankService"
 		class="org.openyu.commons.blank.BlankServiceImpl"
 		parent="baseServiceSupporter" />

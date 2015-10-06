@@ -169,63 +169,6 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 		return instance;
 	}
 
-	/**
-	 * 建構
-	 * 
-	 * @return
-	 */
-	public static ThreadService createInstance() {
-		ThreadServiceImpl result = null;
-		try {
-			result = new ThreadServiceImpl();
-			result.setCreateInstance(true);
-			// 啟動
-			result.start();
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during createInstance()").toString(), e);
-			result = (ThreadServiceImpl) shutdownInstance(result);
-		}
-		return result;
-	}
-
-	/**
-	 * 關閉
-	 * 
-	 * @return
-	 */
-	public static ThreadService shutdownInstance(ThreadService threadService) {
-		try {
-			if (threadService instanceof ThreadService) {
-				ThreadService oldInstance = threadService;
-				//
-				oldInstance.shutdown();
-				threadService = null;
-			}
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance(ThreadService)").toString(),
-					e);
-		}
-		return threadService;
-	}
-
-	/**
-	 * 重啟
-	 * 
-	 * @return
-	 */
-	public static ThreadService restartInstance(ThreadService threadService) {
-		try {
-			if (threadService instanceof ThreadService) {
-				ThreadService oldInstance = threadService;
-				oldInstance.restart();
-			}
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during restartInstance(ThreadService)").toString(),
-					e);
-		}
-		return threadService;
-	}
-
 	@Override
 	public int getMaxExecutorSize() {
 		return maxExecutorSize;
