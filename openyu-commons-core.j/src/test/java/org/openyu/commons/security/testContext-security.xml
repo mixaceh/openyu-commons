@@ -9,7 +9,7 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
              ">
 	<bean
-		id="propsConfigurer"
+		id="testConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property
 			name="order"
@@ -35,8 +35,8 @@
 		p:securityKey="${org.openyu.commons.security.AuthKeyService.securityKey}" />
 
 	<bean
-		id="authKeyFactoryBean"
-		class="org.openyu.commons.security.impl.AuthKeyFactoryBean"
+		id="authKeyServiceFactoryBean"
+		class="org.openyu.commons.security.impl.AuthKeyServiceFactoryBean"
 		parent="baseServiceSupporter">
 		<property
 			name="configLocation"

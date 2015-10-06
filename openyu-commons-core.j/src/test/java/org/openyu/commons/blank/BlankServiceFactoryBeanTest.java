@@ -13,7 +13,7 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BlankFactoryBeanTest extends BaseTestSupporter {
+public class BlankServiceFactoryBeanTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
@@ -22,13 +22,12 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
-				"applicationContext-init.xml", // test目錄下
-				"org/openyu/commons/thread/applicationContext-thread.xml", // test目錄下
+				"applicationContext-init.xml", //
 				"org/openyu/commons/service/applicationContext-service.xml", //
-				"org/openyu/commons/blank/applicationContext-blank.xml",//
+				"org/openyu/commons/blank/testContext-blank.xml",//
 
 		});
-		blankServiceImpl = (BlankServiceImpl) applicationContext.getBean("blankFactoryBean");
+		blankServiceImpl = (BlankServiceImpl) applicationContext.getBean("blankServiceFactoryBean");
 	}
 
 	@Test
@@ -69,7 +68,7 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 		public void createInstance() throws Exception {
-			BlankFactoryBean<BlankService> factoryBean = new BlankFactoryBean<BlankService>();
+			BlankServiceFactoryBean<BlankService> factoryBean = new BlankServiceFactoryBean<BlankService>();
 			BlankService service = factoryBean.createInstance();
 			System.out.println(service);
 			assertNotNull(service);
@@ -78,7 +77,7 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 		public void shutdownInstance() throws Exception {
-			BlankFactoryBean<BlankService> factoryBean = new BlankFactoryBean<BlankService>();
+			BlankServiceFactoryBean<BlankService> factoryBean = new BlankServiceFactoryBean<BlankService>();
 			factoryBean.start();
 			BlankService service = factoryBean.getObject();
 			System.out.println(service);
@@ -94,7 +93,7 @@ public class BlankFactoryBeanTest extends BaseTestSupporter {
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 		public void restartInstance() throws Exception {
-			BlankFactoryBean<BlankService> factoryBean = new BlankFactoryBean<BlankService>();
+			BlankServiceFactoryBean<BlankService> factoryBean = new BlankServiceFactoryBean<BlankService>();
 			factoryBean.start();
 			BlankService service = factoryBean.getObject();
 			System.out.println(service);

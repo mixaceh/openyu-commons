@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- configHelper -->
+	<bean
+		id="configHelper"
+		class="org.openyu.commons.util.ConfigHelper">
+		<property name="configLocation">
+			<value>file:src/test/config/etc/config.xml</value>
+		</property>
+		<!--  
+		<property name="log4jConfigLocation">
+			<value>classpath:log4j.properties</value>
+		</property>
+		-->
+		<property name="jsonDirLocation">
+			<value>file:src/test/config/json</value>
+		</property>
+		<property name="keyDirLocation">
+			<value>file:src/test/config/key</value>
+		</property>
+		<property name="serDirLocation">
+			<value>file:src/test/config/ser</value>
+		</property>
+		<property name="xmlDirLocation">
+			<value>file:src/test/config/xml</value>
+		</property>
+		<property name="excelDirLocation">
+			<value>file:src/test/config/excel</value>
+		</property>
+		<property name="outputDirLocation">
+			<value>file:custom/output</value>
+		</property>
+		<property name="downloadDirLocation">
+			<value>file:custom/download</value>
+		</property>
+		<property name="uploadDirLocation">
+			<value>file:custom/upload</value>
+		</property>
+	</bean>
+
+	<bean
+		id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property
+			name="order"
+			value="1" />
+		<property
+			name="ignoreUnresolvablePlaceholders"
+			value="true" />
+		<property name="locations">
+			<list>
+				<value>file:src/test/config/etc/database.properties</value>
+				<value>file:src/test/config/etc/database-log.properties</value>
+				
+				<!-- hbase zookeeper -->
+				<value>file:src/test/config/etc/hbase-zookeeper.properties</value>
+				
+				<!-- hbase thrift -->
+				<value>file:src/test/config/etc/hbase-thrift.properties</value>
+
+				<!-- cassandra thrift -->
+				<value>file:src/test/config/etc/cassandra-thrift.properties</value>
+
+				<!-- commons net ftp -->
+				<value>file:src/test/config/etc/commons-net-ftp.properties</value>
+
+				<!--  rabbit mq -->
+				<value>file:src/test/config/etc/rabbitmq.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean
+		id="servicePropertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property
+			name="order"
+			value="2" />
+		<property
+			name="ignoreUnresolvablePlaceholders"
+			value="true" />
+		<property name="locations">
+			<list>
+				<!--  
+				<value>file:src/test/config/etc/???.properties</value>
+				-->
+			</list>
+		</property>
+	</bean>
+
+	<!-- must be beanName.property=value   -->
+	<bean
+		id="propertyOverrideConfigurer"
+		class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
+		<property name="locations">
+			<list>
+			</list>
+		</property>
+	</bean>  	
+
+	<!-- velocity for using Spring's VelocityView for web MVC
+	<bean
+		id="velocityConfigurer"
+		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property
+			name="resourceLoaderPath"
+			value="file:custom/template/vm" />
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/velocity.properties" />
+	</bean>
+	 -->
+
+	<bean
+		id="velocityEngine"
+		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<property
+			name="resourceLoaderPath"
+			value="file:custom/template/vm" />
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/velocity.properties" />
+	</bean>
+
+	<!-- freemarker for using Spring's FreeMarkerView for web MVC
+	<bean
+		id="freeMarkerConfigurer"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property
+			name="templateLoaderPath"
+			value="file:custom/template/ftl" />
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/freemarker.properties" />
+	</bean>
+	-->
+
+	<bean
+		id="freemarkerConfiguration"
+		class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
+		<property
+			name="templateLoaderPath"
+			value="file:custom/template/ftl" />
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/freemarker.properties" />
+	</bean>
+
+</beans>

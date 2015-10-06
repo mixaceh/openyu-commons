@@ -13,8 +13,8 @@
 		parent="baseServiceSupporter" />
 
 	<bean
-		id="blankFactoryBean"
-		class="org.openyu.commons.blank.BlankFactoryBean"
+		id="blankServiceFactoryBean"
+		class="org.openyu.commons.blank.BlankServiceFactoryBean"
 		parent="baseServiceSupporter">
 		<property
 			name="configLocation"

@@ -7,15 +7,15 @@ import org.slf4j.LoggerFactory;
 /**
  * Blank服務工廠
  */
-public final class BlankFactoryBean<T> extends BaseFactorySupporter<BlankService> {
+public final class BlankServiceFactoryBean<T> extends BaseFactorySupporter<BlankService> {
 
 	private static final long serialVersionUID = -1401366707657809071L;
 
-	private static final transient Logger LOGGER = LoggerFactory.getLogger(BlankFactoryBean.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(BlankServiceFactoryBean.class);
 
 	private BlankService blankService;
 
-	public BlankFactoryBean() {
+	public BlankServiceFactoryBean() {
 	}
 
 	/**

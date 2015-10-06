@@ -12,22 +12,23 @@
 
 	<!-- init by project -->
 	<import resource="classpath:applicationContext-init.xml" />
-	
+
 	<!-- commons -->
 	<import resource="classpath:META-INF/applicationContext-commons-core.xml" />
-	
+
+	<!-- bean -->
+	<import resource="classpath:applicationContext-bean.xml" />
+
 	<import resource="classpath:applicationContext-message.xml" />
 	<import resource="classpath:applicationContext-database.xml" />
 	<import resource="classpath:applicationContext-database-log.xml" />
-    
-	<!-- cxf 
-	<import resource="classpath:applicationContext-cxf.xml" />
-	-->
-	
+
+	<!-- cxf <import resource="classpath:applicationContext-cxf.xml" /> -->
+
 	<!-- security -->
 	<import resource="classpath:applicationContext-security.xml" />
-	
+
 	<!-- schedule -->
 	<import resource="classpath:applicationContext-schedule.xml" />
-	
+
 </beans>

@@ -15,7 +15,7 @@ import org.openyu.commons.security.AuthKeyService;
 import org.openyu.commons.thread.impl.ThreadServiceImpl;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class AuthKeyFactoryBeanTest extends BaseTestSupporter {
+public class AuthKeyServiceFactoryBeanTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
@@ -24,13 +24,13 @@ public class AuthKeyFactoryBeanTest extends BaseTestSupporter {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
-				"applicationContext-init.xml", // test目錄下
-				"org/openyu/commons/thread/applicationContext-thread.xml", // test目錄下
+				"applicationContext-init.xml", // 
+				"org/openyu/commons/thread/testContext-thread.xml", // 
 				"org/openyu/commons/service/applicationContext-service.xml", //
-				"org/openyu/commons/security/applicationContext-security.xml",// test目錄下
+				"org/openyu/commons/security/testContext-security.xml",// 
 
 		});
-		authKeyServiceImpl = (AuthKeyServiceImpl) applicationContext.getBean("authKeyFactoryBean");
+		authKeyServiceImpl = (AuthKeyServiceImpl) applicationContext.getBean("authKeyServiceFactoryBean");
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class AuthKeyFactoryBeanTest extends BaseTestSupporter {
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 		public void createInstance() throws Exception {
-			AuthKeyFactoryBean<AuthKeyService> factoryBean = new AuthKeyFactoryBean<AuthKeyService>();
+			AuthKeyServiceFactoryBean<AuthKeyService> factoryBean = new AuthKeyServiceFactoryBean<AuthKeyService>();
 			factoryBean.setThreadService(ThreadServiceImpl.getInstance());
 			//
 			AuthKeyService service = factoryBean.createInstance();
@@ -82,7 +82,7 @@ public class AuthKeyFactoryBeanTest extends BaseTestSupporter {
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 		public void shutdownInstance() throws Exception {
-			AuthKeyFactoryBean<AuthKeyService> factoryBean = new AuthKeyFactoryBean<AuthKeyService>();
+			AuthKeyServiceFactoryBean<AuthKeyService> factoryBean = new AuthKeyServiceFactoryBean<AuthKeyService>();
 			factoryBean.setThreadService(ThreadServiceImpl.getInstance());
 			//
 			factoryBean.start();
@@ -100,7 +100,7 @@ public class AuthKeyFactoryBeanTest extends BaseTestSupporter {
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 		public void restartInstance() throws Exception {
-			AuthKeyFactoryBean<AuthKeyService> factoryBean = new AuthKeyFactoryBean<AuthKeyService>();
+			AuthKeyServiceFactoryBean<AuthKeyService> factoryBean = new AuthKeyServiceFactoryBean<AuthKeyService>();
 			factoryBean.setThreadService(ThreadServiceImpl.getInstance());
 			//
 			factoryBean.start();

@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 /**
  * 認證碼服務工廠
  */
-public final class AuthKeyFactoryBean<T> extends BaseFactorySupporter<AuthKeyService> {
+public final class AuthKeyServiceFactoryBean<T> extends BaseFactorySupporter<AuthKeyService> {
 
 	private static final long serialVersionUID = -5900541933254854765L;
 
-	private static final transient Logger LOGGER = LoggerFactory.getLogger(AuthKeyFactoryBean.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(AuthKeyServiceFactoryBean.class);
 
 	@Autowired
 	@Qualifier("threadService")
@@ -25,7 +25,7 @@ public final class AuthKeyFactoryBean<T> extends BaseFactorySupporter<AuthKeySer
 
 	private AuthKeyService authKeyService;
 
-	public AuthKeyFactoryBean() {
+	public AuthKeyServiceFactoryBean() {
 	}
 
 	public void setThreadService(ThreadService threadService) {
