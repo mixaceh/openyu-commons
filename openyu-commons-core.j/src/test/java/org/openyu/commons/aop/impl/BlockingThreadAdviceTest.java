@@ -23,7 +23,7 @@ public class BlockingThreadAdviceTest extends BaseTestSupporter {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] {
 				"applicationContext-init.xml",//
 				"org/openyu/commons/service/applicationContext-service.xml",//
-				"org/openyu/commons/thread/applicationContext-thread.xml",//
+				"org/openyu/commons/thread/testContext-thread.xml",//
 				"org/openyu/commons/aop/applicationContext-aop.xml",//
 
 		});
