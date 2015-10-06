@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.openyu.commons.enumz.EnumHelper;
 import org.openyu.commons.processor.supporter.BaseProcessorSupporter;
 import org.openyu.commons.util.AssertHelper;
+import org.openyu.commons.util.ChecksumType;
 import org.openyu.commons.util.SerializeType;
 import org.openyu.commons.util.SerializeProcessor;
 import org.openyu.commons.util.SerializeHelper;
@@ -21,13 +22,11 @@ import org.slf4j.LoggerFactory;
 
 @XmlRootElement(name = "serializeProcessor")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SerializeProcessorImpl extends BaseProcessorSupporter implements
-		SerializeProcessor {
+public class SerializeProcessorImpl extends BaseProcessorSupporter implements SerializeProcessor {
 
 	private static final long serialVersionUID = 7763775982495411425L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(SerializeProcessorImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(SerializeProcessorImpl.class);
 	// --------------------------------------------------
 	// 此有系統預設值,只是為了轉出xml,並非給企劃編輯用
 	// --------------------------------------------------
@@ -38,12 +37,25 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements
 	private static Set<SerializeType> serializeTypes = new LinkedHashSet<SerializeType>();
 
 	// --------------------------------------------------
+	/**
+	 * 預設是否序列化
+	 */
+	public static final boolean DEFAULT_SERIALIZE = true;
 
-	/** 是否序列化 */
-	private boolean serialize;
+	/**
+	 * 是否序列化
+	 */
+	private boolean serialize = DEFAULT_SERIALIZE;
 
-	/** 序列化類別 */
-	private SerializeType serializeType;
+	/**
+	 * 預設序列化類別
+	 */
+	public static final SerializeType DEFAULT_SERIALIZE_TYPE = SerializeType.JDK;
+
+	/**
+	 * 序列化類別
+	 */
+	private SerializeType serializeType = DEFAULT_SERIALIZE_TYPE;
 
 	static {
 		// 此有系統預設值,只是為了轉出xml,並非給企劃編輯用
@@ -105,10 +117,8 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements
 	 * @return
 	 */
 	public byte[] serialize(String serializeTypeValue, Serializable value) {
-		SerializeType serializeType = EnumHelper.valueOf(SerializeType.class,
-				serializeTypeValue);
-		AssertHelper.notNull(serializeType,
-				"The SerializeType must not be null");
+		SerializeType serializeType = EnumHelper.valueOf(SerializeType.class, serializeTypeValue);
+		AssertHelper.notNull(serializeType, "The SerializeType must not be null");
 		this.serializeType = serializeType;
 		return serialize(value);
 	}
@@ -123,10 +133,8 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements
 	 * @return
 	 */
 	public byte[] serialize(int serializeTypeValue, Serializable value) {
-		SerializeType serializeType = EnumHelper.valueOf(SerializeType.class,
-				serializeTypeValue);
-		AssertHelper.notNull(serializeType,
-				"The SerializeType must not be null");
+		SerializeType serializeType = EnumHelper.valueOf(SerializeType.class, serializeTypeValue);
+		AssertHelper.notNull(serializeType, "The SerializeType must not be null");
 		this.serializeType = serializeType;
 		return serialize(value);
 	}
@@ -143,8 +151,7 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements
 		if (!serialize) {
 			return result;
 		}
-		AssertHelper.notNull(serializeType,
-				"The SerializeType must not be null");
+		AssertHelper.notNull(serializeType, "The SerializeType must not be null");
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		switch (serializeType) {
@@ -177,8 +184,7 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements
 			break;
 		}
 		default: {
-			AssertHelper.unsupported("The SerializeType [" + serializeType
-					+ "] is unsupported");
+			AssertHelper.unsupported("The SerializeType [" + serializeType + "] is unsupported");
 			break;
 		}
 		}
@@ -208,12 +214,9 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements
 	 * @param clazz
 	 * @return
 	 */
-	public <T> T deserialize(String serializeTypeValue, byte[] value,
-			Class<?> clazz) {
-		SerializeType serializeType = EnumHelper.valueOf(SerializeType.class,
-				serializeTypeValue);
-		AssertHelper.notNull(serializeType,
-				"The SerializeType must not be null");
+	public <T> T deserialize(String serializeTypeValue, byte[] value, Class<?> clazz) {
+		SerializeType serializeType = EnumHelper.valueOf(SerializeType.class, serializeTypeValue);
+		AssertHelper.notNull(serializeType, "The SerializeType must not be null");
 		this.serializeType = serializeType;
 		return deserialize(value, clazz);
 	}
@@ -241,12 +244,9 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements
 	 * @param clazz
 	 * @return
 	 */
-	public <T> T deserialize(int serializeTypeValue, byte[] value,
-			Class<?> clazz) {
-		SerializeType serializeType = EnumHelper.valueOf(SerializeType.class,
-				serializeTypeValue);
-		AssertHelper.notNull(serializeType,
-				"The SerializeType must not be null");
+	public <T> T deserialize(int serializeTypeValue, byte[] value, Class<?> clazz) {
+		SerializeType serializeType = EnumHelper.valueOf(SerializeType.class, serializeTypeValue);
+		AssertHelper.notNull(serializeType, "The SerializeType must not be null");
 		this.serializeType = serializeType;
 		return deserialize(value, clazz);
 	}
@@ -268,8 +268,7 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements
 		if (!serialize) {
 			return result;
 		}
-		AssertHelper.notNull(serializeType,
-				"The SerializeType must not be null");
+		AssertHelper.notNull(serializeType, "The SerializeType must not be null");
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		switch (serializeType) {
@@ -286,40 +285,31 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements
 			break;
 		}
 		case KRYO: {
-			AssertHelper
-					.notNull(clazz,
-							"When use KRYO to deserialize the value, the Clazz must not be null");
+			AssertHelper.notNull(clazz, "When use KRYO to deserialize the value, the Clazz must not be null");
 			//
 			result = (T) SerializeHelper.dekryo(value, clazz);
 			break;
 		}
 		case JACKSON: {
-			AssertHelper
-					.notNull(clazz,
-							"When use JSON to deserialize the value, the Clazz must not be null");
+			AssertHelper.notNull(clazz, "When use JSON to deserialize the value, the Clazz must not be null");
 			//
 			result = (T) SerializeHelper.dejackson(value, clazz);
 			break;
 		}
 		case SMILE: {
-			AssertHelper
-					.notNull(clazz,
-							"When use SMILE to deserialize the value, the Clazz must not be null");
+			AssertHelper.notNull(clazz, "When use SMILE to deserialize the value, the Clazz must not be null");
 			//
 			result = (T) SerializeHelper.desmile(value, clazz);
 			break;
 		}
 		case SMILE_JAXRS: {
-			AssertHelper
-					.notNull(clazz,
-							"When use SMILE_JAXRS to deserialize the value, the Clazz must not be null");
+			AssertHelper.notNull(clazz, "When use SMILE_JAXRS to deserialize the value, the Clazz must not be null");
 			//
 			result = (T) SerializeHelper.desmileJaxrs(value, clazz);
 			break;
 		}
 		default: {
-			AssertHelper.unsupported("The SerializeType [" + serializeType
-					+ "] is unsupported");
+			AssertHelper.unsupported("The SerializeType [" + serializeType + "] is unsupported");
 			break;
 		}
 		}

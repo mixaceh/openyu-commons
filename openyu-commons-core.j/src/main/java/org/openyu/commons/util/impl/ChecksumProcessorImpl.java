@@ -23,13 +23,11 @@ import org.slf4j.LoggerFactory;
 
 @XmlRootElement(name = "checksumProcessor")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ChecksumProcessorImpl extends BaseProcessorSupporter implements
-		ChecksumProcessor {
+public class ChecksumProcessorImpl extends BaseProcessorSupporter implements ChecksumProcessor {
 
 	private static final long serialVersionUID = 7763775982495411425L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(ChecksumProcessorImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(ChecksumProcessorImpl.class);
 
 	// --------------------------------------------------
 	// 此有系統預設值,只是為了轉出xml,並非給企劃編輯用
@@ -42,14 +40,35 @@ public class ChecksumProcessorImpl extends BaseProcessorSupporter implements
 
 	// --------------------------------------------------
 
-	/** 是否檢查碼 */
-	private boolean checksum;
+	/**
+	 * 預設是否檢查碼
+	 */
+	public static final boolean DEFAULT_CHECKSUM = true;
 
-	/** 檢查碼類別 */
-	private ChecksumType checksumType;
+	/**
+	 * 是否檢查碼
+	 */
+	private boolean checksum = DEFAULT_CHECKSUM;
 
-	/** 檢查碼key */
-	private String checksumKey;
+	/**
+	 * 預設檢查碼類別
+	 */
+	public static final ChecksumType DEFAULT_CHECKSUM_TYPE = ChecksumType.ADLER32;
+
+	/**
+	 * 檢查碼類別
+	 */
+	private ChecksumType checksumType = DEFAULT_CHECKSUM_TYPE;
+
+	/**
+	 * 預設檢查碼key
+	 */
+	public static final String DEFAULT_CHECKSUM_KEY = "checksumKey";
+
+	/**
+	 * 檢查碼key
+	 */
+	private String checksumKey = DEFAULT_CHECKSUM_KEY;
 
 	static {
 		// 此有系統預設值,只是為了轉出xml,並非給企劃編輯用
@@ -124,8 +143,7 @@ public class ChecksumProcessorImpl extends BaseProcessorSupporter implements
 	 * @return
 	 */
 	public long checksum(String checksumTypeValue, byte[] value) {
-		ChecksumType checksumType = EnumHelper.valueOf(ChecksumType.class,
-				checksumTypeValue);
+		ChecksumType checksumType = EnumHelper.valueOf(ChecksumType.class, checksumTypeValue);
 		AssertHelper.notNull(checksumType, "The ChecksumType must not be null");
 		this.checksumType = checksumType;
 		return checksum(value);
@@ -141,8 +159,7 @@ public class ChecksumProcessorImpl extends BaseProcessorSupporter implements
 	 * @return
 	 */
 	public long checksum(int checksumTypeValue, byte[] value) {
-		ChecksumType checksumType = EnumHelper.valueOf(ChecksumType.class,
-				checksumTypeValue);
+		ChecksumType checksumType = EnumHelper.valueOf(ChecksumType.class, checksumTypeValue);
 		AssertHelper.notNull(checksumType, "The ChecksumType must not be null");
 		this.checksumType = checksumType;
 		return checksum(value);
@@ -157,7 +174,7 @@ public class ChecksumProcessorImpl extends BaseProcessorSupporter implements
 	public long checksum(byte[] value) {
 		long result = 0;
 		//
-		if (!checksum){
+		if (!checksum) {
 			return result;
 		}
 		AssertHelper.notNull(checksumType, "The ChecksumType must not be null");
@@ -170,8 +187,7 @@ public class ChecksumProcessorImpl extends BaseProcessorSupporter implements
 				// buf = ArrayHelper.add(buf,
 				// ByteHelper.toByteArray(checksumKey));
 				byte[] checksumKeyArray = ByteHelper.toByteArray(checksumKey);
-				buf = UnsafeHelper
-						.putByteArray(buf, buf.length, checksumKeyArray);
+				buf = UnsafeHelper.putByteArray(buf, buf.length, checksumKeyArray);
 			}
 			result = ChecksumHelper.crc32(buf);
 			break;
@@ -183,15 +199,13 @@ public class ChecksumProcessorImpl extends BaseProcessorSupporter implements
 				// buf = ArrayHelper.add(buf,
 				// ByteHelper.toByteArray(checksumKey));
 				byte[] checksumKeyArray = ByteHelper.toByteArray(checksumKey);
-				buf = UnsafeHelper
-						.putByteArray(buf, buf.length, checksumKeyArray);
+				buf = UnsafeHelper.putByteArray(buf, buf.length, checksumKeyArray);
 			}
 			result = ChecksumHelper.adler32(buf);
 			break;
 		}
 		default: {
-			AssertHelper.unsupported("The ChecksumType [" + checksumType
-					+ "] is unsupported");
+			AssertHelper.unsupported("The ChecksumType [" + checksumType + "] is unsupported");
 		}
 		}
 		// LOGGER.info("Checksum the value with " + checksumType);

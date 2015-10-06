@@ -43,7 +43,9 @@ public class SecurityProcessorImpl extends BaseProcessorSupporter implements Sec
 	 */
 	public static final boolean DEFAULT_SECURITY = true;
 
-	/** 是否加密 */
+	/**
+	 * 是否加密
+	 */
 	private boolean security = DEFAULT_SECURITY;;
 
 	/**
@@ -59,7 +61,7 @@ public class SecurityProcessorImpl extends BaseProcessorSupporter implements Sec
 	/**
 	 * 預設加密key
 	 */
-	public static final String DEFAULT_SECURITY_KEY = "encrypt";
+	public static final String DEFAULT_SECURITY_KEY = "securityKey";
 
 	/**
 	 * 加密key
