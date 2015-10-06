@@ -30,26 +30,21 @@ public final class ThreadServiceFactoryBean<T> extends BaseFactorySupporter<Thre
 			result = new ThreadServiceImpl();
 			result.setCreateInstance(true);
 
-			// 1.extendedProperties
-			final String MAX_EXECUTOR_SIZE = "org.openyu.thread.ThreadService.maxExecutorSize";
+			/**
+			 * extendedProperties
+			 */
 			result.setMaxExecutorSize(
-					extendedProperties.getInt(MAX_EXECUTOR_SIZE, ThreadServiceImpl.DEFAULT_MAX_EXECUTOR_SIZE));
-			//
-			final String CORE_POOL_SIZE = "org.openyu.thread.ThreadService.corePoolSize";
-			result.setCorePoolSize(extendedProperties.getInt(CORE_POOL_SIZE, ThreadServiceImpl.DEFAULT_CORE_POOL_SIZE));
-			//
-			final String KEEP_ALIVE_SECONDS = "org.openyu.thread.ThreadService.keepAliveSeconds";
+					extendedProperties.getInt("maxExecutorSize", ThreadServiceImpl.DEFAULT_MAX_EXECUTOR_SIZE));
+			result.setCorePoolSize(extendedProperties.getInt("corePoolSize", ThreadServiceImpl.DEFAULT_CORE_POOL_SIZE));
 			result.setKeepAliveSeconds(
-					extendedProperties.getInt(KEEP_ALIVE_SECONDS, ThreadServiceImpl.DEFAULT_KEEP_ALIVE_SECONDS));
-			//
-			final String MAX_POOL_SIZE = "org.openyu.thread.ThreadService.maxPoolSize";
-			result.setMaxPoolSize(extendedProperties.getInt(MAX_POOL_SIZE, ThreadServiceImpl.DEFAULT_MAX_POOL_SIZE));
-			//
-			final String QUEUE_CAPACITY = "org.openyu.thread.ThreadService.queueCapacity";
+					extendedProperties.getInt("keepAliveSeconds", ThreadServiceImpl.DEFAULT_KEEP_ALIVE_SECONDS));
+			result.setMaxPoolSize(extendedProperties.getInt("maxPoolSize", ThreadServiceImpl.DEFAULT_MAX_POOL_SIZE));
 			result.setQueueCapacity(
-					extendedProperties.getInt(QUEUE_CAPACITY, ThreadServiceImpl.DEFAULT_QUEUE_CAPACITY));
+					extendedProperties.getInt("queueCapacity", ThreadServiceImpl.DEFAULT_QUEUE_CAPACITY));
 
-			// 2. injectiion
+			/**
+			 * injectiion
+			 */
 
 			// 啟動
 			result.start();

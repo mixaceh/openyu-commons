@@ -43,27 +43,25 @@ public final class AuthKeyServiceFactoryBean<T> extends BaseFactorySupporter<Aut
 			result = new AuthKeyServiceImpl();
 			result.setCreateInstance(true);
 
-			// 1.extendedProperties
-			final String ALIVE_MILLS = "org.openyu.commons.security.AuthKeyService.aliveMills";
-			result.setAliveMills(extendedProperties.getLong(ALIVE_MILLS, AuthKeyServiceImpl.DEFAULT_ALIVE_MILLS));
+			/**
+			 * extendedProperties
+			 */
+			result.setAliveMills(extendedProperties.getLong("aliveMills", AuthKeyServiceImpl.DEFAULT_ALIVE_MILLS));
+			result.setListenMills(extendedProperties.getLong("listenMills", AuthKeyServiceImpl.DEFAULT_LISTEN_MILLS));
 			//
-			final String LISTEN_MILLS = "org.openyu.commons.security.AuthKeyService.listenMills";
-			result.setListenMills(extendedProperties.getLong(LISTEN_MILLS, AuthKeyServiceImpl.DEFAULT_LISTEN_MILLS));
+			result.setSecurity(extendedProperties.getBoolean("security", SecurityProcessorImpl.DEFAULT_SECURITY));
 			//
-			final String SECURITY = "org.openyu.commons.security.AuthKeyService.security";
-			result.setSecurity(extendedProperties.getBoolean(SECURITY, SecurityProcessorImpl.DEFAULT_SECURITY));
-			//
-			final String SECURITY_TYPE = "org.openyu.commons.security.AuthKeyService.securityType";
-			String securityTypeValue = extendedProperties.getString(SECURITY_TYPE,
+			String securityTypeValue = extendedProperties.getString("securityType",
 					SecurityProcessorImpl.DEFAULT_SECURITY_TYPE.getValue());
 			SecurityType securityType = EnumHelper.valueOf(SecurityType.class, securityTypeValue);
 			result.setSecurityType(securityType);
 			//
-			final String SECURITY_KEY = "org.openyu.commons.security.AuthKeyService.securityKey";
 			result.setSecurityKey(
-					extendedProperties.getString(SECURITY_KEY, SecurityProcessorImpl.DEFAULT_SECURITY_KEY));
+					extendedProperties.getString("securityKey", SecurityProcessorImpl.DEFAULT_SECURITY_KEY));
 
-			// 2. injectiion
+			/**
+			 * injectiion
+			 */
 			result.setThreadService(threadService);
 
 			// 啟動

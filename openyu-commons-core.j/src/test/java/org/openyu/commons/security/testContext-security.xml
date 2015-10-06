@@ -28,11 +28,11 @@
 		id="authKeyService"
 		class="org.openyu.commons.security.impl.AuthKeyServiceImpl"
 		parent="baseServiceSupporter"
-		p:aliveMills="${org.openyu.commons.security.AuthKeyService.aliveMills}"
-		p:listenMills="${org.openyu.commons.security.AuthKeyService.listenMills}"
-		p:security="${org.openyu.commons.security.AuthKeyService.security}"
-		p:securityType="${org.openyu.commons.security.AuthKeyService.securityType}"
-		p:securityKey="${org.openyu.commons.security.AuthKeyService.securityKey}" />
+		p:aliveMills="${aliveMills}"
+		p:listenMills="${listenMills}"
+		p:security="${security}"
+		p:securityType="${securityType}"
+		p:securityKey="${securityKey}" />
 
 	<bean
 		id="authKeyServiceFactoryBean"

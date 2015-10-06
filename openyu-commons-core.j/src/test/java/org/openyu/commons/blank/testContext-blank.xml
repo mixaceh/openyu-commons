@@ -37,7 +37,7 @@
 			value="file:src/test/config/etc/BlankService.properties" />
 		<property name="properties">
 			<props>
-				<prop key="org.openyu.blank.BlankService.aliveMills">180000</prop>
+				<prop key="aliveMills">180000</prop>
 			</props>
 		</property>
 	</bean>

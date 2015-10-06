@@ -29,12 +29,15 @@ public final class BlankServiceFactoryBean<T> extends BaseFactorySupporter<Blank
 			result = new BlankServiceImpl();
 			result.setCreateInstance(true);
 
-			// 1.extendedProperties
+			/**
+			 * extendedProperties
+			 */
 			// LOGGER.info("" +
-			// extendedProperties.getLong("org.openyu.blank.BlankService.aliveMills"));
-			// LOGGER.info("" +
-			// extendedProperties.getLong("org.openyu.blank.BlankService.listenMills"));
-			// 2. injectiion
+			// extendedProperties.getLong("aliveMills"));
+
+			/**
+			 * injectiion
+			 */
 
 			// 啟動
 			result.start();
