@@ -19,10 +19,6 @@
 	<!-- lang -->
 	<import resource="classpath:org/openyu/commons/lang/applicationContext-lang.xml" />
 
-	<!-- util 
-	<import resource="classpath:org/openyu/commons/util/applicationContext-util.xml" />
-	-->
-
 	<!-- web -->
 	<import resource="classpath:org/openyu/commons/web/applicationContext-web.xml" />
 	
