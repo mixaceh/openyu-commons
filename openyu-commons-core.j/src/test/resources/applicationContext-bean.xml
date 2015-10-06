@@ -156,4 +156,30 @@
 			value="file:src/test/config/etc/freemarker.properties" />
 	</bean>
 
+	<bean
+		id="threadService"
+		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
+		parent="baseServiceSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/ThreadService.properties" />
+	</bean>
+
+	<bean
+		id="blockingThreadService"
+		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
+		parent="baseServiceSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/BlockingThreadService.properties" />
+	</bean>
+
+	<bean
+		id="authKeyService"
+		class="org.openyu.commons.security.impl.AuthKeyServiceFactoryBean"
+		parent="baseServiceSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/AuthKeyService.properties" />
+	</bean>
 </beans>

@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.io.Serializable;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
@@ -384,7 +383,7 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 		//
 		String[] beanNames = applicationContext.getBeanDefinitionNames();
 		Arrays.sort(beanNames, Collator.getInstance(java.util.Locale.ENGLISH));
-		final String msgPattern = "#.{0} {1} \"{2}\"";
+		final String MSG_PATTERN = "#.{0} {1} \"{2}\"";
 		// 計算所耗費的記憶體(bytes)
 		RuntimeHelper.gc();
 		// 原本的記憶體
@@ -395,15 +394,17 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 		System.out.println("=========================================");
 		for (int i = 0; i < beanNames.length; i++) {
 			String className = null;
+			Object bean = null;
 			try {
 				// when abstract bean will throw exception
 				// so set bean="abstract bean"
-				className = applicationContext.getBean(beanNames[i]).getClass().getSimpleName();
+				bean = applicationContext.getBean(beanNames[i]);
+				className = bean.getClass().getSimpleName();
 			} catch (Exception ex) {
 				className = "ABSTRACT CLASS";
 			}
 
-			StringBuilder msg = new StringBuilder(MessageFormat.format(msgPattern, (i + 1), className, beanNames[i]));
+			StringBuilder msg = new StringBuilder(MessageFormat.format(MSG_PATTERN, (i + 1), className, beanNames[i]));
 			// 不是抽象類別
 			// if (!abstractBean) {
 			// System.out.println(msg);// 顯示黑色
