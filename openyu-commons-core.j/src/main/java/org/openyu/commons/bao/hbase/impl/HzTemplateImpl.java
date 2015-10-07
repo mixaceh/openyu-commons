@@ -49,7 +49,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		AssertHelper.notNull(hzSessionFactory, "HzSessionFactory is required");
+		AssertHelper.notNull(hzSessionFactory, "The HzSessionFactory is required");
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 	}
 
 	protected <T> T doExecute(HzCallback<T> action) throws HzTemplateException {
-		AssertHelper.notNull(action, "HzCallback must not be null");
+		AssertHelper.notNull(action, "The HzCallback must not be null");
 		//
 		T result = null;
 		HzSession session = null;
@@ -180,7 +180,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 
 	protected <T> T doExecute(String tableName, HzTableCallback<T> action)
 			throws HzTemplateException {
-		AssertHelper.notNull(action, "HzTableCallback must not be null");
+		AssertHelper.notNull(action, "The HzTableCallback must not be null");
 		//
 		T result = null;
 		HzSession session = null;

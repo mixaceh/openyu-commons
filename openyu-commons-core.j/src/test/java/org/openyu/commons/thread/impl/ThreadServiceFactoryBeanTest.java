@@ -15,6 +15,7 @@ import org.openyu.commons.thread.ThreadService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ThreadServiceFactoryBeanTest extends BaseTestSupporter {
+
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
@@ -67,55 +68,4 @@ public class ThreadServiceFactoryBeanTest extends BaseTestSupporter {
 		// 多次,不會丟出ex
 		applicationContext.refresh();
 	}
-
-	/**
-	 * CreateInstanceTest
-	 */
-	public static class CreateInstanceTest extends BaseTestSupporter {
-
-		@Rule
-		public BenchmarkRule benchmarkRule = new BenchmarkRule();
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void createInstance() throws Exception {
-			ThreadServiceFactoryBean<ThreadService> factoryBean = new ThreadServiceFactoryBean<ThreadService>();
-			ThreadService service = factoryBean.createInstance();
-			System.out.println(service);
-			assertNotNull(service);
-		}
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void shutdownInstance() throws Exception {
-			ThreadServiceFactoryBean<ThreadService> factoryBean = new ThreadServiceFactoryBean<ThreadService>();
-			factoryBean.start();
-			ThreadService service = factoryBean.getObject();
-			System.out.println(service);
-			assertNotNull(service);
-			//
-			service = factoryBean.shutdownInstance();
-			assertNull(service);
-			// 多次,不會丟出ex
-			service = factoryBean.shutdownInstance();
-			assertNull(service);
-		}
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void restartInstance() throws Exception {
-			ThreadServiceFactoryBean<ThreadService> factoryBean = new ThreadServiceFactoryBean<ThreadService>();
-			factoryBean.start();
-			ThreadService service = factoryBean.getObject();
-			System.out.println(service);
-			assertNotNull(service);
-			//
-			service = factoryBean.restartInstance();
-			assertNotNull(service);
-			// 多次,不會丟出ex
-			service = factoryBean.restartInstance();
-			assertNotNull(service);
-		}
-	}
-
 }

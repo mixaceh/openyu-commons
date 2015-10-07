@@ -34,6 +34,7 @@ import org.openyu.commons.enumz.EnumHelper;
 import org.openyu.commons.junit.BaseTest;
 import org.openyu.commons.lang.BooleanHelper;
 import org.openyu.commons.lang.CharHelper;
+import org.openyu.commons.lang.ClassHelper;
 import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.lang.RuntimeHelper;
 import org.openyu.commons.lang.StringHelper;
@@ -379,7 +380,7 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 * Prints the beans.
 	 */
 	protected static void printBeans() {
-		AssertHelper.notNull(applicationContext, "ApplicationContext must not be null");
+		AssertHelper.notNull(applicationContext, "The ApplicationContext must not be null");
 		//
 		String[] beanNames = applicationContext.getBeanDefinitionNames();
 		Arrays.sort(beanNames, Collator.getInstance(java.util.Locale.ENGLISH));
@@ -463,17 +464,7 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 * @return the declared constructor
 	 */
 	protected static Constructor<?> getDeclaredConstructor(Class<?> clazz, Class<?>... parameterTypes) {
-		Constructor<?> result = null;
-		try {
-			if (clazz != null) {
-				result = clazz.getDeclaredConstructor(parameterTypes);
-				result.setAccessible(true);
-			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return result;
+		return ClassHelper.getDeclaredConstructor(clazz, parameterTypes);
 	}
 
 	/**
@@ -488,18 +479,7 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 * @return the declared method
 	 */
 	protected static Method getDeclaredMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
-		Method result = null;
-		try {
-
-			if (clazz != null) {
-				result = clazz.getDeclaredMethod(methodName, parameterTypes);
-				result.setAccessible(true);
-			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return result;
+		return ClassHelper.getDeclaredMethod(clazz, methodName, parameterTypes);
 	}
 
 	/**
@@ -512,18 +492,7 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 * @return the declared field
 	 */
 	protected static Field getDeclaredField(Class<?> clazz, String fieldName) {
-		Field result = null;
-		try {
-
-			if (clazz != null) {
-				result = clazz.getDeclaredField(fieldName);
-				result.setAccessible(true);
-			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return result;
+		return ClassHelper.getDeclaredField(clazz, fieldName);
 	}
 
 	/**

@@ -96,7 +96,7 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 			this.shutdown = false;
 			this.executorService.submit(this);
 		} else {
-			AssertHelper.notNull(null, "ThreadService or ExecutorService must not be null");
+			AssertHelper.notNull(null, "The ThreadService or ExecutorService must not be null");
 		}
 	}
 

@@ -17,14 +17,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.openyu.commons.bean.BaseBean;
 import org.openyu.commons.entity.BaseEntity;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.util.ConfigHelper;
+import org.openyu.commons.util.AssertHelper;
 import org.openyu.commons.util.CollectionHelper;
 import org.openyu.commons.util.concurrent.MapCache;
 import org.openyu.commons.util.concurrent.impl.MapCacheImpl;
@@ -36,12 +34,9 @@ import org.slf4j.LoggerFactory;
  */
 public class ClassHelper extends BaseHelperSupporter {
 
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(ClassHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(ClassHelper.class);
 
 	private static ClassHelper instance;
-
-	// public static final Class<?> EMPTY_CLASS = EmptyClass.class;
 
 	public static final Class<?>[] EMPTY_CLASSES = new Class<?>[0];
 
@@ -52,21 +47,18 @@ public class ClassHelper extends BaseHelperSupporter {
 	//
 	public static final String ARRAY_SUFFIX = "[]";
 
-	private static Class<?>[] PRIMITIVE_CLASSES = { boolean.class, char.class,
-			byte.class, short.class, int.class, long.class, float.class,
-			double.class };
+	private static Class<?>[] PRIMITIVE_CLASSES = { boolean.class, char.class, byte.class, short.class, int.class,
+			long.class, float.class, double.class };
 
 	private static Class<?>[] LANG_CLASSES = { String.class, Object.class };
 
 	private static final char PACKAGE_SEPARATOR_CHAR = '.';
 
-	private static final String PACKAGE_SEPARATOR = String
-			.valueOf(PACKAGE_SEPARATOR_CHAR);
+	private static final String PACKAGE_SEPARATOR = String.valueOf(PACKAGE_SEPARATOR_CHAR);
 
 	private static final char INNER_CLASS_SEPARATOR_CHAR = '$';
 
-	private static final String INNER_CLASS_SEPARATOR = String
-			.valueOf(INNER_CLASS_SEPARATOR_CHAR);
+	private static final String INNER_CLASS_SEPARATOR = String.valueOf(INNER_CLASS_SEPARATOR_CHAR);
 
 	private static final String CGLIB_CLASS_SEPARATOR_CHAR = "$$";
 
@@ -75,90 +67,23 @@ public class ClassHelper extends BaseHelperSupporter {
 
 	private static final Map<Class<?>, Object> defaultValueCache = new LinkedHashMap<Class<?>, Object>();
 
-	// "java.lang.StringBuilder",StringBuilder.class
-	// private static Map<String, Class<?>> forNameCache =
-	// Collections.synchronizedMap(new LinkedHashMap<String, Class<?>>());
-	// private static ConcurrentMap<String, Class<?>> forNameCache = new
-	// ConcurrentHashMap<String, Class<?>>();
-	//
-	// private static ReentrantLock forNameCacheLock = new ReentrantLock();
-
 	private static MapCache<String, Class<?>> forNameAndCache = new MapCacheImpl<String, Class<?>>();
 
-	// private static ConcurrentMap<Class<?>, ConcurrentMap<String,
-	// ConcurrentMap<Class<?>[], Method>>> methodCache = new
-	// ConcurrentHashMap<Class<?>, ConcurrentMap<String,
-	// ConcurrentMap<Class<?>[], Method>>>();
-	// <StringBuilder.class,methodName,parameterTypes,method>
-	// 太慢,改為單一string key,methodCache
-
-	@Deprecated
-	private static ConcurrentMap<Class<?>, ConcurrentMap<String, ConcurrentMap<String, Method>>> nestedMethodCache = new ConcurrentHashMap<Class<?>, ConcurrentMap<String, ConcurrentMap<String, Method>>>();
-
-	// <classMame+methodName+parameterTypes,method>
-	// private static ConcurrentMap<String, Method> getMethodCache = new
-	// ConcurrentHashMap<String, Method>();
-
-	// <className+fieldName,field>
-	// private static ConcurrentMap<String, Field> getFieldCache = new
-	// ConcurrentHashMap<String, Field>();
-
-	// <class,field[]>
-	// private static ConcurrentMap<Class<?>, Field[]> fieldCache = new
-	// ConcurrentHashMap<Class<?>, Field[]>();
-	//
-	// private static ReentrantLock fieldCacheLock = new ReentrantLock();
-
+	/**
+	 * Field
+	 */
 	private static MapCache<Class<?>, Field[]> getFieldsAndCache = new MapCacheImpl<Class<?>, Field[]>();
-
-	// private static ConcurrentMap<Class<?>, Field[]> declaredFieldCache = new
-	// ConcurrentHashMap<Class<?>, Field[]>();
-	//
-	// private static ReentrantLock declaredFieldCacheLock = new
-	// ReentrantLock();
 
 	private static MapCache<Class<?>, Field[]> getDeclaredFieldsAndCache = new MapCacheImpl<Class<?>, Field[]>();
 
-	// <class,method[]>
-	// private static ConcurrentMap<Class<?>, Method[]> methodCache = new
-	// ConcurrentHashMap<Class<?>, Method[]>();
-	//
-	// private static ReentrantLock methodCacheLock = new ReentrantLock();
+	/**
+	 * Method
+	 */
 	private static MapCache<Class<?>, Method[]> getMethodsAndCache = new MapCacheImpl<Class<?>, Method[]>();
-
-	// <class,method[]>
-	// private static ConcurrentMap<Class<?>, Method[]> declaredMethodCache =
-	// new ConcurrentHashMap<Class<?>, Method[]>();
-	//
-	// private static ReentrantLock declaredMethodCacheLock = new
-	// ReentrantLock();
 
 	private static MapCache<Class<?>, Method[]> getDeclaredMethodsAndCache = new MapCacheImpl<Class<?>, Method[]>();
 
-	// <class,method,class[]>
-	// private static ConcurrentMap<Class<?>, ConcurrentMap<Method, Class<?>[]>>
-	// parameterTypesCache = new ConcurrentHashMap<Class<?>,
-	// ConcurrentMap<Method, Class<?>[]>>();
-	//
-	// private static ReentrantLock parameterTypesCacheLock = new
-	// ReentrantLock();
-
-	private static MapCache<Class<?>, MapCacheImpl<Method, Class<?>[]>> getParameterTypesAndCache = new MapCacheImpl<Class<?>, MapCacheImpl<Method, Class<?>[]>>();
-
-	// <class,class>
-	// 可以不用cache,因原本速度就很快
-	@Deprecated
-	private static ConcurrentMap<Class<?>, Class<?>> superClassCache = new ConcurrentHashMap<Class<?>, Class<?>>();
-
-	@Deprecated
-	private static ReentrantLock superClassCacheLock = new ReentrantLock();
-
-	// <class,class[]>
-	// private static ConcurrentMap<Class<?>, Class<?>[]> interfaceClassCache =
-	// new ConcurrentHashMap<Class<?>, Class<?>[]>();
-	//
-	// private static ReentrantLock interfaceClassCacheLock = new
-	// ReentrantLock();
+	private static MapCache<Class<?>, MapCacheImpl<Method, Class<?>[]>> getMethodParameterTypesAndCache = new MapCacheImpl<Class<?>, MapCacheImpl<Method, Class<?>[]>>();
 
 	private static MapCache<Class<?>, Class<?>[]> getInterfacesAndCache = new MapCacheImpl<Class<?>, Class<?>[]>();
 
@@ -167,16 +92,18 @@ public class ClassHelper extends BaseHelperSupporter {
 
 	private static Map<String, String> po2vos = new LinkedHashMap<String, String>();
 
-	// <class,class>
-	// private static ConcurrentMap<Class<?>, Class<?>> getConventionClassCache
-	// = new ConcurrentHashMap<Class<?>, Class<?>>();
-	//
-	// private static ReentrantLock getConventionClassCacheLock = new
-	// ReentrantLock();
-
 	private static MapCache<Class<?>, Class<?>> getConventionClassAndCache = new MapCacheImpl<Class<?>, Class<?>>();
 
 	private static MapCache<Class<?>, Object[]> getEnumConstantsAndCache = new MapCacheImpl<Class<?>, Object[]>();
+
+	/**
+	 * Constructor
+	 */
+	private static MapCache<Class<?>, Constructor<?>[]> getConstructorsAndCache = new MapCacheImpl<Class<?>, Constructor<?>[]>();
+
+	private static MapCache<Class<?>, Constructor<?>[]> getDeclaredConstructorsAndCache = new MapCacheImpl<Class<?>, Constructor<?>[]>();
+
+	private static MapCache<Class<?>, MapCacheImpl<Constructor<?>, Class<?>[]>> getConstructorParameterTypesAndCache = new MapCacheImpl<Class<?>, MapCacheImpl<Constructor<?>, Class<?>[]>>();
 
 	static {
 		new Static();
@@ -213,18 +140,7 @@ public class ClassHelper extends BaseHelperSupporter {
 			defaultValueCache.put(float.class, NumberHelper.DEFAULT_FLOAT);
 			defaultValueCache.put(double.class, NumberHelper.DEFAULT_DOUBLE);
 			//
-			po2vos = ConfigHelper.getMap(PO2VOS,
-					new LinkedHashMap<String, String>());
-
-			// for disable cache
-			// forNameAndCache.setDisable(true);
-			// getFieldsAndCache.setDisable(true);
-			// getDeclaredFieldsAndCache.setDisable(true);
-			// getMethodsAndCache.setDisable(true);
-			// getDeclaredMethodsAndCache.setDisable(true);
-			// getParameterTypesAndCache.setDisable(true);
-			// getInterfacesAndCache.setDisable(true);
-			// getConventionClassAndCache.setDisable(true);
+			po2vos = ConfigHelper.getMap(PO2VOS, new LinkedHashMap<String, String>());
 		}
 	}
 
@@ -239,8 +155,7 @@ public class ClassHelper extends BaseHelperSupporter {
 	}
 
 	public static ClassLoader getClassLoader() {
-		ClassLoader classLoader = Thread.currentThread()
-				.getContextClassLoader();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		if (classLoader == null) {
 			// No thread context class loader -> use class loader of this class.
 			classLoader = ClassHelper.class.getClassLoader();
@@ -300,21 +215,16 @@ public class ClassHelper extends BaseHelperSupporter {
 										// com.aaa.bbb.ccc[]
 										// special handling for array class
 										// names
-										String elementClassName = name
-												.substring(0, name.length()
-														- ARRAY_SUFFIX.length());
-										Class<?> elementClass = forName(
-												elementClassName, classLoader);
-										clazz = Array.newInstance(elementClass,
-												0).getClass();
+										String elementClassName = name.substring(0,
+												name.length() - ARRAY_SUFFIX.length());
+										Class<?> elementClass = forName(elementClassName, classLoader);
+										clazz = Array.newInstance(elementClass, 0).getClass();
 									} else {
 										try {
-											clazz = Thread.currentThread()
-													.getClass().forName(name);
+											clazz = Thread.currentThread().getClass().forName(name);
 										} catch (Exception ex) {
 											try {
-												clazz = Class.forName(name,
-														true, classLoader);
+												clazz = Class.forName(name, true, classLoader);
 											} catch (Exception ex2) {
 												// ex2.printStackTrace();
 											}
@@ -384,10 +294,8 @@ public class ClassHelper extends BaseHelperSupporter {
 		}
 		//
 		StringBuilder result = new StringBuilder();
-		result.append(new String(className.substring(lastDotIndex + 1,
-				nameEndIndex)));
-		return StringHelper.replace(result.toString(), INNER_CLASS_SEPARATOR,
-				PACKAGE_SEPARATOR);
+		result.append(new String(className.substring(lastDotIndex + 1, nameEndIndex)));
+		return StringHelper.replace(result.toString(), INNER_CLASS_SEPARATOR, PACKAGE_SEPARATOR);
 	}
 
 	public static String getSimpleName(Class<?> clazz) {
@@ -408,7 +316,7 @@ public class ClassHelper extends BaseHelperSupporter {
 	}
 
 	public static String getQualifiedName(Class<?> clazz) {
-		// Assert.notNull(clazz, "Class must not be null");
+		AssertHelper.notNull(clazz, "The Class must not be null");
 		if (clazz.isArray()) {
 			return clazz.getComponentType().getName() + ARRAY_SUFFIX;
 		} else {
@@ -418,7 +326,7 @@ public class ClassHelper extends BaseHelperSupporter {
 
 	// TODO 未測試
 	public static String getQualifiedMethodName(Method method) {
-		// Assert.notNull(method, "Method must not be empty");
+		AssertHelper.notNull(method, "The Method must not be null");
 		return method.getDeclaringClass().getName() + "." + method.getName();
 	}
 
@@ -426,8 +334,7 @@ public class ClassHelper extends BaseHelperSupporter {
 		return isMethod(clazz, methodName, null);
 	}
 
-	public static boolean isMethod(Class<?> clazz, String methodName,
-			Class<?>[] parameterTypes) {
+	public static boolean isMethod(Class<?> clazz, String methodName, Class<?>[] parameterTypes) {
 		Method method = getMethod(clazz, methodName, parameterTypes);
 		return (method != null ? true : false);
 	}
@@ -436,8 +343,7 @@ public class ClassHelper extends BaseHelperSupporter {
 		return isDeclaredMethod(clazz, methodName, null);
 	}
 
-	public static boolean isDeclaredMethod(Class<?> clazz, String methodName,
-			Class<?>[] parameterTypes) {
+	public static boolean isDeclaredMethod(Class<?> clazz, String methodName, Class<?>[] parameterTypes) {
 		Method method = getDeclaredMethod(clazz, methodName, parameterTypes);
 		return (method != null ? true : false);
 	}
@@ -473,59 +379,19 @@ public class ClassHelper extends BaseHelperSupporter {
 		return false;
 	}
 
-	// java.lang.String;toString;NoParams
-	// protected static String getMethodCacheKey(Class<?> clazz, String
-	// methodName,
-	// Class<?>[] parameterTypes)
-	// {
-	// StringBuilder methodKey = new StringBuilder();
-	// methodKey.append(clazz.getName() + ";");
-	// methodKey.append(methodName + ";");
-	// if (parameterTypes != null)
-	// {
-	// if (parameterTypes.length > 0)
-	// {
-	// int count = 0;
-	// for (Class<?> paramClass : parameterTypes)
-	// {
-	// methodKey.append(paramClass.getName());
-	// //最後一個";"不加
-	// if (count < parameterTypes.length - 1)
-	// {
-	// methodKey.append(";");
-	// }
-	// count++;
-	// }
-	// // //去掉最後一個";"
-	// // if (methodKey.length() > 0){
-	// // methodKey.setLength(methodKey.length() - 1);
-	// // }
-	// }
-	// else
-	// {
-	// methodKey.append("NoParams");
-	// }
-	// }
-	// else
-	// {
-	// methodKey.append("NoParams");
-	// }
-	// //System.out.println("methodKey: "+methodKey);
-	// return methodKey.toString();
-	// }
-
 	public static Method getMethod(Class<?> clazz, String methodName) {
 		return getMethod(clazz, methodName, (Class[]) null);
 	}
 
-	public static Method getMethod(Class<?> clazz, String methodName,
-			Class<?> parameterType) {
+	public static Method getMethod(Class<?> clazz, String methodName, Class<?> parameterType) {
 		return getMethod(clazz, methodName, new Class[] { parameterType });
 	}
 
 	// getMethods 自身的public方法和super class的public方法
-	public static Method getMethod(Class<?> clazz, String methodName,
-			Class<?>[] parameterTypes) {
+	public static Method getMethod(Class<?> clazz, String methodName, Class<?>[] parameterTypes) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		AssertHelper.notNull(methodName, "The MethodName must not be null");
+		//
 		Method method = null;
 		try {
 			// String methodKey = getMethodCacheKey(clazz, methodName,
@@ -538,16 +404,13 @@ public class ClassHelper extends BaseHelperSupporter {
 			// #fix
 			Method[] methods = getMethodsAndCache(clazz);
 			for (Method entryMethod : methods) {
-				Class<?>[] entryParameterTypes = getParameterTypesAndCache(
-						clazz, entryMethod);
+				Class<?>[] entryParameterTypes = getMethodParameterTypesAndCache(clazz, entryMethod);
 				if (entryMethod.getName().equals(methodName)) {
-					if (entryParameterTypes.length == 0
-							&& parameterTypes == null) {
+					if (entryParameterTypes.length == 0 && parameterTypes == null) {
 						method = entryMethod;
 						break;
 					} else {
-						if (ObjectHelper.equals(entryParameterTypes,
-								parameterTypes)) {
+						if (ObjectHelper.equals(entryParameterTypes, parameterTypes)) {
 							method = entryMethod;
 							break;
 						}
@@ -561,7 +424,6 @@ public class ClassHelper extends BaseHelperSupporter {
 			// }
 
 		} catch (Exception ex) {
-			// log.warn(ex);
 			// ex.printStackTrace();
 		}
 		return method;
@@ -571,17 +433,17 @@ public class ClassHelper extends BaseHelperSupporter {
 		return getDeclaredMethod(clazz, methodName, (Class[]) null);
 	}
 
-	public static Method getDeclaredMethod(Class<?> clazz, String methodName,
-			Class<?> parameterType) {
-		return getDeclaredMethod(clazz, methodName,
-				new Class[] { parameterType });
+	public static Method getDeclaredMethod(Class<?> clazz, String methodName, Class<?> parameterType) {
+		return getDeclaredMethod(clazz, methodName, new Class[] { parameterType });
 	}
 
 	// getDeclaredMethods 自身的public、protected、private方法
 	// #fix:當本身找不到,先判斷自身是否為interface,若是往super interface class尋找
-	// #fix:若自身不為interfac,則往super class 尋找
-	public static Method getDeclaredMethod(Class<?> clazz, String methodName,
-			Class<?>[] parameterTypes) {
+	// #fix:若自身不為interface,則往super class 尋找
+	public static Method getDeclaredMethod(Class<?> clazz, String methodName, Class<?>[] parameterTypes) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		AssertHelper.notNull(methodName, "The MethodName must not be null");
+		//
 		Method method = null;
 		try {
 
@@ -607,18 +469,15 @@ public class ClassHelper extends BaseHelperSupporter {
 				// System.out.println("entry: "+entry);
 				// System.out.println("----------" + methodParams);
 
-				Class<?>[] entryParameterTypes = getParameterTypesAndCache(
-						clazz, entryMethod);
+				Class<?>[] entryParameterTypes = getMethodParameterTypesAndCache(clazz, entryMethod);
 				if (entryMethod.getName().equals(methodName)) {
 					// System.out.println(parameterTypeKey + " " + methodName);
 					// 沒有params的method
-					if (entryParameterTypes.length == 0
-							&& parameterTypes == null) {
+					if (entryParameterTypes.length == 0 && parameterTypes == null) {
 						method = entryMethod;
 						break;
 					} else {
-						if (ObjectHelper.equals(entryParameterTypes,
-								parameterTypes)) {
+						if (ObjectHelper.equals(entryParameterTypes, parameterTypes)) {
 							method = entryMethod;
 							break;
 						}
@@ -626,153 +485,22 @@ public class ClassHelper extends BaseHelperSupporter {
 				}
 			}
 
-			//
-			// if (method == null)
-			// {
-			// Class<?> superClazz = clazz.getSuperclass();
-			// //if (superClazz != null)
-			// //排除尋找Object.class,約快2秒,5129->7427 mills
-			// if (superClazz != null && superClazz != Object.class)
-			// {
-			// //System.out.println("superClazz: " + superClazz);
-			// method = getDeclaredMethod(superClazz, methodName,
-			// parameterTypes);
-			// }
-			// }
-
-			// catch (NoSuchMethodException ex)
-			// catch (Exception ex)
-			// {
-			// //往supper class 尋找
-			// Class<?> superClazz = clazz.getSuperclass();
-			// //System.out.println(superClazz);
-			// if (superClazz != null)
-			// {
-			// method = getDeclaredMethod(superClazz, methodName,
-			// parameterTypes);
-			// }
-			// ex.printStackTrace();
-			// }
-			// if (method != null)
-			// {
-			// getMethodCache.put(methodKey, method);
-			// }
-			// }
 		} catch (Exception ex) {
-			// log.warn(ex);
 			// ex.printStackTrace();
 		}
 		return method;
 	}
-
-	// no cache
-	public static Method ___getMethod(Class<?> clazz, String methodName,
-			Class<?>[] parameterTypes) {
-		Method method = null;
-		try {
-			method = clazz.getMethod(methodName, parameterTypes);
-		} catch (Exception ex) {
-			// log.warn(ex);
-			ex.printStackTrace();
-		}
-		return method;
-	}
-
-	// nest ConcurrentMap會太慢,改為單一個就ok
-	// 目前已改用 getMethod
-	@Deprecated
-	public static Method ___getMethod2(Class<?> clazz, String methodName,
-			Class<?>[] parameterTypes) {
-		Method method = null;
-		try {
-			// ConcurrentMap<String, ConcurrentMap<Class<?>[], Method>> methods
-			// = methodCache
-			// .get(clazz);
-			// ConcurrentMap<Class<?>[], Method> paramMethods = null;
-			ConcurrentMap<String, ConcurrentMap<String, Method>> methods = nestedMethodCache
-					.get(clazz);
-			ConcurrentMap<String, Method> paramMethods = null;
-			// 方法
-			if (methods == null) {
-				// methods = new ConcurrentHashMap<String,
-				// ConcurrentMap<Class<?>[], Method>>();
-				methods = new ConcurrentHashMap<String, ConcurrentMap<String, Method>>();
-				nestedMethodCache.put(clazz, methods);
-			}
-			// 方法參數
-			paramMethods = methods.get(methodName);
-			if (paramMethods == null) {
-				// paramMethods = new ConcurrentHashMap<Class<?>[], Method>();
-				paramMethods = new ConcurrentHashMap<String, Method>();
-				methods.put(methodName, paramMethods);
-			}
-
-			// 同方法不同參數的key
-			// Class[] paramMethodsKey = (parameterTypes == null ? new Class[]
-			// {} : parameterTypes);
-			StringBuilder paramMethodsKey = new StringBuilder();
-			if (parameterTypes != null) {
-				for (Class<?> paramClass : parameterTypes) {
-					paramMethodsKey.append(paramClass.getSimpleName());
-				}
-			} else {
-				paramMethodsKey.append("NoParams");
-			}
-			method = paramMethods.get(paramMethodsKey);
-
-			//
-			if (method == null) {
-				method = clazz.getMethod(methodName, parameterTypes);
-
-				// paramMethods.put(paramMethodsKey, method);
-				paramMethods.put(paramMethodsKey.toString(), method);
-				methods.put(methodName, paramMethods);
-				nestedMethodCache.put(clazz, methods);
-			}
-
-		} catch (Exception ex) {
-			// log.warn(ex);
-			ex.printStackTrace();
-		}
-		return method;
-
-	}
-
-	// public static Method getStaticMethod(Class<?> clazz, String methodName,
-	// Class<?>... parameterTypes)
-	// {
-	// // Assert.notNull(clazz, "Class must not be null");
-	// // Assert.notNull(methodName, "Method name must not be null");
-	// Method method = null;
-	// try
-	// {
-	// Method foundMethod = clazz.getDeclaredMethod(methodName, parameterTypes);
-	// //Method foundMethod = getMethod(clazz, methodName, parameterTypes);
-	// if ((foundMethod.getModifiers() & Modifier.STATIC) != 0)
-	// {
-	// method = foundMethod;
-	// }
-	// }
-	// catch (Exception ex)
-	// {
-	// ex.printStackTrace();
-	// }
-	// return method;
-	// }
 
 	// getMethod
 	public static Object invokeMethod(Object object, String methodName) {
 		return invokeMethod(object, methodName, (Class[]) null, (Object[]) null);
 	}
 
-	public static Object invokeMethod(Object object, String methodName,
-			Class<?> parameterType, Object arg) {
-		return invokeMethod(object, methodName, new Class[] { parameterType },
-				new Object[] { arg });
+	public static Object invokeMethod(Object object, String methodName, Class<?> parameterType, Object arg) {
+		return invokeMethod(object, methodName, new Class[] { parameterType }, new Object[] { arg });
 	}
 
-	public static Object invokeMethod(Object value, String methodName,
-			Class<?>[] parameterTypes, Object[] args) {
+	public static Object invokeMethod(Object value, String methodName, Class<?>[] parameterTypes, Object[] args) {
 		Method method = getMethod(value.getClass(), methodName, parameterTypes);
 		return invokeMethod(value, method, args);
 	}
@@ -785,7 +513,6 @@ public class ClassHelper extends BaseHelperSupporter {
 				object = method.invoke(value, args);
 			}
 		} catch (Exception ex) {
-			// log.warn(ex);
 			ex.printStackTrace();
 		}
 		return object;
@@ -793,34 +520,18 @@ public class ClassHelper extends BaseHelperSupporter {
 
 	//
 	public static Object invokeDeclaredMethod(Object object, String methodName) {
-		return invokeDeclaredMethod(object, methodName, (Class[]) null,
-				(Object[]) null);
+		return invokeDeclaredMethod(object, methodName, (Class[]) null, (Object[]) null);
 	}
 
-	public static Object invokeDeclaredMethod(Object object, String methodName,
-			Class<?> parameterType, Object arg) {
-		return invokeDeclaredMethod(object, methodName,
-				new Class[] { parameterType }, new Object[] { arg });
+	public static Object invokeDeclaredMethod(Object object, String methodName, Class<?> parameterType, Object arg) {
+		return invokeDeclaredMethod(object, methodName, new Class[] { parameterType }, new Object[] { arg });
 	}
 
-	public static Object invokeDeclaredMethod(Object value, String methodName,
-			Class<?>[] parameterTypes, Object[] args) {
-		Method method = getDeclaredMethod(value.getClass(), methodName,
-				parameterTypes);
+	public static Object invokeDeclaredMethod(Object value, String methodName, Class<?>[] parameterTypes,
+			Object[] args) {
+		Method method = getDeclaredMethod(value.getClass(), methodName, parameterTypes);
 		return invokeMethod(value, method, args);
 	}
-
-	// org.openyu.commons.lang.ClassHelperTest$PlayerPoSupporter;superField
-	// protected static String getFieldCacheKey(Class<?> clazz, String
-	// fieldName)
-	// {
-	// StringBuilder fieldKey = new StringBuilder();
-	// fieldKey.append(clazz.getName());
-	// fieldKey.append(";");
-	// fieldKey.append(fieldName);
-	// //System.out.println("fieldKey: " + fieldKey);
-	// return fieldKey.toString();
-	// }
 
 	/**
 	 * 取自身及父類的 public field
@@ -849,7 +560,6 @@ public class ClassHelper extends BaseHelperSupporter {
 				}
 			}
 		} catch (Exception ex) {
-			// log.warn(ex);
 			// ex.printStackTrace();
 		}
 		return result;
@@ -865,7 +575,6 @@ public class ClassHelper extends BaseHelperSupporter {
 				}
 			}
 		} catch (Exception ex) {
-			// log.warn(ex);
 			// ex.printStackTrace();
 		}
 		return list.toArray(new Field[] {});
@@ -901,7 +610,6 @@ public class ClassHelper extends BaseHelperSupporter {
 			}
 
 		} catch (Exception ex) {
-			// log.warn(ex);
 			// ex.printStackTrace();
 		}
 		return result;
@@ -918,22 +626,9 @@ public class ClassHelper extends BaseHelperSupporter {
 			}
 
 		} catch (Exception ex) {
-			// log.warn(ex);
 			// ex.printStackTrace();
 		}
 		return list.toArray(new Field[] {});
-	}
-
-	// no cache
-	public static Field ___getField(Class<?> clazz, String fieldName) {
-		Field field = null;
-		try {
-			field = clazz.getField(fieldName);
-		} catch (Exception ex) {
-			// log.warn(ex);
-			ex.printStackTrace();
-		}
-		return field;
 	}
 
 	// 取自身及父類的 public field
@@ -994,21 +689,18 @@ public class ClassHelper extends BaseHelperSupporter {
 		return result;
 	}
 
-	public static boolean setFieldValue(Object value, String fieldName,
-			Object setValue) {
+	public static boolean setFieldValue(Object value, String fieldName, Object setValue) {
 		Field field = getField(value.getClass(), fieldName);
 		return setFieldValue(value, field, setValue);
 	}
 
-	public static boolean setDeclaredFieldValue(Object value, String fieldName,
-			Object setValue) {
+	public static boolean setDeclaredFieldValue(Object value, String fieldName, Object setValue) {
 		Field field = getDeclaredField(value.getClass(), fieldName);
 		return setFieldValue(value, field, setValue);
 	}
 
 	// setFieldValue,setDeclaredFieldValue共用
-	public static boolean setFieldValue(Object value, Field field,
-			Object setValue) {
+	public static boolean setFieldValue(Object value, Field field, Object setValue) {
 		boolean result = false;
 		if (value != null && field != null) {
 			try {
@@ -1046,9 +738,7 @@ public class ClassHelper extends BaseHelperSupporter {
 		if (field != null) {
 			try {
 				int modifiers = field.getModifiers();
-				if (Modifier.isPublic(modifiers)
-						&& Modifier.isStatic(modifiers)
-						&& Modifier.isFinal(modifiers)) {
+				if (Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
 					result = true;
 				}
 			} catch (Exception ex) {
@@ -1095,8 +785,7 @@ public class ClassHelper extends BaseHelperSupporter {
 			clazz = Void.TYPE;
 		} else {
 			// String className = object.getClass().getName();
-			StringBuilder className = new StringBuilder(object.getClass()
-					.getName());
+			StringBuilder className = new StringBuilder(object.getClass().getName());
 			// System.out.println("className: " + className);
 
 			// 判斷是否一維/多維陣列
@@ -1145,8 +834,7 @@ public class ClassHelper extends BaseHelperSupporter {
 				// [Ljava.lang.String;
 				case 'L':
 					try {
-						clazz = ClassHelper.forName(className.substring(
-								dimension + 1, className.length() - 1));
+						clazz = ClassHelper.forName(className.substring(dimension + 1, className.length() - 1));
 					} catch (Exception ex) {
 						// ex.printStackTrace();
 					}
@@ -1157,8 +845,7 @@ public class ClassHelper extends BaseHelperSupporter {
 		return clazz;
 	}
 
-	public static String resourcePath2PackagePath(Class<?> clazz,
-			String resourceName) {
+	public static String resourcePath2PackagePath(Class<?> clazz, String resourceName) {
 		if (!resourceName.startsWith("/")) {
 			return classPackageAsResourcePath(clazz) + "/" + resourceName;
 		}
@@ -1230,10 +917,8 @@ public class ClassHelper extends BaseHelperSupporter {
 		}
 		// catch (InstantiationException ex)
 		// {
-		// //log.warn("Is it an abstract class?");
 		// }
 		catch (Exception ex) {
-			// log.warn("Has the class definition changed? Is the constructor accessible?");
 			// ex.printStackTrace();
 		}
 		return result;
@@ -1246,8 +931,7 @@ public class ClassHelper extends BaseHelperSupporter {
 		T result = null;
 		try {
 			if (!Modifier.isPublic(constructor.getModifiers())
-					|| !Modifier.isPublic(constructor.getDeclaringClass()
-							.getModifiers())) {
+					|| !Modifier.isPublic(constructor.getDeclaringClass().getModifiers())) {
 				constructor.setAccessible(true);
 			}
 			result = (T) constructor.newInstance(args);
@@ -1258,19 +942,19 @@ public class ClassHelper extends BaseHelperSupporter {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T newProxyInstance(Class<?>[] clazzes,
-			InvocationHandler handler) {
+	public static <T> T newProxyInstance(Class<?>[] clazzes, InvocationHandler handler) {
 		// 因多代繼承時,delegate.getClass().getInterfaces() 只能找到本身的實作介面
 		// 無法找到super class實作介面,故改用
 
 		// Class[] clazzes = delegate.getClass().getInterfaces();
 		// Class[] clazzes = ClassHelper.getInterfaces(handler.getClass());
 		// Spy.trace(clazzes);
-		return (T) Proxy.newProxyInstance(handler.getClass().getClassLoader(),
-				clazzes, handler);
+		return (T) Proxy.newProxyInstance(handler.getClass().getClassLoader(), clazzes, handler);
 	}
 
 	public static Method[] getMethodsAndCache(Class<?> clazz) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		//
 		Method[] methods = new Method[0];
 		if (clazz != null) {
 			try {
@@ -1282,6 +966,10 @@ public class ClassHelper extends BaseHelperSupporter {
 						if (methods == null) {
 							try {
 								methods = clazz.getMethods();
+								// 2015/10/07 for not public
+								for (Method method : methods) {
+									method.setAccessible(true);
+								}
 							} catch (Exception ex) {
 								// ex.printStackTrace();
 							}
@@ -1300,24 +988,6 @@ public class ClassHelper extends BaseHelperSupporter {
 		return methods;
 	}
 
-	// 直接從cache上取
-	public static Method[] ___getMethods(Class<?> clazz) {
-		Method[] methods = new Method[0];
-		try {
-			getMethodsAndCache.lockInterruptibly();
-			try {
-				methods = getMethodsAndCache.get(clazz);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			} finally {
-				getMethodsAndCache.unlock();
-			}
-		} catch (InterruptedException ex) {
-			ex.printStackTrace();
-		}
-		return methods;
-	}
-
 	/**
 	 * 使用遞迴, 會往super class 尋找
 	 * 
@@ -1325,6 +995,8 @@ public class ClassHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static Method[] getDeclaredMethodsAndCache(Class<?> clazz) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		//
 		Method[] methods = new Method[0];
 		if (clazz != null) {
 			try {
@@ -1336,6 +1008,10 @@ public class ClassHelper extends BaseHelperSupporter {
 						if (methods == null) {
 							try {
 								methods = clazz.getDeclaredMethods();
+								// 2015/10/07 for not public
+								for (Method method : methods) {
+									method.setAccessible(true);
+								}
 							} catch (Exception ex) {
 								// ex.printStackTrace();
 							}
@@ -1357,8 +1033,7 @@ public class ClassHelper extends BaseHelperSupporter {
 				for (Class<?> interfaceClazz : interfaceClazzes) {
 					Method[] interfaceMethods = getDeclaredMethodsAndCache(interfaceClazz);
 					if (interfaceMethods != null && interfaceMethods.length > 0) {
-						methods = ArrayHelper.addUnique(methods,
-								interfaceMethods, Method[].class);
+						methods = ArrayHelper.addUnique(methods, interfaceMethods, Method[].class);
 					}
 				}
 			} else {
@@ -1367,8 +1042,7 @@ public class ClassHelper extends BaseHelperSupporter {
 				if (superClazz != null && !superClazz.equals(Object.class)) {
 					Method[] superMethods = getDeclaredMethodsAndCache(superClazz);
 					if (superMethods != null && superMethods.length > 0) {
-						methods = ArrayHelper.addUnique(methods, superMethods,
-								Method[].class);
+						methods = ArrayHelper.addUnique(methods, superMethods, Method[].class);
 					}
 				}
 			}
@@ -1376,35 +1050,18 @@ public class ClassHelper extends BaseHelperSupporter {
 		return methods;
 	}
 
-	// 直接從cache上取
-	public static Method[] ___getDeclaredMethods(Class<?> clazz) {
-		Method[] methods = new Method[0];
-		try {
-			getDeclaredMethodsAndCache.lockInterruptibly();
-			try {
-				methods = getDeclaredMethodsAndCache.get(clazz);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			} finally {
-				getDeclaredMethodsAndCache.unlock();
-			}
-		} catch (InterruptedException ex) {
-			ex.printStackTrace();
-		}
-		return methods;
-	}
-
-	public static Class<?>[] getParameterTypesAndCache(Class<?> clazz,
-			Method method) {
+	public static Class<?>[] getMethodParameterTypesAndCache(Class<?> clazz, Method method) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		AssertHelper.notNull(method, "The Method must not be null");
+		//
 		Class<?>[] parameterTypes = null;
 		try {
-			getParameterTypesAndCache.lockInterruptibly();
+			getMethodParameterTypesAndCache.lockInterruptibly();
 			try {
-				MapCacheImpl<Method, Class<?>[]> methodParameterTypes = getParameterTypesAndCache
-						.get(clazz);
+				MapCacheImpl<Method, Class<?>[]> methodParameterTypes = getMethodParameterTypesAndCache.get(clazz);
 				if (methodParameterTypes == null) {
 					methodParameterTypes = new MapCacheImpl<Method, Class<?>[]>();
-					getParameterTypesAndCache.put(clazz, methodParameterTypes);
+					getMethodParameterTypesAndCache.put(clazz, methodParameterTypes);
 				}
 				// System.out.println(method);
 				//
@@ -1424,7 +1081,7 @@ public class ClassHelper extends BaseHelperSupporter {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			} finally {
-				getParameterTypesAndCache.unlock();
+				getMethodParameterTypesAndCache.unlock();
 			}
 
 		} catch (InterruptedException ex) {
@@ -1436,6 +1093,8 @@ public class ClassHelper extends BaseHelperSupporter {
 	// get form cache, if not exist then add to cache
 	// include super class
 	public static Field[] getFieldsAndCache(Class<?> clazz) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		//
 		Field[] fields = new Field[0];
 		if (clazz != null) {
 			try {
@@ -1447,6 +1106,10 @@ public class ClassHelper extends BaseHelperSupporter {
 						if (fields == null) {
 							try {
 								fields = clazz.getFields();
+								// 2015/10/07 for not public
+								for (Field field : fields) {
+									field.setAccessible(true);
+								}
 							} catch (Exception ex) {
 								// ex.printStackTrace();
 							}
@@ -1465,24 +1128,6 @@ public class ClassHelper extends BaseHelperSupporter {
 		return fields;
 	}
 
-	// 直接從cache上取
-	public static Field[] ___getFields(Class<?> clazz) {
-		Field[] fields = new Field[0];
-		try {
-			getFieldsAndCache.lockInterruptibly();
-			try {
-				fields = getFieldsAndCache.get(clazz);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			} finally {
-				getFieldsAndCache.unlock();
-			}
-		} catch (InterruptedException ex) {
-			ex.printStackTrace();
-		}
-		return fields;
-	}
-
 	//
 	/**
 	 * 使用遞迴, 會往super class 尋找
@@ -1491,6 +1136,8 @@ public class ClassHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static Field[] getDeclaredFieldsAndCache(Class<?> clazz) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		//
 		Field[] fields = new Field[0];
 		if (clazz != null) {
 			try {
@@ -1502,6 +1149,10 @@ public class ClassHelper extends BaseHelperSupporter {
 						if (fields == null) {
 							try {
 								fields = clazz.getDeclaredFields();
+								// 2015/10/07 for not public
+								for (Field field : fields) {
+									field.setAccessible(true);
+								}
 							} catch (Exception ex) {
 								// ex.printStackTrace();
 							}
@@ -1530,8 +1181,7 @@ public class ClassHelper extends BaseHelperSupporter {
 					// fields = (Field[]) allFields;//error
 					// fields=Arrays.asList(allFields).toArray(new
 					// Field[allFields.length]);
-					fields = ArrayHelper.addUnique(fields, superFields,
-							Field[].class);
+					fields = ArrayHelper.addUnique(fields, superFields, Field[].class);
 				}
 			}
 			// System.out.println("declaredFieldCache: "+declaredFieldCache);
@@ -1539,112 +1189,6 @@ public class ClassHelper extends BaseHelperSupporter {
 		return fields;
 	}
 
-	// 直接從cache上取
-	public static Field[] ___getDeclaredFields(Class<?> clazz) {
-		Field[] fields = new Field[0];
-		try {
-			getDeclaredFieldsAndCache.lockInterruptibly();
-			try {
-				fields = getDeclaredFieldsAndCache.get(clazz);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			} finally {
-				getDeclaredFieldsAndCache.unlock();
-			}
-		} catch (InterruptedException ex) {
-			ex.printStackTrace();
-		}
-		return fields;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T ___copyByConvention(Object orig) {
-		T dest = null;
-		Class<?> destClass = null;
-		// 基本型別,及string
-		if (isPrimitiveOrWrapper(orig) || orig instanceof String) {
-			dest = (T) orig;
-		}
-		// coleciton(BeanContext, BeanContextServices, List, Set, SortedSet)
-		else if (orig instanceof Collection) {
-			Collection<?> origs = (Collection<?>) orig;
-			//
-			dest = (T) newInstance(orig.getClass());
-			for (Object entryOrig : origs) {
-				// 取第一個判斷比較快
-				destClass = getConventionClass(entryOrig);
-				break;
-			}
-
-		}
-		// TODO map ???
-		else if (orig instanceof Map) {
-
-		}
-		// TODO array ???
-
-		// 其他視為自定型別
-		else {
-			destClass = getConventionClass(orig);
-		}
-
-		//
-		if (destClass != null) {
-			dest = deepCopyPropertiesByField(orig, destClass);
-		}
-		// else
-		// {
-		// dest = (T) orig;
-		// }
-
-		return dest;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T ___copyPo2Vo(Object orig) {
-		// T dest = (T)orig;
-		// Class<?> voClass = ClassHelper.po2VoClass(orig);
-		// if (voClass != null)
-		// {
-		// dest = copyPropertiesByField(poOrig, voClass);
-		// }
-		// return dest;
-
-		T dest = null;
-		Class<?> destClass = null;
-		if (orig instanceof Collection) {
-			Collection<?> origs = (Collection<?>) orig;
-			//
-			dest = (T) newInstance(orig.getClass());
-			boolean firstFound = false;
-			for (Object entryOrig : origs) {
-				if (!firstFound) {
-					destClass = ClassHelper.po2VoClass(entryOrig);
-					firstFound = true;
-				}
-				if (destClass != null) {
-					Object entryDest = newInstance(destClass);
-					genericCopyPropertiesByField(entryOrig, entryDest);
-					((Collection) dest).add(entryDest);
-				} else {
-					dest = (T) orig;
-					break;
-				}
-			}
-		} else {
-			destClass = po2VoClass(orig);
-			if (destClass != null) {
-				dest = deepCopyPropertiesByField(orig, destClass);
-			} else {
-				dest = (T) orig;
-			}
-		}
-		return dest;
-	}
-
-	// ---------------------------------------------------
-	//
-	//
 	// ---------------------------------------------------
 	/**
 	 * 目前正在使用的,為deep copy,類似deep clone,
@@ -1699,8 +1243,7 @@ public class ClassHelper extends BaseHelperSupporter {
 		if (ArrayHelper.isArray(orig)) {
 			// TODO 陣列尚未處理
 		} else if (orig instanceof Collection) {
-			Collection<Object> copy = (Collection<Object>) (dest != null ? dest
-					: newInstance(orig.getClass()));
+			Collection<Object> copy = (Collection<Object>) (dest != null ? dest : newInstance(orig.getClass()));
 			for (Object entryOrig : (Collection<?>) orig) {
 				// #issue: copy class mapping, getCopyClass
 				// #fix: ok
@@ -1712,18 +1255,15 @@ public class ClassHelper extends BaseHelperSupporter {
 			}
 			dest = (T) copy;
 		} else if (orig instanceof Map) {
-			Map<Object, Object> copy = (Map<Object, Object>) (dest != null ? dest
-					: newInstance(orig.getClass()));
+			Map<Object, Object> copy = (Map<Object, Object>) (dest != null ? dest : newInstance(orig.getClass()));
 			for (Map.Entry<?, ?> entryOrig : ((Map<?, ?>) orig).entrySet()) {
 				// #issue: copy class mapping, getCopyClass
 				// #fix: ok
 				Object entryDestKey = null;
-				entryDestKey = deepCopyProperties(entryOrig.getKey(),
-						entryDestKey);
+				entryDestKey = deepCopyProperties(entryOrig.getKey(), entryDestKey);
 				//
 				Object entryDestValue = null;
-				entryDestValue = deepCopyProperties(entryOrig.getValue(),
-						entryDestValue);
+				entryDestValue = deepCopyProperties(entryOrig.getValue(), entryDestValue);
 				copy.put(entryDestKey, entryDestValue);
 			}
 			dest = (T) copy;
@@ -1736,8 +1276,7 @@ public class ClassHelper extends BaseHelperSupporter {
 			if (dest == null) {
 				// 當找不到destClass時,表示沒有要轉換class
 				destClass = getConventionClass(orig);
-				dest = (destClass == null ? (T) orig
-						: (T) newInstance(destClass));
+				dest = (destClass == null ? (T) orig : (T) newInstance(destClass));
 			}
 			// System.out.println("generic..." + orig);
 			// dest = genericCopyPropertiesBySpring(orig, dest);
@@ -1764,8 +1303,7 @@ public class ClassHelper extends BaseHelperSupporter {
 			result = (T) dest;
 		}
 		// 當來源與目的ref相同時,用deep clone
-		else if (orig != null && dest != null
-				&& orig.getClass().equals(dest.getClass())) {
+		else if (orig != null && dest != null && orig.getClass().equals(dest.getClass())) {
 			dest = CloneHelper.clone(orig);
 			result = (T) dest;
 		}
@@ -1788,8 +1326,7 @@ public class ClassHelper extends BaseHelperSupporter {
 			// System.out.println("destClass: " + destClass);
 			for (Field destField : fields) {
 				// final,transient,不需copy
-				if (Modifier.isFinal(destField.getModifiers())
-						|| Modifier.isTransient(destField.getModifiers())) {
+				if (Modifier.isFinal(destField.getModifiers()) || Modifier.isTransient(destField.getModifiers())) {
 					continue;
 				}
 				// System.out.println("destField: " + destField.getName() + ", "
@@ -1800,8 +1337,7 @@ public class ClassHelper extends BaseHelperSupporter {
 				Object destFieldValue = getFieldValue(dest, destField);
 
 				// 來源欄位
-				Field origField = getDeclaredField(origClass,
-						destField.getName());
+				Field origField = getDeclaredField(origClass, destField.getName());
 				Class<?> origFieldType = null;
 				if (origField != null) {
 					// orig field class
@@ -1809,18 +1345,15 @@ public class ClassHelper extends BaseHelperSupporter {
 					Object origFieldValue = getFieldValue(orig, origField);
 
 					// 非null且值不相同
-					if (origFieldValue != null
-							&& !origFieldValue.equals(destFieldValue)) {
+					if (origFieldValue != null && !origFieldValue.equals(destFieldValue)) {
 						// 2012/10/16
 						// 1.基本或包裝型別
 						if (isPrimitiveOrWrapper(origFieldType)) {
 							setFieldValue(dest, destField, origFieldValue);
 						}
 						// 2.型別相等,且非集合物件不作轉換,直接clone後塞值
-						else if (origFieldType.equals(destFieldType)
-								&& !ArrayHelper.isArray(origFieldValue)
-								&& !(origFieldValue instanceof Collection)
-								&& !(origFieldValue instanceof Map)) {
+						else if (origFieldType.equals(destFieldType) && !ArrayHelper.isArray(origFieldValue)
+								&& !(origFieldValue instanceof Collection) && !(origFieldValue instanceof Map)) {
 							// System.out.println("1:origField " +
 							// origField.getName() + ", "
 							// + origFieldValue);
@@ -1863,17 +1396,14 @@ public class ClassHelper extends BaseHelperSupporter {
 							// System.out.println("4: "+origFieldClass);
 							Map<Object, Object> copy = (Map<Object, Object>) (destFieldValue != null ? destFieldValue
 									: newInstance(origFieldValue.getClass()));
-							for (Map.Entry<?, ?> entryOrig : ((Map<?, ?>) origFieldValue)
-									.entrySet()) {
+							for (Map.Entry<?, ?> entryOrig : ((Map<?, ?>) origFieldValue).entrySet()) {
 								// System.out.println("entryOrig.getKey(): " +
 								// entryOrig.getKey());
 								Object entryDestKey = null;
-								entryDestKey = deepCopyFields(
-										entryOrig.getKey(), entryDestKey);
+								entryDestKey = deepCopyFields(entryOrig.getKey(), entryDestKey);
 								//
 								Object entryDestValue = null;
-								entryDestValue = deepCopyFields(
-										entryOrig.getValue(), entryDestValue);
+								entryDestValue = deepCopyFields(entryOrig.getValue(), entryDestValue);
 
 								// System.out.println("entryDestKey: " +
 								// entryDestKey);
@@ -1890,8 +1420,7 @@ public class ClassHelper extends BaseHelperSupporter {
 							// 當找不到copy class時,表示沒有要轉換class
 							Class<?> copyClass = getConventionClass(origFieldValue);
 							// Class<?> copyClass = null;
-							destFieldValue = (copyClass != null ? newInstance(copyClass)
-									: origFieldValue);
+							destFieldValue = (copyClass != null ? newInstance(copyClass) : origFieldValue);
 
 							// 這裡可換其他的generic copyProperties,目前使用spring的
 							// destValue =
@@ -1900,8 +1429,7 @@ public class ClassHelper extends BaseHelperSupporter {
 							// #issue 但若field為集合時,會整個copy過去,形成別的class
 
 							// #fix 改為遞迴方式,直接setFieldValue即可
-							destFieldValue = deepCopyFields(origFieldValue,
-									destFieldValue);
+							destFieldValue = deepCopyFields(origFieldValue, destFieldValue);
 							setFieldValue(dest, destField, destFieldValue);
 
 							result = (T) dest;
@@ -1916,8 +1444,7 @@ public class ClassHelper extends BaseHelperSupporter {
 						if (isPrimitiveOrWrapper) {
 							// hibernate用,當version=null,不塞預設值=0
 							if (!"version".equals(origField.getName())) {
-								setFieldValue(dest, destField,
-										getDefaultValue(origFieldType));
+								setFieldValue(dest, destField, getDefaultValue(origFieldType));
 							}
 						} else {
 							setFieldValue(dest, destField, null);
@@ -1944,8 +1471,7 @@ public class ClassHelper extends BaseHelperSupporter {
 	 */
 	protected static void setOwner(Object owner, Object destFieldValue) {
 		if (owner != null && destFieldValue != null) {
-			Field[] fields = getDeclaredFieldsAndCache(destFieldValue
-					.getClass());
+			Field[] fields = getDeclaredFieldsAndCache(destFieldValue.getClass());
 			for (Field field : fields) {
 				// System.out.println(field.getName()+" "+field.getType());
 				if (isInterfaceOf(field.getType(), owner.getClass())) {
@@ -1957,8 +1483,7 @@ public class ClassHelper extends BaseHelperSupporter {
 
 	// 無遞迴, 泛化 copy
 	@SuppressWarnings("unchecked")
-	protected static <T> T genericCopyPropertiesBySpring(Object orig,
-			Object dest) {
+	protected static <T> T genericCopyPropertiesBySpring(Object orig, Object dest) {
 		// System.out.println("spring: " + orig);
 		// System.out.println("spring: " + dest);
 		if (orig != dest && dest != null) {
@@ -1977,8 +1502,7 @@ public class ClassHelper extends BaseHelperSupporter {
 	// 遞迴
 	// #issus 會有無窮回圈,當雙向關聯時
 	@SuppressWarnings("unchecked")
-	protected static <T> T deepCopyPropertiesByField(Object orig,
-			Class<?> destClass) {
+	protected static <T> T deepCopyPropertiesByField(Object orig, Class<?> destClass) {
 		Object dest = null;
 		if (orig != null) {
 			if (ArrayHelper.isArray(orig)) {
@@ -1987,19 +1511,15 @@ public class ClassHelper extends BaseHelperSupporter {
 				Collection<?> origs = (Collection<?>) orig;
 				Collection<T> copy = newInstance(orig.getClass());
 				for (Object entryOrig : origs) {
-					copy.add((T) deepCopyPropertiesByField(entryOrig,
-							entryOrig.getClass()));
+					copy.add((T) deepCopyPropertiesByField(entryOrig, entryOrig.getClass()));
 				}
 				dest = copy;
 			} else if (orig instanceof Map) {
 				Map<?, ?> origs = (Map<?, ?>) orig;
 				Map<T, T> copy = ClassHelper.newInstance(orig.getClass());
 				for (Map.Entry<?, ?> entryOrig : origs.entrySet()) {
-					copy.put(
-							(T) deepCopyPropertiesByField(entryOrig.getKey(),
-									entryOrig.getKey().getClass()),
-							(T) deepCopyPropertiesByField(entryOrig.getValue(),
-									entryOrig.getValue().getClass()));
+					copy.put((T) deepCopyPropertiesByField(entryOrig.getKey(), entryOrig.getKey().getClass()),
+							(T) deepCopyPropertiesByField(entryOrig.getValue(), entryOrig.getValue().getClass()));
 				}
 				dest = copy;
 			}
@@ -2057,14 +1577,13 @@ public class ClassHelper extends BaseHelperSupporter {
 
 				if (origValue != null && !origValue.equals(destValue)) {
 					// 型別相等及非集合物件不作轉換
-					if (origFieldClass.equals(destFieldClass)
-							&& !ArrayHelper.isArray(origValue)
-							&& !(origValue instanceof Collection)
-							&& !(origValue instanceof Map)) {
+					if (origFieldClass.equals(destFieldClass) && !ArrayHelper.isArray(origValue)
+							&& !(origValue instanceof Collection) && !(origValue instanceof Map)) {
 						setFieldValue(dest, destField, origValue);
 					} else {
 						// 轉換
-						// System.out.println("copyByConvention: "+origFieldClass+" "+destFieldClass);
+						// System.out.println("copyByConvention:
+						// "+origFieldClass+" "+destFieldClass);
 						// Object conventionValue = copyByConvention(origValue);
 						// setFieldValue(dest, destField, conventionValue);
 					}
@@ -2167,23 +1686,19 @@ public class ClassHelper extends BaseHelperSupporter {
 					}
 					// 1.array
 					else if (ArrayHelper.isArray(orig)) {
-						Object[] firstOrig = ArrayHelper
-								.getFirstEntry((Object[]) orig);
+						Object[] firstOrig = ArrayHelper.getFirstEntry((Object[]) orig);
 						keyClass = (Class<?>) firstOrig[0];
 						keyValue = firstOrig[1];
 						if (keyClass != null) {
-							if (getConventionClassAndCache
-									.isNotNullValue(keyClass)) {
-								conventionClass = getConventionClassAndCache
-										.get(keyClass);
+							if (getConventionClassAndCache.isNotNullValue(keyClass)) {
+								conventionClass = getConventionClassAndCache.get(keyClass);
 								if (conventionClass == null) {
 									if (isExcludeConvention(keyValue)) {
 										conventionClass = keyClass;
 									} else {
 										conventionClass = getConventionClass(keyValue);
 									}
-									getConventionClassAndCache.put(keyClass,
-											conventionClass);
+									getConventionClassAndCache.put(keyClass, conventionClass);
 								}
 							}
 						}
@@ -2192,24 +1707,20 @@ public class ClassHelper extends BaseHelperSupporter {
 					else if (orig instanceof Collection) {
 						// [0]=class
 						// [1]=value
-						Object[] firstOrig = CollectionHelper
-								.getFirstValue((Collection<?>) orig);
+						Object[] firstOrig = CollectionHelper.getFirstValue((Collection<?>) orig);
 						keyClass = (Class<?>) firstOrig[0];
 						keyValue = firstOrig[1];
 						//
 						if (keyClass != null) {
-							if (getConventionClassAndCache
-									.isNotNullValue(keyClass)) {
-								conventionClass = getConventionClassAndCache
-										.get(keyClass);
+							if (getConventionClassAndCache.isNotNullValue(keyClass)) {
+								conventionClass = getConventionClassAndCache.get(keyClass);
 								if (conventionClass == null) {
 									if (isExcludeConvention(keyValue)) {
 										conventionClass = keyClass;
 									} else {
 										conventionClass = getConventionClass(keyValue);
 									}
-									getConventionClassAndCache.put(keyClass,
-											conventionClass);
+									getConventionClassAndCache.put(keyClass, conventionClass);
 								}
 							}
 						}
@@ -2218,16 +1729,13 @@ public class ClassHelper extends BaseHelperSupporter {
 					else if (orig instanceof Map) {
 						// [0]=class
 						// [1]=value
-						Object[] firstOrig = CollectionHelper
-								.getFirstValue((Map<?, ?>) orig);
+						Object[] firstOrig = CollectionHelper.getFirstValue((Map<?, ?>) orig);
 						keyClass = (Class<?>) firstOrig[0];
 						keyValue = firstOrig[1];
 						//
 						if (keyClass != null) {
-							if (getConventionClassAndCache
-									.isNotNullValue(keyClass)) {
-								conventionClass = getConventionClassAndCache
-										.get(keyClass);
+							if (getConventionClassAndCache.isNotNullValue(keyClass)) {
+								conventionClass = getConventionClassAndCache.get(keyClass);
 								if (conventionClass == null) {
 									if (isExcludeConvention(keyValue)) {
 										conventionClass = keyClass;
@@ -2235,8 +1743,7 @@ public class ClassHelper extends BaseHelperSupporter {
 										conventionClass = getConventionClass(keyValue);
 									}
 									// conventionClass=keyClass;
-									getConventionClassAndCache.put(keyClass,
-											conventionClass);
+									getConventionClassAndCache.put(keyClass, conventionClass);
 								}
 							}
 						}
@@ -2245,12 +1752,10 @@ public class ClassHelper extends BaseHelperSupporter {
 					else if (isPoClass(orig)) {
 						keyClass = orig.getClass();
 						if (getConventionClassAndCache.isNotNullValue(keyClass)) {
-							conventionClass = getConventionClassAndCache
-									.get(keyClass);
+							conventionClass = getConventionClassAndCache.get(keyClass);
 							if (conventionClass == null) {
 								conventionClass = po2VoClass(orig);
-								getConventionClassAndCache.put(keyClass,
-										conventionClass);
+								getConventionClassAndCache.put(keyClass, conventionClass);
 							}
 						}
 						// conventionClass = po2VoClass(orig);
@@ -2260,33 +1765,26 @@ public class ClassHelper extends BaseHelperSupporter {
 						// System.out.println("isVoClass: "+isVoClass(orig));
 						keyClass = orig.getClass();
 						if (getConventionClassAndCache.isNotNullValue(keyClass)) {
-							conventionClass = getConventionClassAndCache
-									.get(keyClass);
+							conventionClass = getConventionClassAndCache.get(keyClass);
 							if (conventionClass == null) {
 								conventionClass = vo2PoClass(orig);
-								getConventionClassAndCache.put(keyClass,
-										conventionClass);
+								getConventionClassAndCache.put(keyClass, conventionClass);
 							}
 						}
 						// conventionClass = vo2PoClass(orig);
 					}
 					// 6.appConfig-ini.xml
 					else if (!po2vos.isEmpty()) {
-						String mappingClassName = po2vos.get(orig.getClass()
-								.getName());
-						List<String> poKeys = CollectionHelper.getKeysByValue(
-								po2vos, orig.getClass().getName());
+						String mappingClassName = po2vos.get(orig.getClass().getName());
+						List<String> poKeys = CollectionHelper.getKeysByValue(po2vos, orig.getClass().getName());
 						// 從設定檔尋找對應的class, key->value
 						if (mappingClassName != null) {
 							keyClass = orig.getClass();
-							if (getConventionClassAndCache
-									.isNotNullValue(keyClass)) {
-								conventionClass = getConventionClassAndCache
-										.get(keyClass);
+							if (getConventionClassAndCache.isNotNullValue(keyClass)) {
+								conventionClass = getConventionClassAndCache.get(keyClass);
 								if (conventionClass == null) {
 									conventionClass = forName(mappingClassName);
-									getConventionClassAndCache.put(keyClass,
-											conventionClass);
+									getConventionClassAndCache.put(keyClass, conventionClass);
 								}
 							}
 							// conventionClass = forName(mappingClassName);
@@ -2294,14 +1792,11 @@ public class ClassHelper extends BaseHelperSupporter {
 						// value -> key
 						else if (!poKeys.isEmpty()) {
 							keyClass = orig.getClass();
-							if (getConventionClassAndCache
-									.isNotNullValue(keyClass)) {
-								conventionClass = getConventionClassAndCache
-										.get(keyClass);
+							if (getConventionClassAndCache.isNotNullValue(keyClass)) {
+								conventionClass = getConventionClassAndCache.get(keyClass);
 								if (conventionClass == null) {
 									conventionClass = forName(poKeys.get(0));
-									getConventionClassAndCache.put(keyClass,
-											conventionClass);
+									getConventionClassAndCache.put(keyClass, conventionClass);
 								}
 							}
 							// conventionClass = forName(poKeys.get(0));
@@ -2330,8 +1825,7 @@ public class ClassHelper extends BaseHelperSupporter {
 	// #3.沒再用,只是測試
 	// ---------------------------------------------------
 	@SuppressWarnings("unchecked")
-	protected static <T> T copyPropertiesByMethod(Object orig,
-			Class<?> destClass) {
+	protected static <T> T copyPropertiesByMethod(Object orig, Class<?> destClass) {
 		Object dest = null;
 		if (orig instanceof Collection) {
 			@SuppressWarnings("rawtypes")
@@ -2366,10 +1860,8 @@ public class ClassHelper extends BaseHelperSupporter {
 			String getterName = null;
 			if (setterName.startsWith("set")) {
 				// setEnable(boolean enable)
-				Class<?>[] destParameterTypes = getParameterTypesAndCache(
-						destClass, destMethod);
-				if (destParameterTypes == null
-						|| destParameterTypes.length != 1) {
+				Class<?>[] destParameterTypes = getMethodParameterTypesAndCache(destClass, destMethod);
+				if (destParameterTypes == null || destParameterTypes.length != 1) {
 					continue;
 				}
 				//
@@ -2377,8 +1869,7 @@ public class ClassHelper extends BaseHelperSupporter {
 				getterName = "get" + setterName.substring(3);
 				// getter
 				Method origMethod = null;
-				if (setterType.isInstance(boolean.class)
-						|| setterType.isInstance(Boolean.class)) {
+				if (setterType.isInstance(boolean.class) || setterType.isInstance(Boolean.class)) {
 					origMethod = getMethod(origClass, getterName);
 					// boolean 若無 getXxx,則換成isXxx,再找一次
 					if (origMethod == null) {
@@ -2387,35 +1878,16 @@ public class ClassHelper extends BaseHelperSupporter {
 				}
 				//
 				origMethod = getMethod(origClass, getterName);
-				if (origMethod != null
-						&& setterType.equals(origMethod.getReturnType())) {
+				if (origMethod != null && setterType.equals(origMethod.getReturnType())) {
 					// 取得getter value
 					Object origValue = invokeMethod(orig, origMethod, null);
 					if (origValue != null) {
 						// 設定 setter value
-						invokeMethod(dest, destMethod,
-								new Object[] { origValue });
+						invokeMethod(dest, destMethod, new Object[] { origValue });
 					}
 				}
 			}
 		}
-	}
-
-	// 可以不用cache,因原本速度就很快
-	public static Class<?> ___getSuperClassAndCache(Class<?> clazz) {
-		Class<?> superClass = Object.class;
-		try {
-			superClassCacheLock.lock();
-			superClass = superClassCache.get(clazz);
-			if (superClass == null) {
-				superClass = clazz.getSuperclass();
-				superClassCache.put(clazz, superClass);
-			}
-		} catch (Exception ex) {
-		} finally {
-			superClassCacheLock.unlock();
-		}
-		return superClass;
 	}
 
 	// 2011/12/12
@@ -2438,6 +1910,8 @@ public class ClassHelper extends BaseHelperSupporter {
 	}
 
 	public static Class<?>[] getInterfacesAndCache(Class<?> clazz) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		//
 		Class<?>[] result = null;
 		try {
 			getInterfacesAndCache.lockInterruptibly();
@@ -2594,12 +2068,10 @@ public class ClassHelper extends BaseHelperSupporter {
 			// #fix: 改isSfcEntityClass先判斷
 			if (isFcEntityClass(poClass)) {
 				// bean->entity
-				clazz = toClass(poClass, ".entity.supporter",
-						".bean.supporter", "Entity", "Bean");
+				clazz = toClass(poClass, ".entity.supporter", ".bean.supporter", "Entity", "Bean");
 			} else {
 				// 規則1
-				clazz = toClass(poClass, ".po.impl", ".vo.impl", "PoImpl",
-						"Impl");
+				clazz = toClass(poClass, ".po.impl", ".vo.impl", "PoImpl", "Impl");
 				// #issue 多加其他條件判斷
 				if (clazz == null) {
 					// #fix
@@ -2627,12 +2099,10 @@ public class ClassHelper extends BaseHelperSupporter {
 			// #fix: 改isSfcBeanClass先判斷
 			if (isFcBeanClass(voClass)) {
 				// bean->entity
-				clazz = toClass(voClass, ".bean.supporter",
-						".entity.supporter", "Bean", "Entity");
+				clazz = toClass(voClass, ".bean.supporter", ".entity.supporter", "Bean", "Entity");
 			} else {
 				// 規則1
-				clazz = toClass(voClass, ".vo.impl", ".po.impl", "Impl",
-						"PoImpl");
+				clazz = toClass(voClass, ".vo.impl", ".po.impl", "Impl", "PoImpl");
 				// #issue 多加其他條件判斷
 				if (clazz == null) {
 					// #fix
@@ -2644,8 +2114,8 @@ public class ClassHelper extends BaseHelperSupporter {
 		return clazz;
 	}
 
-	protected static Class<?> toClass(Class<?> fromClass, String packExp,
-			String replacePackExp, String nameExp, String replaceNameExp) {
+	protected static Class<?> toClass(Class<?> fromClass, String packExp, String replacePackExp, String nameExp,
+			String replaceNameExp) {
 		Class<?> clazz = null;
 		// String packExp = ".vo.impl";
 		// String nameExp = "Impl";
@@ -2654,8 +2124,7 @@ public class ClassHelper extends BaseHelperSupporter {
 		int packPos = toClassName.indexOf(packExp);
 		// System.out.println("packPos: " + packPos);
 		if (packPos > -1) {
-			toClassName.replace(packPos, packPos + packExp.length(),
-					replacePackExp);
+			toClassName.replace(packPos, packPos + packExp.length(), replacePackExp);
 			int namePos = toClassName.indexOf(nameExp);
 			// System.out.println("namePos: " + namePos);
 
@@ -2669,8 +2138,7 @@ public class ClassHelper extends BaseHelperSupporter {
 			// org.openyu.commons.po.impl.CatPoImpl
 			else if (namePos > -1) {
 
-				toClassName.replace(namePos, namePos + nameExp.length(),
-						replaceNameExp);
+				toClassName.replace(namePos, namePos + nameExp.length(), replaceNameExp);
 				// System.out.println(toClassName);
 				clazz = ClassHelper.forName(toClassName.toString());
 			}
@@ -2734,103 +2202,200 @@ public class ClassHelper extends BaseHelperSupporter {
 		return result;
 	}
 
-	// ------------------------------------------------------------
-	// 太慢
-	public static Class<?> ___vo2PoClass(Class<?> voClass) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(StringHelper.replace(voClass.getName(), ".vo.impl",
-				".po.impl"));
-		//
-		StringBuilder toClassName = new StringBuilder();
-		toClassName
-				.append(StringHelper.replace(sb.toString(), "Impl", "PoImpl"));
-
-		Class<?> toClass = ClassHelper.forName(toClassName.toString());
-		return toClass;
+	public static Constructor<?> getConstructor(Class<?> clazz) {
+		return getConstructor(clazz, (Class[]) null);
 	}
 
-	public static Class<?> ___getConventionClass(Object orig) {
-		Class<?> conventionClass = null;
-
-		if (orig != null) {
-			// 基本型別,String,Object不尋找
-			if (isPrimitiveOrWrapper(orig)
-					|| orig.getClass().equals(String.class)
-					|| orig.getClass().equals(Object.class)) {
-				conventionClass = null;
-			}
-			// list,set
-			else if (orig instanceof Collection) {
-				Collection<?> origs = (Collection<?>) orig;
-				for (Object entryOrig : origs) {
-					// 取第一個判斷比較快
-					conventionClass = getConventionClass(entryOrig);
+	// getConstructors 自身的public方法和super class的public方法
+	public static Constructor<?> getConstructor(Class<?> clazz, Class<?>[] parameterTypes) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		//
+		Constructor<?> constructor = null;
+		try {
+			Constructor<?>[] constructors = getConstructorsAndCache(clazz);
+			for (Constructor<?> entryConstructor : constructors) {
+				Class<?>[] entryParameterTypes = getConstructorParameterTypesAndCache(clazz, entryConstructor);
+				if (entryParameterTypes.length == 0 && parameterTypes == null) {
+					constructor = entryConstructor;
 					break;
-				}
-			}
-			// map,不取key作判斷,取value作判斷
-			else if (orig instanceof Map) {
-				Map<?, ?> origs = (Map<?, ?>) orig;
-				for (Object entryOrig : origs.values()) {
-					// 取第一個判斷比較快
-					conventionClass = getConventionClass(entryOrig);
-					break;
-				}
-			}
-			// TODO array ???
-			// 1.使用慣例isPoClass/isVoClass
-			else if (isPoClass(orig)) {
-				conventionClass = po2VoClass(orig);
-			} else if (isVoClass(orig)) {
-				conventionClass = vo2PoClass(orig);
-			} else {
-				if (!po2vos.isEmpty()) {
-					String mappingClassName = po2vos.get(orig.getClass()
-							.getName());
-					List<String> poKeys = CollectionHelper.getKeysByValue(
-							po2vos, orig.getClass().getName());
-					// 2.從設定檔尋找對應的class
-					if (mappingClassName != null) {
-						conventionClass = forName(mappingClassName);
-					} else if (!poKeys.isEmpty()) {
-						conventionClass = forName(poKeys.get(0));
-					} else {
-						conventionClass = null;
+				} else {
+					if (ObjectHelper.equals(entryParameterTypes, parameterTypes)) {
+						constructor = entryConstructor;
+						break;
 					}
 				}
+			}
+			//
+		} catch (Exception ex) {
+			// ex.printStackTrace();
+		}
+		return constructor;
+	}
 
+	public static Constructor<?> getDeclaredConstructor(Class<?> clazz) {
+		return getDeclaredConstructor(clazz, (Class[]) null);
+	}
+
+	// getDeclaredConstructors 自身的public、protected、private方法
+	// #fix:當本身找不到,先判斷自身是否為interface,若是往super interface class尋找
+	// #fix:若自身不為interface,則往super class 尋找
+	public static Constructor<?> getDeclaredConstructor(Class<?> clazz, Class<?>[] parameterTypes) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		//
+		Constructor<?> constructor = null;
+		try {
+			// 找不到時會花費很多時間
+			// method = clazz.getDeclaredConstructor( parameterTypes);
+
+			// #fix
+			Constructor<?>[] constructors = getDeclaredConstructorsAndCache(clazz);
+			for (Constructor<?> entryConstructor : constructors) {
+				Class<?>[] entryParameterTypes = getConstructorParameterTypesAndCache(clazz, entryConstructor);
+				// System.out.println(parameterTypeKey + " " + methodName);
+				// 沒有params的method
+				if (entryParameterTypes.length == 0 && parameterTypes == null) {
+					constructor = entryConstructor;
+					break;
+				} else {
+					if (ObjectHelper.equals(entryParameterTypes, parameterTypes)) {
+						constructor = entryConstructor;
+						break;
+					}
+				}
+			}
+
+		} catch (Exception ex) {
+			// ex.printStackTrace();
+		}
+		return constructor;
+	}
+
+	public static Constructor<?>[] getConstructorsAndCache(Class<?> clazz) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		//
+		Constructor<?>[] constructors = new Constructor<?>[0];
+		if (clazz != null) {
+			try {
+				getConstructorsAndCache.lockInterruptibly();
+				try {
+					if (getConstructorsAndCache.isNotNullValue(clazz)) {
+						constructors = getConstructorsAndCache.get(clazz);
+						if (constructors == null) {
+							try {
+								constructors = clazz.getConstructors();
+								// 2015/10/07 for not public
+								for (Constructor<?> constructor : constructors) {
+									constructor.setAccessible(true);
+								}
+							} catch (Exception ex) {
+								// ex.printStackTrace();
+							}
+							getConstructorsAndCache.put(clazz, constructors);
+						}
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				} finally {
+					getConstructorsAndCache.unlock();
+				}
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
 			}
 		}
-		return conventionClass;
+		return constructors;
 	}
 
-	// entity->bean
-	// org.openyu.commons.entity.supporter.IdEntitySupporter
-	// org.openyu.commons.bean.supporter.IdBeanSupporter
-	public static Class<?> ___entity2BeanClass(Class<?> entityClass) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(StringHelper.replace(entityClass.getName(),
-				".entity.supporter", ".bean.supporter"));
-
-		StringBuilder toClassName = new StringBuilder();
-		toClassName
-				.append(StringHelper.replace(sb.toString(), "Entity", "Bean"));
-		Class<?> toClass = forName(toClassName.toString());
-		return toClass;
+	public static Constructor<?>[] getDeclaredConstructorsAndCache(Class<?> clazz) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		//
+		Constructor<?>[] constructors = new Constructor<?>[0];
+		if (clazz != null) {
+			try {
+				getDeclaredConstructorsAndCache.lockInterruptibly();
+				try {
+					if (getDeclaredConstructorsAndCache.isNotNullValue(clazz)) {
+						constructors = getDeclaredConstructorsAndCache.get(clazz);
+						if (constructors == null) {
+							try {
+								constructors = clazz.getDeclaredConstructors();
+								// 2015/10/07 for not public
+								for (Constructor<?> constructor : constructors) {
+									constructor.setAccessible(true);
+								}
+							} catch (Exception ex) {
+								// ex.printStackTrace();
+							}
+							getDeclaredConstructorsAndCache.put(clazz, constructors);
+						}
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				} finally {
+					getDeclaredConstructorsAndCache.unlock();
+				}
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return constructors;
 	}
 
-	// bean->entity
-	// org.openyu.commons.bean.supporter.IdBeanSupporter
-	// org.openyu.commons.entity.supporter.IdEntitySupporter
-	public static Class<?> ___bean2EntityClass(Class<?> beanClass) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(StringHelper.replace(beanClass.getName(), ".bean.supporter",
-				".entity.supporter"));
+	public static Class<?>[] getConstructorParameterTypesAndCache(Class<?> clazz, Constructor<?> constructor) {
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		AssertHelper.notNull(constructor, "The Constructor must not be null");
+		//
+		Class<?>[] parameterTypes = null;
+		try {
+			getConstructorParameterTypesAndCache.lockInterruptibly();
+			try {
+				MapCacheImpl<Constructor<?>, Class<?>[]> constructorParameterTypes = getConstructorParameterTypesAndCache
+						.get(clazz);
+				if (constructorParameterTypes == null) {
+					constructorParameterTypes = new MapCacheImpl<Constructor<?>, Class<?>[]>();
+					getConstructorParameterTypesAndCache.put(clazz, constructorParameterTypes);
+				}
+				// System.out.println(constructor);
+				//
+				if (constructor != null) {
+					if (constructorParameterTypes.isNotNullValue(constructor)) {
+						parameterTypes = constructorParameterTypes.get(constructor);
+						if (parameterTypes == null) {
+							try {
+								parameterTypes = constructor.getParameterTypes();
+							} catch (Exception ex) {
+								// ex.printStackTrace();
+							}
+							constructorParameterTypes.put(constructor, parameterTypes);
+						}
+					}
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			} finally {
+				getConstructorParameterTypesAndCache.unlock();
+			}
 
-		StringBuilder toClassName = new StringBuilder();
-		toClassName
-				.append(StringHelper.replace(sb.toString(), "Bean", "Entity"));
-		Class<?> toClass = ClassHelper.forName(toClassName.toString());
-		return toClass;
+		} catch (InterruptedException ex) {
+			ex.printStackTrace();
+		}
+		return parameterTypes;
 	}
+
+	// public static Constructor<?> getConstructor(Class<?> clazz, Class<?>...
+	// parameterTypes) {
+	// AssertHelper.notNull(clazz, "The Class must not be null");
+	// //
+	// Constructor<?> result = null;
+	// try {
+	// if (clazz != null) {
+	// result = clazz.getConstructor(parameterTypes);
+	// result.setAccessible(true);
+	// }
+	//
+	// } catch (Exception ex) {
+	// ex.printStackTrace();
+	// }
+	// return result;
+	// }
+
 }

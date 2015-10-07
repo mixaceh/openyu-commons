@@ -17,6 +17,8 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
  * 1.configLocation
  * 
  * 2.properties
+ * 
+ * 3.extendedProperties (merged configLocation and properties)
  */
 public abstract class BaseFactorySupporter<T> extends BaseServiceSupporter implements BaseFactory<T> {
 

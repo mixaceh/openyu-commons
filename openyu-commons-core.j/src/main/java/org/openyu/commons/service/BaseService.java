@@ -11,7 +11,7 @@ import org.openyu.commons.model.BaseModel;
  * 
  * 3.createInstance() 建構
  */
-public interface BaseService extends BaseModel {
+public interface BaseService extends BaseModel, ServiceLifecycle {
 
 	// /**
 	// * Gets the message.
@@ -37,6 +37,9 @@ public interface BaseService extends BaseModel {
 	// */
 	// String getMessage(String key, Object[] params, Locale locale);
 
+	// --------------------------------------------------
+	// ServiceLifecycle
+	// --------------------------------------------------
 	/**
 	 * 啟動
 	 */

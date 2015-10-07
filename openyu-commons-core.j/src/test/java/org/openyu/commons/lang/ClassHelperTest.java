@@ -2,6 +2,7 @@ package org.openyu.commons.lang;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
@@ -68,8 +69,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		for (int i = 0; i < count; i++) {
 			// clazz =
 			// ClassHelper.forName("org.openyu.commons.lang.ClassHelperTest$PlayerPo");
-			result = ClassHelper
-					.forName("org.openyu.commons.lang.ClassHelperTest$PlayerPo");
+			result = ClassHelper.forName("org.openyu.commons.lang.ClassHelperTest$PlayerPo");
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -78,8 +78,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		assertEquals(PlayerPo.class, result);
 		//
 		Class<?> results = null;
-		results = ClassHelper
-				.forName("org.openyu.commons.lang.ClassHelperTest$PlayerPo[]");
+		results = ClassHelper.forName("org.openyu.commons.lang.ClassHelperTest$PlayerPo[]");
 		System.out.println(results);
 		assertEquals(PlayerPo[].class, results);
 	}
@@ -129,8 +128,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
 			// 使用class name 會稍慢些,還可以接受
-			result = ClassHelper
-					.newInstance("org.openyu.commons.lang.ClassHelperTest$PlayerPo");
+			result = ClassHelper.newInstance("org.openyu.commons.lang.ClassHelperTest$PlayerPo");
 			// object =
 			// ClassHelper.newInstance("xxxorg.openyu.commons.lang.ClassHelperTest$PlayerPo");
 		}
@@ -209,8 +207,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		Method method = null;
 		for (int i = 0; i < count; i++) {
 			// method = ClassHelper.getMethod(PlayerPo.class, "getSuperField");
-			method = ClassHelper.getMethod(PlayerPo.class, "getSuperField",
-					String.class);
+			method = ClassHelper.getMethod(PlayerPo.class, "getSuperField", String.class);
 			// Method method2 = ClassHelper.getMethod(PlayerPo.class,
 			// "getSuperField",String.class);
 			// System.out.println("method2: " + method2);
@@ -269,8 +266,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 			// "protectedHello");
 			// method = ClassHelper.getDeclaredMethod(PlayerPo.class,
 			// "getSuperField");
-			method = ClassHelper.getDeclaredMethod(PlayerPo.class,
-					"getSuperField", String.class);
+			method = ClassHelper.getDeclaredMethod(PlayerPo.class, "getSuperField", String.class);
 			// Method method2 = ClassHelper.getDeclaredMethod(PlayerPo.class,
 			// "getSuperField",
 			// String.class);
@@ -281,8 +277,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
 		//
-		method = ClassHelper.getDeclaredMethod(PlayerPo.class, "onConnect",
-				String.class);
+		method = ClassHelper.getDeclaredMethod(PlayerPo.class, "onConnect", String.class);
 		System.out.println(method);
 	}
 
@@ -323,6 +318,48 @@ public class ClassHelperTest extends BaseTestSupporter {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 0, concurrency = 100)
+	public void getConstructor() {
+		Constructor<?> constructor = null;
+		constructor = ClassHelper.getConstructor(PlayerPo.class);
+		System.out.println(constructor);
+		assertNotNull(constructor);
+	}
+
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 0, concurrency = 100)
+	public void getConstructorsAndCache() {
+		Constructor<?>[] constructors = null;
+		constructors = ClassHelper.getConstructorsAndCache(PlayerPo.class);
+		//
+		for (Constructor<?> constructor : constructors) {
+			System.out.println(constructor.getName());
+		}
+	}
+
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 0, concurrency = 100)
+	public void getDeclaredConstructor() {
+		Constructor<?> constructor = null;
+		constructor = ClassHelper.getDeclaredConstructor(PlayerPo.class);
+		System.out.println(constructor);
+		//
+		constructor = ClassHelper.getDeclaredConstructor(PlayerPo.class);
+		System.out.println(constructor);
+	}
+
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 0, concurrency = 100)
+	public void getDeclaredConstructorsAndCache() {
+		Constructor<?>[] constructors = null;
+		constructors = ClassHelper.getDeclaredConstructorsAndCache(PlayerPo.class);
+		//
+		for (Constructor<?> constructor : constructors) {
+			System.out.println(constructor.getName());
+		}
+	}
+
+	@Test
 	// no cache
 	// 1000000 times: 306 mills.
 	// 1000000 times: 316 mills.
@@ -337,8 +374,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		long beg = System.currentTimeMillis();
 		boolean isMethod = false;
 		for (int i = 0; i < count; i++) {
-			isMethod = ClassHelper.isMethod(StringBuilder.class, "toString",
-					null);
+			isMethod = ClassHelper.isMethod(StringBuilder.class, "toString", null);
 
 		}
 		System.out.println("isMethod: " + isMethod);
@@ -355,14 +391,12 @@ public class ClassHelperTest extends BaseTestSupporter {
 		int count = 1000000;// 100w
 		long beg = System.currentTimeMillis();
 
-		Method method = ClassHelper.getMethod(PlayerPo.class, "setId",
-				Integer.class);
+		Method method = ClassHelper.getMethod(PlayerPo.class, "setId", Integer.class);
 		// Method method = ClassHelper.getMethod(PlayerPo.class, "setId",
 		// String.class);
 		// System.out.println(method);
 		for (int i = 0; i < count; i++) {
-			parameterTypes = ClassHelper.getParameterTypesAndCache(
-					PlayerPo.class, method);
+			parameterTypes = ClassHelper.getMethodParameterTypesAndCache(PlayerPo.class, method);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -452,8 +486,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		for (int i = 0; i < count; i++) {
 			// field = ClassHelper.getDeclaredField(PlayerPo.class,
 			// "superField");
-			field = ClassHelper.getDeclaredField(PlayerPo.class,
-					"xxxsuperField");
+			field = ClassHelper.getDeclaredField(PlayerPo.class, "xxxsuperField");
 		}
 		System.out.println("field: " + field);
 		long end = System.currentTimeMillis();
@@ -611,8 +644,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		int count = 1000000;// 100w
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = ClassHelper.setFieldValue(playerPo, "superField",
-					"newValue");
+			result = ClassHelper.setFieldValue(playerPo, "superField", "newValue");
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -634,8 +666,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		int count = 1000000;// 100w
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = ClassHelper.setDeclaredFieldValue(playerPo, "superField",
-					"newValue...........");
+			result = ClassHelper.setDeclaredFieldValue(playerPo, "superField", "newValue...........");
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -803,8 +834,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 			// result = ClassHelper.getConventionClass(stringMap);
 			// result = ClassHelper.getConventionClass(new String[] { "aaa",
 			// "bbb" });
-			result = ClassHelper.getConventionClass(new PlayerPo[] { playerPo,
-					playerPo2 });
+			result = ClassHelper.getConventionClass(new PlayerPo[] { playerPo, playerPo2 });
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -814,8 +844,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		result = ClassHelper.getConventionClass(new SeqAuditBeanSupporter());
 		System.out.println(result);
 		//
-		result = ClassHelper
-				.getConventionClass(new SeqIdAuditNamesBeanSupporter());
+		result = ClassHelper.getConventionClass(new SeqIdAuditNamesBeanSupporter());
 		System.out.println(result);
 		//
 		result = ClassHelper.getConventionClass(new LocaleNameBeanSupporter());
@@ -886,8 +915,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
 			// ClassHelper.deepCopyPropertiesByField( playerPo,player);
-			player = ClassHelper.deepCopyPropertiesByField(playerPo,
-					Player.class);
+			player = ClassHelper.deepCopyPropertiesByField(playerPo, Player.class);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -927,8 +955,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
 			// ClassHelper.copyPropertiesByField( player,playerPo);
-			playerPo = ClassHelper.deepCopyPropertiesByField(player,
-					PlayerPo.class);
+			playerPo = ClassHelper.deepCopyPropertiesByField(player, PlayerPo.class);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -1383,24 +1410,6 @@ public class ClassHelperTest extends BaseTestSupporter {
 	}
 
 	@Test
-	// cache
-	// 1000000 times: 118 mills.
-	// 1000000 times: 116 mills.
-	// 1000000 times: 115 mills.
-	public void getSuperClassAndCache() {
-		int count = 1000000;// 100w
-		long beg = System.currentTimeMillis();
-		Class<?> superClass = null;
-		for (int i = 0; i < count; i++) {
-			superClass = ClassHelper.___getSuperClassAndCache(LinkedList.class);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
-
-		System.out.println(superClass);
-	}
-
-	@Test
 	// no cache
 	// 1000000 times: 81 mills.
 	// 1000000 times: 80 mills.
@@ -1410,8 +1419,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		long beg = System.currentTimeMillis();
 		boolean isSubClassOf = false;
 		for (int i = 0; i < count; i++) {
-			isSubClassOf = ClassHelper.isSubClassOf(AbstractCollection.class,
-					LinkedList.class);
+			isSubClassOf = ClassHelper.isSubClassOf(AbstractCollection.class, LinkedList.class);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -1469,8 +1477,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		SystemHelper.println(SeqIdAuditEntitySupporter.class.getInterfaces());
 
 		System.out.println("--------------------------");
-		SystemHelper.println(ClassHelper
-				.getInterfaces(SeqIdAuditEntitySupporter.class));
+		SystemHelper.println(ClassHelper.getInterfaces(SeqIdAuditEntitySupporter.class));
 
 		System.out.println("getInterfaces: --------------------------");
 		SystemHelper.println(ClassHelper.getInterfaces(SeqIdAuditEntity.class));
@@ -1478,14 +1485,10 @@ public class ClassHelperTest extends BaseTestSupporter {
 		System.out.println(Collections.singleton(SeqIdAuditEntity.class));
 		System.out.println("getInterfaces: --------------------------");
 		SystemHelper.println(SeqIdAuditEntity.class.getInterfaces());
-		System.out
-				.println("getInterfacesFromInterface: --------------------------");
-		SystemHelper.println(ClassHelper
-				.getInterfacesByExtend(SeqIdAuditEntity.class));
-		System.out
-				.println("getInterfacesFromInterface: --------------------------");
-		SystemHelper
-				.println(ClassHelper.getInterfacesByExtend(Cloneable.class));
+		System.out.println("getInterfacesFromInterface: --------------------------");
+		SystemHelper.println(ClassHelper.getInterfacesByExtend(SeqIdAuditEntity.class));
+		System.out.println("getInterfacesFromInterface: --------------------------");
+		SystemHelper.println(ClassHelper.getInterfacesByExtend(Cloneable.class));
 
 	}
 
@@ -1503,8 +1506,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		long beg = System.currentTimeMillis();
 
 		for (int i = 0; i < count; i++) {
-			result = ClassHelper.isInterfaceOf(Collection.class,
-					LinkedList.class);
+			result = ClassHelper.isInterfaceOf(Collection.class, LinkedList.class);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -1621,8 +1623,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		int count = 1;// 100w
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = ClassHelper.toClass(CatImpl.class, ".vo.impl", ".po.impl",
-					"Impl", "PoImpl");
+			result = ClassHelper.toClass(CatImpl.class, ".vo.impl", ".po.impl", "Impl", "PoImpl");
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -1780,54 +1781,17 @@ public class ClassHelperTest extends BaseTestSupporter {
 	}
 
 	@Test
-	// 1000000 times: 678 mills.
-	// 1000000 times: 678 mills.
-	// 1000000 times: 715 mills.
-	public void ___entity2BeanClass() {
-		int count = 1000000;// 100w
-		long beg = System.currentTimeMillis();
-		Class<?> clazz = null;
-		for (int i = 0; i < count; i++) {
-			clazz = ClassHelper.___entity2BeanClass(SeqEntitySupporter.class);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
-		System.out.println("clazz: " + clazz);
-	}
-
-	@Test
-	// 1000000 times: 678 mills.
-	// 1000000 times: 678 mills.
-	// 1000000 times: 715 mills.
-	public void ___bean2EntityClass() {
-		int count = 1000000;// 100w
-		long beg = System.currentTimeMillis();
-		Class<?> clazz = null;
-		for (int i = 0; i < count; i++) {
-			clazz = ClassHelper.___bean2EntityClass(SeqBeanSupporter.class);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
-		System.out.println("clazz: " + clazz);
-	}
-
-	@Test
-	// 1000000 times: 447 mills.
 	public void getQualifiedName() {
-		int count = 1000000;// 100w
-		long beg = System.currentTimeMillis();
 		String result = null;
-		for (int i = 0; i < count; i++) {
-			result = ClassHelper.getQualifiedName(getClass());
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		result = ClassHelper.getQualifiedName(getClass());
 		// org.openyu.commons.lang.ClassHelperTest
 		System.out.println(result);
+		assertEquals("org.openyu.commons.lang.ClassHelperTest", result);
 		//
 		result = ClassHelper.getQualifiedName(PlayerPoSupporter.class);
 		// org.openyu.commons.lang.ClassHelperTest$PlayerPoSupporter
 		System.out.println(result);
+		assertEquals("org.openyu.commons.lang.ClassHelperTest$PlayerPoSupporter", result);
 	}
 
 	@Test
@@ -1895,8 +1859,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 	}
 
 	// po
-	public static class PlayerPo extends PlayerPoSupporter implements
-			PlayerPoConnect {
+	public static class PlayerPo extends PlayerPoSupporter implements PlayerPoConnect {
 
 		private static final long serialVersionUID = 3002192355513773388L;
 
@@ -2008,8 +1971,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		}
 
 		public String toString() {
-			return ToStringBuilder.reflectionToString(this,
-					ToStringStyle.MULTI_LINE_STYLE);
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 		}
 
 		public boolean onConnect(String code) {
@@ -2188,8 +2150,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		}
 
 		public String toString() {
-			return ToStringBuilder.reflectionToString(this,
-					ToStringStyle.MULTI_LINE_STYLE);
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 		}
 	}
 
@@ -2274,8 +2235,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		}
 
 		public String toString() {
-			return ToStringBuilder.reflectionToString(this,
-					ToStringStyle.MULTI_LINE_STYLE);
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 		}
 	}
 
@@ -2322,8 +2282,7 @@ public class ClassHelperTest extends BaseTestSupporter {
 		}
 
 		public String toString() {
-			return ToStringBuilder.reflectionToString(this,
-					ToStringStyle.MULTI_LINE_STYLE);
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 		}
 	}
 

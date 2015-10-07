@@ -1,19 +1,17 @@
 package org.openyu.commons.blank;
 
-import org.openyu.commons.service.supporter.BaseFactorySupporter;
+import org.openyu.commons.service.supporter.BaseServiceFactorySupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * BlankService工廠
  */
-public final class BlankServiceFactoryBean<T> extends BaseFactorySupporter<BlankService> {
+public final class BlankServiceFactoryBean<T extends BlankService> extends BaseServiceFactorySupporter<BlankService> {
 
 	private static final long serialVersionUID = -1401366707657809071L;
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(BlankServiceFactoryBean.class);
-
-	private BlankService blankService;
 
 	public BlankServiceFactoryBean() {
 	}
@@ -32,8 +30,7 @@ public final class BlankServiceFactoryBean<T> extends BaseFactorySupporter<Blank
 			/**
 			 * extendedProperties
 			 */
-			// LOGGER.info("" +
-			// extendedProperties.getLong("aliveMills"));
+			// extendedProperties.getLong("aliveMills");
 
 			/**
 			 * injectiion
@@ -52,79 +49,4 @@ public final class BlankServiceFactoryBean<T> extends BaseFactorySupporter<Blank
 		}
 		return result;
 	}
-
-	/**
-	 * 關閉
-	 *
-	 * @return
-	 */
-	protected BlankService shutdownInstance() throws Exception {
-		try {
-			if (this.blankService != null) {
-				BlankService oldInstance = this.blankService;
-				oldInstance.shutdown();
-				this.blankService = null;
-			}
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance()").toString(), e);
-			throw e;
-		}
-		return this.blankService;
-
-	}
-
-	/**
-	 * 重啟
-	 *
-	 * @return
-	 */
-	protected BlankService restartInstance() throws Exception {
-		try {
-			if (this.blankService != null) {
-				BlankService oldInstance = this.blankService;
-				oldInstance.restart();
-			}
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during restartInstance()").toString(), e);
-			throw e;
-		}
-		return this.blankService;
-	}
-
-	/**
-	 * 內部啟動
-	 */
-	@Override
-	protected void doStart() throws Exception {
-		this.blankService = createInstance();
-	}
-
-	/**
-	 * 內部關閉
-	 */
-	@Override
-	protected void doShutdown() throws Exception {
-		this.blankService = shutdownInstance();
-	}
-
-	@Override
-	protected void doRestart() throws Exception {
-		this.blankService = restartInstance();
-	}
-
-	@Override
-	public BlankService getObject() throws Exception {
-		return blankService;
-	}
-
-	@Override
-	public Class<? extends BlankService> getObjectType() {
-		return ((this.blankService != null) ? this.blankService.getClass() : BlankService.class);
-	}
-
-	@Override
-	public boolean isSingleton() {
-		return true;
-	}
-
 }

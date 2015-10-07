@@ -191,7 +191,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	}
 
 	// --------------------------------------------------
-	// life cycle states
+	// ServiceLifecycle states
 	// --------------------------------------------------
 	/**
 	 * 取得狀態
@@ -350,7 +350,8 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	 * @return
 	 */
 	public final boolean addServiceCallback(String[] classNames, ServiceCallback... actions) {
-		AssertHelper.notNull(actions, new StringBuilder().append("ServiceCallbacks must not be null").toString());
+		AssertHelper.notNull(actions, new StringBuilder().append("The ClassNames must not be null").toString());
+		AssertHelper.notNull(actions, new StringBuilder().append("The ServiceCallbacks must not be null").toString());
 		//
 		boolean result = false;
 
@@ -358,8 +359,8 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 		// result &= addServiceCallback(action);
 		// }
 
-		int len = classNames.length;
-		for (int i = 0; i < len; i++) {
+		int length = classNames.length;
+		for (int i = 0; i < length; i++) {
 			ServiceCallback buff = addServiceCallback(classNames[i], actions[i]);
 			result &= (buff != null);
 		}
@@ -374,7 +375,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	 * @return
 	 */
 	public final ServiceCallback addServiceCallback(String className, ServiceCallback action) {
-		AssertHelper.notNull(action, new StringBuilder().append("ServiceCallback must not be null").toString());
+		AssertHelper.notNull(action, new StringBuilder().append("The ServiceCallback must not be null").toString());
 		//
 		try {
 			this.lock.lockInterruptibly();
@@ -410,7 +411,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	 * @return
 	 */
 	public final ServiceCallback removeServiceCallback(String className) {
-		AssertHelper.notNull(className, new StringBuilder().append("ClassName must not be null").toString());
+		AssertHelper.notNull(className, new StringBuilder().append("The ClassName must not be null").toString());
 		//
 		try {
 			this.lock.lockInterruptibly();
@@ -538,7 +539,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	 * 內部啟動
 	 */
 	protected final void doStartCallback(StartCallback action) throws Exception {
-		AssertHelper.notNull(action, new StringBuilder().append("StartCallback must not be null").toString());
+		AssertHelper.notNull(action, new StringBuilder().append("The StartCallback must not be null").toString());
 		//
 		try {
 			action.doInAction();
@@ -631,7 +632,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	 * 內部關閉
 	 */
 	protected final void doShutdownCallback(ShutdownCallback action) throws Exception {
-		AssertHelper.notNull(action, new StringBuilder().append("ShutdownCallback must not be null").toString());
+		AssertHelper.notNull(action, new StringBuilder().append("The ShutdownCallback must not be null").toString());
 		//
 		try {
 			action.doInAction();
@@ -706,7 +707,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	 * 內部重啟
 	 */
 	protected final void doRestartCallback(RestartCallback action) throws Exception {
-		AssertHelper.notNull(action, new StringBuilder().append("RestartCallback must not be null").toString());
+		AssertHelper.notNull(action, new StringBuilder().append("The RestartCallback must not be null").toString());
 		//
 		try {
 			action.doInAction();

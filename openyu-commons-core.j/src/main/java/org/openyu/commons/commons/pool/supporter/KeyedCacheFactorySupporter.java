@@ -108,7 +108,7 @@ public abstract class KeyedCacheFactorySupporter<K, V> extends
 			throws KeyedCacheException {
 		Object result = null;
 		//
-		AssertHelper.notNull(action, "Callback object must not be null");
+		AssertHelper.notNull(action, "The KeyedCacheCallback object must not be null");
 		//
 		V obj = null;
 		try {

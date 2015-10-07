@@ -14,6 +14,8 @@ import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 import freemarker.template.Configuration;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
+import org.openyu.commons.security.AuthKeyService;
+import org.openyu.commons.thread.ThreadService;
 import org.openyu.commons.util.ConfigHelper;
 
 public class ApplicationContextBeanTest extends BaseTestSupporter {
@@ -92,6 +94,27 @@ public class ApplicationContextBeanTest extends BaseTestSupporter {
 	@Test
 	public void freemarkerConfiguration() {
 		Configuration bean = (Configuration) applicationContext.getBean("freemarkerConfiguration");
+		System.out.println(ToStringBuilder.reflectionToString(bean, ToStringStyle.MULTI_LINE_STYLE));
+		assertNotNull(bean);
+	}
+
+	@Test
+	public void threadService() {
+		ThreadService bean = (ThreadService) applicationContext.getBean("threadService");
+		System.out.println(ToStringBuilder.reflectionToString(bean, ToStringStyle.MULTI_LINE_STYLE));
+		assertNotNull(bean);
+	}
+
+	@Test
+	public void blockingThreadService() {
+		ThreadService bean = (ThreadService) applicationContext.getBean("blockingThreadService");
+		System.out.println(ToStringBuilder.reflectionToString(bean, ToStringStyle.MULTI_LINE_STYLE));
+		assertNotNull(bean);
+	}
+
+	@Test
+	public void authKeyService() {
+		AuthKeyService bean = (AuthKeyService) applicationContext.getBean("authKeyService");
 		System.out.println(ToStringBuilder.reflectionToString(bean, ToStringStyle.MULTI_LINE_STYLE));
 		assertNotNull(bean);
 	}

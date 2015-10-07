@@ -75,7 +75,7 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter
 	@Override
 	protected void doStart() throws Exception {
 		AssertHelper.notNull(cacheableObjectFactory,
-				"CacheableObjectFactory is required");
+				"The CacheableObjectFactory is required");
 	}
 
 	/**
@@ -127,7 +127,7 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter
 	protected Object doExecute(CacheCallback<T> action) throws CacheException {
 		Object result = null;
 		//
-		AssertHelper.notNull(action, "Callback object must not be null");
+		AssertHelper.notNull(action, "The CacheCallback must not be null");
 		//
 		T cache = null;
 		try {

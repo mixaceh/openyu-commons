@@ -60,7 +60,7 @@ public class CnfTemplateImpl implements CnfTemplate, InitializingBean,
 
 	public void afterPropertiesSet() {
 		AssertHelper
-				.notNull(cnfSessionFactory, "CnfSessionFactory is required");
+				.notNull(cnfSessionFactory, "The CnfSessionFactory is required");
 	}
 
 	public void destroy() {

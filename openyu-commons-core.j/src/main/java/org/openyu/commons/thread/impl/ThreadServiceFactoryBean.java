@@ -1,6 +1,6 @@
 package org.openyu.commons.thread.impl;
 
-import org.openyu.commons.service.supporter.BaseFactorySupporter;
+import org.openyu.commons.service.supporter.BaseServiceFactorySupporter;
 import org.openyu.commons.thread.ThreadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,13 +8,12 @@ import org.slf4j.LoggerFactory;
 /**
  * ThreadService工廠
  */
-public final class ThreadServiceFactoryBean<T> extends BaseFactorySupporter<ThreadService> {
+public final class ThreadServiceFactoryBean<T extends ThreadService>
+		extends BaseServiceFactorySupporter<ThreadService> {
 
 	private static final long serialVersionUID = 7441283283901230776L;
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(ThreadServiceFactoryBean.class);
-
-	private ThreadService threadService;
 
 	public ThreadServiceFactoryBean() {
 	}
@@ -59,79 +58,4 @@ public final class ThreadServiceFactoryBean<T> extends BaseFactorySupporter<Thre
 		}
 		return result;
 	}
-
-	/**
-	 * 關閉
-	 *
-	 * @return
-	 */
-	protected ThreadService shutdownInstance() throws Exception {
-		try {
-			if (this.threadService != null) {
-				ThreadService oldInstance = this.threadService;
-				oldInstance.shutdown();
-				this.threadService = null;
-			}
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance()").toString(), e);
-			throw e;
-		}
-		return this.threadService;
-
-	}
-
-	/**
-	 * 重啟
-	 *
-	 * @return
-	 */
-	protected ThreadService restartInstance() throws Exception {
-		try {
-			if (this.threadService != null) {
-				ThreadService oldInstance = this.threadService;
-				oldInstance.restart();
-			}
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during restartInstance()").toString(), e);
-			throw e;
-		}
-		return this.threadService;
-	}
-
-	/**
-	 * 內部啟動
-	 */
-	@Override
-	protected void doStart() throws Exception {
-		this.threadService = createInstance();
-	}
-
-	/**
-	 * 內部關閉
-	 */
-	@Override
-	protected void doShutdown() throws Exception {
-		this.threadService = shutdownInstance();
-	}
-
-	@Override
-	protected void doRestart() throws Exception {
-		this.threadService = restartInstance();
-	}
-
-	@Override
-	public ThreadService getObject() throws Exception {
-		return threadService;
-	}
-
-	@Override
-	public Class<? extends ThreadService> getObjectType() {
-		return ((this.threadService != null) ? this.threadService.getClass() : ThreadService.class);
-	}
-
-	@Override
-	public boolean isSingleton() {
-		return true;
-	}
-
 }

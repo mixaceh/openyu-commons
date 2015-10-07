@@ -73,7 +73,7 @@ public abstract class BaseJobSupporter extends QuartzJobBean implements
 				buff.append(" ");
 				buff.append(method.getName());
 				//
-				Class<?>[] paramTypes = ClassHelper.getParameterTypesAndCache(
+				Class<?>[] paramTypes = ClassHelper.getMethodParameterTypesAndCache(
 						method.getDeclaringClass(), method);
 				if (paramTypes != null) {
 					if (paramTypes.length == 0) {
