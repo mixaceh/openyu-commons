@@ -80,7 +80,7 @@ public abstract class BaseFactorySupporter<T> extends BaseServiceSupporter imple
 		if (props.size() > 0) {
 			this.extendedProperties = ExtendedProperties.convertProperties(props);
 			if (this.extendedProperties.size() > 0) {
-				LOGGER.info(new StringBuilder().append("Merged properties are " + extendedProperties).toString());
+				LOGGER.info(new StringBuilder().append("Pros: " + extendedProperties).toString());
 			}
 		}
 	}

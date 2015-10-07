@@ -27,10 +27,10 @@ public class AuthKeyServiceImplTest extends BaseTestSupporter {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
-				"applicationContext-init.xml", // test目錄下
-				"org/openyu/commons/thread/applicationContext-thread.xml", // test目錄下
+				"applicationContext-init.xml", //
+				"org/openyu/commons/thread/testContext-thread.xml", //
 				"org/openyu/commons/service/applicationContext-service.xml", //
-				"org/openyu/commons/security/applicationContext-security.xml",// test目錄下
+				"org/openyu/commons/security/testContext-security.xml",//
 		});
 		authKeyServiceImpl = (AuthKeyServiceImpl) applicationContext.getBean("authKeyService");
 	}

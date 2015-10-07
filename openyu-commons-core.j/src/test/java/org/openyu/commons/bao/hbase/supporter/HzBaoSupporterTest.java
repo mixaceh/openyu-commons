@@ -14,8 +14,9 @@ public class HzBaoSupporterTest extends BaseTestSupporter {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] {
-				"META-INF/applicationContext-commons-core.xml",//
 				"applicationContext-init.xml",//
+				"META-INF/applicationContext-commons-core.xml",//
+				"org/openyu/commons/thread/testContext-thread.xml", // 
 				"applicationContext-hbase-zookeeper.xml",//
 		});
 		hzBaoSupporter = (HzBaoSupporter) applicationContext

@@ -16,14 +16,14 @@ import freemarker.template.Configuration;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.util.ConfigHelper;
 
-public class ApplicationContextInitTest extends BaseTestSupporter {
+public class ApplicationContextBeanTest extends BaseTestSupporter {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/thread/applicationContext-thread.xml", //
 				"org/openyu/commons/service/applicationContext-service.xml", //
+				"applicationContext-bean.xml", //
 		});
 	}
 
