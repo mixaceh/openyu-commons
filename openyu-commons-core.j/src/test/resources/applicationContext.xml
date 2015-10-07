@@ -13,11 +13,11 @@
 	<!-- init by project -->
 	<import resource="classpath:applicationContext-init.xml" />
 
-	<!-- commons -->
-	<import resource="classpath:META-INF/applicationContext-commons-core.xml" />
-
 	<!-- bean -->
 	<import resource="classpath:applicationContext-bean.xml" />
+
+	<!-- commons -->
+	<import resource="classpath:META-INF/applicationContext-commons-core.xml" />
 
 	<import resource="classpath:applicationContext-message.xml" />
 	<import resource="classpath:applicationContext-database.xml" />

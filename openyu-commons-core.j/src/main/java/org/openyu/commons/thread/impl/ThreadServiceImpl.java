@@ -25,6 +25,7 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 
 	private static ThreadServiceImpl instance;
 
+	public final static String MAX_EXECUTOR_SIZE = "maxExecutorSize";
 	/**
 	 * 預設executor的最大數目
 	 */
@@ -35,14 +36,19 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 	 */
 	private int maxExecutorSize = DEFAULT_MAX_EXECUTOR_SIZE;
 
+	public final static String _CORE_POOL_SIZE = "corePoolSize";
+
 	public static final int DEFAULT_CORE_POOL_SIZE = 8;
 
 	private int corePoolSize = DEFAULT_CORE_POOL_SIZE;
+
+	public final static String KEEP_ALIVE_SECONDS = "keepAliveSeconds";
 
 	public static final int DEFAULT_KEEP_ALIVE_SECONDS = 60;
 
 	private int keepAliveSeconds = DEFAULT_KEEP_ALIVE_SECONDS;
 
+	public final static String MAX_POOL_SIZE = "maxPoolSize";
 	/**
 	 * 預設thread的最大數目
 	 */
@@ -53,9 +59,14 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 	 */
 	private int maxPoolSize = DEFAULT_MAX_POOL_SIZE;
 
+	public final static String QUEUE_CAPACITY = "queueCapacity";
+
 	public static final int DEFAULT_QUEUE_CAPACITY = 8;
 
 	private int queueCapacity = DEFAULT_QUEUE_CAPACITY;
+
+	public final static String[] ALL_PROPERTIES = { MAX_EXECUTOR_SIZE, _CORE_POOL_SIZE, KEEP_ALIVE_SECONDS,
+			MAX_POOL_SIZE, QUEUE_CAPACITY };
 
 	private transient ThreadPoolTaskExecutor taskExecutors[];
 

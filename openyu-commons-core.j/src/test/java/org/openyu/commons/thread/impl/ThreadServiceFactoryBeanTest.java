@@ -1,7 +1,6 @@
 package org.openyu.commons.thread.impl;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -11,7 +10,6 @@ import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
-import org.openyu.commons.thread.ThreadService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ThreadServiceFactoryBeanTest extends BaseTestSupporter {

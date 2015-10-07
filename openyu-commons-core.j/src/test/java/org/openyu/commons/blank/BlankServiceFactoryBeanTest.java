@@ -72,7 +72,7 @@ public class BlankServiceFactoryBeanTest extends BaseTestSupporter {
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 		public void createInstance() throws Exception {
 			BlankServiceFactoryBean<BlankService> factoryBean = new BlankServiceFactoryBean<BlankService>();
-			BlankService service = factoryBean.createInstance();
+			BlankService service = factoryBean.createService();
 			System.out.println(service);
 			assertNotNull(service);
 		}

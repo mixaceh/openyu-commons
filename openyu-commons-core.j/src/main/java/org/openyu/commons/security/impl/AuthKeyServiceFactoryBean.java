@@ -37,7 +37,7 @@ public final class AuthKeyServiceFactoryBean<T extends AuthKeyService>
 	 * 
 	 * @return
 	 */
-	protected AuthKeyService createInstance() throws Exception {
+	protected AuthKeyService createService() throws Exception {
 		AuthKeyServiceImpl result = null;
 		try {
 			result = new AuthKeyServiceImpl();
@@ -69,7 +69,7 @@ public final class AuthKeyServiceFactoryBean<T extends AuthKeyService>
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during createInstance()").toString(), e);
 			try {
-				result = (AuthKeyServiceImpl) shutdownInstance();
+				result = (AuthKeyServiceImpl) shutdownService();
 			} catch (Exception sie) {
 				throw sie;
 			}

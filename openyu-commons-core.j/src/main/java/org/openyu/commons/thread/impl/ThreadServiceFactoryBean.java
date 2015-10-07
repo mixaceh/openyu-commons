@@ -23,7 +23,7 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 	 * 
 	 * @return
 	 */
-	protected ThreadService createInstance() throws Exception {
+	protected ThreadService createService() throws Exception {
 		ThreadServiceImpl result = null;
 		try {
 			result = new ThreadServiceImpl();
@@ -32,14 +32,16 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 			/**
 			 * extendedProperties
 			 */
-			result.setMaxExecutorSize(
-					extendedProperties.getInt("maxExecutorSize", ThreadServiceImpl.DEFAULT_MAX_EXECUTOR_SIZE));
-			result.setCorePoolSize(extendedProperties.getInt("corePoolSize", ThreadServiceImpl.DEFAULT_CORE_POOL_SIZE));
-			result.setKeepAliveSeconds(
-					extendedProperties.getInt("keepAliveSeconds", ThreadServiceImpl.DEFAULT_KEEP_ALIVE_SECONDS));
-			result.setMaxPoolSize(extendedProperties.getInt("maxPoolSize", ThreadServiceImpl.DEFAULT_MAX_POOL_SIZE));
-			result.setQueueCapacity(
-					extendedProperties.getInt("queueCapacity", ThreadServiceImpl.DEFAULT_QUEUE_CAPACITY));
+			result.setMaxExecutorSize(extendedProperties.getInt(ThreadServiceImpl.MAX_EXECUTOR_SIZE,
+					ThreadServiceImpl.DEFAULT_MAX_EXECUTOR_SIZE));
+			result.setCorePoolSize(extendedProperties.getInt(ThreadServiceImpl._CORE_POOL_SIZE,
+					ThreadServiceImpl.DEFAULT_CORE_POOL_SIZE));
+			result.setKeepAliveSeconds(extendedProperties.getInt(ThreadServiceImpl.KEEP_ALIVE_SECONDS,
+					ThreadServiceImpl.DEFAULT_KEEP_ALIVE_SECONDS));
+			result.setMaxPoolSize(extendedProperties.getInt(ThreadServiceImpl.MAX_POOL_SIZE,
+					ThreadServiceImpl.DEFAULT_MAX_POOL_SIZE));
+			result.setQueueCapacity(extendedProperties.getInt(ThreadServiceImpl.QUEUE_CAPACITY,
+					ThreadServiceImpl.DEFAULT_QUEUE_CAPACITY));
 
 			/**
 			 * injectiion
@@ -50,7 +52,7 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during createInstance()").toString(), e);
 			try {
-				result = (ThreadServiceImpl) shutdownInstance();
+				result = (ThreadServiceImpl) shutdownService();
 			} catch (Exception sie) {
 				throw sie;
 			}

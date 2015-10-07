@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 /**
  * BaseService工廠類
  * 
- * 1.instance
+ * 1.service
  */
 public abstract class BaseServiceFactorySupporter<T extends BaseService> extends BaseFactorySupporter<BaseService> {
 
@@ -15,7 +15,7 @@ public abstract class BaseServiceFactorySupporter<T extends BaseService> extends
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseServiceFactorySupporter.class);
 
-	protected T instance;
+	protected T service;
 
 	public BaseServiceFactorySupporter() {
 	}
@@ -25,25 +25,25 @@ public abstract class BaseServiceFactorySupporter<T extends BaseService> extends
 	 * 
 	 * @return
 	 */
-	protected abstract T createInstance() throws Exception;
+	protected abstract T createService() throws Exception;
 
 	/**
 	 * 關閉
 	 *
 	 * @return
 	 */
-	protected T shutdownInstance() throws Exception {
+	protected T shutdownService() throws Exception {
 		try {
-			if (this.instance != null) {
-				T oldInstance = this.instance;
+			if (this.service != null) {
+				T oldInstance = this.service;
 				oldInstance.shutdown();
-				this.instance = null;
+				this.service = null;
 			}
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance()").toString(), e);
 			throw e;
 		}
-		return this.instance;
+		return this.service;
 	}
 
 	/**
@@ -51,17 +51,17 @@ public abstract class BaseServiceFactorySupporter<T extends BaseService> extends
 	 *
 	 * @return
 	 */
-	protected T restartInstance() throws Exception {
+	protected T restartService() throws Exception {
 		try {
-			if (this.instance != null) {
-				T oldInstance = this.instance;
+			if (this.service != null) {
+				T oldInstance = this.service;
 				oldInstance.restart();
 			}
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during restartInstance()").toString(), e);
 			throw e;
 		}
-		return this.instance;
+		return this.service;
 	}
 
 	/**
@@ -69,7 +69,7 @@ public abstract class BaseServiceFactorySupporter<T extends BaseService> extends
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		this.instance = createInstance();
+		this.service = createService();
 	}
 
 	/**
@@ -77,7 +77,7 @@ public abstract class BaseServiceFactorySupporter<T extends BaseService> extends
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		this.instance = shutdownInstance();
+		this.service = shutdownService();
 	}
 
 	/**
@@ -85,17 +85,17 @@ public abstract class BaseServiceFactorySupporter<T extends BaseService> extends
 	 */
 	@Override
 	protected void doRestart() throws Exception {
-		this.instance = restartInstance();
+		this.service = restartService();
 	}
 
 	@Override
 	public BaseService getObject() throws Exception {
-		return instance;
+		return service;
 	}
 
 	@Override
 	public Class<? extends BaseService> getObjectType() {
-		return ((this.instance != null) ? this.instance.getClass() : BaseService.class);
+		return ((this.service != null) ? this.service.getClass() : BaseService.class);
 	}
 
 	@Override

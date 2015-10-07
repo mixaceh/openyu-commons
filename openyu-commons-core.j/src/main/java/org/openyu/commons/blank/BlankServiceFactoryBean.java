@@ -21,7 +21,7 @@ public final class BlankServiceFactoryBean<T extends BlankService> extends BaseS
 	 * 
 	 * @return
 	 */
-	protected BlankService createInstance() throws Exception {
+	protected BlankService createService() throws Exception {
 		BlankServiceImpl result = null;
 		try {
 			result = new BlankServiceImpl();
@@ -41,7 +41,7 @@ public final class BlankServiceFactoryBean<T extends BlankService> extends BaseS
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during createInstance()").toString(), e);
 			try {
-				result = (BlankServiceImpl) shutdownInstance();
+				result = (BlankServiceImpl) shutdownService();
 			} catch (Exception sie) {
 				throw sie;
 			}
