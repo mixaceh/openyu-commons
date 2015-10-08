@@ -25,48 +25,21 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 
 	private static ThreadServiceImpl instance;
 
-	public final static String MAX_EXECUTOR_SIZE = "maxExecutorSize";
-	/**
-	 * 預設executor的最大數目
-	 */
-	public static final int DEFAULT_MAX_EXECUTOR_SIZE = 1;
-
 	/**
 	 * executor的最大數目
 	 */
-	private int maxExecutorSize = DEFAULT_MAX_EXECUTOR_SIZE;
+	private int maxExecutorSize = 1;
 
-	public final static String _CORE_POOL_SIZE = "corePoolSize";
+	private int corePoolSize = 8;
 
-	public static final int DEFAULT_CORE_POOL_SIZE = 8;
-
-	private int corePoolSize = DEFAULT_CORE_POOL_SIZE;
-
-	public final static String KEEP_ALIVE_SECONDS = "keepAliveSeconds";
-
-	public static final int DEFAULT_KEEP_ALIVE_SECONDS = 60;
-
-	private int keepAliveSeconds = DEFAULT_KEEP_ALIVE_SECONDS;
-
-	public final static String MAX_POOL_SIZE = "maxPoolSize";
-	/**
-	 * 預設thread的最大數目
-	 */
-	public static final int DEFAULT_MAX_POOL_SIZE = 8;
+	private int keepAliveSeconds = 60;
 
 	/**
 	 * thread的最大數目
 	 */
-	private int maxPoolSize = DEFAULT_MAX_POOL_SIZE;
+	private int maxPoolSize = 8;
 
-	public final static String QUEUE_CAPACITY = "queueCapacity";
-
-	public static final int DEFAULT_QUEUE_CAPACITY = 8;
-
-	private int queueCapacity = DEFAULT_QUEUE_CAPACITY;
-
-	public final static String[] ALL_PROPERTIES = { MAX_EXECUTOR_SIZE, _CORE_POOL_SIZE, KEEP_ALIVE_SECONDS,
-			MAX_POOL_SIZE, QUEUE_CAPACITY };
+	private int queueCapacity = 8;
 
 	private transient ThreadPoolTaskExecutor taskExecutors[];
 
@@ -114,13 +87,10 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 	}
 
 	public ThreadServiceImpl() {
-		this(DEFAULT_MAX_EXECUTOR_SIZE, DEFAULT_CORE_POOL_SIZE, DEFAULT_KEEP_ALIVE_SECONDS, DEFAULT_MAX_POOL_SIZE,
-				DEFAULT_QUEUE_CAPACITY);
 	}
 
 	public synchronized static ThreadService getInstance() {
-		return getInstance(DEFAULT_MAX_EXECUTOR_SIZE, DEFAULT_CORE_POOL_SIZE, DEFAULT_KEEP_ALIVE_SECONDS,
-				DEFAULT_MAX_POOL_SIZE, DEFAULT_QUEUE_CAPACITY);
+		return getInstance(1, 8, 60, 8, 8);
 	}
 
 	/**
