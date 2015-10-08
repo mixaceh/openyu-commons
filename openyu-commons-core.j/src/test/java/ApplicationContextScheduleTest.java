@@ -17,7 +17,6 @@ public class ApplicationContextScheduleTest extends BaseTestSupporter
 	{
 		applicationContext = new ClassPathXmlApplicationContext(new String[] {
 				"applicationContext-init.xml",// 
-				"META-INF/applicationContext-commons-core.xml",//				
 				"applicationContext-schedule.xml",//
 		});
 	}
