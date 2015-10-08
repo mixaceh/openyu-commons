@@ -379,7 +379,7 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	/**
 	 * Prints the beans.
 	 */
-	protected static void printBeans() {
+	protected static void printBean() {
 		AssertHelper.notNull(applicationContext, "The ApplicationContext must not be null");
 		//
 		String[] beanNames = applicationContext.getBeanDefinitionNames();

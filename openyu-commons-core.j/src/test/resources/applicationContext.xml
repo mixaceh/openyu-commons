@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jaxws="http://cxf.apache.org/jaxws"
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
 	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="
              http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
@@ -15,18 +18,15 @@
 
 	<!-- bean -->
 	<import resource="classpath:applicationContext-bean.xml" />
-
-	<!-- commons -->
-	<import resource="classpath:META-INF/applicationContext-commons-core.xml" />
-
+	<!-- i18n -->
 	<import resource="classpath:applicationContext-message.xml" />
+	<!-- database -->
 	<import resource="classpath:applicationContext-database.xml" />
 	<import resource="classpath:applicationContext-database-log.xml" />
 
-	<!-- cxf <import resource="classpath:applicationContext-cxf.xml" /> -->
-
-	<!-- security -->
-	<import resource="classpath:applicationContext-security.xml" />
+	<!-- cxf 
+	<import resource="classpath:applicationContext-cxf.xml" /> 
+	-->
 
 	<!-- schedule -->
 	<import resource="classpath:applicationContext-schedule.xml" />

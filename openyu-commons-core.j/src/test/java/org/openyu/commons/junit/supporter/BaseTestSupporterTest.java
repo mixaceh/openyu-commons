@@ -29,7 +29,7 @@ public class BaseTestSupporterTest {
 		//
 		final int COUNT = 10000;
 		for (int i = 0; i < COUNT; i++) {
-			BaseTestSupporter.printBeans();
+			BaseTestSupporter.printBean();
 		}
 	}
 

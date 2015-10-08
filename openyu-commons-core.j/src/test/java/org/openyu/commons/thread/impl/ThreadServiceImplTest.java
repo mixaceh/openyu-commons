@@ -30,9 +30,8 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
-				"applicationContext-init.xml", // test目錄下
-				"org/openyu/commons/thread/testContext-thread.xml", // test目錄下
-				"org/openyu/commons/service/applicationContext-service.xml", //
+				"applicationContext-init.xml", //
+				"org/openyu/commons/thread/testContext-thread.xml", //
 
 		});
 		threadServiceImpl = (ThreadServiceImpl) applicationContext.getBean("threadService");

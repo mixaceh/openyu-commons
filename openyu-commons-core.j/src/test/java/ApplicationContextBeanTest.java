@@ -24,9 +24,29 @@ public class ApplicationContextBeanTest extends BaseTestSupporter {
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/service/applicationContext-service.xml", //
 				"applicationContext-bean.xml", //
 		});
+	}
+
+	@Test
+	public void threadService() {
+		ThreadService bean = (ThreadService) applicationContext.getBean("threadService");
+		System.out.println(ToStringBuilder.reflectionToString(bean, ToStringStyle.MULTI_LINE_STYLE));
+		assertNotNull(bean);
+	}
+
+	@Test
+	public void blockingThreadService() {
+		ThreadService bean = (ThreadService) applicationContext.getBean("blockingThreadService");
+		System.out.println(ToStringBuilder.reflectionToString(bean, ToStringStyle.MULTI_LINE_STYLE));
+		assertNotNull(bean);
+	}
+
+	@Test
+	public void authKeyService() {
+		AuthKeyService bean = (AuthKeyService) applicationContext.getBean("authKeyService");
+		System.out.println(ToStringBuilder.reflectionToString(bean, ToStringStyle.MULTI_LINE_STYLE));
+		assertNotNull(bean);
 	}
 
 	@Test
@@ -98,24 +118,4 @@ public class ApplicationContextBeanTest extends BaseTestSupporter {
 		assertNotNull(bean);
 	}
 
-	@Test
-	public void threadService() {
-		ThreadService bean = (ThreadService) applicationContext.getBean("threadService");
-		System.out.println(ToStringBuilder.reflectionToString(bean, ToStringStyle.MULTI_LINE_STYLE));
-		assertNotNull(bean);
-	}
-
-	@Test
-	public void blockingThreadService() {
-		ThreadService bean = (ThreadService) applicationContext.getBean("blockingThreadService");
-		System.out.println(ToStringBuilder.reflectionToString(bean, ToStringStyle.MULTI_LINE_STYLE));
-		assertNotNull(bean);
-	}
-
-	@Test
-	public void authKeyService() {
-		AuthKeyService bean = (AuthKeyService) applicationContext.getBean("authKeyService");
-		System.out.println(ToStringBuilder.reflectionToString(bean, ToStringStyle.MULTI_LINE_STYLE));
-		assertNotNull(bean);
-	}
 }

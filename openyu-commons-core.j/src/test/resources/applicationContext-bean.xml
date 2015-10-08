@@ -10,6 +10,44 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
              http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
+	<!-- thread -->
+	<bean
+		id="threadService"
+		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
+		parent="baseServiceSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/ThreadService.properties" />
+	</bean>
+	<bean
+		id="blockingThreadService"
+		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
+		parent="baseServiceSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/BlockingThreadService.properties" />
+	</bean>
+	<!-- aop -->
+	<import resource="classpath:org/openyu/commons/aop/applicationContext-aop.xml" />
+	<!-- lang -->
+	<import resource="classpath:org/openyu/commons/lang/applicationContext-lang.xml" />
+	<!-- web -->
+	<import resource="classpath:org/openyu/commons/web/applicationContext-web.xml" />
+	<!-- ws -->
+	<import resource="classpath:org/openyu/commons/ws/applicationContext-ws.xml" />
+	<!-- security -->
+	<bean
+		id="authKeyService"
+		class="org.openyu.commons.security.impl.AuthKeyServiceFactoryBean"
+		parent="baseServiceSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/AuthKeyService.properties" />
+	</bean>	
+	<!-- freemarker -->
+	<import
+		resource="classpath:org/openyu/commons/freemarker/applicationContext-freemarker.xml" />
+
 	<!-- configHelper -->
 	<bean
 		id="configHelper"
@@ -156,30 +194,4 @@
 			value="file:src/test/config/etc/freemarker.properties" />
 	</bean>
 
-	<bean
-		id="threadService"
-		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
-		parent="baseServiceSupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/ThreadService.properties" />
-	</bean>
-
-	<bean
-		id="blockingThreadService"
-		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
-		parent="baseServiceSupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/BlockingThreadService.properties" />
-	</bean>
-
-	<bean
-		id="authKeyService"
-		class="org.openyu.commons.security.impl.AuthKeyServiceFactoryBean"
-		parent="baseServiceSupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/AuthKeyService.properties" />
-	</bean>
 </beans>
