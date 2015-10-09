@@ -28,7 +28,7 @@
 		class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init"
 		destroy-method="close"> 
-      <!-- 基本属性 url、user、password -->
+        <!-- url、user、password -->
 		<property
 			name="url"
 			value="jdbc:hsqldb:hsql://localhost:9001/commons" />
@@ -39,7 +39,7 @@
 			name="password"
 			value="" />
 
-      <!-- 配置初始化大小、最小、最大 -->
+      <!-- 初始化大小、最小、最大 -->
 		<property
 			name="initialSize"
 			value="1" />
@@ -50,17 +50,17 @@
 			name="maxActive"
 			value="10" />
 
-      <!-- 配置获取连接等待超时的时间 -->
+      <!-- 获取连接等待超时的时间 -->
 		<property
 			name="maxWait"
 			value="60000" />
 
-      <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+      <!-- 间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
 		<property
 			name="timeBetweenEvictionRunsMillis"
 			value="60000" />
 
-      <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+      <!-- 一个连接在池中最小生存的时间，单位是毫秒 -->
 		<property
 			name="minEvictableIdleTimeMillis"
 			value="300000" />
@@ -86,7 +86,7 @@
 			name="maxPoolPreparedStatementPerConnectionSize"
 			value="50" />
 
-      <!-- 配置监控统计拦截的filters 
+      <!-- 监控统计拦截的filters 
 		<property
 			name="filters"
 			value="stat" />
@@ -100,7 +100,7 @@
 		parent="baseServiceSupporter">
 		<property
 			name="configLocation"
-			value="file:src/test/config/etc/BlankService.properties" />
+			value="file:src/test/config/etc/druid.properties" />
 		<property name="properties">
 			<props>
 				<prop key="aliveMills">180000</prop>
