@@ -1,4 +1,4 @@
-package org.openyu.commons.dao.supporter;
+package org.openyu.commons.druid;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -16,6 +16,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.sql.DataSource;
+
 import org.hibernate.type.StandardBasicTypes;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,22 +28,24 @@ import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
+public class BenchmarkDruidTest extends BaseTestSupporter {
 
-	private static OjDaoSupporter ojDaoSupporter;
+	private static DataSource dataSource;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		applicationContext = new ClassPathXmlApplicationContext(new String[] { "applicationContext-init.xml", //
-				"applicationContext-database.xml",//
+		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
+				"applicationContext-init.xml", //
+				"org/openyu/commons/druid/testContext-druid.xml",//
+
 		});
-		ojDaoSupporter = (OjDaoSupporter) applicationContext.getBean("ojDaoSupporter");
+		dataSource = (DataSource) applicationContext.getBean("dataSource");
 	}
 
 	@Test
-	public void ojDaoSupporter() {
-		System.out.println(ojDaoSupporter);
-		assertNotNull(ojDaoSupporter);
+	public void dataSource() {
+		System.out.println(dataSource);
+		assertNotNull(dataSource);
 	}
 
 	// ---------------------------------------------------
@@ -133,7 +137,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 	// ---------------------------------------------------
 	// native
 	// ---------------------------------------------------
-	public static class NativeTest extends BenchmarkOjDaoSupporterTest {
+	public static class NativeTest extends BenchmarkDruidTest {
 
 		@Test
 		// insert: 10000 rows, 102400000 bytes / 38545 ms. = 2656.64 BYTES/MS,
@@ -520,7 +524,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 	// ---------------------------------------------------
 	// optimized
 	// ---------------------------------------------------
-	public static class OptimizedTest extends BenchmarkOjDaoSupporterTest {
+	public static class OptimizedTest extends BenchmarkDruidTest {
 
 		@Test
 		// insert: 10000 rows, 102400000 bytes / 29690 ms. = 3448.97 BYTES/MS,

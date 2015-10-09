@@ -40,7 +40,7 @@ public abstract class BaseServiceFactorySupporter<T extends BaseService> extends
 				this.service = null;
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during shutdownInstance()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during shutdownService()").toString(), e);
 			throw e;
 		}
 		return this.service;
@@ -58,7 +58,7 @@ public abstract class BaseServiceFactorySupporter<T extends BaseService> extends
 				oldInstance.restart();
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during restartInstance()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during restartService()").toString(), e);
 			throw e;
 		}
 		return this.service;

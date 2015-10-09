@@ -89,12 +89,11 @@ public class EncodingHelperTest extends BaseTestSupporter {
 															// e4b8ade69687e6b8ace8a9a6616263646566
 		assertEquals("e4b8ade69687e6b8ace8a9a6616263646566", result);
 		//
-		result = EncodingHelper.encodeHex("netcmkpl");
-		System.out.println(result.length() + ", " + result);// 16,
-															// 6e6574636d6b706c
+		result = EncodingHelper.encodeHex("abc");
+		System.out.println(result.length() + ", " + result);// 6, 616263
 		//
-		result = EncodingHelper.encodeHex("mkpl");
-		System.out.println(result.length() + ", " + result);// 8, 6d6b706c
+		result = EncodingHelper.encodeHex("123");
+		System.out.println(result.length() + ", " + result);// 6, 313233
 	}
 
 	@Test

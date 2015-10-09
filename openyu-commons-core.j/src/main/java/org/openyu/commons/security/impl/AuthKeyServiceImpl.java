@@ -40,27 +40,23 @@ public class AuthKeyServiceImpl extends BaseServiceSupporter implements AuthKeyS
 	private transient ThreadService threadService;
 
 	/**
-	 * 預設key存活毫秒, 3分鐘
-	 */
-	public static final long DEFAULT_ALIVE_MILLS = 180 * 1000L;
-	/**
 	 * key存活毫秒
+	 * 
+	 * 180 * 1000L
 	 */
-	private long aliveMills = DEFAULT_ALIVE_MILLS;
+	private long aliveMills;
 
 	/**
-	 * 預設監聽毫秒, 10秒
-	 */
-	public static final long DEFAULT_LISTEN_MILLS = 10 * 1000L;
-	/**
 	 * 監聽毫秒
+	 * 
+	 * 10 * 1000L
 	 */
-	private long listenMills = DEFAULT_LISTEN_MILLS;
+	private long listenMills;
 
 	/**
 	 * 安全性處理器
 	 */
-	private transient SecurityProcessor securityProcessor = new SecurityProcessorImpl();
+	private SecurityProcessor securityProcessor = new SecurityProcessorImpl();
 
 	private Map<String, AuthKey> authKeys = new ConcurrentHashMap<String, AuthKey>();
 

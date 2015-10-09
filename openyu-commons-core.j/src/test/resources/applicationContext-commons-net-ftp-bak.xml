@@ -28,10 +28,10 @@
 			<value>1000</value>
 		</property>
 		<property name="username">
-			<value>mktftp</value>
+			<value>root</value>
 		</property>
 		<property name="password">
-			<value>Mkt2BestDev</value>
+			<value>1111</value>
 		</property>
 		<property name="bufferSize">
 			<value>131072</value>
@@ -46,7 +46,7 @@
 			<value>UTF-8</value>
 		</property>
 		<property name="remotePath">
-			<value>MKTPLS_Batch/inbound/Inventory/</value>
+			<value>inbound/</value>
 		</property>
 		<property name="initialSize">
 			<value>1</value>

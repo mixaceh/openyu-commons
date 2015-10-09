@@ -18,7 +18,7 @@ public class CnfDataSourceImplTest {
 	public static void setUpBeforeClass() throws Exception {
 		// GQC
 		cnfDataSource = new CnfDataSourceImpl();
-		cnfDataSource.setIp("10.1.24.143");
+		cnfDataSource.setIp("127.0.0.1");
 		cnfDataSource.setPort(21);
 		cnfDataSource.setTimeout(5000);
 		//
@@ -28,13 +28,13 @@ public class CnfDataSourceImplTest {
 		cnfDataSource.setRetryNumber(3);
 		cnfDataSource.setRetryPauseMills(1000L);
 		//
-		cnfDataSource.setUsername("mktftp");
-		cnfDataSource.setPassword("Mkt2BestDev");
+		cnfDataSource.setUsername("root");
+		cnfDataSource.setPassword("1111");
 		cnfDataSource.setBufferSize(128 * 1024);
 		cnfDataSource.setClientMode(2);
 		cnfDataSource.setFileType(2);
 		cnfDataSource.setControlEncoding("UTF-8");
-		cnfDataSource.setRemotePath("MKTPLS_Batch/inbound/Inventory/");
+		cnfDataSource.setRemotePath("inbound/");
 	}
 
 	@Test

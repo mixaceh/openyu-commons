@@ -39,6 +39,9 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 
 	public static final int DEFAULT_QUEUE_CAPACITY = 8;
 
+	/**
+	 * 所有屬性
+	 */
 	public final static String[] ALL_PROPERTIES = { MAX_EXECUTOR_SIZE, _CORE_POOL_SIZE, KEEP_ALIVE_SECONDS,
 			MAX_POOL_SIZE, QUEUE_CAPACITY };
 
@@ -72,7 +75,7 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 			// 啟動
 			result.start();
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during createInstance()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during createService()").toString(), e);
 			try {
 				result = (ThreadServiceImpl) shutdownService();
 			} catch (Exception sie) {

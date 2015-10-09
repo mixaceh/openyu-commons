@@ -203,7 +203,7 @@ public class HBaseThriftDMLTest extends HBaseThriftDDLTest {
 	// 897 at mills.
 	// 888 at mills.
 	public void scanOneColumn() throws Exception {
-		// String TABLE_NAME = "MKPL_ItemCreation_Buffer_Item";
+		// String TABLE_NAME = "ItemCreation_Buffer_Item";
 		// String rowKey =
 		// "0016630555\\x0501\\x0501\\x05A1FS\\x05CreateItem\\x0516630555\\x050000116\\x05670744-086876166705";
 		// String cloumn = "ItemInfo:SellerId";
@@ -244,7 +244,7 @@ public class HBaseThriftDMLTest extends HBaseThriftDDLTest {
 
 	@Test
 	public void scanNotClose() throws Exception {
-		String TABLE_NAME = "MKPL_ItemCreation_Buffer_Item_B";
+		String TABLE_NAME = "ItemCreation_Buffer_Item_B";
 		String cloumn = "ItemInfo:ProcessResult";
 		//
 		List<ByteBuffer> columns = new LinkedList<ByteBuffer>();
@@ -574,7 +574,7 @@ public class HBaseThriftDMLTest extends HBaseThriftDDLTest {
 	// #fix
 	// scan and update, 改用 PageFilter每次取20筆, 取所有欄位, 無timeout
 	public void mockUpdate() throws Exception {
-		String TABLE_NAME = "MKPL_ItemCreation_Buffer_Item_B";
+		String TABLE_NAME = "ItemCreation_Buffer_Item_B";
 		//
 		List<ByteBuffer> columns = new LinkedList<ByteBuffer>();
 		Map<ByteBuffer, ByteBuffer> attributes = new HashMap<ByteBuffer, ByteBuffer>();
@@ -657,7 +657,7 @@ public class HBaseThriftDMLTest extends HBaseThriftDDLTest {
 	// #fix
 	// scan and update, 改用 PageFilter每次取20筆, 取所有欄位, 無timeout
 	public void mockUpdateFix() throws Exception {
-		String TABLE_NAME = "MKPL_ItemCreation_Buffer_Item_B";
+		String TABLE_NAME = "ItemCreation_Buffer_Item_B";
 		//
 		List<ByteBuffer> columns = new LinkedList<ByteBuffer>();
 		Map<ByteBuffer, ByteBuffer> attributes = new HashMap<ByteBuffer, ByteBuffer>();
@@ -776,7 +776,7 @@ public class HBaseThriftDMLTest extends HBaseThriftDDLTest {
 		Hbase.Client client = new Hbase.Client(tprotocol);
 		transport.open();
 		//
-		String TABLE_NAME = "MKPL_ItemCreation_Buffer_Item_B";
+		String TABLE_NAME = "ItemCreation_Buffer_Item_B";
 		List<TRowResult> results = null;
 		//
 		List<ByteBuffer> columns = new LinkedList<ByteBuffer>();

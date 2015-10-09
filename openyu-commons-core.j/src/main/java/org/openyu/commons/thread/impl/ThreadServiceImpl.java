@@ -87,6 +87,7 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 	}
 
 	public ThreadServiceImpl() {
+		this(1, 8, 60, 8, 8);
 	}
 
 	public synchronized static ThreadService getInstance() {

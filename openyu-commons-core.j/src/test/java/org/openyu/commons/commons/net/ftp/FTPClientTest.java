@@ -19,8 +19,8 @@ public class FTPClientTest {
 			result.setSendBufferSize(128 * 1024);
 			result.setReceiveBufferSize(128 * 1024);
 			//
-			result.connect("10.1.24.143", 21);
-			boolean login = result.login("mktftp", "Mkt2BestDev");
+			result.connect("127.0.0.1", 21);
+			boolean login = result.login("root", "1111");
 			if (!login) {
 				System.out.println("login: " + login);
 				return null;
@@ -36,7 +36,7 @@ public class FTPClientTest {
 			result.enterLocalPassiveMode();
 			result.setFileType(FTPClient.BINARY_FILE_TYPE);
 			result.setControlEncoding("UTF-8");
-			result.changeWorkingDirectory("MKTPLS_Batch/inbound/Inventory/");
+			result.changeWorkingDirectory("inbound/");
 			//
 		} catch (Exception ex) {
 			ex.printStackTrace();

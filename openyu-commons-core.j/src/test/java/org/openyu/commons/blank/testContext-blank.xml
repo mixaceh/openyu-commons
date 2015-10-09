@@ -28,6 +28,7 @@
 		class="org.openyu.commons.blank.BlankServiceImpl"
 		parent="baseServiceSupporter" />
 
+	<!-- factory
 	<bean
 		id="blankServiceFactoryBean"
 		class="org.openyu.commons.blank.BlankServiceFactoryBean"
@@ -41,4 +42,5 @@
 			</props>
 		</property>
 	</bean>
+	-->
 </beans>

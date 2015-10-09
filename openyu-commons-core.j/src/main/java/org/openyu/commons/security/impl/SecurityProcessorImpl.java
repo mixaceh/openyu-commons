@@ -39,34 +39,19 @@ public class SecurityProcessorImpl extends BaseProcessorSupporter implements Sec
 	// --------------------------------------------------
 
 	/**
-	 * 預設是否加密
-	 */
-	public static final boolean DEFAULT_SECURITY = true;
-
-	/**
 	 * 是否加密
 	 */
-	private boolean security = DEFAULT_SECURITY;;
-
-	/**
-	 * 預設加密類型
-	 */
-	public static final SecurityType DEFAULT_SECURITY_TYPE = SecurityType.HmacSHA1;
+	private boolean security;
 
 	/**
 	 * 加密類別
 	 */
-	private SecurityType securityType = DEFAULT_SECURITY_TYPE;
-
-	/**
-	 * 預設加密key
-	 */
-	public static final String DEFAULT_SECURITY_KEY = "securityKey";
+	private SecurityType securityType;
 
 	/**
 	 * 加密key
 	 */
-	private String securityKey = DEFAULT_SECURITY_KEY;
+	private String securityKey;
 
 	static {
 		// 此有系統預設值,只是為了轉出xml,並非給企劃編輯用

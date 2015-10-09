@@ -15,8 +15,8 @@ public class FtpClientFactoryImplTest {
 	public static void setUpBeforeClass() throws Exception {
 		// DEV
 		factory = new FtpClientFactoryImpl("10.1.24.143", 21, 0, 3, 1000L,
-				"mktftp", "Mkt2BestDev", 128 * 1024, 2, 2, "UTF-8",
-				"MKTPLS_Batch/inbound/Inventory/");
+				"root", "1111", 128 * 1024, 2, 2, "UTF-8",
+				"inbound/");
 	}
 
 	@Test
