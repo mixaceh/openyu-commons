@@ -54,8 +54,8 @@ public class BenchmarkC3p0Test extends DatabaseTestSupporter {
 		// 3368.14 K/S, 3.29 MB/S
 
 		// 2015/10/09
-		// insert: 10000 rows, 102628000 bytes / 82989 ms. = 1236.65 BYTES/MS,
-		// 1207.66 K/S, 1.18 MB/S
+		// insert: 10000 rows, 102628000 bytes / 107223 ms. = 957.15 BYTES/MS,
+		// 934.71 K/S, 0.91 MB/S
 		public void insert() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -207,8 +207,8 @@ public class BenchmarkC3p0Test extends DatabaseTestSupporter {
 		// 2899.81 K/S, 2.83 MB/S
 
 		// 2015/10/09
-		// update: 10000 rows, 102400000 bytes / 124789 ms. = 820.59 BYTES/MS,
-		// 801.35 K/S, 0.78 MB/S
+		// update: 102400000 bytes / 145604 ms. = 703.28 BYTES/MS, 686.79 K/S,
+		// 0.67 MB/S
 		public void update() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -279,8 +279,8 @@ public class BenchmarkC3p0Test extends DatabaseTestSupporter {
 		// 5460.01 K/S, 5.33 MB/S
 
 		// 2015/10/09
-		// delete: 10000 rows, 102400000 bytes / 27290 ms. = 3696.76 BYTES/MS,
-		// 3610.11 K/S, 3.53 MB/S
+		// delete: 102400000 bytes / 32887 ms. = 3113.69 BYTES/MS, 3040.72 K/S,
+		// 2.97 MB/S
 		public void delete() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;

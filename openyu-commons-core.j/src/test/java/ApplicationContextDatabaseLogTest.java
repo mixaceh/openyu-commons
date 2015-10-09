@@ -28,32 +28,28 @@ public class ApplicationContextDatabaseLogTest extends BaseTestSupporter {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		applicationContext = new ClassPathXmlApplicationContext(new String[] {
-				"applicationContext-init.xml",//
-				"META-INF/applicationContext-commons-core.xml",//
+		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
+				"applicationContext-init.xml", //
+				"applicationContext-database.xml", //
 				"applicationContext-database-log.xml",//
 		});
 	}
 
 	@Test
 	public void logDataSource() throws Exception {
-		DataSource bean = (DataSource) applicationContext
-				.getBean("logDataSource");
+		DataSource bean = (DataSource) applicationContext.getBean("logDataSource");
 		System.out.println(bean);
 		assertNotNull(bean);
 		//
 		System.out.println(bean);
 		System.out.println("connection: " + bean.getConnection());
-		System.out.println("autoCommit: "
-				+ bean.getConnection().getAutoCommit());
-		System.out.println("transactionIsolation: "
-				+ bean.getConnection().getTransactionIsolation());
+		System.out.println("autoCommit: " + bean.getConnection().getAutoCommit());
+		System.out.println("transactionIsolation: " + bean.getConnection().getTransactionIsolation());
 	}
 
 	@Test
 	public void logSessionFactory() throws Exception {
-		SessionFactory bean = (SessionFactory) applicationContext
-				.getBean("logSessionFactory");
+		SessionFactory bean = (SessionFactory) applicationContext.getBean("logSessionFactory");
 		System.out.println(bean);
 		assertNotNull(bean);
 		//
@@ -62,62 +58,54 @@ public class ApplicationContextDatabaseLogTest extends BaseTestSupporter {
 			public void execute(Connection connection) throws SQLException {
 				System.out.println("connection: " + connection);
 				System.out.println("autoCommit: " + connection.getAutoCommit());
-				System.out.println("transactionIsolation: "
-						+ connection.getTransactionIsolation());
+				System.out.println("transactionIsolation: " + connection.getTransactionIsolation());
 			}
 		});
 	}
 
 	@Test
 	public void logHibernateTemplate() {
-		HibernateTemplate bean = (HibernateTemplate) applicationContext
-				.getBean("logHibernateTemplate");
+		HibernateTemplate bean = (HibernateTemplate) applicationContext.getBean("logHibernateTemplate");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}
 
 	@Test
 	public void logTxAdvice() {
-		TransactionInterceptor bean = (TransactionInterceptor) applicationContext
-				.getBean("logTxAdvice");
+		TransactionInterceptor bean = (TransactionInterceptor) applicationContext.getBean("logTxAdvice");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}
 
 	@Test
 	public void logTxManager() {
-		HibernateTransactionManager bean = (HibernateTransactionManager) applicationContext
-				.getBean("logTxManager");
+		HibernateTransactionManager bean = (HibernateTransactionManager) applicationContext.getBean("logTxManager");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}
 
 	@Test
 	public void logOjDaoSupporter() {
-		OjDaoSupporter bean = (OjDaoSupporter) applicationContext
-				.getBean("logOjDaoSupporter");
+		OjDaoSupporter bean = (OjDaoSupporter) applicationContext.getBean("logOjDaoSupporter");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}
 
 	@Test
 	public void baseLogServiceSupporter() {
-		BaseLogService bean = (BaseLogService) applicationContext
-				.getBean("baseLogServiceSupporter");
+		BaseLogService bean = (BaseLogService) applicationContext.getBean("baseLogServiceSupporter");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}
 
 	@Test
 	public void logQueueService() {
-		QueueService bean = (QueueService) applicationContext
-				.getBean("logQueueService");
+		QueueService bean = (QueueService) applicationContext.getBean("logQueueService");
 		System.out.println(bean);
 		assertNotNull(bean);
 		//
 		ThreadHelper.sleep(3 * 1000);
-		BeanDefinitionRegistry factory = (BeanDefinitionRegistry) applicationContext
-				.getAutowireCapableBeanFactory();
+		BeanDefinitionRegistry factory = (BeanDefinitionRegistry) applicationContext.getAutowireCapableBeanFactory();
 		factory.removeBeanDefinition("logQueueService");
 		ThreadHelper.sleep(3 * 1000);
 	}
