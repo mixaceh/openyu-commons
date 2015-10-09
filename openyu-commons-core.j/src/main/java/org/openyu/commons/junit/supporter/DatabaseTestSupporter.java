@@ -208,7 +208,7 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 		double mbresult = NumberHelper
 				.round((byteCounter.get() / (double) 1024 / (double) 1024) / (dur / (double) 1000), 2);
 		//
-		System.out.println("insert: " + timesCounter.get() + " rows, " + byteCounter.get() + " bytes / " + dur
+		System.out.println(timesCounter.get() + " rows, " + byteCounter.get() + " bytes / " + dur
 				+ " ms. = " + result + " BYTES/MS, " + kresult + " K/S, " + mbresult + " MB/S");
 	}
 

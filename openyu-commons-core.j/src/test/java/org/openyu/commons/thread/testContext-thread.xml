@@ -13,7 +13,7 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property
 			name="order"
-			value="2" />
+			value="1" />
 		<property
 			name="ignoreUnresolvablePlaceholders"
 			value="true" />
