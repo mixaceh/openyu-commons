@@ -18,15 +18,14 @@
 			value="true" />
 		<property name="locations">
 			<list>
-				<value>file:src/test/config/etc/druid.properties</value>
+				<value>file:src/test/config/etc/dbcp.properties</value>
 			</list>
 		</property>
 	</bean>
 
 	<bean
 		id="dataSource"
-		class="com.alibaba.druid.pool.DruidDataSource"
-		init-method="init"
+		class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close"> 
       <!-- 基本属性 url、user、password -->
 		<property
@@ -48,6 +47,10 @@
 			value="1" />
 		<property
 			name="maxActive"
+			value="10" />
+
+		<property
+			name="maxIdle"
 			value="10" />
 
       <!-- 配置获取连接等待超时的时间 -->
@@ -82,15 +85,6 @@
 		<property
 			name="poolPreparedStatements"
 			value="false" />
-		<property
-			name="maxPoolPreparedStatementPerConnectionSize"
-			value="50" />
-
-      <!-- 配置监控统计拦截的filters 
-		<property
-			name="filters"
-			value="stat" />
-		-->
 	</bean>
 
 	<!-- factory

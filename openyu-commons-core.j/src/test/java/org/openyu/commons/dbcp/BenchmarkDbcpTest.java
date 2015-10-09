@@ -1,4 +1,4 @@
-package org.openyu.commons.druid;
+package org.openyu.commons.dbcp;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -28,7 +28,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-public class BenchmarkDruidTest extends BaseTestSupporter {
+public class BenchmarkDbcpTest extends BaseTestSupporter {
 
 	private static DataSource dataSource;
 
@@ -38,7 +38,7 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/druid/testContext-druid.xml",//
+				"org/openyu/commons/dbcp/testContext-dbcp.xml",//
 
 		});
 		dataSource = (DataSource) applicationContext.getBean("dataSource");
@@ -156,7 +156,7 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 	// ---------------------------------------------------
 	// native
 	// ---------------------------------------------------
-	public static class NativeTest extends BenchmarkDruidTest {
+	public static class NativeTest extends BenchmarkDbcpTest {
 
 		@Test
 		// insert: 10000 rows, 102400000 bytes / 38545 ms. = 2656.64 BYTES/MS,
@@ -555,15 +555,15 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 	// ---------------------------------------------------
 	// optimized
 	// ---------------------------------------------------
-	public static class OptimizedTest extends BenchmarkDruidTest {
+	public static class OptimizedTest extends BenchmarkDbcpTest {
 
 		@Test
 		// insert: 10000 rows, 102400000 bytes / 29690 ms. = 3448.97 BYTES/MS,
 		// 3368.14 K/S, 3.29 MB/S
 
 		// 2015/10/09
-		// insert: 10000 rows, 102628000 bytes / 93261 ms. = 1100.44 BYTES/MS,
-		// 1074.65 K/S, 1.05 MB/S
+		// insert: 10000 rows, 102628000 bytes / 82989 ms. = 1236.65 BYTES/MS,
+		// 1207.66 K/S, 1.18 MB/S
 		public void optimizedInsert() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -643,8 +643,8 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 		// 4889.02 K/S, 4.77 MB/S
 
 		// 2015/10/09
-		// select: 10000 rows, 183462421 bytes / 35759 ms. = 5130.52 BYTES/MS,
-		// 5010.28 K/S, 4.89 MB/S
+		// select: 10000 rows, 183460321 bytes / 25246 ms. = 7266.91 BYTES/MS,
+		// 7096.59 K/S, 6.93 MB/S
 		public void optimizedSelect() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -731,8 +731,8 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 		// 2899.81 K/S, 2.83 MB/S
 
 		// 2015/10/09
-		// update: 10000 rows, 102400000 bytes / 126711 ms. = 808.14 BYTES/MS,
-		// 789.2 K/S, 0.77 MB/S
+		// update: 10000 rows, 102400000 bytes / 124789 ms. = 820.59 BYTES/MS,
+		// 801.35 K/S, 0.78 MB/S
 		public void optimizedUpdate() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -811,8 +811,8 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 		// 5460.01 K/S, 5.33 MB/S
 
 		// 2015/10/09
-		// delete: 10000 rows, 102400000 bytes / 29794 ms. = 3436.93 BYTES/MS,
-		// 3356.38 K/S, 3.28 MB/S
+		// delete: 10000 rows, 102400000 bytes / 26270 ms. = 3897.98 BYTES/MS,
+		// 3806.62 K/S, 3.72 MB/S
 		public void optimizedDelete() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
