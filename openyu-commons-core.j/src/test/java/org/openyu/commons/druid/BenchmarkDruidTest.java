@@ -7,6 +7,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,10 +28,15 @@ import org.openyu.commons.lang.ByteHelper;
 import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 public class BenchmarkDruidTest extends BaseTestSupporter {
 
 	private static DataSource dataSource;
+
+	private static JdbcTemplate jdbcTemplate;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -40,12 +46,19 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 
 		});
 		dataSource = (DataSource) applicationContext.getBean("dataSource");
+		jdbcTemplate = (JdbcTemplate) applicationContext.getBean("jdbcTemplate");
 	}
 
 	@Test
 	public void dataSource() {
 		System.out.println(dataSource);
 		assertNotNull(dataSource);
+	}
+
+	@Test
+	public void jdbcTemplate() {
+		System.out.println(jdbcTemplate);
+		assertNotNull(jdbcTemplate);
 	}
 
 	// ---------------------------------------------------
@@ -72,15 +85,25 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 	@Test
 	public void createTable() throws Exception {
 		StringBuilder sql = new StringBuilder();
+		// mysql
+		// sql.append("CREATE TABLE TEST_CHENG ");
+		// sql.append("(");
+		// sql.append("seq bigint NOT NULL,");
+		// sql.append("id varchar(50) NULL,");
+		// sql.append("info varchar(max) NULL,");
+		// sql.append("CONSTRAINT PK_test_cheng PRIMARY KEY CLUSTERED ");
+		// sql.append("(seq ASC) ");
+		// sql.append(")");
+
+		// hsql
 		sql.append("CREATE TABLE TEST_CHENG ");
 		sql.append("(");
 		sql.append("seq bigint NOT NULL,");
 		sql.append("id varchar(50) NULL,");
-		sql.append("info varchar(max) NULL,");
-		sql.append("CONSTRAINT PK_test_cheng PRIMARY KEY CLUSTERED ");
-		sql.append("(seq ASC) ");
+		sql.append("info varchar(10240) NULL,");
+		sql.append("PRIMARY KEY (seq) ");
 		sql.append(")");
-		//
+
 		Connection connection = createConnection();
 		Statement stmt = connection.createStatement();
 		boolean result = stmt.execute(sql.toString());
@@ -142,6 +165,10 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 		@Test
 		// insert: 10000 rows, 102400000 bytes / 38545 ms. = 2656.64 BYTES/MS,
 		// 2594.37 K/S, 2.53 MB/S
+
+		// 2015/10/09
+		// insert: 10000 rows, 102628000 bytes / 124588 ms. = 823.74 BYTES/MS,
+		// 804.43 K/S, 0.79 MB/S
 		public void nativeInsert() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -238,6 +265,10 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 		@Test
 		// select: 10000 rows, 102400000 bytes / 31782 ms. = 3221.95 BYTES/MS,
 		// 3146.44 K/S, 3.07 MB/S
+
+		// 2015/10/09
+		// select: 10000 rows, 183462421 bytes / 64106 ms. = 2861.86 BYTES/MS,
+		// 2794.79 K/S, 2.73 MB/S
 		public void nativeSelect() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -341,6 +372,10 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 		@Test
 		// update: 10000 rows, 102400000 bytes / 41240 ms. = 2483.03 BYTES/MS,
 		// 2424.83 K/S, 2.37 MB/S
+
+		// 2015/10/09
+		// update: 10000 rows, 102400000 bytes / 175518 ms. = 583.42 BYTES/MS,
+		// 569.74 K/S, 0.56 MB/S
 		public void nativeUpdate() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -529,6 +564,10 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 		@Test
 		// insert: 10000 rows, 102400000 bytes / 29690 ms. = 3448.97 BYTES/MS,
 		// 3368.14 K/S, 3.29 MB/S
+
+		// 2015/10/09
+		// insert: 10000 rows, 102628000 bytes / 93261 ms. = 1100.44 BYTES/MS,
+		// 1074.65 K/S, 1.05 MB/S
 		public void optimizedInsert() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -560,11 +599,8 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 									// 0_0
 									String newId = userId + "_" + i;
 									// params
-									Map<String, Object> params = new LinkedHashMap<String, Object>();
-									params.put("seq", seq);
-									params.put("id", newId);
-									params.put("info", new String(buff));
-									int inserted = ojDaoSupporter.insert(sql.toString(), params);
+									Object[] params = new Object[] { seq, newId, new String(buff) };
+									int inserted = jdbcTemplate.update(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + inserted);
 									//
@@ -609,6 +645,10 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 		@Test
 		// select: 10000 rows, 102400000 bytes / 20454 ms. = 5006.36 BYTES/MS,
 		// 4889.02 K/S, 4.77 MB/S
+
+		// 2015/10/09
+		// select: 10000 rows, 183462421 bytes / 35759 ms. = 5130.52 BYTES/MS,
+		// 5010.28 K/S, 4.89 MB/S
 		public void optimizedSelect() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -638,24 +678,17 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 
 									long seq = seqCounter.getAndIncrement();
 									// params
-									Map<String, Object> params = new LinkedHashMap<String, Object>();
-									params.put("seq", seq);
-									// scalars
-									Map<String, Object> scalars = new LinkedHashMap<String, Object>();
-									scalars.put("seq", StandardBasicTypes.LONG);
-									scalars.put("id", StandardBasicTypes.STRING);
-									scalars.put("info", StandardBasicTypes.STRING);
-									//
-									List<Object[]> list = ojDaoSupporter.find(sql.toString(), params, scalars);
+									Object[] params = new Object[] { seq };
+									List<Cheng> list = jdbcTemplate.query(sql.toString(), params, new ChengRowMapper());
 									//
 									seq = 0;
 									String id = null;
 									String info = null;
 									if (list.size() > 0) {
-										Object[] row = list.get(0);
-										seq = NumberHelper.safeGet((Long) row[0]);
-										id = (String) row[1];
-										info = (String) row[2];
+										Cheng row = list.get(0);
+										seq = row.getSeq();
+										id = row.getId();
+										info = row.getInfo();
 									}
 									System.out.println("I[" + id + "] R[" + i + "], " + seq);
 									//
@@ -700,6 +733,10 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 		@Test
 		// update: 10000 rows, 102400000 bytes / 34485 ms. = 2969.41 BYTES/MS,
 		// 2899.81 K/S, 2.83 MB/S
+
+		// 2015/10/09
+		// update: 10000 rows, 102400000 bytes / 126711 ms. = 808.14 BYTES/MS,
+		// 789.2 K/S, 0.77 MB/S
 		public void optimizedUpdate() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -732,10 +769,8 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 
 									long seq = seqCounter.getAndIncrement();
 									// params
-									Map<String, Object> params = new LinkedHashMap<String, Object>();
-									params.put("seq", seq);
-									params.put("info", new String(buff));
-									int updated = ojDaoSupporter.update(sql.toString(), params);
+									Object[] params = new Object[] { new String(buff), seq };
+									int updated = jdbcTemplate.update(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + updated);
 									//
@@ -778,6 +813,10 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 		@Test
 		// delete: 10000 rows, 102400000 bytes / 18315 ms. = 5591.05 BYTES/MS,
 		// 5460.01 K/S, 5.33 MB/S
+
+		// 2015/10/09
+		// delete: 10000 rows, 102400000 bytes / 29794 ms. = 3436.93 BYTES/MS,
+		// 3356.38 K/S, 3.28 MB/S
 		public void optimizedDelete() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -807,9 +846,8 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 
 									long seq = seqCounter.getAndIncrement();
 									// params
-									Map<String, Object> params = new LinkedHashMap<String, Object>();
-									params.put("seq", seq);
-									int deleted = ojDaoSupporter.delete(sql.toString(), params);
+									Object[] params = new Object[] { seq };
+									int deleted = jdbcTemplate.update(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + deleted);
 									//
@@ -847,6 +885,50 @@ public class BenchmarkDruidTest extends BaseTestSupporter {
 			//
 			System.out.println("delete: " + timesCounter.get() + " rows, " + byteCounter.get() + " bytes / " + dur
 					+ " ms. = " + result + " BYTES/MS, " + kresult + " K/S, " + mbresult + " MB/S");
+		}
+	}
+
+	protected class ChengRowMapper implements RowMapper<Cheng> {
+		public Cheng mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Cheng customer = new Cheng();
+			customer.setSeq(rs.getLong("seq"));
+			customer.setId(rs.getString("id"));
+			customer.setInfo(rs.getString("info"));
+			return customer;
+		}
+	}
+
+	protected class Cheng {
+
+		private long seq;
+		private String id;
+		private String info;
+
+		public Cheng() {
+		}
+
+		public long getSeq() {
+			return seq;
+		}
+
+		public void setSeq(long seq) {
+			this.seq = seq;
+		}
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		public String getInfo() {
+			return info;
+		}
+
+		public void setInfo(String info) {
+			this.info = info;
 		}
 
 	}

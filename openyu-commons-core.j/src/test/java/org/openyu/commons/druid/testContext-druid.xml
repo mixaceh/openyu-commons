@@ -48,7 +48,7 @@
 			value="1" />
 		<property
 			name="maxActive"
-			value="20" />
+			value="10" />
 
       <!-- 配置获取连接等待超时的时间 -->
 		<property
@@ -84,12 +84,13 @@
 			value="false" />
 		<property
 			name="maxPoolPreparedStatementPerConnectionSize"
-			value="20" />
+			value="50" />
 
-      <!-- 配置监控统计拦截的filters -->
+      <!-- 配置监控统计拦截的filters 
 		<property
 			name="filters"
 			value="stat" />
+		-->
 	</bean>
 
 	<!-- factory
@@ -107,4 +108,14 @@
 		</property>
 	</bean>
 	-->
+
+	<bean
+		id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property
+			name="dataSource"
+			ref="dataSource" />
+	</bean>
+
+
 </beans>
