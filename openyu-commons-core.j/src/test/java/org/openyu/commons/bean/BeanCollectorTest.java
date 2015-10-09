@@ -23,12 +23,12 @@ import org.openyu.commons.dao.inquiry.impl.InquiryImpl;
 import org.openyu.commons.dao.inquiry.impl.OrderImpl;
 import org.openyu.commons.dao.inquiry.impl.PaginationImpl;
 import org.openyu.commons.dao.inquiry.impl.SortImpl;
-import org.openyu.commons.junit.supporter.BeanTestSupporter;
+import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
-public class BeanCollectorTest extends BeanTestSupporter {
+public class BeanCollectorTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();

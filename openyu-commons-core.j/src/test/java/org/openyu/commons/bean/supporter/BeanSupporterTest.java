@@ -14,9 +14,9 @@ import org.openyu.commons.bean.LocaleNameBean;
 import org.openyu.commons.bean.NameBean;
 import org.openyu.commons.bean.NamesBean;
 import org.openyu.commons.collector.CollectorHelper;
-import org.openyu.commons.junit.supporter.BeanTestSupporter;
+import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
-public class BeanSupporterTest extends BeanTestSupporter {
+public class BeanSupporterTest extends BaseTestSupporter {
 
 	@Test
 	// verified
