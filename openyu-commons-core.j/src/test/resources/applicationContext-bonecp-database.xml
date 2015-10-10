@@ -7,13 +7,53 @@
              http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
-	<bean
-		id="dataSourceTarget"
-		class="org.openyu.commons.commons.dbcp.BasicDataSourceFactoryBean"
-		parent="baseFactorySupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/dbcp.properties" />
+	<!-- bonecp -->
+	<bean id="dataSourceTarget" class="com.jolbox.bonecp.BoneCPDataSource"
+		destroy-method="close">
+		<property name="driverClass">
+			<value>${bonecp.driverClass}</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>${bonecp.jdbcUrl}</value>
+		</property>
+		<property name="username">
+			<value>${bonecp.username}</value>
+		</property>
+		<property name="password">
+			<value>${bonecp.password}</value>
+		</property>
+		<property name="initSQL">
+			<value>${bonecp.initSQL}</value>
+		</property>
+		<property name="idleConnectionTestPeriodInMinutes">
+			<value>${bonecp.idleConnectionTestPeriodInMinutes}</value>
+		</property>
+		<property name="idleMaxAgeInMinutes">
+			<value>${bonecp.idleMaxAgeInMinutes}</value>
+		</property>
+		<property name="maxConnectionsPerPartition">
+			<value>${bonecp.maxConnectionsPerPartition}</value>
+		</property>
+		<property name="minConnectionsPerPartition">
+			<value>${bonecp.minConnectionsPerPartition}</value>
+		</property>
+		<property name="partitionCount">
+			<value>${bonecp.partitionCount}</value>
+		</property>
+		<property name="acquireIncrement">
+			<value>${bonecp.acquireIncrement}</value>
+		</property>
+		<property name="statementsCacheSize">
+			<value>${bonecp.statementsCacheSize}</value>
+		</property>
+		<!-- bonecp 0.8 deprecated  
+		<property name="releaseHelperThreads">
+			<value>${bonecp.releaseHelperThreads}</value>
+		</property>
+		-->
+		<property name="connectionTimeoutInMs">
+			<value>${bonecp.connectionTimeoutInMs}</value>
+		</property>
 	</bean>
 
 	<bean id="dataSource"

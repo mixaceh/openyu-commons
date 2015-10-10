@@ -30,7 +30,7 @@ public class ApplicationContextDatabaseLogTest extends BaseTestSupporter {
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"applicationContext-database.xml", //
+				"applicationContext-bean.xml", //
 				"applicationContext-database-log.xml",//
 		});
 	}

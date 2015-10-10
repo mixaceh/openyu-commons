@@ -10,13 +10,55 @@
              http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
+	<!-- bonecp -->
 	<bean
 		id="logDataSourceTarget"
-		class="org.openyu.commons.commons.dbcp.BasicDataSourceFactoryBean"
-		parent="baseFactorySupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/dbcp-log.properties" />
+		class="com.jolbox.bonecp.BoneCPDataSource"
+		destroy-method="close">
+		<property name="driverClass">
+			<value>${log.bonecp.driverClass}</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>${log.bonecp.jdbcUrl}</value>
+		</property>
+		<property name="username">
+			<value>${log.bonecp.username}</value>
+		</property>
+		<property name="password">
+			<value>${log.bonecp.password}</value>
+		</property>
+		<property name="initSQL">
+			<value>${log.bonecp.initSQL}</value>
+		</property>
+		<property name="idleConnectionTestPeriodInMinutes">
+			<value>${log.bonecp.idleConnectionTestPeriodInMinutes}</value>
+		</property>
+		<property name="idleMaxAgeInMinutes">
+			<value>${log.bonecp.idleMaxAgeInMinutes}</value>
+		</property>
+		<property name="maxConnectionsPerPartition">
+			<value>${log.bonecp.maxConnectionsPerPartition}</value>
+		</property>
+		<property name="minConnectionsPerPartition">
+			<value>${log.bonecp.minConnectionsPerPartition}</value>
+		</property>
+		<property name="partitionCount">
+			<value>${log.bonecp.partitionCount}</value>
+		</property>
+		<property name="acquireIncrement">
+			<value>${log.bonecp.acquireIncrement}</value>
+		</property>
+		<property name="statementsCacheSize">
+			<value>${log.bonecp.statementsCacheSize}</value>
+		</property>
+		<!-- bonecp 0.8 deprecated  
+		<property name="releaseHelperThreads">
+			<value>${log.bonecp.releaseHelperThreads}</value>
+		</property>
+		-->
+		<property name="connectionTimeoutInMs">
+			<value>${log.bonecp.connectionTimeoutInMs}</value>
+		</property>
 	</bean>
 
 	<bean
