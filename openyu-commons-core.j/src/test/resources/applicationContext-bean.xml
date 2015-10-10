@@ -14,7 +14,7 @@
 	<bean
 		id="threadService"
 		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
-		parent="baseServiceSupporter">
+		parent="baseServiceFactorySupporter">
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/ThreadService.properties" />
@@ -22,7 +22,7 @@
 	<bean
 		id="blockingThreadService"
 		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
-		parent="baseServiceSupporter">
+		parent="baseServiceFactorySupporter">
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/BlockingThreadService.properties" />
@@ -39,7 +39,7 @@
 	<bean
 		id="authKeyService"
 		class="org.openyu.commons.security.impl.AuthKeyServiceFactoryBean"
-		parent="baseServiceSupporter">
+		parent="baseServiceFactorySupporter">
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/AuthKeyService.properties" />

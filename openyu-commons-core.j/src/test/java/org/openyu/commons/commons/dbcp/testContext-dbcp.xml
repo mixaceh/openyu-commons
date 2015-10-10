@@ -87,21 +87,15 @@
 			value="false" />
 	</bean>
 
-	<!-- factory
+	<!-- factory -->
 	<bean
-		id="blankServiceFactoryBean"
-		class="org.openyu.commons.blank.BlankServiceFactoryBean"
-		parent="baseServiceSupporter">
+		id="basicDataSourceFactoryBean"
+		class="org.openyu.commons.commons.dbcp.BasicDataSourceFactoryBean"
+		parent="baseFactorySupporter">
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/dbcp.properties" />
-		<property name="properties">
-			<props>
-				<prop key="aliveMills">180000</prop>
-			</props>
-		</property>
 	</bean>
-	-->
 
 	<bean
 		id="jdbcTemplate"

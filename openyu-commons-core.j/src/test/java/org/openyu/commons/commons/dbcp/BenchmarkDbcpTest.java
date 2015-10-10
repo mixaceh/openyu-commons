@@ -1,4 +1,4 @@
-package org.openyu.commons.dbcp;
+package org.openyu.commons.commons.dbcp;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -22,7 +22,7 @@ public class BenchmarkDbcpTest extends DatabaseTestSupporter {
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/dbcp/testContext-dbcp.xml",//
+				"org/openyu/commons/commons/dbcp/testContext-dbcp.xml",//
 
 		});
 		// ---------------------------------------------------

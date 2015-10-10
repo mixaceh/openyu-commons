@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openyu.commons.dbcp.BenchmarkDbcpTest;
+import org.openyu.commons.commons.dbcp.BenchmarkDbcpTest;
 import org.openyu.commons.junit.supporter.DatabaseTestSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 import org.openyu.commons.lang.ByteHelper;

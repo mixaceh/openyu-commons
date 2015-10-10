@@ -69,7 +69,7 @@ public class BlankServiceFactoryBeanTest extends BaseTestSupporter {
 
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void createInstance() throws Exception {
+		public void createService() throws Exception {
 			BlankServiceFactoryBean<BlankService> factoryBean = new BlankServiceFactoryBean<BlankService>();
 			BlankService service = factoryBean.createService();
 			System.out.println(service);
@@ -78,40 +78,40 @@ public class BlankServiceFactoryBeanTest extends BaseTestSupporter {
 
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void shutdownInstance() throws Exception {
+		public void shutdownService() throws Exception {
 			BlankServiceFactoryBean<BlankService> factoryBean = new BlankServiceFactoryBean<BlankService>();
 			factoryBean.start();
 			BlankService service = (BlankService) factoryBean.getObject();
 			System.out.println(service);
 			assertNotNull(service);
 			//
-			// service = factoryBean.shutdownInstance();
+			// service = factoryBean.shutdownService();
 			// 使用反射取protected方法
-			Method method = getDeclaredMethod(BlankServiceFactoryBean.class, "shutdownInstance");
+			Method method = getDeclaredMethod(BlankServiceFactoryBean.class, "shutdownService");
 			service = (BlankService) method.invoke(factoryBean);
 			assertNull(service);
 			// 多次,不會丟出ex
-			// service = factoryBean.shutdownInstance();
+			// service = factoryBean.shutdownService();
 			service = (BlankService) method.invoke(factoryBean);
 			assertNull(service);
 		}
 
 		@Test
 		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void restartInstance() throws Exception {
+		public void restartService() throws Exception {
 			BlankServiceFactoryBean<BlankService> factoryBean = new BlankServiceFactoryBean<BlankService>();
 			factoryBean.start();
 			BlankService service = (BlankService) factoryBean.getObject();
 			System.out.println(service);
 			assertNotNull(service);
 			//
-			// service = factoryBean.restartInstance();
+			// service = factoryBean.restartService();
 			// 使用反射取protected方法
-			Method method = getDeclaredMethod(BlankServiceFactoryBean.class, "restartInstance");
+			Method method = getDeclaredMethod(BlankServiceFactoryBean.class, "restartService");
 			service = (BlankService) method.invoke(factoryBean);
 			assertNotNull(service);
 			// 多次,不會丟出ex
-			// service = factoryBean.restartInstance();
+			// service = factoryBean.restartService();
 			service = (BlankService) method.invoke(factoryBean);
 			assertNotNull(service);
 		}

@@ -37,7 +37,7 @@
 	<bean
 		id="authKeyServiceFactoryBean"
 		class="org.openyu.commons.security.impl.AuthKeyServiceFactoryBean"
-		parent="baseServiceSupporter">
+		parent="baseServiceFactorySupporter">
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/AuthKeyService.properties" />

@@ -39,9 +39,7 @@ import org.openyu.commons.util.LocaleHelper;
  *
  * 2.靜態資料改由xxxCollector處理
  * 
- * 3.初始化順序 set() > start() > @Autowired
- * 
- * 4.另一種呼叫,使用start/shutdown call back
+ * 3.start() -> startCallback -> doStart()
  * 
  * 參考 com.google.common.util.concurrent.AbstractService
  *

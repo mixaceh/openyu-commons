@@ -39,7 +39,7 @@ public final class BlankServiceFactoryBean<T extends BlankService> extends BaseS
 			// 啟動
 			result.start();
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during createInstance()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during createService()").toString(), e);
 			try {
 				result = (BlankServiceImpl) shutdownService();
 			} catch (Exception sie) {

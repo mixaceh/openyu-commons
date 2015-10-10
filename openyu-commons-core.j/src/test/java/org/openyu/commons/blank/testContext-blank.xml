@@ -22,17 +22,17 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean
 		id="blankService"
 		class="org.openyu.commons.blank.BlankServiceImpl"
 		parent="baseServiceSupporter" />
 
-	<!-- factory
+	<!-- factory -->
 	<bean
 		id="blankServiceFactoryBean"
 		class="org.openyu.commons.blank.BlankServiceFactoryBean"
-		parent="baseServiceSupporter">
+		parent="baseServiceFactorySupporter">
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/BlankService.properties" />
@@ -42,5 +42,5 @@
 			</props>
 		</property>
 	</bean>
-	-->
+
 </beans>

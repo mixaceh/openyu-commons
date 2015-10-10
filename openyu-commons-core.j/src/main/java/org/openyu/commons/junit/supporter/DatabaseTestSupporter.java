@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openyu.commons.dbcp.BenchmarkDbcpTest;
+import org.openyu.commons.commons.dbcp.BenchmarkDbcpTest;
 import org.openyu.commons.lang.ArrayHelper;
 import org.openyu.commons.lang.ByteHelper;
 import org.openyu.commons.lang.NumberHelper;

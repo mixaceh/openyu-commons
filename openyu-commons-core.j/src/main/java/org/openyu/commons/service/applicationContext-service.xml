@@ -24,4 +24,15 @@
 		id="serviceAdapter"
 		class="org.openyu.commons.service.event.supporter.ServiceAdapter" />
 
+	<!-- factory -->
+	<bean
+		id="baseFactorySupporter"
+		class="org.openyu.commons.service.supporter.BaseFactorySupporter"
+		abstract="true" />
+
+	<bean
+		id="baseServiceFactorySupporter"
+		class="org.openyu.commons.service.supporter.BaseServiceFactorySupporter"
+		abstract="true" />
+
 </beans>
