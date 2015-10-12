@@ -56,7 +56,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			result.setReceiveBufferSize(128 * 1024);
 			//
 			result.connect("hpc", 8888);
-			boolean login = result.login("cheng", "1111");
+			boolean login = result.login("root", "1111");
 			if (!login) {
 				System.out.println("login: " + login);
 				return null;
@@ -90,7 +90,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 	@Test
 	public void createDir() throws Exception {
 		FTPClient ftpClient = createFTPClient();
-		String DIR = "TEST_CHENG";
+		String DIR = "TEST_BENCHMARK";
 		boolean maked = ftpClient.makeDirectory(DIR);
 		System.out.println(maked);
 	}
@@ -98,7 +98,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 	@Test
 	public void storeFile() throws Exception {
 		final int LENGTH_OF_BYTES = 10 * 1024;// 10k
-		String DIR = "TEST_CHENG";
+		String DIR = "TEST_BENCHMARK";
 		//
 		InputStream in = null;
 		FTPClient ftpClient = null;
@@ -134,7 +134,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String DIR = "TEST_CHENG";
+			final String DIR = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -225,7 +225,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String DIR = "TEST_CHENG";
+			final String DIR = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -316,7 +316,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String DIR = "TEST_CHENG";
+			final String DIR = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -402,7 +402,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String DIR = "TEST_CHENG";
+			final String DIR = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -495,7 +495,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String DIR = "TEST_CHENG";
+			final String DIR = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -577,7 +577,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String DIR = "TEST_CHENG";
+			final String DIR = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -656,7 +656,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String DIR = "TEST_CHENG";
+			final String DIR = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -731,7 +731,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String DIR = "TEST_CHENG";
+			final String DIR = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);

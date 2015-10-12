@@ -61,7 +61,7 @@ public class RabbitMqTest {
 
 	@Test
 	public void send() throws Exception {
-		String QUEUE_NAME = "ChengTest";
+		String QUEUE_NAME = "TEST_QUEUE";
 		//
 		String message = "Hello World";
 		DeclareOk declare = channel.queueDeclare(QUEUE_NAME, false, false,
@@ -73,7 +73,7 @@ public class RabbitMqTest {
 
 	@Test
 	public void receive() throws Exception {
-		String QUEUE_NAME = "ChengTest";
+		String QUEUE_NAME = "TEST_QUEUE";
 		//
 		DeclareOk declare = channel.queueDeclare(QUEUE_NAME, false, false,
 				false, null);
@@ -90,7 +90,7 @@ public class RabbitMqTest {
 
 	@Test
 	public void sendPersistent() throws Exception {
-		String QUEUE_NAME = "ChengPersistentTest";
+		String QUEUE_NAME = "TEST_PERSISTENT";
 		//
 		String message = "Hello World";
 		DeclareOk declare = channel.queueDeclare(QUEUE_NAME, true, false,
@@ -103,7 +103,7 @@ public class RabbitMqTest {
 
 	@Test
 	public void receivePersistent() throws Exception {
-		String QUEUE_NAME = "ChengPersistentTest";
+		String QUEUE_NAME = "TEST_PERSISTENT";
 		//
 		DeclareOk declare = channel.queueDeclare(QUEUE_NAME, true, false,
 				false, null);// durable=true
@@ -123,7 +123,7 @@ public class RabbitMqTest {
 
 	@Test
 	public void sendExchange() throws Exception {
-		String EXCHANGE_NAME = "ChengExchangeTest";
+		String EXCHANGE_NAME = "TEST_EXCHANGE";
 		//
 		String message = "Hello World";
 		com.rabbitmq.client.AMQP.Exchange.DeclareOk declare = channel
@@ -135,7 +135,7 @@ public class RabbitMqTest {
 
 	@Test
 	public void receiveExchange() throws Exception {
-		String EXCHANGE_NAME = "ChengExchangeTest";
+		String EXCHANGE_NAME = "TEST_EXCHANGE";
 		//
 		com.rabbitmq.client.AMQP.Exchange.DeclareOk declare = channel
 				.exchangeDeclare(EXCHANGE_NAME, "fanout");
@@ -156,7 +156,7 @@ public class RabbitMqTest {
 
 	@Test
 	public void sendExchangeDirect() throws Exception {
-		String EXCHANGE_NAME = "ChengExchangeDirectTest";
+		String EXCHANGE_NAME = "TEST_EXCHANGE_DIRECT";
 		//
 		String message = "Hello World";
 		com.rabbitmq.client.AMQP.Exchange.DeclareOk declare = channel
@@ -169,7 +169,7 @@ public class RabbitMqTest {
 
 	@Test
 	public void receiveExchangeDirect() throws Exception {
-		String EXCHANGE_NAME = "ChengExchangeDirectTest";
+		String EXCHANGE_NAME = "TEST_EXCHANGE_DIRECT";
 		//
 		com.rabbitmq.client.AMQP.Exchange.DeclareOk declare = channel
 				.exchangeDeclare(EXCHANGE_NAME, "direct");
@@ -195,7 +195,7 @@ public class RabbitMqTest {
 
 	@Test
 	public void sendExchangeTopic() throws Exception {
-		String EXCHANGE_NAME = "ChengExchangeTopicTest";
+		String EXCHANGE_NAME = "TEST_EXCHANGE_TOPIC";
 		//
 		String message = "Hello World";
 		com.rabbitmq.client.AMQP.Exchange.DeclareOk declare = channel
@@ -209,7 +209,7 @@ public class RabbitMqTest {
 
 	@Test
 	public void receiveExchangeTopic() throws Exception {
-		String EXCHANGE_NAME = "ChengExchangeTopicTest";
+		String EXCHANGE_NAME = "TEST_EXCHANGE_TOPIC";
 		//
 		com.rabbitmq.client.AMQP.Exchange.DeclareOk declare = channel
 				.exchangeDeclare(EXCHANGE_NAME, "topic");
@@ -244,7 +244,7 @@ public class RabbitMqTest {
 
 	@Test
 	public void rpcServer() throws Exception {
-		String QUEUE_NAME = "ChengRpcTest";
+		String QUEUE_NAME = "TEST_RPC";
 		//
 		DeclareOk declare = channel.queueDeclare(QUEUE_NAME, false, false,
 				false, null);
@@ -277,7 +277,7 @@ public class RabbitMqTest {
 	}
 
 	private String rpcCall(String message) throws Exception {
-		String QUEUE_NAME = "ChengRpcTest";
+		String QUEUE_NAME = "TEST_RPC";
 
 		String replyQueueName = channel.queueDeclare().getQueue();
 		System.out.println("replyQueueName: " + replyQueueName);

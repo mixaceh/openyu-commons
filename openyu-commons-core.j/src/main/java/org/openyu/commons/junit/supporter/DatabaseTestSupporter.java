@@ -91,12 +91,12 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 	protected static String useMysql() {
 		StringBuilder sql = new StringBuilder();
 		// mysql
-		sql.append("CREATE TABLE TEST_CHENG ");
+		sql.append("CREATE TABLE TEST_BENCHMARK ");
 		sql.append("(");
 		sql.append("seq bigint NOT NULL,");
 		sql.append("id varchar(50) NULL,");
 		sql.append("info varchar(max) NULL,");
-		sql.append("CONSTRAINT PK_test_cheng PRIMARY KEY CLUSTERED ");
+		sql.append("CONSTRAINT PK_TEST_BENCHMARK PRIMARY KEY CLUSTERED ");
 		sql.append("(seq ASC) ");
 		sql.append(")");
 		return sql.toString();
@@ -110,7 +110,7 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 	protected static String useHsql() {
 		StringBuilder sql = new StringBuilder();
 		// hsql
-		sql.append("CREATE TABLE TEST_CHENG ");
+		sql.append("CREATE TABLE TEST_BENCHMARK ");
 		sql.append("(");
 		sql.append("seq bigint NOT NULL,");
 		sql.append("id varchar(50) NULL,");
@@ -122,7 +122,7 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 
 	@Test
 	public void getTable() throws Exception {
-		String TABLE_NAME = "TEST_CHENG";
+		String TABLE_NAME = "TEST_BENCHMARK";
 		//
 		Connection connection = createConnection();
 		DatabaseMetaData databaseMetaData = connection.getMetaData();
@@ -145,7 +145,7 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 	@Test
 	public void alterTable() throws Exception {
 		StringBuilder sql = new StringBuilder();
-		sql.append("ALTER TABLE TEST_CHENG ALTER COLUMN id varchar(255) ");
+		sql.append("ALTER TABLE TEST_BENCHMARK ALTER COLUMN id varchar(255) ");
 		//
 		Connection connection = createConnection();
 		Statement stmt = connection.createStatement();
@@ -157,7 +157,7 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 	@Test
 	public void dropTable() throws Exception {
 		StringBuilder sql = new StringBuilder();
-		sql.append("DROP TABLE TEST_CHENG");
+		sql.append("DROP TABLE TEST_BENCHMARK");
 		//
 		Connection connection = createConnection();
 		Statement stmt = connection.createStatement();
@@ -208,8 +208,8 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 		double mbresult = NumberHelper
 				.round((byteCounter.get() / (double) 1024 / (double) 1024) / (dur / (double) 1000), 2);
 		//
-		System.out.println(timesCounter.get() + " rows, " + byteCounter.get() + " bytes / " + dur
-				+ " ms. = " + result + " BYTES/MS, " + kresult + " K/S, " + mbresult + " MB/S");
+		System.out.println(timesCounter.get() + " rows, " + byteCounter.get() + " bytes / " + dur + " ms. = " + result
+				+ " BYTES/MS, " + kresult + " K/S, " + mbresult + " MB/S");
 	}
 
 	// ---------------------------------------------------
@@ -221,9 +221,13 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 		// insert: 10000 rows, 102400000 bytes / 38545 ms. = 2656.64 BYTES/MS,
 		// 2594.37 K/S, 2.53 MB/S
 
-		// 2015/10/09
+		// 2015/10/09 nb
 		// insert: 10000 rows, 102628000 bytes / 124588 ms. = 823.74 BYTES/MS,
 		// 804.43 K/S, 0.79 MB/S
+
+		// 2015/10/12 pc
+		// 10000 rows, 102628000 bytes / 79235 ms. = 1295.24 BYTES/MS, 1264.88
+		// K/S, 1.24 MB/S
 		public void insert() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -251,7 +255,7 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 								PreparedStatement psmt = null;
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("insert into TEST_CHENG (seq, id, info) ");
+									sql.append("insert into TEST_BENCHMARK (seq, id, info) ");
 									sql.append("values (?, ?, ?)");
 
 									connection = createConnection();
@@ -336,7 +340,7 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 								ResultSet rs = null;
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("select seq, id, info from TEST_CHENG ");
+									sql.append("select seq, id, info from TEST_BENCHMARK ");
 									sql.append("where seq=?");
 
 									connection = createConnection();
@@ -427,7 +431,7 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 								PreparedStatement psmt = null;
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("update TEST_CHENG set info=? ");
+									sql.append("update TEST_BENCHMARK set info=? ");
 									sql.append("where seq=?");
 
 									connection = createConnection();
@@ -501,7 +505,7 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 								PreparedStatement psmt = null;
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("delete from TEST_CHENG ");
+									sql.append("delete from TEST_BENCHMARK ");
 									sql.append("where seq=?");
 
 									connection = createConnection();
@@ -548,13 +552,13 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 	/**
 	 * mapping
 	 */
-	protected class ChengRowMapper implements RowMapper<Cheng> {
-		
-		public ChengRowMapper() {
+	protected class TestBenchmarkRowMapper implements RowMapper<TestBenchmark> {
+
+		public TestBenchmarkRowMapper() {
 		}
 
-		public Cheng mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Cheng customer = new Cheng();
+		public TestBenchmark mapRow(ResultSet rs, int rowNum) throws SQLException {
+			TestBenchmark customer = new TestBenchmark();
 			customer.setSeq(rs.getLong("seq"));
 			customer.setId(rs.getString("id"));
 			customer.setInfo(rs.getString("info"));
@@ -565,7 +569,7 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 	/**
 	 * bean
 	 */
-	protected class Cheng {
+	protected class TestBenchmark {
 
 		private long seq;
 
@@ -573,7 +577,7 @@ public class DatabaseTestSupporter extends BaseTestSupporter {
 
 		private String info;
 
-		public Cheng() {
+		public TestBenchmark() {
 		}
 
 		public long getSeq() {

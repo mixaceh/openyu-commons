@@ -80,7 +80,7 @@ public class BenchmarkBonecpTest extends DatabaseTestSupporter {
 								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("insert into TEST_CHENG (seq, id, info) ");
+									sql.append("insert into TEST_BENCHMARK (seq, id, info) ");
 									sql.append("values (:seq, :id, :info)");
 
 									long seq = seqCounter.getAndIncrement();
@@ -153,19 +153,19 @@ public class BenchmarkBonecpTest extends DatabaseTestSupporter {
 								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("select seq, id, info from TEST_CHENG ");
+									sql.append("select seq, id, info from TEST_BENCHMARK ");
 									sql.append("where seq=:seq");
 
 									long seq = seqCounter.getAndIncrement();
 									// params
 									Object[] params = new Object[] { seq };
-									List<Cheng> list = jdbcTemplate.query(sql.toString(), params, new ChengRowMapper());
+									List<TestBenchmark> list = jdbcTemplate.query(sql.toString(), params, new TestBenchmarkRowMapper());
 									//
 									seq = 0;
 									String id = null;
 									String info = null;
 									if (list.size() > 0) {
-										Cheng row = list.get(0);
+										TestBenchmark row = list.get(0);
 										seq = row.getSeq();
 										id = row.getId();
 										info = row.getInfo();
@@ -236,7 +236,7 @@ public class BenchmarkBonecpTest extends DatabaseTestSupporter {
 										ByteHelper.getByteArray(buff, 0, buff.length - prefix.length));
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("update TEST_CHENG set info=:info ");
+									sql.append("update TEST_BENCHMARK set info=:info ");
 									sql.append("where seq=:seq");
 
 									long seq = seqCounter.getAndIncrement();
@@ -305,7 +305,7 @@ public class BenchmarkBonecpTest extends DatabaseTestSupporter {
 								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("delete from TEST_CHENG ");
+									sql.append("delete from TEST_BENCHMARK ");
 									sql.append("where seq=:seq");
 
 									long seq = seqCounter.getAndIncrement();

@@ -72,7 +72,7 @@ public class ApplicationContextRabbitmqTest extends BaseTestSupporter {
 		RabbitAdmin bean = (RabbitAdmin) applicationContext
 				.getBean("rabbitAdmin");
 		//
-		String QUEUE_NAME = "TEST_CHENG";
+		String QUEUE_NAME = "TEST_BENCHMARK";
 		Queue queue = new Queue(QUEUE_NAME, false);
 		String name = bean.declareQueue(queue);
 		System.out.println(name);
@@ -83,11 +83,11 @@ public class ApplicationContextRabbitmqTest extends BaseTestSupporter {
 		RabbitAdmin bean = (RabbitAdmin) applicationContext
 				.getBean("rabbitAdmin");
 		//
-		String EXCHANGE_NAME = "TEST_EXCHANGE_CHENG";
+		String EXCHANGE_NAME = "TEST_EXCHANGE";
 		TopicExchange exchange = new TopicExchange(EXCHANGE_NAME);
 		bean.declareExchange(exchange);
 		//
-		String QUEUE_NAME = "TEST_EXCHANGE_CHENG";
+		String QUEUE_NAME = "TEST_EXCHANGE";
 		Queue queue = new Queue(QUEUE_NAME, false);
 		bean.declareQueue(queue);
 		//
@@ -102,7 +102,7 @@ public class ApplicationContextRabbitmqTest extends BaseTestSupporter {
 		RabbitTemplate bean = (RabbitTemplate) applicationContext
 				.getBean("rabbitTemplate");
 		//
-		String QUEUE_NAME = "TEST_CHENG";
+		String QUEUE_NAME = "TEST_BENCHMARK";
 		bean.convertAndSend(QUEUE_NAME, new byte[] { 1, 2, 3 });
 	}
 
@@ -111,7 +111,7 @@ public class ApplicationContextRabbitmqTest extends BaseTestSupporter {
 		RabbitTemplate bean = (RabbitTemplate) applicationContext
 				.getBean("rabbitTemplate");
 		//
-		String QUEUE_NAME = "TEST_CHENG";
+		String QUEUE_NAME = "TEST_BENCHMARK";
 		Message message = bean.receive(QUEUE_NAME);
 		byte[] buff = message.getBody();
 		SystemHelper.println(buff);
@@ -122,7 +122,7 @@ public class ApplicationContextRabbitmqTest extends BaseTestSupporter {
 		CachingConnectionFactory bean = (CachingConnectionFactory) applicationContext
 				.getBean("rabbitConnectionFactory");
 		//
-		String QUEUE_NAME = "TEST_CHENG";
+		String QUEUE_NAME = "TEST_BENCHMARK";
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(bean);
 		container.setQueueNames(QUEUE_NAME);

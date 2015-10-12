@@ -68,12 +68,12 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 	@Test
 	public void createTable() throws Exception {
 		StringBuilder sql = new StringBuilder();
-		sql.append("CREATE TABLE TEST_CHENG ");
+		sql.append("CREATE TABLE TEST_BENCHMARK ");
 		sql.append("(");
 		sql.append("seq bigint NOT NULL,");
 		sql.append("id varchar(50) NULL,");
 		sql.append("info varchar(max) NULL,");
-		sql.append("CONSTRAINT PK_test_cheng PRIMARY KEY CLUSTERED ");
+		sql.append("CONSTRAINT PK_TEST_BENCHMARK PRIMARY KEY CLUSTERED ");
 		sql.append("(seq ASC) ");
 		sql.append(")");
 		//
@@ -86,7 +86,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 
 	@Test
 	public void getTable() throws Exception {
-		String TABLE_NAME = "TEST_CHENG";
+		String TABLE_NAME = "TEST_BENCHMARK";
 		//
 		Connection connection = createConnection();
 		DatabaseMetaData databaseMetaData = connection.getMetaData();
@@ -109,7 +109,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 	@Test
 	public void alterTable() throws Exception {
 		StringBuilder sql = new StringBuilder();
-		sql.append("ALTER TABLE TEST_CHENG ALTER COLUMN id varchar(255) ");
+		sql.append("ALTER TABLE TEST_BENCHMARK ALTER COLUMN id varchar(255) ");
 		//
 		Connection connection = createConnection();
 		Statement stmt = connection.createStatement();
@@ -121,7 +121,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 	@Test
 	public void deleteTable() throws Exception {
 		StringBuilder sql = new StringBuilder();
-		sql.append("DROP TABLE TEST_CHENG");
+		sql.append("DROP TABLE TEST_BENCHMARK");
 		//
 		Connection connection = createConnection();
 		Statement stmt = connection.createStatement();
@@ -165,7 +165,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 								PreparedStatement psmt = null;
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("insert into TEST_CHENG (seq, id, info) ");
+									sql.append("insert into TEST_BENCHMARK (seq, id, info) ");
 									sql.append("values (?, ?, ?)");
 
 									connection = createConnection();
@@ -262,7 +262,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 								ResultSet rs = null;
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("select seq, id, info from TEST_CHENG ");
+									sql.append("select seq, id, info from TEST_BENCHMARK ");
 									sql.append("where seq=?");
 
 									connection = createConnection();
@@ -367,7 +367,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 								PreparedStatement psmt = null;
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("update TEST_CHENG set info=? ");
+									sql.append("update TEST_BENCHMARK set info=? ");
 									sql.append("where seq=?");
 
 									connection = createConnection();
@@ -457,7 +457,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 								PreparedStatement psmt = null;
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("delete from TEST_CHENG ");
+									sql.append("delete from TEST_BENCHMARK ");
 									sql.append("where seq=?");
 
 									connection = createConnection();
@@ -549,7 +549,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("insert into TEST_CHENG (seq, id, info) ");
+									sql.append("insert into TEST_BENCHMARK (seq, id, info) ");
 									sql.append("values (:seq, :id, :info)");
 
 									long seq = seqCounter.getAndIncrement();
@@ -629,7 +629,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("select seq, id, info from TEST_CHENG ");
+									sql.append("select seq, id, info from TEST_BENCHMARK ");
 									sql.append("where seq=:seq");
 
 									long seq = seqCounter.getAndIncrement();
@@ -723,7 +723,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 										ByteHelper.getByteArray(buff, 0, buff.length - prefix.length));
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("update TEST_CHENG set info=:info ");
+									sql.append("update TEST_BENCHMARK set info=:info ");
 									sql.append("where seq=:seq");
 
 									long seq = seqCounter.getAndIncrement();
@@ -798,7 +798,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("delete from TEST_CHENG ");
+									sql.append("delete from TEST_BENCHMARK ");
 									sql.append("where seq=:seq");
 
 									long seq = seqCounter.getAndIncrement();

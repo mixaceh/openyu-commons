@@ -113,7 +113,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 
 	@Test
 	public void creatTable() throws Exception {
-		String TABLE_NAME = "TEST_CHENG";
+		String TABLE_NAME = "TEST_BENCHMARK";
 		//
 		Configuration configuration = createConfiguration();
 		HBaseAdmin hbaseAdmin = createHBaseAdmin(configuration);
@@ -127,7 +127,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 
 	@Test
 	public void getTable() throws Exception {
-		String TABLE_NAME = "TEST_CHENG";
+		String TABLE_NAME = "TEST_BENCHMARK";
 		//
 		Configuration configuration = createConfiguration();
 		HBaseAdmin hbaseAdmin = createHBaseAdmin(configuration);
@@ -140,7 +140,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 
 	@Test
 	public void modifyTable() throws Exception {
-		String TABLE_NAME = "TEST_CHENG";
+		String TABLE_NAME = "TEST_BENCHMARK";
 		//
 		Configuration configuration = createConfiguration();
 		HBaseAdmin hbaseAdmin = createHBaseAdmin(configuration);
@@ -168,7 +168,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 
 	@Test
 	public void deleteTable() throws Exception {
-		String TABLE_NAME = "TEST_CHENG";
+		String TABLE_NAME = "TEST_BENCHMARK";
 		//
 		Configuration configuration = createConfiguration();
 		HBaseAdmin hbaseAdmin = createHBaseAdmin(configuration);
@@ -183,7 +183,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 
 	@Test
 	public void addColumnFamily() throws Exception {
-		String TABLE_NAME = "TEST_CHENG";
+		String TABLE_NAME = "TEST_BENCHMARK";
 		//
 		Configuration configuration = createConfiguration();
 		HBaseAdmin hbaseAdmin = createHBaseAdmin(configuration);
@@ -287,7 +287,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String TABLE_NAME = "TEST_CHENG";
+			final String TABLE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -397,7 +397,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String TABLE_NAME = "TEST_CHENG";
+			final String TABLE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -515,7 +515,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String TABLE_NAME = "TEST_CHENG";
+			final String TABLE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -620,7 +620,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String TABLE_NAME = "TEST_CHENG";
+			final String TABLE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -715,7 +715,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String TABLE_NAME = "TEST_CHENG";
+			final String TABLE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -815,7 +815,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String TABLE_NAME = "TEST_CHENG";
+			final String TABLE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -922,7 +922,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String TABLE_NAME = "TEST_CHENG";
+			final String TABLE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -1017,7 +1017,7 @@ public class BenchmarkHzBaoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String TABLE_NAME = "TEST_CHENG";
+			final String TABLE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);

@@ -89,7 +89,7 @@ public class BenchmarkRmMqoSupporterTest extends BaseTestSupporter {
 
 	@Test
 	public void creatQueue() throws Exception {
-		String QUEUE_NAME = "TEST_CHENG";
+		String QUEUE_NAME = "TEST_BENCHMARK";
 		//
 		Channel channel = createChannel();
 		DeclareOk declareOk = channel.queueDeclare(QUEUE_NAME, false, false,
@@ -100,7 +100,7 @@ public class BenchmarkRmMqoSupporterTest extends BaseTestSupporter {
 
 	@Test
 	public void createExchange() throws Exception {
-		String EXCHANGE_NAME = "TEST_CHENG";
+		String EXCHANGE_NAME = "TEST_BENCHMARK";
 		//
 		Channel channel = createChannel();
 		com.rabbitmq.client.AMQP.Exchange.DeclareOk declareOk = channel
@@ -124,7 +124,7 @@ public class BenchmarkRmMqoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String QUEUE_NAME = "TEST_CHENG";
+			final String QUEUE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -215,7 +215,7 @@ public class BenchmarkRmMqoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String QUEUE_NAME = "TEST_CHENG";
+			final String QUEUE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -306,7 +306,7 @@ public class BenchmarkRmMqoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String QUEUE_NAME = "TEST_CHENG";
+			final String QUEUE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -392,7 +392,7 @@ public class BenchmarkRmMqoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String QUEUE_NAME = "TEST_CHENG";
+			final String QUEUE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -485,7 +485,7 @@ public class BenchmarkRmMqoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String QUEUE_NAME = "TEST_CHENG";
+			final String QUEUE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -559,7 +559,7 @@ public class BenchmarkRmMqoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String QUEUE_NAME = "TEST_CHENG";
+			final String QUEUE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -632,7 +632,7 @@ public class BenchmarkRmMqoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String QUEUE_NAME = "TEST_CHENG";
+			final String QUEUE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
@@ -704,7 +704,7 @@ public class BenchmarkRmMqoSupporterTest extends BaseTestSupporter {
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
 			//
-			final String QUEUE_NAME = "TEST_CHENG";
+			final String QUEUE_NAME = "TEST_BENCHMARK";
 			//
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
