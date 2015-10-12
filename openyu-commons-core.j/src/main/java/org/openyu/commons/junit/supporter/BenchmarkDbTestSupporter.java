@@ -26,7 +26,7 @@ import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-public class DatabaseTestSupporter extends BaseTestSupporter {
+public class BenchmarkDbTestSupporter extends BaseTestSupporter {
 
 	protected static DataSource dataSource;
 
