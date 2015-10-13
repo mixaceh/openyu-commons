@@ -75,7 +75,7 @@ public class CommonBeanAdapterTest {
 	}
 
 	@Test
-	public void ojServiceSupporter() {
+	public void commonServiceSupporter() {
 		System.out.println(commonServiceSupporter);
 		assertNotNull(commonServiceSupporter);
 	}
@@ -85,8 +85,8 @@ public class CommonBeanAdapterTest {
 		final String ID = "TEST_DOG";
 
 		// 註冊listener
-		CommonBeanAdapter ojBeanAdapter = new CommonBeanAdapter();
-		commonServiceSupporter.addBeanListener(ojBeanAdapter);
+		CommonBeanAdapter commonBeanAdapter = new CommonBeanAdapter();
+		commonServiceSupporter.addBeanListener(commonBeanAdapter);
 		//
 		int count = 1;// 100w
 		long beg = System.currentTimeMillis();
@@ -121,7 +121,7 @@ public class CommonBeanAdapterTest {
 		//
 		System.out.println(commonServiceSupporter.getBeanListeners().length);
 
-		commonServiceSupporter.removeBeanListener(ojBeanAdapter);
+		commonServiceSupporter.removeBeanListener(commonBeanAdapter);
 		System.out.println(commonServiceSupporter.getBeanListeners());
 	}
 

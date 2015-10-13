@@ -55,8 +55,8 @@ public class CommonBeanAdapter extends BeanAdapter
 	{
 		System.out.println("beanFound: " + beanEvent.getName() + " (" + beanEvent.getType() + ")");
 
-		CommonService ojService = (CommonService) beanEvent.getSource();
-		if (ojService != null)
+		CommonService commonService = (CommonService) beanEvent.getSource();
+		if (commonService != null)
 		{
 			@SuppressWarnings("unchecked")
 			EventAttach<Object, Object> eventAttach = ((EventAttach<Object, Object>) beanEvent
@@ -72,7 +72,7 @@ public class CommonBeanAdapter extends BeanAdapter
 					String key = getKey(object);
 					if (key != null)
 					{
-						ojService.getBeanCache().put(key, object);
+						commonService.getBeanCache().put(key, object);
 					}
 				}
 			}
@@ -81,7 +81,7 @@ public class CommonBeanAdapter extends BeanAdapter
 				String key = getKey(newValue);
 				if (key != null)
 				{
-					ojService.getBeanCache().put(key, newValue);
+					commonService.getBeanCache().put(key, newValue);
 				}
 			}
 		}
@@ -93,8 +93,8 @@ public class CommonBeanAdapter extends BeanAdapter
 		System.out.println("beanUpdating: " + beanEvent.getName() + " (" + beanEvent.getType()
 				+ ")");
 
-		CommonService ojService = (CommonService) beanEvent.getSource();
-		if (ojService != null)
+		CommonService commonService = (CommonService) beanEvent.getSource();
+		if (commonService != null)
 		{
 			@SuppressWarnings("unchecked")
 			EventAttach<Object, Object> eventAttach = ((EventAttach<Object, Object>) beanEvent
@@ -105,7 +105,7 @@ public class CommonBeanAdapter extends BeanAdapter
 			String key = getKey(newValue);
 			if (key != null)
 			{
-				ojService.getBeanCache().put(key, newValue);
+				commonService.getBeanCache().put(key, newValue);
 			}
 		}
 	}
@@ -115,8 +115,8 @@ public class CommonBeanAdapter extends BeanAdapter
 		System.out
 				.println("beanUpdated: " + beanEvent.getName() + " (" + beanEvent.getType() + ")");
 
-		CommonService ojService = (CommonService) beanEvent.getSource();
-		if (ojService != null)
+		CommonService commonService = (CommonService) beanEvent.getSource();
+		if (commonService != null)
 		{
 			@SuppressWarnings("unchecked")
 			EventAttach<Object, Object> eventAttach = ((EventAttach<Object, Object>) beanEvent
@@ -127,7 +127,7 @@ public class CommonBeanAdapter extends BeanAdapter
 			String key = getKey(newValue);
 			if (key != null)
 			{
-				ojService.getBeanCache().put(key, newValue);
+				commonService.getBeanCache().put(key, newValue);
 			}
 		}
 	}
@@ -138,8 +138,8 @@ public class CommonBeanAdapter extends BeanAdapter
 		System.out.println("beanDeleting: " + beanEvent.getName() + " (" + beanEvent.getType()
 				+ ")");
 
-		CommonService ojService = (CommonService) beanEvent.getSource();
-		if (ojService != null)
+		CommonService commonService = (CommonService) beanEvent.getSource();
+		if (commonService != null)
 		{
 			@SuppressWarnings("unchecked")
 			EventAttach<Object, Object> eventAttach = ((EventAttach<Object, Object>) beanEvent
@@ -151,7 +151,7 @@ public class CommonBeanAdapter extends BeanAdapter
 			//若存在則從beans刪除
 			if (key != null)
 			{
-				ojService.getBeanCache().remove(key);
+				commonService.getBeanCache().remove(key);
 			}
 		}
 	}
@@ -161,8 +161,8 @@ public class CommonBeanAdapter extends BeanAdapter
 		System.out
 				.println("beanDeleted: " + beanEvent.getName() + " (" + beanEvent.getType() + ")");
 
-		CommonService ojService = (CommonService) beanEvent.getSource();
-		if (ojService != null)
+		CommonService commonService = (CommonService) beanEvent.getSource();
+		if (commonService != null)
 		{
 			@SuppressWarnings("unchecked")
 			EventAttach<Object, Object> eventAttach = ((EventAttach<Object, Object>) beanEvent
@@ -174,7 +174,7 @@ public class CommonBeanAdapter extends BeanAdapter
 			//若存在則從beans刪除
 			if (key != null)
 			{
-				ojService.getBeanCache().remove(key);
+				commonService.getBeanCache().remove(key);
 			}
 		}
 	}

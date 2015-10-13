@@ -32,7 +32,7 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 			commonServiceSupporter = new CommonServiceSupporter();
 
 			// dao
-			CommonDaoSupporter ojDaoSupporter = new CommonDaoSupporter();
+			CommonDaoSupporter commonDaoSupporter = new CommonDaoSupporter();
 
 			// 建構HibernateTemplate,因HibernateDaoSupporter需要
 			HibernateTemplate hibernateTemplate = new HibernateTemplate();
@@ -47,9 +47,9 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 			//System.out.println("sessionFactory: " + sessionFactory);
 			//
 			hibernateTemplate.setSessionFactory(sessionFactory);
-			ojDaoSupporter.setHibernateTemplate(hibernateTemplate);
+			commonDaoSupporter.setHibernateTemplate(hibernateTemplate);
 			//
-			commonServiceSupporter.setCommonDao(ojDaoSupporter);
+			commonServiceSupporter.setCommonDao(commonDaoSupporter);
 
 			// listener
 			serviceBeanListener = new CommonBeanAdapter();

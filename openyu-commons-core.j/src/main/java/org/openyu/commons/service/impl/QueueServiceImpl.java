@@ -95,8 +95,8 @@ public class QueueServiceImpl extends BaseServiceSupporter implements
 		return commonDao;
 	}
 
-	public void setCommonDao(CommonDao ojDao) {
-		this.commonDao = ojDao;
+	public void setCommonDao(CommonDao commonDao) {
+		this.commonDao = commonDao;
 	}
 
 	/**
