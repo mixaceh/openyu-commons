@@ -11,13 +11,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openyu.commons.commons.dbcp.BenchmarkDbcpTest;
-import org.openyu.commons.junit.supporter.BenchmarkDbTestSupporter;
+import org.openyu.commons.junit.supporter.BenchmarkDatabaseTestSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 import org.openyu.commons.lang.ByteHelper;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BenchmarkDruidTest extends BenchmarkDbTestSupporter {
+public class BenchmarkDruidTest extends BenchmarkDatabaseTestSupporter {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
