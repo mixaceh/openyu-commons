@@ -11,28 +11,28 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.Test;
 import org.springframework.orm.hibernate4.HibernateTemplate;
-import org.openyu.commons.dao.supporter.OjDaoSupporter;
+import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.CloneHelper;
 import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.vo.impl.CatImpl;
 import org.openyu.commons.po.impl.CatPoImpl;
 import org.openyu.commons.service.event.BeanListener;
-import org.openyu.commons.service.event.impl.OjBeanAdapter;
+import org.openyu.commons.service.event.impl.CommonBeanAdapter;
 
-public class OjServiceSupporterTest extends BaseTestSupporter {
+public class CommonServiceSupporterTest extends BaseTestSupporter {
 
-	private static OjServiceSupporter ojServiceSupporter;
+	private static CommonServiceSupporter commonServiceSupporter;
 
 	private static BeanListener serviceBeanListener;
 
-	public static void createOjServiceSupporter() {
+	public static void createCommonServiceSupporter() {
 		try {
 			// service
-			ojServiceSupporter = new OjServiceSupporter();
+			commonServiceSupporter = new CommonServiceSupporter();
 
 			// dao
-			OjDaoSupporter ojDaoSupporter = new OjDaoSupporter();
+			CommonDaoSupporter ojDaoSupporter = new CommonDaoSupporter();
 
 			// 建構HibernateTemplate,因HibernateDaoSupporter需要
 			HibernateTemplate hibernateTemplate = new HibernateTemplate();
@@ -49,32 +49,32 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 			hibernateTemplate.setSessionFactory(sessionFactory);
 			ojDaoSupporter.setHibernateTemplate(hibernateTemplate);
 			//
-			ojServiceSupporter.setOjDao(ojDaoSupporter);
+			commonServiceSupporter.setCommonDao(ojDaoSupporter);
 
 			// listener
-			serviceBeanListener = new OjBeanAdapter();
-			ojServiceSupporter.addBeanListener(serviceBeanListener);
-			assertNotNull(ojServiceSupporter);
+			serviceBeanListener = new CommonBeanAdapter();
+			commonServiceSupporter.addBeanListener(serviceBeanListener);
+			assertNotNull(commonServiceSupporter);
 
-			ojServiceSupporter.start();
+			commonServiceSupporter.start();
 
 			System.out.println("---------------------------");
-			System.out.println("createOjDaoSupporter [success]");
+			System.out.println("createCommonServiceSupporter [success]");
 			System.out.println("---------------------------");
 		} catch (Exception ex) {
 			System.out.println("---------------------------");
-			System.out.println("createOjDaoSupporter [fail]");
+			System.out.println("createCommonServiceSupporter [fail]");
 			System.out.println("---------------------------");
 			ex.printStackTrace();
 		}
 	}
 
 	@Test
-	public void ojServiceSupporter() {
-		createOjServiceSupporter();
+	public void commonServiceSupporter() {
+		createCommonServiceSupporter();
 		//
-		System.out.println(ojServiceSupporter);
-		assertNotNull(ojServiceSupporter);
+		System.out.println(commonServiceSupporter);
+		assertNotNull(commonServiceSupporter);
 	}
 
 	@Test
@@ -86,7 +86,7 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 	//
 	// verified: ok
 	public void crud() {
-		createOjServiceSupporter();
+		createCommonServiceSupporter();
 		//
 		final String ID = "TEST_CAT";
 		// final String NAME = "TEST_NAME";
@@ -106,13 +106,13 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 			cat.addName(Locale.US, "Gin Gi La");
 
 			// create
-			Serializable pk = ojServiceSupporter.insert(cat);
+			Serializable pk = commonServiceSupporter.insert(cat);
 			System.out.println("#." + i + " insert: "
 					+ (pk != null ? "[success]" : "[fail]"));
 			assertNotNull(pk);
 
 			// retrieve
-			CatImpl existCat = ojServiceSupporter.find(CatImpl.class,
+			CatImpl existCat = commonServiceSupporter.find(CatImpl.class,
 					cat.getSeq());
 			System.out.println("#." + i + " find: "
 					+ (existCat != null ? "[success]" : "[fail]"));
@@ -120,13 +120,13 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 
 			// update
 			cat.setValid(true);
-			int updated = ojServiceSupporter.update(cat);
+			int updated = commonServiceSupporter.update(cat);
 			System.out.println("#." + i + " update: "
 					+ (updated > 0 ? "[success]" : "[fail]"));
 			assertTrue(updated > 0);
 
 			// delete
-			CatImpl deleteCatImpl = ojServiceSupporter.delete(CatImpl.class,
+			CatImpl deleteCatImpl = commonServiceSupporter.delete(CatImpl.class,
 					cat.getSeq());
 			System.out.println("#." + i + " delete: "
 					+ (deleteCatImpl != null ? "[success]" : "[fail]"));
@@ -139,7 +139,7 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 	@Test
 	// verified: ok
 	public void insert() {
-		createOjServiceSupporter();
+		createCommonServiceSupporter();
 		//
 		final String ID = "TEST_CAT";
 		int count = 1;
@@ -156,11 +156,11 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 			cat.addName(Locale.TRADITIONAL_CHINESE, "金吉拉");
 			cat.addName(Locale.US, "Gin Gi La");
 
-			Serializable pk = ojServiceSupporter.insert(cat);
+			Serializable pk = commonServiceSupporter.insert(cat);
 			printInsert(0, pk);
 			assertNotNull(pk);
 
-			CatImpl foundEntity = ojServiceSupporter.find(CatImpl.class,
+			CatImpl foundEntity = commonServiceSupporter.find(CatImpl.class,
 					cat.getSeq());
 			assertEquals(cat.getId(), foundEntity.getId());
 		}
@@ -171,7 +171,7 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 	@Test
 	// verified: ok
 	public void insertByPo() {
-		createOjServiceSupporter();
+		createCommonServiceSupporter();
 		//
 		final String ID = "TEST_CAT";
 		int count = 1;
@@ -188,11 +188,11 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 			cat.addName(Locale.TRADITIONAL_CHINESE, "金吉拉");
 			cat.addName(Locale.US, "Gin Gi La");
 
-			Serializable pk = ojServiceSupporter.insert(cat);
+			Serializable pk = commonServiceSupporter.insert(cat);
 			printInsert(0, pk);
 			assertNotNull(pk);
 
-			CatImpl existCat = ojServiceSupporter.find(CatImpl.class,
+			CatImpl existCat = commonServiceSupporter.find(CatImpl.class,
 					cat.getSeq());
 			assertEquals(cat.getId(), existCat.getId());
 		}
@@ -205,7 +205,7 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 	// 1000 times: 977 mills.
 	// 1000 times: 978 mills.
 	public void findCat() {
-		createOjServiceSupporter();
+		createCommonServiceSupporter();
 		//
 		final Long SEQ = 10L;
 		CatImpl result = null;
@@ -230,13 +230,13 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 	 */
 	private CatImpl mockFindCat(Long seq) {
 		CatImpl result = null;
-		result = ojServiceSupporter.find(CatImpl.class, seq);
+		result = commonServiceSupporter.find(CatImpl.class, seq);
 		return result;
 	}
 
 	@Test
 	public void update() {
-		createOjServiceSupporter();
+		createCommonServiceSupporter();
 		//
 		int result = 0;
 		CatImpl cat = mockFindCat(23L);
@@ -247,7 +247,7 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 			anotherCat.getNames().clear();
 			//
 			// org.hibernate.NonUniqueObjectException
-			result = ojServiceSupporter.update(anotherCat);
+			result = commonServiceSupporter.update(anotherCat);
 			printUpdate(0, result);
 			assertTrue(result > 0);
 		} else {
@@ -257,7 +257,7 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 
 	@Test
 	public void updateNonUniqueObjectException() {
-		createOjServiceSupporter();
+		createCommonServiceSupporter();
 		//
 		CatImpl cat = mockFindCat(3L);
 		CatImpl anotherCat = CloneHelper.clone(cat);
@@ -267,7 +267,7 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 			anotherCat.getNames().clear();
 			//
 			// org.hibernate.NonUniqueObjectException
-			int update = ojServiceSupporter.update(anotherCat);
+			int update = commonServiceSupporter.update(anotherCat);
 			System.out.println("update: "
 					+ (update > 0 ? "[success]" : "[fail]"));
 			System.out.println(update);
@@ -279,9 +279,9 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 	@Test
 	// verified: ok
 	public void delete() {
-		createOjServiceSupporter();
+		createCommonServiceSupporter();
 		//
-		CatImpl result = ojServiceSupporter.delete(CatImpl.class, 22L);
+		CatImpl result = commonServiceSupporter.delete(CatImpl.class, 22L);
 		printDelete(0, result);
 		System.out.println(result);
 	}
@@ -289,16 +289,16 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 	@Test
 	// verified: ok
 	public void deleteByPo() {
-		createOjServiceSupporter();
+		createCommonServiceSupporter();
 		//
-		CatPoImpl result = ojServiceSupporter.delete(CatPoImpl.class, 17L);
+		CatPoImpl result = commonServiceSupporter.delete(CatPoImpl.class, 17L);
 		printDelete(0, result);
 		System.out.println(result);
 	}
 
 	@Test
 	public void deleteNonUniqueObjectException() {
-		createOjServiceSupporter();
+		createCommonServiceSupporter();
 		//
 		CatImpl cat = mockFindCat(19L);
 		CatImpl anotherCat = CloneHelper.clone(cat);
@@ -307,7 +307,7 @@ public class OjServiceSupporterTest extends BaseTestSupporter {
 			System.out.println("anotherCat seq: " + anotherCat.getSeq());
 			//
 			// org.hibernate.NonUniqueObjectException
-			int delete = ojServiceSupporter.delete(anotherCat);
+			int delete = commonServiceSupporter.delete(anotherCat);
 			System.out.println("delete: "
 					+ (delete > 0 ? "[success]" : "[fail]"));
 			System.out.println(delete);

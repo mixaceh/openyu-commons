@@ -10,7 +10,7 @@ import org.openyu.commons.util.concurrent.MapCache;
 /**
  * ORM+JDBC服務
  */
-public interface OjService extends JdbcService, OrmService {
+public interface CommonService extends JdbcService, OrmService {
 	/**
 	 * 存放共用的beanCache,當多緒時,物件需注意資料同步
 	 * 

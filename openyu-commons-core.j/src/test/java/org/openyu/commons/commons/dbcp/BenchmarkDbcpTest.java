@@ -123,16 +123,16 @@ public class BenchmarkDbcpTest extends BenchmarkDatabaseTestSupporter {
 		}
 
 		@Test
-		// select: 10000 rows, 102400000 bytes / 20454 ms. = 5006.36 BYTES/MS,
+		// 10000 rows, 102400000 bytes / 20454 ms. = 5006.36 BYTES/MS,
 		// 4889.02 K/S, 4.77 MB/S
 
 		// 2015/10/09 nb
-		// select: 10000 rows, 183460321 bytes / 25246 ms. = 7266.91 BYTES/MS,
+		// 10000 rows, 183460321 bytes / 25246 ms. = 7266.91 BYTES/MS,
 		// 7096.59 K/S, 6.93 MB/S
 
 		// 2015/10/12 pc
-		// 10000 rows, 183473056 bytes / 20450 ms. = 8971.79 BYTES/MS, 8761.51
-		// K/S, 8.56 MB/S
+		// 10000 rows, 183473056 bytes / 16079 ms. = 11410.73 BYTES/MS, 11143.29
+		// K/S, 10.88 MB/S
 		public void select() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;

@@ -9,17 +9,17 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openyu.commons.dao.OjDao;
-import org.openyu.commons.dao.aware.OjDaoAware;
+import org.openyu.commons.dao.CommonDao;
+import org.openyu.commons.dao.aware.CommonDaoAware;
 import org.openyu.commons.entity.SeqEntity;
 import org.openyu.commons.lang.ClassHelper;
 import org.openyu.commons.lang.event.EventAttach;
 import org.openyu.commons.lang.event.EventCaster;
 import org.openyu.commons.lang.event.EventHelper;
-import org.openyu.commons.service.OjService;
+import org.openyu.commons.service.CommonService;
 import org.openyu.commons.service.event.BeanEvent;
 import org.openyu.commons.service.event.BeanListener;
-import org.openyu.commons.service.ex.OjServiceException;
+import org.openyu.commons.service.ex.CommonServiceException;
 import org.openyu.commons.thread.ThreadService;
 import org.openyu.commons.thread.supporter.TriggerQueueSupporter;
 import org.openyu.commons.util.CollectionHelper;
@@ -40,15 +40,15 @@ import org.openyu.commons.util.concurrent.impl.MapCacheImpl;
  fireServiceBeanAdded, 表新增後/修改後/刪除後,可用於:
  1.發送訊息通知 
  */
-public class OjServiceSupporter extends BaseServiceSupporter implements
-		OjService, OjDaoAware {
+public class CommonServiceSupporter extends BaseServiceSupporter implements
+		CommonService, CommonDaoAware {
 
 	private static final long serialVersionUID = 1915658408145401655L;
 
 	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(OjServiceSupporter.class);
+			.getLogger(CommonServiceSupporter.class);
 
-	protected transient OjDao ojDao;
+	protected transient CommonDao commonDao;
 
 	// service建構除構用
 	// private transient EventCaster serviceListeners;
@@ -77,7 +77,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 	 */
 	protected transient DeleteQueue<Object> deleteQueue;
 
-	public OjServiceSupporter() {
+	public CommonServiceSupporter() {
 	}
 
 	/**
@@ -97,12 +97,12 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 		deleteQueue.shutdown();
 	}
 
-	public OjDao getOjDao() {
-		return ojDao;
+	public CommonDao getCommonDao() {
+		return commonDao;
 	}
 
-	public void setOjDao(OjDao ojDao) {
-		this.ojDao = ojDao;
+	public void setCommonDao(CommonDao commonDao) {
+		this.commonDao = commonDao;
 	}
 
 	public MapCache<String, Object> getBeanCache() {
@@ -265,7 +265,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 							.eventAttach(null, null);
 					//
 					fireBeanFinding(this, eventAttach);
-					List<E> orig = ojDao.find(poClass);
+					List<E> orig = commonDao.find(poClass);
 					if (orig != null && !orig.isEmpty()) {
 						if (is2Vo) {
 							dest = ClassHelper.copyProperties(orig);
@@ -282,7 +282,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 				EventAttach<List<E>, List<E>> eventAttach = EventHelper
 						.eventAttach(null, null);
 				fireBeanFinding(this, eventAttach);
-				List<E> orig = ojDao.find(entityClass);
+				List<E> orig = commonDao.find(entityClass);
 				if (orig != null && !orig.isEmpty()) {
 					// 是否要轉成is2vo=true,則轉成vo
 					if (is2Vo) {
@@ -297,7 +297,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 				fireBeanFound(this, eventAttach);
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return dest;
 	}
@@ -324,7 +324,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 				}
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return list;
 	}
@@ -343,7 +343,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 					EventAttach<T, T> eventAttach = EventHelper.eventAttach(
 							null, null);
 					fireBeanFinding(this, eventAttach);
-					T orig = ojDao.find(poClass, seq);
+					T orig = commonDao.find(poClass, seq);
 					if (orig != null) {
 						// 是否要轉為vo
 						if (is2Vo) {
@@ -362,7 +362,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 				EventAttach<T, T> eventAttach = EventHelper.eventAttach(null,
 						null);
 				fireBeanFinding(this, eventAttach);
-				T orig = ojDao.find(entityClass, seq);// po
+				T orig = commonDao.find(entityClass, seq);// po
 				if (orig != null) {
 					Class<?> voClass = ClassHelper.po2VoClass(entityClass);
 					// 若有相對應的vo,及是否要轉成is2vo=true,則轉成vo
@@ -378,7 +378,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 				fireBeanFound(this, eventAttach);
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return dest;
 	}
@@ -397,7 +397,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 				}
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return dest;
 	}
@@ -438,7 +438,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 							null, (voEntity != null ? (T) voEntity
 									: (T) poEntity));
 					fireBeanInserting(this, eventAttach);
-					result = ojDao.insert(poEntity, modifiedUser);
+					result = commonDao.insert(poEntity, modifiedUser);
 					// System.out.println("poEntity: "+poEntity);
 					if (result != null) {
 						// 因insert到db,有些欄位是寫入db時才會有值
@@ -459,7 +459,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 				}
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return result;
 	}
@@ -503,7 +503,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 					fireBeanUpdating(this, eventAttach);
 					// System.out.println("before version: "
 					// + ((SeqEntity) poEntity).getVersion());
-					ret = ojDao.update(poEntity, modifiedUser);
+					ret = commonDao.update(poEntity, modifiedUser);
 					// System.out.println("after version: "
 					// + ((SeqEntity) poEntity).getVersion());
 					if (ret > 0) {
@@ -537,7 +537,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 				}
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return ret;
 	}
@@ -588,7 +588,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 					//
 					// }
 					// org.hibernate.NonUniqueObjectException
-					ret = ojDao.delete(poEntity, modifiedUser);// po
+					ret = commonDao.delete(poEntity, modifiedUser);// po
 					if (ret > 0) {
 						eventAttach = EventHelper
 								.eventAttach(null,
@@ -599,7 +599,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 				}
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return ret;
 	}
@@ -655,13 +655,13 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 			if (isVoClass) {
 				Class<?> poClass = ClassHelper.vo2PoClass(entityClass);
 				if (poClass != null) {
-					result = ojDao.rowCount(poClass);
+					result = commonDao.rowCount(poClass);
 				}
 			} else {
-				result = ojDao.rowCount(entityClass);
+				result = commonDao.rowCount(entityClass);
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return result;
 	}
@@ -671,17 +671,17 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 	// ------------------------------------
 	public <E> List<E> find(String sqlString, String[] paramNames,
 			Object[] values, String[] columnAliases, Object[] types) {
-		return ojDao.find(sqlString, paramNames, values, columnAliases, types);
+		return commonDao.find(sqlString, paramNames, values, columnAliases, types);
 	}
 
 	public <E> List<E> find(String sqlString, String[] paramNames,
 			Object[] values, Map<String, Object> scalars) {
-		return ojDao.find(sqlString, paramNames, values, scalars);
+		return commonDao.find(sqlString, paramNames, values, scalars);
 	}
 
 	public <E> List<E> find(String sqlString, Map<String, Object> params,
 			Map<String, Object> scalars) {
-		return ojDao.find(sqlString, params, scalars);
+		return commonDao.find(sqlString, params, scalars);
 	}
 
 	// ------------------------------------
@@ -698,12 +698,12 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 			Map<String, Object> params = CollectionHelper.toMap(paramNames,
 					values);
 			fireBeanInserting(params, this);
-			result = ojDao.insert(sqlString, paramNames, values, modifiedUser);
+			result = commonDao.insert(sqlString, paramNames, values, modifiedUser);
 			if (result > 0) {
 				fireBeanInserted(params, this);
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return result;
 	}
@@ -717,12 +717,12 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 		int result = 0;
 		try {
 			fireBeanInserting(params, this);
-			result = ojDao.insert(sqlString, params, modifiedUser);
+			result = commonDao.insert(sqlString, params, modifiedUser);
 			if (result > 0) {
 				fireBeanInserted(params, this);
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return result;
 	}
@@ -741,12 +741,12 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 			Map<String, Object> params = CollectionHelper.toMap(paramNames,
 					values);
 			fireBeanUpdating(params, this);
-			result = ojDao.update(sqlString, paramNames, values, modifiedUser);
+			result = commonDao.update(sqlString, paramNames, values, modifiedUser);
 			if (result > 0) {
 				fireBeanUpdated(params, this);
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return result;
 	}
@@ -760,12 +760,12 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 		int result = 0;
 		try {
 			fireBeanUpdating(params, this);
-			result = ojDao.update(sqlString, params, modifiedUser);
+			result = commonDao.update(sqlString, params, modifiedUser);
 			if (result > 0) {
 				fireBeanUpdated(params, this);
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return result;
 	}
@@ -784,12 +784,12 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 			Map<String, Object> params = CollectionHelper.toMap(paramNames,
 					values);
 			fireBeanDeleting(params, this);
-			result = ojDao.delete(sqlString, paramNames, values, modifiedUser);
+			result = commonDao.delete(sqlString, paramNames, values, modifiedUser);
 			if (result > 0) {
 				fireBeanDeleted(params, this);
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return result;
 	}
@@ -803,12 +803,12 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 		int result = 0;
 		try {
 			fireBeanDeleting(params, this);
-			result = ojDao.delete(sqlString, params, modifiedUser);
+			result = commonDao.delete(sqlString, params, modifiedUser);
 			if (result > 0) {
 				fireBeanDeleted(params, this);
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		return result;
 	}
@@ -816,19 +816,19 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 	// ------------------------------------------------------------
 
 	public <E> InputStream write(Collection<E> list) {
-		return ojDao.write(list);
+		return commonDao.write(list);
 	}
 
 	public <E> List<E> read(InputStream inputStream) {
-		return ojDao.read(inputStream);
+		return commonDao.read(inputStream);
 	}
 
 	public boolean reindex(Class<?> entityClass) {
-		return ojDao.reindex(entityClass);
+		return commonDao.reindex(entityClass);
 	}
 
 	public <T> boolean reindex(T entity) {
-		return ojDao.reindex(entity);
+		return commonDao.reindex(entity);
 	}
 
 	// ------------------------------------------------------------
@@ -907,7 +907,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 		try {
 			result = insertQueue.offer(entity);
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		//
 		return result;
@@ -924,7 +924,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 		try {
 			result = updateQueue.offer(entity);
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		//
 		return result;
@@ -941,7 +941,7 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 		try {
 			result = deleteQueue.offer(entity);
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		//
 		return result;
@@ -959,12 +959,12 @@ public class OjServiceSupporter extends BaseServiceSupporter implements
 		//
 		try {
 			// 搜尋entity
-			Object entity = ojDao.find(entityClass, seq);
+			Object entity = commonDao.find(entityClass, seq);
 			if (entity != null) {
 				result = offerDelete(entity);
 			}
 		} catch (Exception ex) {
-			throw new OjServiceException(ex);
+			throw new CommonServiceException(ex);
 		}
 		//
 		return result;

@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate4.HibernateCallback;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.util.StopWatch;
-import org.openyu.commons.dao.OjDao;
-import org.openyu.commons.dao.ex.OjDaoException;
+import org.openyu.commons.dao.CommonDao;
+import org.openyu.commons.dao.ex.CommonDaoException;
 import org.openyu.commons.dao.inquiry.Inquiry;
 import org.openyu.commons.dao.inquiry.Order;
 import org.openyu.commons.dao.inquiry.Pagination;
@@ -51,12 +51,12 @@ import org.openyu.commons.util.CollectionHelper;
 // ApplicationContextAware, OjDao, Supporter {
 
 // 2014/10/09, 改為不繼承spring HibernateDaoSupport
-public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
+public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 
 	private static final long serialVersionUID = 565018661823278805L;
 
 	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(OjDaoSupporter.class);
+			.getLogger(CommonDaoSupporter.class);
 
 	// protected transient ApplicationContext applicationContext;
 
@@ -72,7 +72,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 	// @Qualifier("threadService")
 	// protected transient ThreadService threadService;
 
-	public OjDaoSupporter() {
+	public CommonDaoSupporter() {
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 	// Criteria criteria = session.createCriteria
 	// --------------------------------------------------
 
-	// implement OjDao
+	// implement commonDao
 	// --------------------------------------------------
 	// oo find(select), = findAll
 	// --------------------------------------------------
@@ -142,7 +142,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 		try {
 			result = (List<T>) getHibernateTemplate().loadAll(entityClass);
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -223,7 +223,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 			// 使用get, 若讀不到資料則傳回null
 			result = (T) getHibernateTemplate().load(entityClass, seq);
 		} catch (Exception ex) {
-			// throw new OjDaoException(ex);
+			// throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -246,7 +246,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 				}
 			}
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -306,7 +306,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						}
 					});
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -414,7 +414,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 				EntityHelper.filterName(result, locale);
 			}
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -548,7 +548,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						});
 			}
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -622,7 +622,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 				EntityHelper.filterName(result, locale);
 			}
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -719,7 +719,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						}
 					});
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -755,7 +755,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 					});
 			result = safeGet(buff);
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -816,7 +816,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 			}
 			//
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -861,7 +861,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 			getHibernateTemplate().setCheckWriteOperations(false);
 			result = getHibernateTemplate().save(entity);
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -892,7 +892,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 			getHibernateTemplate().update(entity);
 			result = 1;
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -951,7 +951,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 			getHibernateTemplate().delete(entity);
 			result = 1;
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1015,7 +1015,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 				}
 			}
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1084,7 +1084,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						});
 				result = safeGet(buff);
 			} catch (Exception ex) {
-				throw new OjDaoException(ex);
+				throw new CommonDaoException(ex);
 			}
 		}
 		return result;
@@ -1119,7 +1119,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 			//
 			result = safeGet(buff);
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1182,7 +1182,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						}
 					});
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1205,7 +1205,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						}
 					});
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1267,7 +1267,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						}
 					});
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1290,7 +1290,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						}
 					});
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1325,7 +1325,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						}
 					});
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1358,7 +1358,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						}
 					});
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1380,7 +1380,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						}
 					});
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1469,7 +1469,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 			//
 			result = safeGet(buff);
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1491,7 +1491,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 			//
 			result = safeGet(buff);
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1742,7 +1742,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						}
 					});
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1757,7 +1757,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 			massIndexer.startAndWait();
 			result = true;
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1779,7 +1779,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 						}
 					});
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
@@ -1791,7 +1791,7 @@ public class OjDaoSupporter extends BaseDaoSupporter implements OjDao {
 			fullTextSession.index(entity);
 			result = true;
 		} catch (Exception ex) {
-			throw new OjDaoException(ex);
+			throw new CommonDaoException(ex);
 		}
 		return result;
 	}

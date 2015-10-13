@@ -124,12 +124,16 @@ public class BenchmarkDruidTest extends BenchmarkDatabaseTestSupporter {
 		}
 
 		@Test
-		// select: 10000 rows, 102400000 bytes / 20454 ms. = 5006.36 BYTES/MS,
+		// 10000 rows, 102400000 bytes / 20454 ms. = 5006.36 BYTES/MS,
 		// 4889.02 K/S, 4.77 MB/S
 
-		// 2015/10/09
-		// select: 10000 rows, 183462421 bytes / 35759 ms. = 5130.52 BYTES/MS,
+		// 2015/10/09 nb
+		// 10000 rows, 183462421 bytes / 35759 ms. = 5130.52 BYTES/MS,
 		// 5010.28 K/S, 4.89 MB/S
+
+		// 2015/10/12 pc
+		// 10000 rows, 183473056 bytes / 16300 ms. = 11256.02 BYTES/MS, 10992.2
+		// K/S, 10.73 MB/S
 		public void select() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -160,7 +164,8 @@ public class BenchmarkDruidTest extends BenchmarkDatabaseTestSupporter {
 									long seq = seqCounter.getAndIncrement();
 									// params
 									Object[] params = new Object[] { seq };
-									List<TestBenchmark> list = jdbcTemplate.query(sql.toString(), params, new TestBenchmarkRowMapper());
+									List<TestBenchmark> list = jdbcTemplate.query(sql.toString(), params,
+											new TestBenchmarkRowMapper());
 									//
 									seq = 0;
 									String id = null;

@@ -3,7 +3,7 @@ package org.openyu.commons.service.event.impl;
 import java.util.Collection;
 
 import org.openyu.commons.lang.event.EventAttach;
-import org.openyu.commons.service.OjService;
+import org.openyu.commons.service.CommonService;
 import org.openyu.commons.service.event.BeanEvent;
 import org.openyu.commons.service.event.supporter.BeanAdapter;
 
@@ -18,10 +18,10 @@ import org.openyu.commons.service.event.supporter.BeanAdapter;
  * 
  * 4.觸發之後,會將bean/params value,存到 xxxServiceImpl.beans上,要取出就用getBeanCache()
  */
-public class OjBeanAdapter extends BeanAdapter
+public class CommonBeanAdapter extends BeanAdapter
 {
 
-	public OjBeanAdapter()
+	public CommonBeanAdapter()
 	{
 
 	}
@@ -30,8 +30,8 @@ public class OjBeanAdapter extends BeanAdapter
 	// #fix: 新增到db後,再放入mem
 	public void beanInserted(BeanEvent beanEvent)
 	{
-		OjService ojService = (OjService) beanEvent.getSource();
-		if (ojService != null)
+		CommonService commonService = (CommonService) beanEvent.getSource();
+		if (commonService != null)
 		{
 			System.out.println("beanInserted: " + beanEvent.getName() + " (" + beanEvent.getType()
 					+ ")");
@@ -45,7 +45,7 @@ public class OjBeanAdapter extends BeanAdapter
 			String key = getKey(newValue);
 			if (key != null)
 			{
-				ojService.getBeanCache().put(key, newValue);
+				commonService.getBeanCache().put(key, newValue);
 			}
 		}
 	}
@@ -55,7 +55,7 @@ public class OjBeanAdapter extends BeanAdapter
 	{
 		System.out.println("beanFound: " + beanEvent.getName() + " (" + beanEvent.getType() + ")");
 
-		OjService ojService = (OjService) beanEvent.getSource();
+		CommonService ojService = (CommonService) beanEvent.getSource();
 		if (ojService != null)
 		{
 			@SuppressWarnings("unchecked")
@@ -93,7 +93,7 @@ public class OjBeanAdapter extends BeanAdapter
 		System.out.println("beanUpdating: " + beanEvent.getName() + " (" + beanEvent.getType()
 				+ ")");
 
-		OjService ojService = (OjService) beanEvent.getSource();
+		CommonService ojService = (CommonService) beanEvent.getSource();
 		if (ojService != null)
 		{
 			@SuppressWarnings("unchecked")
@@ -115,7 +115,7 @@ public class OjBeanAdapter extends BeanAdapter
 		System.out
 				.println("beanUpdated: " + beanEvent.getName() + " (" + beanEvent.getType() + ")");
 
-		OjService ojService = (OjService) beanEvent.getSource();
+		CommonService ojService = (CommonService) beanEvent.getSource();
 		if (ojService != null)
 		{
 			@SuppressWarnings("unchecked")
@@ -138,7 +138,7 @@ public class OjBeanAdapter extends BeanAdapter
 		System.out.println("beanDeleting: " + beanEvent.getName() + " (" + beanEvent.getType()
 				+ ")");
 
-		OjService ojService = (OjService) beanEvent.getSource();
+		CommonService ojService = (CommonService) beanEvent.getSource();
 		if (ojService != null)
 		{
 			@SuppressWarnings("unchecked")
@@ -161,7 +161,7 @@ public class OjBeanAdapter extends BeanAdapter
 		System.out
 				.println("beanDeleted: " + beanEvent.getName() + " (" + beanEvent.getType() + ")");
 
-		OjService ojService = (OjService) beanEvent.getSource();
+		CommonService ojService = (CommonService) beanEvent.getSource();
 		if (ojService != null)
 		{
 			@SuppressWarnings("unchecked")

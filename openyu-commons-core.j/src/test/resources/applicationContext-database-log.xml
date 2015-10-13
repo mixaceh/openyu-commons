@@ -167,8 +167,8 @@
 		p:sessionFactory-ref="logSessionFactory" />
 	-->
 	<bean
-		id="logOjDaoSupporter"
-		class="org.openyu.commons.dao.supporter.OjDaoSupporter"
+		id="logCommonDaoSupporter"
+		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
 		p:hibernateTemplate-ref="logHibernateTemplate" />
 
 	<!-- queue service -->
@@ -176,7 +176,7 @@
 		id="logQueueService"
 		class="org.openyu.commons.service.impl.QueueServiceImpl"
 		parent="baseServiceSupporter"
-		p:ojDao-ref="logOjDaoSupporter" />
+		p:commonDao-ref="logCommonDaoSupporter" />
 
 	<!-- log service supporter -->
 	<bean

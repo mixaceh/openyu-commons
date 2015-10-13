@@ -26,22 +26,22 @@ import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
+public class BenchmarkCommonDaoSupporterTest extends BaseTestSupporter {
 
-	private static OjDaoSupporter ojDaoSupporter;
+	private static CommonDaoSupporter commonDaoSupporter;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { "applicationContext-init.xml", //
 				"applicationContext-database.xml",//
 		});
-		ojDaoSupporter = (OjDaoSupporter) applicationContext.getBean("ojDaoSupporter");
+		commonDaoSupporter = (CommonDaoSupporter) applicationContext.getBean("commonDaoSupporter");
 	}
 
 	@Test
-	public void ojDaoSupporter() {
-		System.out.println(ojDaoSupporter);
-		assertNotNull(ojDaoSupporter);
+	public void commonDaoSupporter() {
+		System.out.println(commonDaoSupporter);
+		assertNotNull(commonDaoSupporter);
 	}
 
 	// ---------------------------------------------------
@@ -133,7 +133,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 	// ---------------------------------------------------
 	// native
 	// ---------------------------------------------------
-	public static class NativeTest extends BenchmarkOjDaoSupporterTest {
+	public static class NativeTest extends BenchmarkCommonDaoSupporterTest {
 
 		@Test
 		// insert: 10000 rows, 102400000 bytes / 38545 ms. = 2656.64 BYTES/MS,
@@ -520,7 +520,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 	// ---------------------------------------------------
 	// optimized
 	// ---------------------------------------------------
-	public static class OptimizedTest extends BenchmarkOjDaoSupporterTest {
+	public static class OptimizedTest extends BenchmarkCommonDaoSupporterTest {
 
 		@Test
 		// insert: 10000 rows, 102400000 bytes / 29690 ms. = 3448.97 BYTES/MS,
@@ -560,7 +560,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 									params.put("seq", seq);
 									params.put("id", newId);
 									params.put("info", new String(buff));
-									int inserted = ojDaoSupporter.insert(sql.toString(), params);
+									int inserted = commonDaoSupporter.insert(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + inserted);
 									//
@@ -642,7 +642,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 									scalars.put("id", StandardBasicTypes.STRING);
 									scalars.put("info", StandardBasicTypes.STRING);
 									//
-									List<Object[]> list = ojDaoSupporter.find(sql.toString(), params, scalars);
+									List<Object[]> list = commonDaoSupporter.find(sql.toString(), params, scalars);
 									//
 									seq = 0;
 									String id = null;
@@ -731,7 +731,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 									Map<String, Object> params = new LinkedHashMap<String, Object>();
 									params.put("seq", seq);
 									params.put("info", new String(buff));
-									int updated = ojDaoSupporter.update(sql.toString(), params);
+									int updated = commonDaoSupporter.update(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + updated);
 									//
@@ -805,7 +805,7 @@ public class BenchmarkOjDaoSupporterTest extends BaseTestSupporter {
 									// params
 									Map<String, Object> params = new LinkedHashMap<String, Object>();
 									params.put("seq", seq);
-									int deleted = ojDaoSupporter.delete(sql.toString(), params);
+									int deleted = commonDaoSupporter.delete(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + deleted);
 									//

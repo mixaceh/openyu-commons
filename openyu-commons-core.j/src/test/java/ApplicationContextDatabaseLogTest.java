@@ -16,7 +16,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
-import org.openyu.commons.dao.supporter.OjDaoSupporter;
+import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.service.BaseLogService;
 import org.openyu.commons.service.QueueService;
@@ -85,8 +85,8 @@ public class ApplicationContextDatabaseLogTest extends BaseTestSupporter {
 	}
 
 	@Test
-	public void logOjDaoSupporter() {
-		OjDaoSupporter bean = (OjDaoSupporter) applicationContext.getBean("logOjDaoSupporter");
+	public void logCommonDaoSupporter() {
+		CommonDaoSupporter bean = (CommonDaoSupporter) applicationContext.getBean("logCommonDaoSupporter");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}

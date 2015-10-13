@@ -136,17 +136,17 @@
 
 	<!-- dao supporter, use sessionFactory
 	<bean
-		id="ojDaoSupporter"
-		class="org.openyu.commons.dao.supporter.OjDaoSupporter"
+		id="commonDaoSupporter"
+		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
 		p:sessionFactory-ref="sessionFactory" />
 	-->
 
-	<bean id="ojDaoSupporter" class="org.openyu.commons.dao.supporter.OjDaoSupporter"
+	<bean id="commonDaoSupporter" class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
 		p:hibernateTemplate-ref="hibernateTemplate" />
 		
 
 	<!-- service supporter -->
-	<bean id="ojServiceSupporter" parent="baseServiceSupporter"
-		class="org.openyu.commons.service.supporter.OjServiceSupporter" />
+	<bean id="commonServiceSupporter" parent="baseServiceSupporter"
+		class="org.openyu.commons.service.supporter.CommonServiceSupporter" />
 
 </beans>

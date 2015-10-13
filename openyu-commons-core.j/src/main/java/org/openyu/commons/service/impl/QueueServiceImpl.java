@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.openyu.commons.dao.OjDao;
-import org.openyu.commons.dao.aware.OjDaoAware;
+import org.openyu.commons.dao.CommonDao;
+import org.openyu.commons.dao.aware.CommonDaoAware;
 import org.openyu.commons.service.QueueService;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 import org.openyu.commons.thread.ThreadService;
@@ -21,14 +21,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
  * 資料庫佇列服務
  */
 public class QueueServiceImpl extends BaseServiceSupporter implements
-		QueueService, OjDaoAware {
+		QueueService, CommonDaoAware {
 
 	private static final long serialVersionUID = -436838930128568344L;
 
 	private static transient final Logger LOGGER = LoggerFactory
 			.getLogger(QueueServiceImpl.class);
 
-	private transient OjDao ojDao;
+	private transient CommonDao ojDao;
 
 	/**
 	 * 線程服務
@@ -91,11 +91,11 @@ public class QueueServiceImpl extends BaseServiceSupporter implements
 		deleteQueue.shutdown();
 	}
 
-	public OjDao getOjDao() {
+	public CommonDao getCommonDao() {
 		return ojDao;
 	}
 
-	public void setOjDao(OjDao ojDao) {
+	public void setCommonDao(CommonDao ojDao) {
 		this.ojDao = ojDao;
 	}
 

@@ -14,24 +14,24 @@ import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.orm.hibernate4.HibernateTemplate;
-import org.openyu.commons.dao.supporter.OjDaoSupporter;
+import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.po.impl.DogPoImpl;
-import org.openyu.commons.service.event.impl.OjBeanAdapter;
-import org.openyu.commons.service.supporter.OjServiceSupporter;
+import org.openyu.commons.service.event.impl.CommonBeanAdapter;
+import org.openyu.commons.service.supporter.CommonServiceSupporter;
 import org.openyu.commons.vo.impl.DogImpl;
 
-public class OjBeanAdapterTest {
-	private static OjServiceSupporter ojServiceSupporter;
+public class CommonBeanAdapterTest {
+	private static CommonServiceSupporter commonServiceSupporter;
 
-	private static OjDaoSupporter hibernateDaoSupporter;
+	private static CommonDaoSupporter commonDaoSupporter;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		ojServiceSupporter = new OjServiceSupporter();
+		commonServiceSupporter = new CommonServiceSupporter();
 
 		// dao
-		hibernateDaoSupporter = new OjDaoSupporter();
+		commonDaoSupporter = new CommonDaoSupporter();
 
 		// 建構HibernateTemplate,因HibernateDaoSupporter需要
 		HibernateTemplate hibernateTemplate = new HibernateTemplate();
@@ -44,9 +44,9 @@ public class OjBeanAdapterTest {
 		SessionFactory sessionFactory = config
 				.buildSessionFactory(serviceRegistry);
 		hibernateTemplate.setSessionFactory(sessionFactory);
-		hibernateDaoSupporter.setHibernateTemplate(hibernateTemplate);
+		commonDaoSupporter.setHibernateTemplate(hibernateTemplate);
 		//
-		ojServiceSupporter.setOjDao(hibernateDaoSupporter);
+		commonServiceSupporter.setCommonDao(commonDaoSupporter);
 
 	}
 
@@ -76,8 +76,8 @@ public class OjBeanAdapterTest {
 
 	@Test
 	public void ojServiceSupporter() {
-		System.out.println(ojServiceSupporter);
-		assertNotNull(ojServiceSupporter);
+		System.out.println(commonServiceSupporter);
+		assertNotNull(commonServiceSupporter);
 	}
 
 	@Test
@@ -85,8 +85,8 @@ public class OjBeanAdapterTest {
 		final String ID = "TEST_DOG";
 
 		// 註冊listener
-		OjBeanAdapter ojBeanAdapter = new OjBeanAdapter();
-		ojServiceSupporter.addBeanListener(ojBeanAdapter);
+		CommonBeanAdapter ojBeanAdapter = new CommonBeanAdapter();
+		commonServiceSupporter.addBeanListener(ojBeanAdapter);
 		//
 		int count = 1;// 100w
 		long beg = System.currentTimeMillis();
@@ -98,31 +98,31 @@ public class OjBeanAdapterTest {
 			String id = ID + randomNumber;
 			dogPo.setId(id);
 			// create
-			ojServiceSupporter.insert(dogPo);
-			System.out.println("insert: " + ojServiceSupporter.getBeanCache());
+			commonServiceSupporter.insert(dogPo);
+			System.out.println("insert: " + commonServiceSupporter.getBeanCache());
 
 			// retrieve
-			DogImpl existDog = ojServiceSupporter.find(DogPoImpl.class,
+			DogImpl existDog = commonServiceSupporter.find(DogPoImpl.class,
 					dogPo.getSeq());
-			System.out.println("find: " + ojServiceSupporter.getBeanCache());
+			System.out.println("find: " + commonServiceSupporter.getBeanCache());
 			assertEquals(id, existDog.getId());
 
 			// update
 			dogPo.setValid(false);
-			ojServiceSupporter.update(dogPo);
-			System.out.println("update: " + ojServiceSupporter.getBeanCache());
+			commonServiceSupporter.update(dogPo);
+			System.out.println("update: " + commonServiceSupporter.getBeanCache());
 
 			// delete
-			ojServiceSupporter.delete(dogPo);
-			System.out.println("delete: " + ojServiceSupporter.getBeanCache());
+			commonServiceSupporter.delete(dogPo);
+			System.out.println("delete: " + commonServiceSupporter.getBeanCache());
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
 		//
-		System.out.println(ojServiceSupporter.getBeanListeners().length);
+		System.out.println(commonServiceSupporter.getBeanListeners().length);
 
-		ojServiceSupporter.removeBeanListener(ojBeanAdapter);
-		System.out.println(ojServiceSupporter.getBeanListeners());
+		commonServiceSupporter.removeBeanListener(ojBeanAdapter);
+		System.out.println(commonServiceSupporter.getBeanListeners());
 	}
 
 }
