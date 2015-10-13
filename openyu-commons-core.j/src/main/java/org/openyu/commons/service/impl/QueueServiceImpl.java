@@ -28,7 +28,7 @@ public class QueueServiceImpl extends BaseServiceSupporter implements
 	private static transient final Logger LOGGER = LoggerFactory
 			.getLogger(QueueServiceImpl.class);
 
-	private transient CommonDao ojDao;
+	private transient CommonDao commonDao;
 
 	/**
 	 * 線程服務
@@ -92,11 +92,11 @@ public class QueueServiceImpl extends BaseServiceSupporter implements
 	}
 
 	public CommonDao getCommonDao() {
-		return ojDao;
+		return commonDao;
 	}
 
 	public void setCommonDao(CommonDao ojDao) {
-		this.ojDao = ojDao;
+		this.commonDao = ojDao;
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class QueueServiceImpl extends BaseServiceSupporter implements
 		//
 		try {
 			// 搜尋entity
-			Object entity = ojDao.find(entityClass, seq);
+			Object entity = commonDao.find(entityClass, seq);
 			if (entity != null) {
 				result = offerDelete(entity);
 			}
@@ -200,24 +200,24 @@ public class QueueServiceImpl extends BaseServiceSupporter implements
 	// ------------------------------------
 
 	public <T> Serializable insert(T entity) {
-		return ojDao.insert(entity);
+		return commonDao.insert(entity);
 	}
 
 	public <T> int update(T entity) {
-		return ojDao.update(entity);
+		return commonDao.update(entity);
 	}
 
 	public <T> int delete(T entity) {
-		return ojDao.delete(entity);
+		return commonDao.delete(entity);
 	}
 
 	public <T> T delete(Class<?> entityClass, Serializable seq) {
-		return ojDao.delete(entityClass, seq);
+		return commonDao.delete(entityClass, seq);
 	}
 
 	public <E> List<E> delete(Class<?> entityClass,
 			Collection<Serializable> seqs) {
-		return ojDao.delete(entityClass, seqs);
+		return commonDao.delete(entityClass, seqs);
 	}
 
 	/**

@@ -252,7 +252,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 	}
 
 	protected <E> List<E> findReturnVoOrNot(Class<?> entityClass, boolean is2Vo) {
-		// return ojDao.find(entityClass);
+		// return commonDao.find(entityClass);
 
 		List<E> dest = new LinkedList<E>();
 		try {
@@ -332,7 +332,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 	// is2Vo=是否要將找到的po轉為vo
 	protected <T> T findReturnVoOrNot(Class<?> entityClass, Serializable seq,
 			boolean is2Vo) {
-		// return ojDao.find(entityClass, seq);
+		// return commonDao.find(entityClass, seq);
 		T dest = null;
 		try {
 			boolean isVoClass = ClassHelper.isVoClass(entityClass);
@@ -839,19 +839,19 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 	// */
 	// public static class ReindexJob extends BaseJobSupporter {
 	//
-	// private OjService ojService;
+	// private CommonService commonService;
 	//
 	// private AnnotationSessionFactoryBean annotationSessionFactoryBean;
 	//
 	// public ReindexJob() {
 	// }
 	//
-	// public OjService getOjService() {
-	// return ojService;
+	// public CommonService getCommonService() {
+	// return commonService;
 	// }
 	//
-	// public void setOjService(OjService ojService) {
-	// this.ojService = ojService;
+	// public void setCommonService(CommonService commonService) {
+	// this.commonService = commonService;
 	// }
 	//
 	// public AnnotationSessionFactoryBean getAnnotationSessionFactoryBean() {
@@ -881,7 +881,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 	// // System.out.println("getMappedClass: " +
 	// // persistentClass.getMappedClass());
 	// try {
-	// result += (ojService.reindex(persistentClass
+	// result += (commonService.reindex(persistentClass
 	// .getMappedClass()) ? 1 : 0);
 	//
 	// } catch (Exception ex) {
@@ -890,7 +890,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 	// }
 	// // --------------------------------------------------
 	// if (result > 0) {
-	// log(LOGGER, OjServiceSupporter.class, "execute", stopWatch);
+	// log(LOGGER, CommonServiceSupporter.class, "execute", stopWatch);
 	// }
 	// }
 	// }
