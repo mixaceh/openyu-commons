@@ -303,7 +303,7 @@ public class ImageTest {
 
 	@Test
 	public void isAdultImage() {
-		String value = "d:/testimage/adult/Newegg.jpg";
+		String value = "d:/testimage/adult/image.jpg";
 		boolean result = isAdultImage(value);
 		//
 		System.out.println(value + ", " + result);
