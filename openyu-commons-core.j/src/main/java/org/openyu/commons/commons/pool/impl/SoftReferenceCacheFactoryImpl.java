@@ -23,29 +23,29 @@ public class SoftReferenceCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 		this(null);
 	}
 
-	/**
-	 * new建構
-	 * 
-	 * @return
-	 */
-	public static <T> SoftReferenceCacheFactory<T> createInstance(
-			CacheableObjectFactory<T> cacheableObjectFactory) {
-		SoftReferenceCacheFactoryImpl<T> result = null;
-		try {
-			result = new SoftReferenceCacheFactoryImpl<T>(
-					cacheableObjectFactory);
-			result.setCreateInstance(true);
-			// 啟動
-			result.start();
-		} catch (Exception e) {
-			LOGGER.error(
-					new StringBuilder().append(
-							"Exception encountered during createInstance()")
-							.toString(), e);
-			result = (SoftReferenceCacheFactoryImpl<T>) shutdownInstance(result);
-		}
-		return result;
-	}
+//	/**
+//	 * new建構
+//	 * 
+//	 * @return
+//	 */
+//	public static <T> SoftReferenceCacheFactory<T> createInstance(
+//			CacheableObjectFactory<T> cacheableObjectFactory) {
+//		SoftReferenceCacheFactoryImpl<T> result = null;
+//		try {
+//			result = new SoftReferenceCacheFactoryImpl<T>(
+//					cacheableObjectFactory);
+//			result.setCreateInstance(true);
+//			// 啟動
+//			result.start();
+//		} catch (Exception e) {
+//			LOGGER.error(
+//					new StringBuilder().append(
+//							"Exception encountered during createInstance()")
+//							.toString(), e);
+//			result = (SoftReferenceCacheFactoryImpl<T>) shutdownInstance(result);
+//		}
+//		return result;
+//	}
 
 	/**
 	 * 內部啟動

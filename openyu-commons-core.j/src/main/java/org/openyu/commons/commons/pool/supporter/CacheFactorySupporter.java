@@ -11,13 +11,11 @@ import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter
-		implements CacheFactory<T> {
+public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter implements CacheFactory<T> {
 
 	private static final long serialVersionUID = 34344492443615151L;
 
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(CacheFactorySupporter.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(CacheFactorySupporter.class);
 
 	protected ObjectPoolFactory<T> objectPoolFactory;
 
@@ -37,8 +35,7 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter
 	 */
 	private boolean cleared;
 
-	public CacheFactorySupporter(
-			CacheableObjectFactory<T> cacheableObjectFactory) {
+	public CacheFactorySupporter(CacheableObjectFactory<T> cacheableObjectFactory) {
 		this.cacheableObjectFactory = cacheableObjectFactory;
 	}
 
@@ -51,8 +48,7 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter
 	 * 
 	 * @return
 	 */
-	public static <T> CacheFactory<T> shutdownInstance(
-			CacheFactory<T> cacheFactory) {
+	public static <T> CacheFactory<T> shutdownInstance(CacheFactory<T> cacheFactory) {
 		try {
 			if (cacheFactory instanceof CacheFactory) {
 				CacheFactory<T> oldInstance = cacheFactory;
@@ -61,10 +57,8 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter
 				cacheFactory = null;
 			}
 		} catch (Exception e) {
-			LOGGER.error(
-					new StringBuilder()
-							.append("Exception encountered during shutdownInstance(CacheFactory)")
-							.toString(), e);
+			LOGGER.error(new StringBuilder().append("Exception encountered during shutdownInstance(CacheFactory)")
+					.toString(), e);
 		}
 		return cacheFactory;
 	}
@@ -74,8 +68,7 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		AssertHelper.notNull(cacheableObjectFactory,
-				"The CacheableObjectFactory is required");
+		AssertHelper.notNull(cacheableObjectFactory, "The CacheableObjectFactory is required");
 	}
 
 	/**
@@ -97,8 +90,7 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter
 			}
 		} catch (NullPointerException ex) {
 			if (objectPool == null) {
-				throw new CacheException(
-						"ObjectPool is required. Call initialize()", ex);
+				throw new CacheException("ObjectPool is required. Call initialize()", ex);
 			}
 			throw new CacheException("Could not open Cache", ex);
 		} catch (Exception ex) {

@@ -20,14 +20,10 @@ import javax.crypto.spec.SecretKeySpec;
 //import sun.misc.BASE64Decoder;
 //import sun.misc.BASE64Encoder;
 
-
-
-
-
 import org.openyu.commons.commons.pool.CacheCallback;
 import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
-import org.openyu.commons.commons.pool.impl.SoftReferenceCacheFactoryImpl;
+import org.openyu.commons.commons.pool.impl.SoftReferenceCacheFactoryFactoryBean;
 import org.openyu.commons.commons.pool.supporter.CacheableObjectFactorySupporter;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
@@ -144,8 +140,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SecurityHelper extends BaseHelperSupporter {
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(SecurityHelper.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(SecurityHelper.class);
 
 	// --------------------------------------------------------
 	// SecureRandom Number Generation (RNG) Algorithms
@@ -173,6 +168,8 @@ public class SecurityHelper extends BaseHelperSupporter {
 	//
 	// private static String randomAuthKey;
 
+	private static SoftReferenceCacheFactoryFactoryBean<SecurityProcessor, SoftReferenceCacheFactory<SecurityProcessor>> softReferenceCacheFactoryFactoryBean;
+
 	/** 安全性處理器 */
 	private static SoftReferenceCacheFactory<SecurityProcessor> securityProcessorCacheFactory;
 
@@ -181,6 +178,7 @@ public class SecurityHelper extends BaseHelperSupporter {
 	}
 
 	protected static class Static {
+		@SuppressWarnings("unchecked")
 		public Static() {
 			try {
 				secureRandom = SecureRandom.getInstance("SHA1PRNG");
@@ -192,19 +190,49 @@ public class SecurityHelper extends BaseHelperSupporter {
 				// "MD5");
 
 				// securityProcessor
-				securityProcessorCacheFactory = SoftReferenceCacheFactoryImpl
-						.createInstance(new CacheableObjectFactorySupporter<SecurityProcessor>() {
+				// securityProcessorCacheFactory = SoftReferenceCacheFactoryImpl
+				// .createInstance(new
+				// CacheableObjectFactorySupporter<SecurityProcessor>() {
+				//
+				// private static final long serialVersionUID =
+				// 466475419232947467L;
+				//
+				// public SecurityProcessor makeObject() throws Exception {
+				// SecurityProcessor obj = new SecurityProcessorImpl();
+				// obj.setSecurity(ConfigHelper.isSecurity());
+				// obj.setSecurityKey(ConfigHelper.getSecurityKey());
+				// obj.setSecurityType(ConfigHelper.getSecurityType());
+				// return obj;
+				// }
+				//
+				// public boolean validateObject(SecurityProcessor obj) {
+				// return true;
+				// }
+				//
+				// public void activateObject(SecurityProcessor obj) throws
+				// Exception {
+				// obj.setSecurity(ConfigHelper.isSecurity());
+				// obj.setSecurityKey(ConfigHelper.getSecurityKey());
+				// obj.setSecurityType(ConfigHelper.getSecurityType());
+				// }
+				//
+				// public void passivateObject(SecurityProcessor obj) throws
+				// Exception {
+				// obj.reset();
+				// }
+				// });
+
+				softReferenceCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<SecurityProcessor, SoftReferenceCacheFactory<SecurityProcessor>>();
+				softReferenceCacheFactoryFactoryBean
+						.setCacheableObjectFactory(new CacheableObjectFactorySupporter<SecurityProcessor>() {
 
 							private static final long serialVersionUID = 466475419232947467L;
 
-							public SecurityProcessor makeObject()
-									throws Exception {
+							public SecurityProcessor makeObject() throws Exception {
 								SecurityProcessor obj = new SecurityProcessorImpl();
 								obj.setSecurity(ConfigHelper.isSecurity());
-								obj.setSecurityKey(ConfigHelper
-										.getSecurityKey());
-								obj.setSecurityType(ConfigHelper
-										.getSecurityType());
+								obj.setSecurityKey(ConfigHelper.getSecurityKey());
+								obj.setSecurityType(ConfigHelper.getSecurityType());
 								return obj;
 							}
 
@@ -212,25 +240,25 @@ public class SecurityHelper extends BaseHelperSupporter {
 								return true;
 							}
 
-							public void activateObject(SecurityProcessor obj)
-									throws Exception {
+							public void activateObject(SecurityProcessor obj) throws Exception {
 								obj.setSecurity(ConfigHelper.isSecurity());
-								obj.setSecurityKey(ConfigHelper
-										.getSecurityKey());
-								obj.setSecurityType(ConfigHelper
-										.getSecurityType());
+								obj.setSecurityKey(ConfigHelper.getSecurityKey());
+								obj.setSecurityType(ConfigHelper.getSecurityType());
 							}
 
-							public void passivateObject(SecurityProcessor obj)
-									throws Exception {
+							public void passivateObject(SecurityProcessor obj) throws Exception {
 								obj.reset();
 							}
 						});
+				softReferenceCacheFactoryFactoryBean.start();
+				securityProcessorCacheFactory = (SoftReferenceCacheFactory<SecurityProcessor>) softReferenceCacheFactoryFactoryBean
+						.getObject();
 
 			} catch (Exception ex) {
 				throw new HelperException("new Static() Initializing failed", ex);
 			}
 		}
+
 	}
 
 	/**
@@ -304,8 +332,7 @@ public class SecurityHelper extends BaseHelperSupporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static SecretKey createSecretKey(String assignKey,
-			String charsetName, String algorithm) {
+	public static SecretKey createSecretKey(String assignKey, String charsetName, String algorithm) {
 		byte[] keysValue = ByteHelper.toByteArray(assignKey, charsetName);
 		return createSecretKey(keysValue, algorithm);
 	}
@@ -337,25 +364,26 @@ public class SecurityHelper extends BaseHelperSupporter {
 				// new byte[8]
 				if ("DES".equals(algorithm)) {
 					DESKeySpec desKeySpec = new DESKeySpec(assignKey);
-					SecretKeyFactory factory = SecretKeyFactory
-							.getInstance(algorithm);
+					SecretKeyFactory factory = SecretKeyFactory.getInstance(algorithm);
 					result = factory.generateSecret(desKeySpec);
 				}
 				// new byte[24]
 				else if ("DESede".equals(algorithm)) {
 					DESedeKeySpec desedeKeySpec = new DESedeKeySpec(assignKey);
-					SecretKeyFactory factory = SecretKeyFactory
-							.getInstance(algorithm);
+					SecretKeyFactory factory = SecretKeyFactory.getInstance(algorithm);
 					result = factory.generateSecret(desedeKeySpec);
 					// new byte[16]
 				} else if ("AES".equals(algorithm)) {
 					// byte[] buff = assignKey;
-					// MessageDigest sha = MessageDigest.getInstance("SHA-1");
+					// MessageDigest sha =
+					// MessageDigest.getInstance("SHA-1");
 					// buff = sha.digest(buff);
-					// buff = Arrays.copyOf(buff, 16); // use only first 128 bit
+					// buff = Arrays.copyOf(buff, 16); // use only first 128
+					// bit
 
 					byte[] buff = md(assignKey, "MD5");// MD5/SHA-1
-					// buff = Arrays.copyOf(buff, 16); // use only first 128 bit
+					// buff = Arrays.copyOf(buff, 16); // use only first 128
+					// bit
 					buff = ByteHelper.getByteArray(buff, 0, 16);
 					result = new SecretKeySpec(buff, algorithm);
 				} else {
@@ -384,7 +412,8 @@ public class SecurityHelper extends BaseHelperSupporter {
 	// HmacSHA1
 	// HmacSHA256
 	// HmacSHA384
-	// HmacSHA512 Keys generator for use with the various flavors of the HmacSHA
+	// HmacSHA512 Keys generator for use with the various flavors of the
+	// HmacSHA
 	// algorithms.
 	//
 	// RC2 Key generator for use with the RC2 algorithm.
@@ -400,7 +429,8 @@ public class SecurityHelper extends BaseHelperSupporter {
 		if (StringHelper.notEmpty(algorithm)) {
 			try {
 				// 換掉provider,BouncyCastleProvider會比較慢
-				// KeyGenerator generator = KeyGenerator.getInstance(algorithm,
+				// KeyGenerator generator =
+				// KeyGenerator.getInstance(algorithm,
 				// new BouncyCastleProvider());
 
 				KeyGenerator generator = KeyGenerator.getInstance(algorithm);
@@ -416,7 +446,8 @@ public class SecurityHelper extends BaseHelperSupporter {
 	// --------------------------------------------------------
 	// KeyPairGenerator algorithm
 	// --------------------------------------------------------
-	// DiffieHellman(DH) Generates keypairs for the Diffie-Hellman KeyAgreement
+	// DiffieHellman(DH) Generates keypairs for the Diffie-Hellman
+	// KeyAgreement
 	// algorithm.
 	// Note: key.getAlgorithm() will return "DH" instead of "DiffieHellman".
 	//
@@ -447,8 +478,7 @@ public class SecurityHelper extends BaseHelperSupporter {
 				// KeyPairGenerator.getInstance(algorithm,
 				// new BouncyCastleProvider());
 
-				KeyPairGenerator generator = KeyPairGenerator
-						.getInstance(algorithm);
+				KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm);
 				generator.initialize(keysize, secureRandom);
 				keyPair = generator.generateKeyPair();
 			} catch (Exception ex) {
@@ -461,13 +491,11 @@ public class SecurityHelper extends BaseHelperSupporter {
 	// --------------------------------------------------------
 	// 對稱加解密
 	// --------------------------------------------------------
-	public static byte[] encrypt(String value, SecretKey secretKey,
-			String algorithm) {
+	public static byte[] encrypt(String value, SecretKey secretKey, String algorithm) {
 		return encrypt(value, EncodingHelper.UTF_8, secretKey, algorithm);
 	}
 
-	public static byte[] encrypt(String value, String charsetName,
-			SecretKey secretKey, String algorithm) {
+	public static byte[] encrypt(String value, String charsetName, SecretKey secretKey, String algorithm) {
 		byte[] buffs = ByteHelper.toByteArray(value, charsetName);
 		return encrypt(buffs, secretKey, algorithm);
 	}
@@ -475,40 +503,55 @@ public class SecurityHelper extends BaseHelperSupporter {
 	// --------------------------------------------------------
 	// Cipher algorithm
 	// --------------------------------------------------------
-	// AES Advanced Encryption Standard as specified by NIST in FIPS 197. Also
-	// known as the Rijndael algorithm by Joan Daemen and Vincent Rijmen, AES is
+	// AES Advanced Encryption Standard as specified by NIST in FIPS 197.
+	// Also
+	// known as the Rijndael algorithm by Joan Daemen and Vincent Rijmen,
+	// AES is
 	// a 128-bit block cipher supporting keys of 128, 192, and 256 bits.
 	// AESWrap The AES key wrapping algorithm as described in RFC 3394.
-	// ARCFOUR A stream cipher believed to be fully interoperable with the RC4
-	// cipher developed by Ron Rivest. For more information, see K. Kaukonen and
+	// ARCFOUR A stream cipher believed to be fully interoperable with the
+	// RC4
+	// cipher developed by Ron Rivest. For more information, see K. Kaukonen
+	// and
 	// R. Thayer, "A Stream Cipher Encryption Algorithm 'Arcfour'", Internet
 	// Draft (expired), draft-kaukonen-cipher-arcfour-03.txt.
 	// Blowfish The Blowfish block cipher designed by Bruce Schneier.
 	// DES The Digital Encryption Standard as described in FIPS PUB 46-3.
 	// DESede Triple DES Encryption (also known as DES-EDE, 3DES, or
 	// Triple-DES). Data is encrypted using the DES algorithm three separate
-	// times. It is first encrypted using the first subkey, then decrypted with
+	// times. It is first encrypted using the first subkey, then decrypted
+	// with
 	// the second subkey, and encrypted with the third subkey.
-	// DESedeWrap The DESede key wrapping algorithm as described in RFC 3217 .
+	// DESedeWrap The DESede key wrapping algorithm as described in RFC 3217
+	// .
 	// ECIES Elliptic Curve Integrated Encryption Scheme
 	// PBEWith<digest>And<encryption> PBEWith<prf>And<encryption> The
-	// password-based encryption algorithm found in (PKCS5), using the specified
+	// password-based encryption algorithm found in (PKCS5), using the
+	// specified
 	// message digest (<digest>) or pseudo-random function (<prf>) and
 	// encryption algorithm (<encryption>). Examples:
-	// PBEWithMD5AndDES: The password-based encryption algorithm as defined in
-	// RSA Laboratories, "PKCS5: Password-Based Encryption Standard," version
-	// 1.5, Nov 1993. Note that this algorithm implies CBC as the cipher mode
-	// and PKCS5Padding as the padding scheme and cannot be used with any other
+	// PBEWithMD5AndDES: The password-based encryption algorithm as defined
+	// in
+	// RSA Laboratories, "PKCS5: Password-Based Encryption Standard,"
+	// version
+	// 1.5, Nov 1993. Note that this algorithm implies CBC as the cipher
+	// mode
+	// and PKCS5Padding as the padding scheme and cannot be used with any
+	// other
 	// cipher modes or padding schemes.
 	// PBEWithHmacSHA1AndDESede: The password-based encryption algorithm as
 	// defined in RSA Laboratories,
-	// "PKCS5: Password-Based Cryptography Standard," version 2.0, March 1999.
+	// "PKCS5: Password-Based Cryptography Standard," version 2.0, March
+	// 1999.
 	//
-	// RC2 Variable-key-size encryption algorithms developed by Ron Rivest for
+	// RC2 Variable-key-size encryption algorithms developed by Ron Rivest
+	// for
 	// RSA Data Security, Inc.
-	// RC4 Variable-key-size encryption algorithms developed by Ron Rivest for
+	// RC4 Variable-key-size encryption algorithms developed by Ron Rivest
+	// for
 	// RSA Data Security, Inc. (See note above for ARCFOUR.)
-	// RC5 Variable-key-size encryption algorithms developed by Ron Rivest for
+	// RC5 Variable-key-size encryption algorithms developed by Ron Rivest
+	// for
 	// RSA Data Security, Inc.
 	// RSA The RSA encryption algorithm as defined in PKCS1
 	/**
@@ -519,11 +562,9 @@ public class SecurityHelper extends BaseHelperSupporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static byte[] encrypt(byte[] values, SecretKey secretKey,
-			String algorithm) {
+	public static byte[] encrypt(byte[] values, SecretKey secretKey, String algorithm) {
 		byte[] result = new byte[0];
-		if (ByteHelper.notEmpty(values) && secretKey != null
-				&& StringHelper.notEmpty(algorithm)) {
+		if (ByteHelper.notEmpty(values) && secretKey != null && StringHelper.notEmpty(algorithm)) {
 			try {
 				Cipher cipher = Cipher.getInstance(algorithm);
 				cipher.init(Cipher.ENCRYPT_MODE, secretKey);
@@ -536,26 +577,22 @@ public class SecurityHelper extends BaseHelperSupporter {
 	}
 
 	// assignKey
-	public static String encryptHex(String value, String assignKey,
-			String algorithm) {
+	public static String encryptHex(String value, String assignKey, String algorithm) {
 		return encryptHex(value, EncodingHelper.UTF_8, assignKey, algorithm);
 	}
 
-	public static String encryptHex(String value, String charsetName,
-			String assignKey, String algorithm) {
+	public static String encryptHex(String value, String charsetName, String assignKey, String algorithm) {
 		// 指定key
 		SecretKey secretKey = createSecretKey(assignKey, algorithm);
 		return encryptHex(value, charsetName, secretKey, algorithm);
 	}
 
 	// secretKey
-	public static String encryptHex(String value, SecretKey secretKey,
-			String algorithm) {
+	public static String encryptHex(String value, SecretKey secretKey, String algorithm) {
 		return encryptHex(value, EncodingHelper.UTF_8, secretKey, algorithm);
 	}
 
-	public static String encryptHex(String value, String charsetName,
-			SecretKey secretKey, String algorithm) {
+	public static String encryptHex(String value, String charsetName, SecretKey secretKey, String algorithm) {
 		byte[] buffs = encrypt(value, charsetName, secretKey, algorithm);
 		return EncodingHelper.encodeHex(buffs);
 	}
@@ -568,14 +605,12 @@ public class SecurityHelper extends BaseHelperSupporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static String encryptHex(byte[] values, SecretKey secretKey,
-			String algorithm) {
+	public static String encryptHex(byte[] values, SecretKey secretKey, String algorithm) {
 		byte[] buffs = encrypt(values, secretKey, algorithm);
 		return EncodingHelper.encodeHex(buffs);
 	}
 
-	public static String encryptBase64(String value, SecretKey secretKey,
-			String algorithm) {
+	public static String encryptBase64(String value, SecretKey secretKey, String algorithm) {
 		byte[] buffs = encrypt(value, secretKey, algorithm);
 		return EncodingHelper.encodeBase64String(buffs);
 	}
@@ -588,8 +623,7 @@ public class SecurityHelper extends BaseHelperSupporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static String encryptBase64(byte[] values, SecretKey secretKey,
-			String algorithm) {
+	public static String encryptBase64(byte[] values, SecretKey secretKey, String algorithm) {
 		byte[] buffs = encrypt(values, secretKey, algorithm);
 		return EncodingHelper.encodeBase64String(buffs);
 	}
@@ -602,11 +636,9 @@ public class SecurityHelper extends BaseHelperSupporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static byte[] decrypt(byte[] values, SecretKey secretKey,
-			String algorithm) {
+	public static byte[] decrypt(byte[] values, SecretKey secretKey, String algorithm) {
 		byte[] result = new byte[0];
-		if (ByteHelper.notEmpty(values) && secretKey != null
-				&& StringHelper.notEmpty(algorithm)) {
+		if (ByteHelper.notEmpty(values) && secretKey != null && StringHelper.notEmpty(algorithm)) {
 			try {
 				Cipher cipher = Cipher.getInstance(algorithm);
 				cipher.init(Cipher.DECRYPT_MODE, secretKey);
@@ -618,16 +650,13 @@ public class SecurityHelper extends BaseHelperSupporter {
 		return result;
 	}
 
-	public static byte[] decryptHex(String value, String assignKey,
-			String algorithm) {
+	public static byte[] decryptHex(String value, String assignKey, String algorithm) {
 		// 指定key
-		SecretKey secretKey = SecurityHelper.createSecretKey(assignKey,
-				algorithm);
+		SecretKey secretKey = SecurityHelper.createSecretKey(assignKey, algorithm);
 		return decryptHex(value, secretKey, algorithm);
 	}
 
-	public static byte[] decryptHex(String value, SecretKey secretKey,
-			String algorithm) {
+	public static byte[] decryptHex(String value, SecretKey secretKey, String algorithm) {
 		byte[] buffs = EncodingHelper.decodeHex(value);
 		return decrypt(buffs, secretKey, algorithm);
 	}
@@ -640,14 +669,12 @@ public class SecurityHelper extends BaseHelperSupporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static byte[] decryptHex(byte[] values, SecretKey secretKey,
-			String algorithm) {
+	public static byte[] decryptHex(byte[] values, SecretKey secretKey, String algorithm) {
 		byte[] buffs = EncodingHelper.decodeHex(values);
 		return decrypt(buffs, secretKey, algorithm);
 	}
 
-	public static byte[] decryptBase64(String value, SecretKey secretKey,
-			String algorithm) {
+	public static byte[] decryptBase64(String value, SecretKey secretKey, String algorithm) {
 		byte[] buffs = EncodingHelper.decodeBase64(value);
 		return decrypt(buffs, secretKey, algorithm);
 	}
@@ -660,8 +687,7 @@ public class SecurityHelper extends BaseHelperSupporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static byte[] decryptBase64(byte[] values, SecretKey secretKey,
-			String algorithm) {
+	public static byte[] decryptBase64(byte[] values, SecretKey secretKey, String algorithm) {
 		byte[] buffs = EncodingHelper.decodeBase64(values);
 		return decrypt(buffs, secretKey, algorithm);
 	}
@@ -673,8 +699,7 @@ public class SecurityHelper extends BaseHelperSupporter {
 		return encrypt(value, EncodingHelper.UTF_8, keyPair, algorithm);
 	}
 
-	public static byte[] encrypt(String value, String charsetName,
-			KeyPair keyPair, String algorithm) {
+	public static byte[] encrypt(String value, String charsetName, KeyPair keyPair, String algorithm) {
 		byte[] buffs = ByteHelper.toByteArray(value, charsetName);
 		return encrypt(buffs, keyPair, algorithm);
 	}
@@ -687,11 +712,9 @@ public class SecurityHelper extends BaseHelperSupporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static byte[] encrypt(byte[] values, KeyPair keyPair,
-			String algorithm) {
+	public static byte[] encrypt(byte[] values, KeyPair keyPair, String algorithm) {
 		byte[] result = new byte[0];
-		if (ByteHelper.notEmpty(values) && keyPair != null
-				&& StringHelper.notEmpty(algorithm)) {
+		if (ByteHelper.notEmpty(values) && keyPair != null && StringHelper.notEmpty(algorithm)) {
 			try {
 				Cipher cipher = Cipher.getInstance(algorithm);
 				cipher.init(Cipher.ENCRYPT_MODE, keyPair.getPublic());
@@ -711,11 +734,9 @@ public class SecurityHelper extends BaseHelperSupporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static byte[] decrypt(byte[] values, KeyPair keyPair,
-			String algorithm) {
+	public static byte[] decrypt(byte[] values, KeyPair keyPair, String algorithm) {
 		byte[] result = new byte[0];
-		if (ByteHelper.notEmpty(values) && keyPair != null
-				&& StringHelper.notEmpty(algorithm)) {
+		if (ByteHelper.notEmpty(values) && keyPair != null && StringHelper.notEmpty(algorithm)) {
 			try {
 				Cipher cipher = Cipher.getInstance(algorithm);
 				cipher.init(Cipher.DECRYPT_MODE, keyPair.getPrivate());
@@ -747,8 +768,7 @@ public class SecurityHelper extends BaseHelperSupporter {
 		return mac(value, EncodingHelper.UTF_8, secretKey, algorithm);
 	}
 
-	public static byte[] mac(String value, String charsetName,
-			SecretKey secretKey, String algorithm) {
+	public static byte[] mac(String value, String charsetName, SecretKey secretKey, String algorithm) {
 		byte[] buffs = ByteHelper.toByteArray(value, charsetName);
 		return mac(buffs, secretKey, algorithm);
 	}
@@ -761,11 +781,9 @@ public class SecurityHelper extends BaseHelperSupporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static byte[] mac(byte[] values, SecretKey secretKey,
-			String algorithm) {
+	public static byte[] mac(byte[] values, SecretKey secretKey, String algorithm) {
 		byte[] result = new byte[0];
-		if (ByteHelper.notEmpty(values) && secretKey != null
-				&& StringHelper.notEmpty(algorithm)) {
+		if (ByteHelper.notEmpty(values) && secretKey != null && StringHelper.notEmpty(algorithm)) {
 			try {
 				// 每次都會建構一個新的Mac
 				Mac mac = Mac.getInstance(algorithm);
@@ -794,7 +812,8 @@ public class SecurityHelper extends BaseHelperSupporter {
 	//
 	// SHA-256 is a 256-bit hash function intended to provide 128 bits of
 	// security against collision attacks, while SHA-512 is a 512-bit hash
-	// function intended to provide 256 bits of security. A 384-bit hash may be
+	// function intended to provide 256 bits of security. A 384-bit hash may
+	// be
 	// obtained by truncating the SHA-512 output.
 
 	public static byte[] md(String value) {
@@ -849,7 +868,8 @@ public class SecurityHelper extends BaseHelperSupporter {
 	// * @param value
 	// * @return
 	// */
-	// public static String encryptPassword(String value, String charsetName)
+	// public static String encryptPassword(String value, String
+	// charsetName)
 	// {
 	// String result = null;
 	// try
@@ -1045,13 +1065,11 @@ public class SecurityHelper extends BaseHelperSupporter {
 	public static byte[] encryptWithProcessor(final byte[] value) {
 		byte[] result = new byte[0];
 		//
-		result = (byte[]) securityProcessorCacheFactory
-				.execute(new CacheCallback<SecurityProcessor>() {
-					public Object doInAction(SecurityProcessor obj)
-							throws CacheException {
-						return obj.encrypt(value);
-					}
-				});
+		result = (byte[]) securityProcessorCacheFactory.execute(new CacheCallback<SecurityProcessor>() {
+			public Object doInAction(SecurityProcessor obj) throws CacheException {
+				return obj.encrypt(value);
+			}
+		});
 		//
 		return result;
 	}
@@ -1059,13 +1077,11 @@ public class SecurityHelper extends BaseHelperSupporter {
 	public static byte[] decryptWithProcessor(final byte[] value) {
 		byte[] result = new byte[0];
 		//
-		result = (byte[]) securityProcessorCacheFactory
-				.execute(new CacheCallback<SecurityProcessor>() {
-					public Object doInAction(SecurityProcessor obj)
-							throws CacheException {
-						return obj.decrypt(value);
-					}
-				});
+		result = (byte[]) securityProcessorCacheFactory.execute(new CacheCallback<SecurityProcessor>() {
+			public Object doInAction(SecurityProcessor obj) throws CacheException {
+				return obj.decrypt(value);
+			}
+		});
 		//
 		return result;
 	}
@@ -1098,7 +1114,8 @@ public class SecurityHelper extends BaseHelperSupporter {
 	// * @param assignKey
 	// * @return
 	// */
-	// public static byte[] execute(SecurityType securityType, byte[] values,
+	// public static byte[] execute(SecurityType securityType, byte[]
+	// values,
 	// String assignKey) {
 	// byte[] result = new byte[0];
 	// //
@@ -1196,7 +1213,8 @@ public class SecurityHelper extends BaseHelperSupporter {
 	// * @param assignKey
 	// * @return
 	// */
-	// public static byte[] deexecute(String securityTypeValue, byte[] values,
+	// public static byte[] deexecute(String securityTypeValue, byte[]
+	// values,
 	// String assignKey) {
 	// SecurityType securityType = EnumHelper.valueOf(SecurityType.class,
 	// securityTypeValue);
@@ -1213,7 +1231,8 @@ public class SecurityHelper extends BaseHelperSupporter {
 	// * @param assignKey
 	// * @return
 	// */
-	// public static byte[] deexecute(SecurityType securityType, byte[] values,
+	// public static byte[] deexecute(SecurityType securityType, byte[]
+	// values,
 	// String assignKey) {
 	// byte[] result = new byte[0];
 	// //

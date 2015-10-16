@@ -22,47 +22,79 @@ public class SoftReferenceCacheFactoryImplTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static SoftReferenceCacheFactory<Parser> softReferenceCacheFactory;
+	private static SoftReferenceCacheFactoryFactoryBean<Parser, SoftReferenceCacheFactory<Parser>> softReferenceCacheFactoryFactoryBean;
 
 	private static SoftReferenceCacheFactoryImpl<Parser> softReferenceCacheFactoryImpl;
 
+	@SuppressWarnings("unchecked")
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		// softReferenceCacheFactory = new
 		// SoftReferenceCacheFactoryImpl<Parser>(
 		// new CacheableObjectFactorySupporter<Parser>() {
 		//
-		// 改用newInstance
-		softReferenceCacheFactory = SoftReferenceCacheFactoryImpl
-				.createInstance(new CacheableObjectFactorySupporter<Parser>() {
 
-					private static final long serialVersionUID = -5161964541145838308L;
+		// softReferenceCacheFactory = SoftReferenceCacheFactoryImpl
+		// .createInstance(new CacheableObjectFactorySupporter<Parser>() {
+		//
+		// private static final long serialVersionUID = -5161964541145838308L;
+		//
+		// public Parser makeObject() throws Exception {
+		// return new Parser();
+		// }
+		//
+		// public void destroyObject(Parser obj) throws Exception {
+		// obj.close();
+		// }
+		//
+		// public boolean validateObject(Parser obj) {
+		// return true;
+		// }
+		//
+		// public void activateObject(Parser obj) throws Exception {
+		//
+		// }
+		//
+		// public void passivateObject(Parser obj) throws Exception {
+		// obj.flush();
+		// obj.reset();
+		// }
+		// });
+		//
+		// softReferenceCacheFactoryImpl =
+		// (SoftReferenceCacheFactoryImpl<Parser>)
+		// softReferenceCacheFactory;
 
-					public Parser makeObject() throws Exception {
-						return new Parser();
-					}
+		// 改用FactoryBean
+		softReferenceCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<Parser, SoftReferenceCacheFactory<Parser>>();
+		softReferenceCacheFactoryFactoryBean.setCacheableObjectFactory(new CacheableObjectFactorySupporter<Parser>() {
 
-					public void destroyObject(Parser obj) throws Exception {
-						obj.close();
-					}
+			private static final long serialVersionUID = -5161964541145838308L;
 
-					public boolean validateObject(Parser obj) {
-						return true;
-					}
+			public Parser makeObject() throws Exception {
+				return new Parser();
+			}
 
-					public void activateObject(Parser obj) throws Exception {
+			public void destroyObject(Parser obj) throws Exception {
+				obj.close();
+			}
 
-					}
+			public boolean validateObject(Parser obj) {
+				return true;
+			}
 
-					public void passivateObject(Parser obj) throws Exception {
-						obj.flush();
-						obj.reset();
-					}
-				});
+			public void activateObject(Parser obj) throws Exception {
 
-		softReferenceCacheFactoryImpl = (SoftReferenceCacheFactoryImpl<Parser>) softReferenceCacheFactory;
+			}
 
-		// softReferenceCacheFactoryImpl.initialize();
+			public void passivateObject(Parser obj) throws Exception {
+				obj.flush();
+				obj.reset();
+			}
+		});
+		softReferenceCacheFactoryFactoryBean.start();
+		softReferenceCacheFactoryImpl = (SoftReferenceCacheFactoryImpl<Parser>) softReferenceCacheFactoryFactoryBean
+				.getObject();
 	}
 
 	@Test
@@ -130,8 +162,7 @@ public class SoftReferenceCacheFactoryImplTest extends BaseTestSupporter {
 		// System.out.println(result);
 		softReferenceCacheFactoryImpl.closeCache();
 		//
-		System.out.println("[" + Thread.currentThread().getName() + "] "
-				+ result);
+		System.out.println("[" + Thread.currentThread().getName() + "] " + result);
 		ThreadHelper.sleep(1 * 1000);
 	}
 
@@ -168,8 +199,7 @@ public class SoftReferenceCacheFactoryImplTest extends BaseTestSupporter {
 					throw new CacheException(ex);
 				}
 				//
-				System.out.println("[" + Thread.currentThread().getName()
-						+ "] " + cache);
+				System.out.println("[" + Thread.currentThread().getName() + "] " + cache);
 				return result;
 			}
 		});
