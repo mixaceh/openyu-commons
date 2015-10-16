@@ -7,7 +7,7 @@
 	<session-factory>
 		<!--  
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/commons</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/commons_log</property>
 		<property name="hibernate.connection.username">root</property>
 		<property name="hibernate.connection.password">1111</property>
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
@@ -18,7 +18,7 @@
 		java.lang.UnsupportedOperationException: Not supported by BasicDataSource 
 		at org.apache.commons.dbcp.BasicDataSource.getConnection(BasicDataSource.java:1062)
 		
-		<property name="hibernate.connection.url">jdbc:hsqldb:hsql://localhost:9001/commons</property>
+		<property name="hibernate.connection.url">jdbc:hsqldb:hsql://localhost:9001/commons_log</property>
 		<property name="hibernate.connection.username">SA</property>
 		<property name="hibernate.connection.password"></property>
 		-->
@@ -61,7 +61,7 @@
 		<property name="hibernate.cache.use_second_level_cache">true</property>
 		<property name="hibernate.cache.use_query_cache">true</property>
 		<property name="hibernate.cache.use_structured_entries">true</property>
-		<property name="net.sf.ehcache.configurationResourceName">/ehcache.xml</property>
+		<property name="net.sf.ehcache.configurationResourceName">/ehcache-log.xml</property>
 
 		<property name="hibernate.bytecode.provider">cglib</property>
 		<property name="hibernate.jdbc.batch_size">50</property>

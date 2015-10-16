@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
           "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+          "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
 	<session-factory>
@@ -67,7 +67,7 @@
 		<property name="hibernate.bytecode.provider">cglib</property>
 		<property name="hibernate.jdbc.batch_size">50</property>
 		<property name="hibernate.hbm2ddl.auto">update</property>
-		<!--  
+		<!-- default jta 
 		<property name="hibernate.current_session_context_class">thread</property>
 		-->
 		
@@ -83,6 +83,7 @@
 		-->
 		
 		<!-- hibernate 4 -->
+		<property name="hibernate.search.lucene_version">LUCENE_CURRENT</property>
 		<property name="hibernate.search.default.directory_provider">filesystem</property>
 		<property name="hibernate.search.default.indexBase">search</property>
 		<property name="javax.persistence.validation.mode">none</property>

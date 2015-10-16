@@ -27,72 +27,12 @@
 	<bean
 		id="logSessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-	    <!-- hibernate 3 
-		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-		-->
-		<!--
-		<property name="configLocation" value="hibernate.cfg.xml" /> 
-		-->
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/hibernate-log.cfg.xml" />
 		<property
 			name="dataSource"
 			ref="logDataSource" />
-		<property name="hibernateProperties">
-			<props>
-				<!-- database-log.properties -->
-				<!-- hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect -->
-
-				<prop key="hibernate.dialect">${log.bonecp.hibernate.dialect}</prop>
-				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop> -->
-				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop> -->
-
-				<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
-
-				<prop key="hibernate.generate_statistics">true</prop>
-				<prop key="hibernate.show_sql">${log.bonecp.hibernate.show_sql}</prop>
-				<prop key="hibernate.format_sql">${log.bonecp.hibernate.format_sql}</prop>
-
-				<!--  hibernate 3  
-				<prop key="hibernate.cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider
-				</prop>
-				<prop key="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider
-				</prop>
-				-->
-
-				<!-- hibernate 4 
-				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
-				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop>
-				-->
-
-				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
-				<prop key="hibernate.cache.use_second_level_cache">true</prop>
-				<prop key="hibernate.cache.use_query_cache">true</prop>
-				<prop key="hibernate.cache.use_structured_entries">true</prop>
-				<prop key="net.sf.ehcache.configurationResourceName">/ehcache-log.xml</prop>
-
-				<prop key="hibernate.bytecode.provider">cglib</prop>
-				<prop key="hibernate.jdbc.batch_size">${log.bonecp.hibernate.jdbc.batch_size}</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
-
-				<!-- no jta -->
-				<prop key="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory
-				</prop>
-				
-				<!-- jta
-				<prop key="hibernate.transaction.factory_class">hibernate.transaction.factory_class=org.hibernate.transaction.JTATransactionFactory 
-				</prop>
-				 -->
-
-				<prop key="hibernate.search.default.directory_provider">filesystem</prop>
-				<prop key="hibernate.search.default.indexBase">${log.bonecp.hibernate.search.default.indexBase}
-				</prop>
-				<prop key="javax.persistence.validation.mode">none</prop>
-			</props>
-		</property>
-		<!-- hibernate 3  
-		<property name="lobHandler">
-			<ref bean="lobHandler" />
-		</property>
-		-->
 		<property name="packagesToScan">
 			<list>
 			</list>
@@ -103,12 +43,7 @@
 		id="logHibernateTemplate"
 		class="org.springframework.orm.hibernate4.HibernateTemplate"
 		p:sessionFactory-ref="logSessionFactory" />
-
-	<!--  
-	<bean id="logLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler"
-		lazy-init="true" />
-	-->
-
+	
 	<!--
 	<bean id="logHibernateInterceptor" class="org.springframework.orm.hibernate3.HibernateInterceptor">
 		<property name="sessionFactory">
