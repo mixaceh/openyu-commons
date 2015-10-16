@@ -12,7 +12,7 @@ import java.util.zip.InflaterInputStream;
 import org.openyu.commons.commons.pool.CacheCallback;
 import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
-import org.openyu.commons.commons.pool.impl.SoftReferenceCacheFactoryImpl;
+import org.openyu.commons.commons.pool.impl.SoftReferenceCacheFactoryFactoryBean;
 import org.openyu.commons.commons.pool.supporter.CacheableObjectFactorySupporter;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
@@ -56,8 +56,7 @@ import net.jpountz.lz4.LZ4FastDecompressor;
 public class CompressHelper extends BaseHelperSupporter {
 
 	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(CompressHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(CompressHelper.class);
 
 	private static final int BUFFER_LENGTH = 1024;
 
@@ -70,8 +69,14 @@ public class CompressHelper extends BaseHelperSupporter {
 	 * lzma use
 	 */
 	private static final byte[] props = new byte[propSize];
+	/**
+	 * 壓縮處理器工廠
+	 */
+	private static SoftReferenceCacheFactoryFactoryBean<CompressProcessor, SoftReferenceCacheFactory<CompressProcessor>> compressProcessorCacheFactoryFactoryBean;
 
-	/** 壓縮處理器 */
+	/**
+	 * 壓縮處理器
+	 */
 	private static SoftReferenceCacheFactory<CompressProcessor> compressProcessorCacheFactory;
 
 	static {
@@ -79,6 +84,7 @@ public class CompressHelper extends BaseHelperSupporter {
 	}
 
 	protected static class Static {
+		@SuppressWarnings("unchecked")
 		public Static() {
 			props[0] = 0x5d;
 			props[1] = 0x00;
@@ -89,17 +95,46 @@ public class CompressHelper extends BaseHelperSupporter {
 			try {
 
 				// compressProcessor
-				compressProcessorCacheFactory = SoftReferenceCacheFactoryImpl
-						.createInstance(new CacheableObjectFactorySupporter<CompressProcessor>() {
+				// compressProcessorCacheFactory = SoftReferenceCacheFactoryImpl
+				// .createInstance(new
+				// CacheableObjectFactorySupporter<CompressProcessor>() {
+				//
+				// private static final long serialVersionUID =
+				// -2745795176962911555L;
+				//
+				// public CompressProcessor makeObject() throws Exception {
+				// CompressProcessor obj = new CompressProcessorImpl();
+				// obj.setCompress(ConfigHelper.isCompress());
+				// obj.setCompressType(ConfigHelper.getCompressType());
+				// return obj;
+				// }
+				//
+				// public boolean validateObject(CompressProcessor obj) {
+				// return true;
+				// }
+				//
+				// public void activateObject(CompressProcessor obj) throws
+				// Exception {
+				// obj.setCompress(ConfigHelper.isCompress());
+				// obj.setCompressType(ConfigHelper.getCompressType());
+				// }
+				//
+				// public void passivateObject(CompressProcessor obj) throws
+				// Exception {
+				// obj.reset();
+				// }
+				// });
+
+				compressProcessorCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<CompressProcessor, SoftReferenceCacheFactory<CompressProcessor>>();
+				compressProcessorCacheFactoryFactoryBean
+						.setCacheableObjectFactory(new CacheableObjectFactorySupporter<CompressProcessor>() {
 
 							private static final long serialVersionUID = -2745795176962911555L;
 
-							public CompressProcessor makeObject()
-									throws Exception {
+							public CompressProcessor makeObject() throws Exception {
 								CompressProcessor obj = new CompressProcessorImpl();
 								obj.setCompress(ConfigHelper.isCompress());
-								obj.setCompressType(ConfigHelper
-										.getCompressType());
+								obj.setCompressType(ConfigHelper.getCompressType());
 								return obj;
 							}
 
@@ -107,21 +142,21 @@ public class CompressHelper extends BaseHelperSupporter {
 								return true;
 							}
 
-							public void activateObject(CompressProcessor obj)
-									throws Exception {
+							public void activateObject(CompressProcessor obj) throws Exception {
 								obj.setCompress(ConfigHelper.isCompress());
-								obj.setCompressType(ConfigHelper
-										.getCompressType());
+								obj.setCompressType(ConfigHelper.getCompressType());
 							}
 
-							public void passivateObject(CompressProcessor obj)
-									throws Exception {
+							public void passivateObject(CompressProcessor obj) throws Exception {
 								obj.reset();
 							}
 						});
+				compressProcessorCacheFactoryFactoryBean.start();
+				compressProcessorCacheFactory = (SoftReferenceCacheFactory<CompressProcessor>) compressProcessorCacheFactoryFactoryBean
+						.getObject();
+
 			} catch (Exception ex) {
-				throw new HelperException("new Static() Initializing failed",
-						ex);
+				throw new HelperException("new Static() Initializing failed", ex);
 			}
 		}
 	}
@@ -176,8 +211,7 @@ public class CompressHelper extends BaseHelperSupporter {
 			buff[3] = (byte) (length);
 
 			// 壓縮後長度
-			int written = compressor.compress(value, 0, length, buff,
-					INTEGER_BYTES, maxCompressedLength);
+			int written = compressor.compress(value, 0, length, buff, INTEGER_BYTES, maxCompressedLength);
 			// 新長度=4+壓縮後長度
 			int newLength = INTEGER_BYTES + written;
 			result = new byte[newLength];
@@ -202,12 +236,10 @@ public class CompressHelper extends BaseHelperSupporter {
 			//
 			final int INTEGER_BYTES = 4;
 			// 取原始長度
-			int uncompressedLength = ((value[0] & 0xFF) << 24)
-					| ((value[1] & 0xFF) << 16) | ((value[2] & 0xFF) << 8)
+			int uncompressedLength = ((value[0] & 0xFF) << 24) | ((value[1] & 0xFF) << 16) | ((value[2] & 0xFF) << 8)
 					| ((value[3] & 0xFF));
 			result = new byte[uncompressedLength];
-			int read = decompressor.decompress(value, INTEGER_BYTES, result, 0,
-					uncompressedLength);
+			int read = decompressor.decompress(value, INTEGER_BYTES, result, 0, uncompressedLength);
 			if (read != (value.length - INTEGER_BYTES)) {
 				result = new byte[0];
 			}
@@ -569,13 +601,11 @@ public class CompressHelper extends BaseHelperSupporter {
 	public static byte[] compressWithProcessor(final byte[] value) {
 		byte[] result = new byte[0];
 		//
-		result = (byte[]) compressProcessorCacheFactory
-				.execute(new CacheCallback<CompressProcessor>() {
-					public Object doInAction(CompressProcessor obj)
-							throws CacheException {
-						return obj.compress(value);
-					}
-				});
+		result = (byte[]) compressProcessorCacheFactory.execute(new CacheCallback<CompressProcessor>() {
+			public Object doInAction(CompressProcessor obj) throws CacheException {
+				return obj.compress(value);
+			}
+		});
 		//
 		return result;
 	}
@@ -583,13 +613,11 @@ public class CompressHelper extends BaseHelperSupporter {
 	public static byte[] decompressWithProcessor(final byte[] value) {
 		byte[] result = new byte[0];
 		//
-		result = (byte[]) compressProcessorCacheFactory
-				.execute(new CacheCallback<CompressProcessor>() {
-					public Object doInAction(CompressProcessor obj)
-							throws CacheException {
-						return obj.uncompress(value);
-					}
-				});
+		result = (byte[]) compressProcessorCacheFactory.execute(new CacheCallback<CompressProcessor>() {
+			public Object doInAction(CompressProcessor obj) throws CacheException {
+				return obj.uncompress(value);
+			}
+		});
 		//
 		return result;
 	}

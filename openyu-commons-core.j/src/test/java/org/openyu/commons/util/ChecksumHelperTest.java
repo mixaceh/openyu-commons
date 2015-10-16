@@ -34,22 +34,6 @@ public class ChecksumHelperTest extends BaseTestSupporter {
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	// round: 6.44
-	public void ___crc32() {
-		byte[] value = new byte[307200];// 300k
-		long result = 0;
-		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			result = ChecksumHelper.___crc32(value);
-		}
-		//
-		System.out.println(result);// 2196553878
-		assertEquals(2196553878L, result);
-	}
-
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
 	// round: 6.50
 	public void crc32() {
 		byte[] value = new byte[307200];// 300k
@@ -58,25 +42,6 @@ public class ChecksumHelperTest extends BaseTestSupporter {
 		final int COUNT = 1000;
 		for (int i = 0; i < COUNT; i++) {
 			result = ChecksumHelper.crc32(value);
-		}
-		//
-		System.out.println(result);// 2196553878
-		assertEquals(2196553878L, result);
-	}
-
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	// round: 0.73
-	public void ___crc32InputStream() throws Exception {
-		byte[] value = new byte[307200];// 300k
-		InputStream in = null;
-		long result = 0;
-		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			in = new ByteArrayInputStream(value);
-			result = ChecksumHelper.___crc32(in);
-			in.close();
 		}
 		//
 		System.out.println(result);// 2196553878
@@ -125,27 +90,6 @@ public class ChecksumHelperTest extends BaseTestSupporter {
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	// round: 0.98
-	public void ___adler32() {
-		byte[] value = new byte[307200];// 300k
-		long result = 0;
-		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			result = ChecksumHelper.___adler32(value);
-		}
-		//
-		System.out.println(result);
-		assertEquals(2956722177L, result);
-		//
-		InputStream in = new ByteArrayInputStream(value);
-		result = ChecksumHelper.adler32(in);
-		System.out.println(result);
-		assertEquals(2956722177L, result);
-	}
-
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
 	// round: 0.99
 	public void adler32() {
 		byte[] value = new byte[307200];// 300k
@@ -162,25 +106,6 @@ public class ChecksumHelperTest extends BaseTestSupporter {
 		InputStream in = new ByteArrayInputStream(value);
 		result = ChecksumHelper.adler32(in);
 		System.out.println(result);
-		assertEquals(2956722177L, result);
-	}
-
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	// round: 0.19
-	public void ___adler32InputStream() throws Exception {
-		byte[] value = new byte[307200];// 300k
-		InputStream in = null;
-		long result = 0;
-		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			in = new ByteArrayInputStream(value);
-			result = ChecksumHelper.___adler32(in);
-			in.close();
-		}
-		//
-		System.out.println(result);// 2956722177
 		assertEquals(2956722177L, result);
 	}
 
@@ -236,7 +161,7 @@ public class ChecksumHelperTest extends BaseTestSupporter {
 		result = ChecksumHelper.checksumWithProcessor(value);
 		//
 		System.out.println(result);
-		assertEquals(2956722177L, result);
+		assertEquals(3405579389L, result);
 	}
 
 }

@@ -8,7 +8,7 @@ import java.util.zip.Checksum;
 import org.openyu.commons.commons.pool.CacheCallback;
 import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
-import org.openyu.commons.commons.pool.impl.SoftReferenceCacheFactoryImpl;
+import org.openyu.commons.commons.pool.impl.SoftReferenceCacheFactoryFactoryBean;
 import org.openyu.commons.commons.pool.supporter.CacheableObjectFactorySupporter;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
@@ -34,16 +34,18 @@ import org.slf4j.LoggerFactory;
 public class ChecksumHelper extends BaseHelperSupporter {
 
 	/** The Constant LOGGER. */
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(ChecksumHelper.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(ChecksumHelper.class);
 
 	public static final int BUFFER_LENGTH = 1024;
 
-	private static SoftReferenceCacheFactory<CRC32> crc32CacheFactory;
+	/**
+	 * 檢查碼處理器工廠
+	 */
+	private static SoftReferenceCacheFactoryFactoryBean<ChecksumProcessor, SoftReferenceCacheFactory<ChecksumProcessor>> checksumProcessorCacheFactoryFactoryBean;
 
-	private static SoftReferenceCacheFactory<Adler32> adler32CacheFactory;
-
-	/** 檢查碼處理器 */
+	/**
+	 * 檢查碼處理器
+	 */
 	private static SoftReferenceCacheFactory<ChecksumProcessor> checksumProcessorCacheFactory;
 
 	static {
@@ -51,52 +53,50 @@ public class ChecksumHelper extends BaseHelperSupporter {
 	}
 
 	protected static class Static {
+		@SuppressWarnings("unchecked")
 		public Static() {
 			try {
-				// crc32
-				crc32CacheFactory = SoftReferenceCacheFactoryImpl
-						.createInstance(new CacheableObjectFactorySupporter<CRC32>() {
-
-							private static final long serialVersionUID = -7510715895070674434L;
-
-							public CRC32 makeObject() throws Exception {
-								return new CRC32();
-							}
-
-							public void passivateObject(CRC32 obj)
-									throws Exception {
-								obj.reset();
-							}
-						});
-
-				// adler32
-				adler32CacheFactory = SoftReferenceCacheFactoryImpl
-						.createInstance(new CacheableObjectFactorySupporter<Adler32>() {
-
-							private static final long serialVersionUID = -1974263719398091583L;
-
-							public Adler32 makeObject() throws Exception {
-								return new Adler32();
-							}
-
-							public void passivateObject(Adler32 obj)
-									throws Exception {
-								obj.reset();
-							}
-						});
 
 				// checksumProcessor
-				checksumProcessorCacheFactory = SoftReferenceCacheFactoryImpl
-						.createInstance(new CacheableObjectFactorySupporter<ChecksumProcessor>() {
+				// checksumProcessorCacheFactory = SoftReferenceCacheFactoryImpl
+				// .createInstance(new
+				// CacheableObjectFactorySupporter<ChecksumProcessor>() {
+				//
+				// private static final long serialVersionUID =
+				// -2745795176962911555L;
+				//
+				// public ChecksumProcessor makeObject() throws Exception {
+				// ChecksumProcessor obj = new ChecksumProcessorImpl();
+				// obj.setChecksum(ConfigHelper.isChecksum());
+				// obj.setChecksumType(ConfigHelper.getChecksumType());
+				// return obj;
+				// }
+				//
+				// public boolean validateObject(ChecksumProcessor obj) {
+				// return true;
+				// }
+				//
+				// public void activateObject(ChecksumProcessor obj) throws
+				// Exception {
+				// obj.setChecksum(ConfigHelper.isChecksum());
+				// obj.setChecksumType(ConfigHelper.getChecksumType());
+				// }
+				//
+				// public void passivateObject(ChecksumProcessor obj) throws
+				// Exception {
+				// obj.reset();
+				// }
+				// });
+				checksumProcessorCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<ChecksumProcessor, SoftReferenceCacheFactory<ChecksumProcessor>>();
+				checksumProcessorCacheFactoryFactoryBean
+						.setCacheableObjectFactory(new CacheableObjectFactorySupporter<ChecksumProcessor>() {
 
 							private static final long serialVersionUID = -2745795176962911555L;
 
-							public ChecksumProcessor makeObject()
-									throws Exception {
+							public ChecksumProcessor makeObject() throws Exception {
 								ChecksumProcessor obj = new ChecksumProcessorImpl();
 								obj.setChecksum(ConfigHelper.isChecksum());
-								obj.setChecksumType(ConfigHelper
-										.getChecksumType());
+								obj.setChecksumType(ConfigHelper.getChecksumType());
 								return obj;
 							}
 
@@ -104,21 +104,20 @@ public class ChecksumHelper extends BaseHelperSupporter {
 								return true;
 							}
 
-							public void activateObject(ChecksumProcessor obj)
-									throws Exception {
+							public void activateObject(ChecksumProcessor obj) throws Exception {
 								obj.setChecksum(ConfigHelper.isChecksum());
-								obj.setChecksumType(ConfigHelper
-										.getChecksumType());
+								obj.setChecksumType(ConfigHelper.getChecksumType());
 							}
 
-							public void passivateObject(ChecksumProcessor obj)
-									throws Exception {
+							public void passivateObject(ChecksumProcessor obj) throws Exception {
 								obj.reset();
 							}
 						});
+				checksumProcessorCacheFactoryFactoryBean.start();
+				checksumProcessorCacheFactory = (SoftReferenceCacheFactory<ChecksumProcessor>) checksumProcessorCacheFactoryFactoryBean
+						.getObject();
 			} catch (Exception ex) {
-				throw new HelperException("new Static() Initializing failed",
-						ex);
+				throw new HelperException("new Static() Initializing failed", ex);
 			}
 		}
 	}
@@ -171,7 +170,7 @@ public class ChecksumHelper extends BaseHelperSupporter {
 		return crc32(ByteHelper.toByteArray(value, charsetName));
 	}
 
-	public static long ___crc32(final byte[] value) {
+	public static long crc32(final byte[] value) {
 		long result = 0;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -186,38 +185,10 @@ public class ChecksumHelper extends BaseHelperSupporter {
 	/**
 	 * crc32
 	 * 
-	 * @param value
-	 * @return
-	 */
-	public static long crc32(final byte[] value) {
-		long result = 0;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		Long retObj = (Long) crc32CacheFactory
-				.execute(new CacheCallback<CRC32>() {
-					public Object doInAction(CRC32 obj) throws CacheException {
-						try {
-							obj.update(value, 0, value.length);
-							return new Long(obj.getValue());
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
-						return new Long(0);
-					}
-				});
-		result = retObj.longValue();
-		//
-		return result;
-	}
-
-	/**
-	 * crc32
-	 * 
 	 * @param inputStream
 	 * @return
 	 */
-	public static long ___crc32(InputStream inputStream) {
+	public static long crc32(InputStream inputStream) {
 		long result = 0;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -237,35 +208,6 @@ public class ChecksumHelper extends BaseHelperSupporter {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return result;
-	}
-
-	/**
-	 * crc32
-	 * 
-	 * @param inputStream
-	 * @return
-	 */
-	public static long crc32(final InputStream inputStream) {
-		long result = 0;
-		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
-		//
-		Long retObj = (Long) crc32CacheFactory
-				.execute(new CacheCallback<CRC32>() {
-					public Object doInAction(CRC32 obj) throws CacheException {
-						try {
-							byte[] value = IoHelper.read(inputStream);
-							obj.update(value, 0, value.length);
-							return new Long(obj.getValue());
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
-						return new Long(0);
-					}
-				});
-		result = retObj.longValue();
-		//
 		return result;
 	}
 
@@ -307,8 +249,7 @@ public class ChecksumHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static String crc32AsHex(String value, String charsetName) {
-		return EncodingHelper.encodeHex(ByteHelper.toByteArray(crc32(value,
-				charsetName)));
+		return EncodingHelper.encodeHex(ByteHelper.toByteArray(crc32(value, charsetName)));
 	}
 
 	/**
@@ -358,7 +299,7 @@ public class ChecksumHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static long ___adler32(byte[] value) {
+	public static long adler32(byte[] value) {
 		long result = 0;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -376,38 +317,10 @@ public class ChecksumHelper extends BaseHelperSupporter {
 	/**
 	 * adler32
 	 * 
-	 * @param value
-	 * @return
-	 */
-	public static long adler32(final byte[] value) {
-		long result = 0;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		Long retObj = (Long) adler32CacheFactory
-				.execute(new CacheCallback<Adler32>() {
-					public Object doInAction(Adler32 obj) throws CacheException {
-						try {
-							obj.update(value, 0, value.length);
-							return new Long(obj.getValue());
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
-						return new Long(0);
-					}
-				});
-		result = retObj.longValue();
-		//
-		return result;
-	}
-
-	/**
-	 * adler32
-	 * 
 	 * @param inputStream
 	 * @return
 	 */
-	public static long ___adler32(InputStream inputStream) {
+	public static long adler32(InputStream inputStream) {
 		long result = 0;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -427,35 +340,6 @@ public class ChecksumHelper extends BaseHelperSupporter {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return result;
-	}
-
-	/**
-	 * adler32
-	 * 
-	 * @param inputStream
-	 * @return
-	 */
-	public static long adler32(final InputStream inputStream) {
-		long result = 0;
-		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
-		//
-		Long retObj = (Long) adler32CacheFactory
-				.execute(new CacheCallback<Adler32>() {
-					public Object doInAction(Adler32 obj) throws CacheException {
-						try {
-							byte[] value = IoHelper.read(inputStream);
-							obj.update(value, 0, value.length);
-							return new Long(obj.getValue());
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
-						return new Long(0);
-					}
-				});
-		result = retObj.longValue();
-		//
 		return result;
 	}
 
@@ -497,8 +381,7 @@ public class ChecksumHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static String adler32AsHex(String value, String charsetName) {
-		return EncodingHelper.encodeHex(ByteHelper.toByteArray(adler32(value,
-				charsetName)));
+		return EncodingHelper.encodeHex(ByteHelper.toByteArray(adler32(value, charsetName)));
 	}
 
 	/**
@@ -508,8 +391,7 @@ public class ChecksumHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static String adler32AsHex(byte[] values) {
-		return EncodingHelper
-				.encodeHex(ByteHelper.toByteArray(adler32(values)));
+		return EncodingHelper.encodeHex(ByteHelper.toByteArray(adler32(values)));
 	}
 
 	/**
@@ -525,13 +407,11 @@ public class ChecksumHelper extends BaseHelperSupporter {
 	public static long checksumWithProcessor(final byte[] value) {
 		long result = 0;
 		//
-		Long retObj = (Long) checksumProcessorCacheFactory
-				.execute(new CacheCallback<ChecksumProcessor>() {
-					public Object doInAction(ChecksumProcessor obj)
-							throws CacheException {
-						return obj.checksum(value);
-					}
-				});
+		Long retObj = (Long) checksumProcessorCacheFactory.execute(new CacheCallback<ChecksumProcessor>() {
+			public Object doInAction(ChecksumProcessor obj) throws CacheException {
+				return obj.checksum(value);
+			}
+		});
 		result = NumberHelper.safeGet(retObj);
 		//
 		return result;

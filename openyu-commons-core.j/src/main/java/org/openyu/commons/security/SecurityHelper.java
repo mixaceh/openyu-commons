@@ -167,10 +167,15 @@ public class SecurityHelper extends BaseHelperSupporter {
 	// "securityHelper.randomAuthKey";
 	//
 	// private static String randomAuthKey;
+	
+	/**
+	 * 安全性處理器工廠
+	 */
+	private static SoftReferenceCacheFactoryFactoryBean<SecurityProcessor, SoftReferenceCacheFactory<SecurityProcessor>> securityProcessorCacheFactoryFactoryBean;
 
-	private static SoftReferenceCacheFactoryFactoryBean<SecurityProcessor, SoftReferenceCacheFactory<SecurityProcessor>> softReferenceCacheFactoryFactoryBean;
-
-	/** 安全性處理器 */
+	/**
+	 * 安全性處理器
+	 */
 	private static SoftReferenceCacheFactory<SecurityProcessor> securityProcessorCacheFactory;
 
 	static {
@@ -222,8 +227,8 @@ public class SecurityHelper extends BaseHelperSupporter {
 				// }
 				// });
 
-				softReferenceCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<SecurityProcessor, SoftReferenceCacheFactory<SecurityProcessor>>();
-				softReferenceCacheFactoryFactoryBean
+				securityProcessorCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<SecurityProcessor, SoftReferenceCacheFactory<SecurityProcessor>>();
+				securityProcessorCacheFactoryFactoryBean
 						.setCacheableObjectFactory(new CacheableObjectFactorySupporter<SecurityProcessor>() {
 
 							private static final long serialVersionUID = 466475419232947467L;
@@ -250,8 +255,8 @@ public class SecurityHelper extends BaseHelperSupporter {
 								obj.reset();
 							}
 						});
-				softReferenceCacheFactoryFactoryBean.start();
-				securityProcessorCacheFactory = (SoftReferenceCacheFactory<SecurityProcessor>) softReferenceCacheFactoryFactoryBean
+				securityProcessorCacheFactoryFactoryBean.start();
+				securityProcessorCacheFactory = (SoftReferenceCacheFactory<SecurityProcessor>) securityProcessorCacheFactoryFactoryBean
 						.getObject();
 
 			} catch (Exception ex) {
