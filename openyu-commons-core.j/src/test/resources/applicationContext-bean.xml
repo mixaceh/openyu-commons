@@ -97,9 +97,6 @@
 			value="true" />
 		<property name="locations">
 			<list>
-				<value>file:src/test/config/etc/database.properties</value>
-				<value>file:src/test/config/etc/database-log.properties</value>
-				
 				<!-- hbase zookeeper -->
 				<value>file:src/test/config/etc/hbase-zookeeper.properties</value>
 				

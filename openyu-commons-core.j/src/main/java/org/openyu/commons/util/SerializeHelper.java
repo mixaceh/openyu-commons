@@ -16,13 +16,12 @@ import org.jgroups.util.Util;
 import org.openyu.commons.commons.pool.CacheCallback;
 import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
-import org.openyu.commons.commons.pool.impl.SoftReferenceCacheFactoryImpl;
+import org.openyu.commons.commons.pool.impl.SoftReferenceCacheFactoryFactoryBean;
 import org.openyu.commons.commons.pool.supporter.CacheableObjectFactorySupporter;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.io.IoHelper;
 import org.openyu.commons.lang.ByteHelper;
-import org.openyu.commons.lang.BooleanHelper;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -46,25 +45,18 @@ import org.openyu.commons.util.impl.SerializeProcessorImpl;
 public class SerializeHelper extends BaseHelperSupporter {
 
 	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(SerializeHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(SerializeHelper.class);
 
-	private static FSTConfiguration fstConfiguration = FSTConfiguration
-			.createDefaultConfiguration();
+	private static FSTConfiguration fstConfiguration = FSTConfiguration.createDefaultConfiguration();
 
-	private static SoftReferenceCacheFactory<FSTObjectOutput> fstObjectOutputCacheFactory;
+	/**
+	 * 序列化處理器工廠
+	 */
+	private static SoftReferenceCacheFactoryFactoryBean<SerializeProcessor, SoftReferenceCacheFactory<SerializeProcessor>> serializeProcessorCacheFactoryFactoryBean;
 
-	private static SoftReferenceCacheFactory<FSTObjectInput> fstObjectInputCacheFactory;
-
-	private static SoftReferenceCacheFactory<Kryo> kryoCacheFactory;
-
-	private static SoftReferenceCacheFactory<ObjectMapper> jacksonCacheFactory;
-
-	private static SoftReferenceCacheFactory<ObjectMapper> smileCacheFactory;
-
-	private static SoftReferenceCacheFactory<JacksonSmileProvider> smileJaxrsCacheFactory;
-
-	/** 序列化處理器 */
+	/**
+	 * 序列化處理器
+	 */
 	private static SoftReferenceCacheFactory<SerializeProcessor> serializeProcessorCacheFactory;
 
 	static {
@@ -72,117 +64,52 @@ public class SerializeHelper extends BaseHelperSupporter {
 	}
 
 	protected static class Static {
+		@SuppressWarnings("unchecked")
 		public Static() {
 			try {
-				// FSTObjectOutput
-				fstObjectOutputCacheFactory = SoftReferenceCacheFactoryImpl
-						.createInstance(new CacheableObjectFactorySupporter<FSTObjectOutput>() {
-
-							private static final long serialVersionUID = -7462758716430774639L;
-
-							public FSTObjectOutput makeObject()
-									throws Exception {
-								return new FSTObjectOutput();
-							}
-
-							public boolean validateObject(FSTObjectOutput obj) {
-								return true;
-							}
-						});
-
-				// FSTObjectInput
-				fstObjectInputCacheFactory = SoftReferenceCacheFactoryImpl
-						.createInstance(new CacheableObjectFactorySupporter<FSTObjectInput>() {
-
-							private static final long serialVersionUID = 1860762668217964912L;
-
-							public FSTObjectInput makeObject() throws Exception {
-								return new FSTObjectInput();
-							}
-
-							public boolean validateObject(FSTObjectInput obj) {
-								return true;
-							}
-						});
-
-				// kryo
-				kryoCacheFactory = SoftReferenceCacheFactoryImpl
-						.createInstance(new CacheableObjectFactorySupporter<Kryo>() {
-
-							private static final long serialVersionUID = -9123962698682864084L;
-
-							public Kryo makeObject() throws Exception {
-								Kryo obj = new Kryo();
-								// obj.register(List.class);
-								// obj.register(ArrayList.class);
-								// obj.register(LinkedList.class);
-								return obj;
-							}
-
-							public boolean validateObject(Kryo obj) {
-								return true;
-							}
-						});
-
-				// jackson
-				jacksonCacheFactory = SoftReferenceCacheFactoryImpl
-						.createInstance(new CacheableObjectFactorySupporter<ObjectMapper>() {
-
-							private static final long serialVersionUID = 6880124212137012746L;
-
-							public ObjectMapper makeObject() throws Exception {
-								return new ObjectMapper();
-							}
-
-							public boolean validateObject(ObjectMapper obj) {
-								return true;
-							}
-						});
-
-				// smile
-				smileCacheFactory = SoftReferenceCacheFactoryImpl
-						.createInstance(new CacheableObjectFactorySupporter<ObjectMapper>() {
-
-							private static final long serialVersionUID = -7780789651449541685L;
-
-							public ObjectMapper makeObject() throws Exception {
-								return new ObjectMapper(new SmileFactory());
-							}
-
-							public boolean validateObject(ObjectMapper obj) {
-								return true;
-							}
-						});
-
-				// smileJaxrs
-				smileJaxrsCacheFactory = SoftReferenceCacheFactoryImpl
-						.createInstance(new CacheableObjectFactorySupporter<JacksonSmileProvider>() {
-
-							private static final long serialVersionUID = 4074975001368215557L;
-
-							public JacksonSmileProvider makeObject()
-									throws Exception {
-								return new JacksonSmileProvider();
-							}
-
-							public boolean validateObject(
-									JacksonSmileProvider obj) {
-								return true;
-							}
-						});
 
 				// serializeProcessor
-				serializeProcessorCacheFactory = SoftReferenceCacheFactoryImpl
-						.createInstance(new CacheableObjectFactorySupporter<SerializeProcessor>() {
+				// serializeProcessorCacheFactory =
+				// SoftReferenceCacheFactoryImpl
+				// .createInstance(new
+				// CacheableObjectFactorySupporter<SerializeProcessor>() {
+				//
+				// private static final long serialVersionUID =
+				// -7294494524764181899L;
+				//
+				// public SerializeProcessor makeObject() throws Exception {
+				// SerializeProcessor obj = new SerializeProcessorImpl();
+				// obj.setSerialize(ConfigHelper.isSerialize());
+				// obj.setSerializeType(ConfigHelper.getSerializeType());
+				// return obj;
+				// }
+				//
+				// public boolean validateObject(SerializeProcessor obj) {
+				// return true;
+				// }
+				//
+				// public void activateObject(SerializeProcessor obj) throws
+				// Exception {
+				// obj.setSerialize(ConfigHelper.isSerialize());
+				// obj.setSerializeType(ConfigHelper.getSerializeType());
+				// }
+				//
+				// public void passivateObject(SerializeProcessor obj) throws
+				// Exception {
+				// obj.reset();
+				// }
+				// });
+
+				serializeProcessorCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<SerializeProcessor, SoftReferenceCacheFactory<SerializeProcessor>>();
+				serializeProcessorCacheFactoryFactoryBean
+						.setCacheableObjectFactory(new CacheableObjectFactorySupporter<SerializeProcessor>() {
 
 							private static final long serialVersionUID = -7294494524764181899L;
 
-							public SerializeProcessor makeObject()
-									throws Exception {
+							public SerializeProcessor makeObject() throws Exception {
 								SerializeProcessor obj = new SerializeProcessorImpl();
 								obj.setSerialize(ConfigHelper.isSerialize());
-								obj.setSerializeType(ConfigHelper
-										.getSerializeType());
+								obj.setSerializeType(ConfigHelper.getSerializeType());
 								return obj;
 							}
 
@@ -190,21 +117,21 @@ public class SerializeHelper extends BaseHelperSupporter {
 								return true;
 							}
 
-							public void activateObject(SerializeProcessor obj)
-									throws Exception {
+							public void activateObject(SerializeProcessor obj) throws Exception {
 								obj.setSerialize(ConfigHelper.isSerialize());
-								obj.setSerializeType(ConfigHelper
-										.getSerializeType());
+								obj.setSerializeType(ConfigHelper.getSerializeType());
 							}
 
-							public void passivateObject(SerializeProcessor obj)
-									throws Exception {
+							public void passivateObject(SerializeProcessor obj) throws Exception {
 								obj.reset();
 							}
 						});
+				serializeProcessorCacheFactoryFactoryBean.start();
+				serializeProcessorCacheFactory = (SoftReferenceCacheFactory<SerializeProcessor>) serializeProcessorCacheFactoryFactoryBean
+						.getObject();
+
 			} catch (Exception ex) {
-				throw new HelperException("new Static() Initializing failed",
-						ex);
+				throw new HelperException("new Static() Initializing failed", ex);
 			}
 		}
 	}
@@ -281,8 +208,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean serialize(Serializable value,
-			OutputStream outputStream) {
+	public static boolean serialize(Serializable value, OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -361,7 +287,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] ___fst(Serializable value) {
+	public static byte[] fst(Serializable value) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -369,7 +295,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 		ByteArrayOutputStream baos = null;
 		try {
 			baos = new ByteArrayOutputStream();
-			boolean serialized = ___fst(value, baos);
+			boolean serialized = fst(value, baos);
 			if (serialized) {
 				result = baos.toByteArray();
 			}
@@ -390,7 +316,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean ___fst(Serializable value, OutputStream outputStream) {
+	public static boolean fst(Serializable value, OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -417,7 +343,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static <T> T ___defst(byte[] value) {
+	public static <T> T defst(byte[] value) {
 		T result = null;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -425,7 +351,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 		ByteArrayInputStream bais = null;
 		try {
 			bais = new ByteArrayInputStream(value);
-			result = ___defst(bais);
+			result = defst(bais);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -443,7 +369,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T ___defst(InputStream inputStream) {
+	public static <T> T defst(InputStream inputStream) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -584,131 +510,6 @@ public class SerializeHelper extends BaseHelperSupporter {
 	}
 
 	/**
-	 * fst 序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static byte[] fst(Serializable value) {
-		byte[] result = new byte[0];
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		ByteArrayOutputStream baos = null;
-		try {
-			baos = new ByteArrayOutputStream();
-			boolean serialized = fst(value, baos);
-			if (serialized) {
-				result = baos.toByteArray();
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			IoHelper.close(baos);
-		}
-		return result;
-	}
-
-	/**
-	 * fst 序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @param outputStream
-	 * @return
-	 */
-	public static boolean fst(final Serializable value,
-			final OutputStream outputStream) {
-		boolean result = false;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
-		//
-		Boolean retObj = (Boolean) fstObjectOutputCacheFactory
-				.execute(new CacheCallback<FSTObjectOutput>() {
-					public Object doInAction(FSTObjectOutput obj)
-							throws CacheException {
-						Output out = null;
-						try {
-							obj.resetForReUse(outputStream);
-							obj.writeObject(value);
-							return Boolean.TRUE;
-						} catch (Exception ex) {
-							throw new CacheException(ex);
-						} finally {
-							IoHelper.close((OutputStream) out);
-						}
-					}
-				});
-		result = BooleanHelper.safeGet(retObj);
-		//
-		return result;
-	}
-
-	/**
-	 * fst 反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static <T> T defst(byte[] value) {
-		T result = null;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		ByteArrayInputStream bais = null;
-		try {
-			bais = new ByteArrayInputStream(value);
-			result = defst(bais);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			IoHelper.close(bais);
-		}
-		return result;
-	}
-
-	/**
-	 * fst 反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param inputStream
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T defst(final InputStream inputStream) {
-		T result = null;
-		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
-		//
-		Object retObj = fstObjectInputCacheFactory
-				.execute(new CacheCallback<FSTObjectInput>() {
-					public Object doInAction(FSTObjectInput obj)
-							throws CacheException {
-						Output out = null;
-						try {
-							obj.resetForReuse(inputStream);
-							return obj.readObject();
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						} finally {
-							IoHelper.close((OutputStream) out);
-						}
-						return null;
-					}
-				});
-		result = (T) retObj;
-		//
-		return result;
-	}
-
-	/**
 	 * JGroup 序列化
 	 * 
 	 * object -> byte[]
@@ -761,7 +562,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] ___kryo(Serializable value) {
+	public static byte[] kryo(Serializable value) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -769,7 +570,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 		ByteArrayOutputStream baos = null;
 		try {
 			baos = new ByteArrayOutputStream();
-			boolean serialized = ___kryo(value, baos);
+			boolean serialized = kryo(value, baos);
 			if (serialized) {
 				result = baos.toByteArray();
 			}
@@ -790,8 +591,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean ___kryo(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean kryo(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -818,74 +618,6 @@ public class SerializeHelper extends BaseHelperSupporter {
 	}
 
 	/**
-	 * kryo 序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static byte[] kryo(Serializable value) {
-		byte[] result = new byte[0];
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		ByteArrayOutputStream baos = null;
-		try {
-			baos = new ByteArrayOutputStream();
-			boolean serialized = kryo(value, baos);
-			if (serialized) {
-				result = baos.toByteArray();
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			IoHelper.close(baos);
-		}
-		return result;
-	}
-
-	public static boolean kryo(Object value, OutputStream outputStream) {
-		return kryo((Serializable) value, outputStream);
-	}
-
-	/**
-	 * keyo 序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @param outputStream
-	 * @return
-	 */
-	public static boolean kryo(final Serializable value,
-			final OutputStream outputStream) {
-		boolean result = false;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
-		//
-		Boolean retObj = (Boolean) kryoCacheFactory
-				.execute(new CacheCallback<Kryo>() {
-					public Object doInAction(Kryo obj) throws CacheException {
-						Output out = null;
-						try {
-							out = new Output(outputStream);
-							obj.writeObject(out, value);
-							return Boolean.TRUE;
-						} catch (Exception ex) {
-							throw new CacheException(ex);
-						} finally {
-							IoHelper.close((OutputStream) out);
-						}
-					}
-				});
-		result = BooleanHelper.safeGet(retObj);
-		//
-		return result;
-	}
-
-	/**
 	 * kryo 反序列化
 	 * 
 	 * byte[] -> object
@@ -895,7 +627,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T ___dekryo(byte[] value, Class<?> clazz) {
+	public static <T> T dekryo(byte[] value, Class<?> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -903,7 +635,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 		ByteArrayInputStream bais = null;
 		try {
 			bais = new ByteArrayInputStream(value);
-			result = (T) ___dekryo(bais, clazz);
+			result = (T) dekryo(bais, clazz);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -921,8 +653,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @param clazz
 	 * @return
 	 */
-	public static <T> T ___dekryo(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T dekryo(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -938,180 +669,6 @@ public class SerializeHelper extends BaseHelperSupporter {
 			ex.printStackTrace();
 		} finally {
 			IoHelper.close((InputStream) in);
-		}
-		//
-		return result;
-	}
-
-	/**
-	 * kryo 反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param value
-	 * @param clazz
-	 * @return
-	 */
-	public static <T> T dekryo(byte[] value, Class<T> clazz) {
-		T result = null;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		ByteArrayInputStream bais = null;
-		try {
-			bais = new ByteArrayInputStream(value);
-			result = dekryo(bais, clazz);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			IoHelper.close(bais);
-		}
-		return result;
-	}
-
-	/**
-	 * kryo 反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param inputStream
-	 * @param clazz
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T dekryo(final InputStream inputStream,
-			final Class<T> clazz) {
-		T result = null;
-		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
-		AssertHelper.notNull(inputStream, "The Class must not be null");
-		//
-		Object retObj = kryoCacheFactory.execute(new CacheCallback<Kryo>() {
-			public Object doInAction(Kryo obj) throws CacheException {
-				Input in = null;
-				try {
-					in = new Input(inputStream);
-					return obj.readObject(in, clazz);
-				} catch (Exception ex) {
-					throw new CacheException(ex);
-				} finally {
-					IoHelper.close((InputStream) in);
-				}
-			}
-		});
-		result = (T) retObj;
-		//
-		return result;
-	}
-
-	/**
-	 * jackson 序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static byte[] ___jackson(Serializable value) {
-		byte[] result = new byte[0];
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		ByteArrayOutputStream baos = null;
-		try {
-			baos = new ByteArrayOutputStream();
-			boolean serialized = ___jackson(value, baos);
-			if (serialized) {
-				result = baos.toByteArray();
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			IoHelper.close(baos);
-		}
-		return result;
-	}
-
-	/**
-	 * jackson 序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @param outputStream
-	 * @return
-	 */
-	public static boolean ___jackson(final Serializable value,
-			final OutputStream outputStream) {
-		boolean result = false;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
-		//
-		ObjectMapper mapper = null;
-		try {
-			mapper = new ObjectMapper();
-			byte[] buff = mapper.writeValueAsBytes(value);
-			outputStream.write(buff);
-			result = true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-		}
-		//
-		return result;
-	}
-
-	/**
-	 * jackson 反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param value
-	 * @param clazz
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T ___dejackson(byte[] value, Class<?> clazz) {
-		T result = null;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		ByteArrayInputStream bais = null;
-		try {
-			bais = new ByteArrayInputStream(value);
-			result = (T) ___dejackson(bais, clazz);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			IoHelper.close(bais);
-		}
-		return result;
-	}
-
-	/**
-	 * jackson 反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param inputStream
-	 * @param clazz
-	 * @return
-	 */
-	public static <T> T ___dejackson(final InputStream inputStream,
-			final Class<T> clazz) {
-		T result = null;
-		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
-		AssertHelper.notNull(inputStream, "The Class must not be null");
-		//
-		ObjectMapper mapper = null;
-		try {
-			mapper = new ObjectMapper();
-			result = mapper.readValue(inputStream, clazz);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
 		}
 		//
 		return result;
@@ -1154,31 +711,22 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean jackson(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean jackson(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
 		//
-		Boolean retObj = (Boolean) jacksonCacheFactory
-				.execute(new CacheCallback<ObjectMapper>() {
-					public Object doInAction(ObjectMapper obj)
-							throws CacheException {
-						try {
-							byte[] buff = obj.writeValueAsBytes(value);
-							// obj.writeValue(outputStream, value); //write to
-							// json
-							// XmlMapper stax2-api-3.1.2.jar// write to xml
-							outputStream.write(buff);
-							return Boolean.TRUE;
-						} catch (Exception ex) {
-							throw new CacheException(ex);
-						} finally {
-						}
-					}
-				});
-		result = BooleanHelper.safeGet(retObj);
+		ObjectMapper mapper = null;
+		try {
+			mapper = new ObjectMapper();
+			byte[] buff = mapper.writeValueAsBytes(value);
+			outputStream.write(buff);
+			result = true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+		}
 		//
 		return result;
 	}
@@ -1219,90 +767,20 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @param clazz
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T dejackson(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T dejackson(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
 		AssertHelper.notNull(inputStream, "The Class must not be null");
 		//
-		Object retObj = jacksonCacheFactory
-				.execute(new CacheCallback<ObjectMapper>() {
-					public Object doInAction(ObjectMapper obj)
-							throws CacheException {
-						try {
-							// obj.readValue(jsonString, clazz);//read from json
-							return obj.readValue(inputStream, clazz);
-						} catch (Exception ex) {
-							throw new CacheException(ex);
-						} finally {
-						}
-					}
-				});
-		result = (T) retObj;
-		//
-		return result;
-	}
-
-	/**
-	 * jackson 序列化
-	 * 
-	 * object -> json string
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static String jacksonToString(Serializable value) {
-		String result = null;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		ByteArrayOutputStream baos = null;
+		ObjectMapper mapper = null;
 		try {
-			baos = new ByteArrayOutputStream();
-			boolean serialized = jacksonToString(value, baos);
-			if (serialized) {
-				result = baos.toString();
-			}
+			mapper = new ObjectMapper();
+			result = mapper.readValue(inputStream, clazz);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			IoHelper.close(baos);
 		}
-		return result;
-	}
-
-	/**
-	 * jackson 序列化
-	 * 
-	 * object -> json string
-	 * 
-	 * @param value
-	 * @param outputStream
-	 * @return
-	 */
-	public static boolean jacksonToString(final Serializable value,
-			final OutputStream outputStream) {
-		boolean result = false;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
-		//
-		Boolean retObj = (Boolean) jacksonCacheFactory
-				.execute(new CacheCallback<ObjectMapper>() {
-					public Object doInAction(ObjectMapper obj)
-							throws CacheException {
-						try {
-							obj.writeValue(outputStream, value);
-							return Boolean.TRUE;
-						} catch (Exception ex) {
-							throw new CacheException(ex);
-						} finally {
-						}
-					}
-				});
-		result = BooleanHelper.safeGet(retObj);
 		//
 		return result;
 	}
@@ -1331,153 +809,6 @@ public class SerializeHelper extends BaseHelperSupporter {
 		} finally {
 			IoHelper.close(bais);
 		}
-		return result;
-	}
-
-	/**
-	 * jackson 反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param inputStream
-	 * @param clazz
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T dejacksonFromString(final InputStream inputStream,
-			final Class<T> clazz) {
-		T result = null;
-		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
-		AssertHelper.notNull(inputStream, "The Class must not be null");
-		//
-		Object retObj = jacksonCacheFactory
-				.execute(new CacheCallback<ObjectMapper>() {
-					public Object doInAction(ObjectMapper obj)
-							throws CacheException {
-						try {
-							return obj.readValue(inputStream, clazz);
-						} catch (Exception ex) {
-							throw new CacheException(ex);
-						} finally {
-						}
-					}
-				});
-		result = (T) retObj;
-		//
-		return result;
-	}
-
-	/**
-	 * smile 序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static byte[] ___smile(Serializable value) {
-		byte[] result = new byte[0];
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		ByteArrayOutputStream baos = null;
-		try {
-			baos = new ByteArrayOutputStream();
-			boolean serialized = ___smile(value, baos);
-			if (serialized) {
-				result = baos.toByteArray();
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			IoHelper.close(baos);
-		}
-		return result;
-	}
-
-	/**
-	 * smile 序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @param outputStream
-	 * @return
-	 */
-	public static boolean ___smile(final Serializable value,
-			final OutputStream outputStream) {
-		boolean result = false;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
-		//
-		ObjectMapper mapper = null;
-		try {
-			mapper = new ObjectMapper(new SmileFactory());
-			byte[] buff = mapper.writeValueAsBytes(value);
-			outputStream.write(buff);
-			result = true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-		}
-		//
-		return result;
-	}
-
-	/**
-	 * smile 反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param value
-	 * @param clazz
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T ___desmile(byte[] value, Class<?> clazz) {
-		T result = null;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		ByteArrayInputStream bais = null;
-		try {
-			bais = new ByteArrayInputStream(value);
-			result = (T) ___desmile(bais, clazz);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			IoHelper.close(bais);
-		}
-		return result;
-	}
-
-	/**
-	 * smile 反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param inputStream
-	 * @param clazz
-	 * @return
-	 */
-	public static <T> T ___desmile(final InputStream inputStream,
-			final Class<T> clazz) {
-		T result = null;
-		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
-		AssertHelper.notNull(inputStream, "The Class must not be null");
-		//
-		ObjectMapper mapper = null;
-		try {
-			mapper = new ObjectMapper(new SmileFactory());
-			result = mapper.readValue(inputStream, clazz);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-		}
-		//
 		return result;
 	}
 
@@ -1518,28 +849,22 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean smile(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean smile(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
 		//
-		Boolean retObj = (Boolean) smileCacheFactory
-				.execute(new CacheCallback<ObjectMapper>() {
-					public Object doInAction(ObjectMapper obj)
-							throws CacheException {
-						try {
-							byte[] buff = obj.writeValueAsBytes(value);
-							outputStream.write(buff);
-							return Boolean.TRUE;
-						} catch (Exception ex) {
-							throw new CacheException(ex);
-						} finally {
-						}
-					}
-				});
-		result = BooleanHelper.safeGet(retObj);
+		ObjectMapper mapper = null;
+		try {
+			mapper = new ObjectMapper(new SmileFactory());
+			byte[] buff = mapper.writeValueAsBytes(value);
+			outputStream.write(buff);
+			result = true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+		}
 		//
 		return result;
 	}
@@ -1580,138 +905,16 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @param clazz
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T desmile(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T desmile(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
 		AssertHelper.notNull(inputStream, "The Class must not be null");
 		//
-		Object retObj = smileCacheFactory
-				.execute(new CacheCallback<ObjectMapper>() {
-					public Object doInAction(ObjectMapper obj)
-							throws CacheException {
-						try {
-							return obj.readValue(inputStream, clazz);
-						} catch (Exception ex) {
-							throw new CacheException(ex);
-						} finally {
-						}
-					}
-				});
-		result = (T) retObj;
-		//
-		return result;
-	}
-
-	/**
-	 * smile jaxrs序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static byte[] ___smileJaxrs(Serializable value) {
-		byte[] result = new byte[0];
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		ByteArrayOutputStream baos = null;
+		ObjectMapper mapper = null;
 		try {
-			baos = new ByteArrayOutputStream();
-			boolean serialized = ___smileJaxrs(value, baos);
-			if (serialized) {
-				result = baos.toByteArray();
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			IoHelper.close(baos);
-		}
-		return result;
-	}
-
-	/**
-	 * smile jaxrs序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @param outputStream
-	 * @return
-	 */
-	public static boolean ___smileJaxrs(final Serializable value,
-			final OutputStream outputStream) {
-		boolean result = false;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
-		//
-		JacksonSmileProvider provider = null;
-		try {
-			provider = new JacksonSmileProvider();
-			provider.writeTo(value, value.getClass(), null, null, null, null,
-					outputStream);
-			result = true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-		}
-		//
-		return result;
-	}
-
-	/**
-	 * smile jaxrs反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param value
-	 * @param clazz
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T ___desmileJaxrs(byte[] value, Class<?> clazz) {
-		T result = null;
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		ByteArrayInputStream bais = null;
-		try {
-			bais = new ByteArrayInputStream(value);
-			result = (T) ___desmileJaxrs(bais, clazz);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			IoHelper.close(bais);
-		}
-		return result;
-	}
-
-	/**
-	 * smile 反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param inputStream
-	 * @param clazz
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T ___desmileJaxrs(final InputStream inputStream,
-			final Class<T> clazz) {
-		T result = null;
-		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
-		AssertHelper.notNull(inputStream, "The Class must not be null");
-		//
-		JacksonSmileProvider provider = null;
-		try {
-			provider = new JacksonSmileProvider();
-			result = (T) provider.readFrom(Object.class, clazz, null, null,
-					null, inputStream);
+			mapper = new ObjectMapper(new SmileFactory());
+			result = mapper.readValue(inputStream, clazz);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -1749,7 +952,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 	}
 
 	/**
-	 * smile jaxrs 序列化
+	 * smile jaxrs序列化
 	 * 
 	 * object -> byte[]
 	 * 
@@ -1757,28 +960,21 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean smileJaxrs(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean smileJaxrs(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
 		//
-		Boolean retObj = (Boolean) smileJaxrsCacheFactory
-				.execute(new CacheCallback<JacksonSmileProvider>() {
-					public Object doInAction(JacksonSmileProvider obj)
-							throws CacheException {
-						try {
-							obj.writeTo(value, value.getClass(), null, null,
-									null, null, outputStream);
-							return Boolean.TRUE;
-						} catch (Exception ex) {
-							throw new CacheException(ex);
-						} finally {
-						}
-					}
-				});
-		result = BooleanHelper.safeGet(retObj);
+		JacksonSmileProvider provider = null;
+		try {
+			provider = new JacksonSmileProvider();
+			provider.writeTo(value, value.getClass(), null, null, null, null, outputStream);
+			result = true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+		}
 		//
 		return result;
 	}
@@ -1811,7 +1007,7 @@ public class SerializeHelper extends BaseHelperSupporter {
 	}
 
 	/**
-	 * smile jaxrs反序列化
+	 * smile 反序列化
 	 * 
 	 * byte[] -> object
 	 * 
@@ -1820,27 +1016,20 @@ public class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T desmileJaxrs(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T desmileJaxrs(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
 		AssertHelper.notNull(inputStream, "The Class must not be null");
 		//
-		Object retObj = smileJaxrsCacheFactory
-				.execute(new CacheCallback<JacksonSmileProvider>() {
-					public Object doInAction(JacksonSmileProvider obj)
-							throws CacheException {
-						try {
-							return obj.readFrom(Object.class, clazz, null,
-									null, null, inputStream);
-						} catch (Exception ex) {
-							throw new CacheException(ex);
-						} finally {
-						}
-					}
-				});
-		result = (T) retObj;
+		JacksonSmileProvider provider = null;
+		try {
+			provider = new JacksonSmileProvider();
+			result = (T) provider.readFrom(Object.class, clazz, null, null, null, inputStream);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+		}
 		//
 		return result;
 	}
@@ -1848,29 +1037,24 @@ public class SerializeHelper extends BaseHelperSupporter {
 	public static byte[] serializeWithProcessor(final Serializable value) {
 		byte[] result = new byte[0];
 		//
-		result = (byte[]) serializeProcessorCacheFactory
-				.execute(new CacheCallback<SerializeProcessor>() {
-					public Object doInAction(SerializeProcessor obj)
-							throws CacheException {
-						return obj.serialize(value);
-					}
-				});
+		result = (byte[]) serializeProcessorCacheFactory.execute(new CacheCallback<SerializeProcessor>() {
+			public Object doInAction(SerializeProcessor obj) throws CacheException {
+				return obj.serialize(value);
+			}
+		});
 		//
 		return result;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T deserializeWithProcessor(final byte[] value,
-			final Class<?> clazz) {
+	public static <T> T deserializeWithProcessor(final byte[] value, final Class<?> clazz) {
 		T result = null;
 		//
-		Object retObj = serializeProcessorCacheFactory
-				.execute(new CacheCallback<SerializeProcessor>() {
-					public Object doInAction(SerializeProcessor obj)
-							throws CacheException {
-						return obj.deserialize(value, clazz);
-					}
-				});
+		Object retObj = serializeProcessorCacheFactory.execute(new CacheCallback<SerializeProcessor>() {
+			public Object doInAction(SerializeProcessor obj) throws CacheException {
+				return obj.deserialize(value, clazz);
+			}
+		});
 		result = (T) retObj;
 		//
 		return result;
