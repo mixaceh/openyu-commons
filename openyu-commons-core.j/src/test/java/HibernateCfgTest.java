@@ -82,7 +82,7 @@ public class HibernateCfgTest extends BaseTestSupporter {
 	}
 
 	@Test
-	public void crudNoTx() throws Exception {
+	public void crudWithNoTx() throws Exception {
 		createSessionFactory();
 		//
 		Session session = sessionFactory.openSession();
@@ -134,7 +134,7 @@ public class HibernateCfgTest extends BaseTestSupporter {
 	}
 
 	@Test
-	public void crudTx() throws Exception {
+	public void crudWithTx() throws Exception {
 		createSessionFactory();
 		//
 		Session session = sessionFactory.openSession();
