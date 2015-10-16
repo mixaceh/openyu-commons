@@ -64,21 +64,18 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 
 	private Map<String, ExecutorService> tableExecutors = new ConcurrentHashMap<String, ExecutorService>();
 
-	public PoolableHConnection(HConnection hConnection,
-			ObjectPool<HConnection> pool) throws MasterNotRunningException,
-			ZooKeeperConnectionException {
+	public PoolableHConnection(HConnection hConnection, ObjectPool<HConnection> pool)
+			throws MasterNotRunningException, ZooKeeperConnectionException {
 		this.hConnection = hConnection;
 		this.pool = pool;
 		//
 		this.delegate = new HBaseAdmin(this.hConnection);
-		this.maxThreads = getConfiguration().getInt("hbase.htable.threads.max",
-				100);
+		this.maxThreads = getConfiguration().getInt("hbase.htable.threads.max", 100);
 		if (this.maxThreads == 0) {
 			this.maxThreads = 1;
 		}
 		//
-		this.keepAliveTime = getConfiguration().getLong(
-				"hbase.htable.threads.keepalivetime", 60L);
+		this.keepAliveTime = getConfiguration().getLong("hbase.htable.threads.keepalivetime", 60L);
 	}
 
 	public HBaseAdmin getDelegate() {
@@ -93,8 +90,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 					label = this.hConnection.toString();
 				} catch (Exception ex) {
 				}
-				throw new ZooKeeperConnectionException("HConnection " + label
-						+ " was already closed");
+				throw new ZooKeeperConnectionException("HConnection " + label + " was already closed");
 			}
 			throw new ZooKeeperConnectionException("HConnection is null");
 		}
@@ -115,8 +111,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 				reallyClose();
 			} catch (Exception ie) {
 			}
-			throw new RuntimeException(
-					"Cannot close HConnection (isClosed check failed)");
+			throw new RuntimeException("Cannot close HConnection (isClosed check failed)");
 		}
 		if (!(isUnderlyingConectionClosed)) {
 			try {
@@ -136,8 +131,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 			} catch (RuntimeException e) {
 				throw e;
 			} catch (Exception e) {
-				throw new RuntimeException(
-						"Cannot close HConnection (return to pool failed)");
+				throw new RuntimeException("Cannot close HConnection (return to pool failed)");
 			}
 		} else {
 			try {
@@ -218,8 +212,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public HMasterInterface getMaster() throws MasterNotRunningException,
-			ZooKeeperConnectionException {
+	public HMasterInterface getMaster() throws MasterNotRunningException, ZooKeeperConnectionException {
 		checkOpen();
 		try {
 			return this.hConnection.getMaster();
@@ -231,8 +224,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public boolean isMasterRunning() throws MasterNotRunningException,
-			ZooKeeperConnectionException {
+	public boolean isMasterRunning() throws MasterNotRunningException, ZooKeeperConnectionException {
 		checkOpen();
 		try {
 			return this.hConnection.isMasterRunning();
@@ -284,8 +276,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public HTableDescriptor getHTableDescriptor(byte[] paramArrayOfByte)
-			throws IOException {
+	public HTableDescriptor getHTableDescriptor(byte[] paramArrayOfByte) throws IOException {
 		checkOpen();
 		try {
 			return this.hConnection.getHTableDescriptor(paramArrayOfByte);
@@ -295,12 +286,10 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public HRegionLocation locateRegion(byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2) throws IOException {
+	public HRegionLocation locateRegion(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) throws IOException {
 		checkOpen();
 		try {
-			return this.hConnection.locateRegion(paramArrayOfByte1,
-					paramArrayOfByte2);
+			return this.hConnection.locateRegion(paramArrayOfByte1, paramArrayOfByte2);
 		} catch (IOException e) {
 			handleException(e);
 		}
@@ -325,20 +314,17 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public HRegionLocation relocateRegion(byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2) throws IOException {
+	public HRegionLocation relocateRegion(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) throws IOException {
 		checkOpen();
 		try {
-			return this.hConnection.relocateRegion(paramArrayOfByte1,
-					paramArrayOfByte2);
+			return this.hConnection.relocateRegion(paramArrayOfByte1, paramArrayOfByte2);
 		} catch (IOException e) {
 			handleException(e);
 		}
 		return null;
 	}
 
-	public HRegionLocation locateRegion(byte[] paramArrayOfByte)
-			throws IOException {
+	public HRegionLocation locateRegion(byte[] paramArrayOfByte) throws IOException {
 		checkOpen();
 		try {
 			return this.hConnection.locateRegion(paramArrayOfByte);
@@ -348,8 +334,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public List<HRegionLocation> locateRegions(byte[] paramArrayOfByte)
-			throws IOException {
+	public List<HRegionLocation> locateRegions(byte[] paramArrayOfByte) throws IOException {
 		checkOpen();
 		try {
 			return this.hConnection.locateRegions(paramArrayOfByte);
@@ -359,8 +344,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public HRegionInterface getHRegionConnection(
-			HServerAddress paramHServerAddress) throws IOException {
+	public HRegionInterface getHRegionConnection(HServerAddress paramHServerAddress) throws IOException {
 		checkOpen();
 		try {
 			return this.hConnection.getHRegionConnection(paramHServerAddress);
@@ -370,8 +354,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public HRegionInterface getHRegionConnection(String paramString,
-			int paramInt) throws IOException {
+	public HRegionInterface getHRegionConnection(String paramString, int paramInt) throws IOException {
 		checkOpen();
 		try {
 			return this.hConnection.getHRegionConnection(paramString, paramInt);
@@ -381,50 +364,44 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public HRegionInterface getHRegionConnection(
-			HServerAddress paramHServerAddress, boolean paramBoolean)
+	public HRegionInterface getHRegionConnection(HServerAddress paramHServerAddress, boolean paramBoolean)
 			throws IOException {
 		checkOpen();
 		try {
-			return this.hConnection.getHRegionConnection(paramHServerAddress,
-					paramBoolean);
+			return this.hConnection.getHRegionConnection(paramHServerAddress, paramBoolean);
 		} catch (IOException e) {
 			handleException(e);
 		}
 		return null;
 	}
 
-	public HRegionInterface getHRegionConnection(String paramString,
-			int paramInt, boolean paramBoolean) throws IOException {
+	public HRegionInterface getHRegionConnection(String paramString, int paramInt, boolean paramBoolean)
+			throws IOException {
 		checkOpen();
 		try {
-			return this.hConnection.getHRegionConnection(paramString, paramInt,
-					paramBoolean);
+			return this.hConnection.getHRegionConnection(paramString, paramInt, paramBoolean);
 		} catch (IOException e) {
 			handleException(e);
 		}
 		return null;
 	}
 
-	public HRegionLocation getRegionLocation(byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, boolean paramBoolean) throws IOException {
+	public HRegionLocation getRegionLocation(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, boolean paramBoolean)
+			throws IOException {
 		checkOpen();
 		try {
-			return this.hConnection.getRegionLocation(paramArrayOfByte1,
-					paramArrayOfByte2, paramBoolean);
+			return this.hConnection.getRegionLocation(paramArrayOfByte1, paramArrayOfByte2, paramBoolean);
 		} catch (IOException e) {
 			handleException(e);
 		}
 		return null;
 	}
 
-	public <T> T getRegionServerWithRetries(
-			ServerCallable<T> paramServerCallable) throws IOException,
-			RuntimeException {
+	public <T> T getRegionServerWithRetries(ServerCallable<T> paramServerCallable)
+			throws IOException, RuntimeException {
 		checkOpen();
 		try {
-			return this.hConnection
-					.getRegionServerWithRetries(paramServerCallable);
+			return this.hConnection.getRegionServerWithRetries(paramServerCallable);
 		} catch (IOException e) {
 			handleException(e);
 		} catch (RuntimeException e) {
@@ -433,13 +410,11 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public <T> T getRegionServerWithoutRetries(
-			ServerCallable<T> paramServerCallable) throws IOException,
-			RuntimeException {
+	public <T> T getRegionServerWithoutRetries(ServerCallable<T> paramServerCallable)
+			throws IOException, RuntimeException {
 		checkOpen();
 		try {
-			return this.hConnection
-					.getRegionServerWithoutRetries(paramServerCallable);
+			return this.hConnection.getRegionServerWithoutRetries(paramServerCallable);
 		} catch (IOException e) {
 			handleException(e);
 		} catch (RuntimeException e) {
@@ -448,14 +423,12 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public void processBatch(List<? extends Row> paramList,
-			byte[] paramArrayOfByte, ExecutorService paramExecutorService,
-			Object[] paramArrayOfObject) throws IOException,
-			InterruptedException {
+	public void processBatch(List<? extends Row> paramList, byte[] paramArrayOfByte,
+			ExecutorService paramExecutorService, Object[] paramArrayOfObject)
+					throws IOException, InterruptedException {
 		checkOpen();
 		try {
-			this.hConnection.processBatch(paramList, paramArrayOfByte,
-					paramExecutorService, paramArrayOfObject);
+			this.hConnection.processBatch(paramList, paramArrayOfByte, paramExecutorService, paramArrayOfObject);
 		} catch (IOException e) {
 			handleException(e);
 		} catch (InterruptedException e) {
@@ -463,14 +436,13 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public <R> void processBatchCallback(List<? extends Row> paramList,
-			byte[] paramArrayOfByte, ExecutorService paramExecutorService,
-			Object[] paramArrayOfObject, Callback<R> paramCallback)
-			throws IOException, InterruptedException {
+	public <R> void processBatchCallback(List<? extends Row> paramList, byte[] paramArrayOfByte,
+			ExecutorService paramExecutorService, Object[] paramArrayOfObject, Callback<R> paramCallback)
+					throws IOException, InterruptedException {
 		checkOpen();
 		try {
-			this.hConnection.processBatchCallback(paramList, paramArrayOfByte,
-					paramExecutorService, paramArrayOfObject, paramCallback);
+			this.hConnection.processBatchCallback(paramList, paramArrayOfByte, paramExecutorService, paramArrayOfObject,
+					paramCallback);
 		} catch (IOException e) {
 			handleException(e);
 		} catch (InterruptedException e) {
@@ -478,15 +450,12 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public <T extends CoprocessorProtocol, R> void processExecs(
-			Class<T> paramClass, List<byte[]> paramList,
-			byte[] paramArrayOfByte, ExecutorService paramExecutorService,
-			Call<T, R> paramCall, Callback<R> paramCallback)
-			throws IOException, Throwable {
+	public <T extends CoprocessorProtocol, R> void processExecs(Class<T> paramClass, List<byte[]> paramList,
+			byte[] paramArrayOfByte, ExecutorService paramExecutorService, Call<T, R> paramCall,
+			Callback<R> paramCallback) throws IOException, Throwable {
 		checkOpen();
 		try {
-			this.hConnection.processExecs(paramClass, paramList,
-					paramArrayOfByte, paramExecutorService, paramCall,
+			this.hConnection.processExecs(paramClass, paramList, paramArrayOfByte, paramExecutorService, paramCall,
 					paramCallback);
 		} catch (IOException e) {
 			handleException(e);
@@ -495,12 +464,10 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public void setRegionCachePrefetch(byte[] paramArrayOfByte,
-			boolean paramBoolean) {
+	public void setRegionCachePrefetch(byte[] paramArrayOfByte, boolean paramBoolean) {
 		try {
 			checkOpen();
-			this.hConnection.setRegionCachePrefetch(paramArrayOfByte,
-					paramBoolean);
+			this.hConnection.setRegionCachePrefetch(paramArrayOfByte, paramBoolean);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -515,8 +482,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public void prewarmRegionCache(byte[] paramArrayOfByte,
-			Map<HRegionInfo, HServerAddress> paramMap) {
+	public void prewarmRegionCache(byte[] paramArrayOfByte, Map<HRegionInfo, HServerAddress> paramMap) {
 		try {
 			checkOpen();
 			this.hConnection.prewarmRegionCache(paramArrayOfByte, paramMap);
@@ -535,8 +501,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return 0;
 	}
 
-	public HTableDescriptor[] getHTableDescriptors(List<String> paramList)
-			throws IOException {
+	public HTableDescriptor[] getHTableDescriptors(List<String> paramList) throws IOException {
 		checkOpen();
 		try {
 			return this.hConnection.getHTableDescriptors(paramList);
@@ -591,13 +556,11 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 	protected HTableInterface createTable(String tableName) throws IOException {
 		HTable result = null;
 		//
-		ExecutorService executor = new ThreadPoolExecutor(1, maxThreads,
-				keepAliveTime, TimeUnit.SECONDS, new SynchronousQueue(),
-				Threads.newDaemonThreadFactory("hbase-table"));
+		ExecutorService executor = new ThreadPoolExecutor(1, maxThreads, keepAliveTime, TimeUnit.SECONDS,
+				new SynchronousQueue<Runnable>(), Threads.newDaemonThreadFactory("hbase-table"));
 		this.tableExecutors.put(tableName, executor);
 		//
-		result = new HTable(ByteHelper.toByteArray(tableName), this.hConnection,
-				executor);
+		result = new HTable(ByteHelper.toByteArray(tableName), this.hConnection, executor);
 		//
 		return result;
 	}
@@ -614,8 +577,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 
 	// --------------------------------------------------
 
-	public HTableDescriptor getTableDescriptor(String tableName)
-			throws IOException {
+	public HTableDescriptor getTableDescriptor(String tableName) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -638,9 +600,8 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return false;
 	}
 
-	public void batch(String tableName, List<? extends Row> paramList,
-			Object[] paramArrayOfObject) throws IOException,
-			InterruptedException {
+	public void batch(String tableName, List<? extends Row> paramList, Object[] paramArrayOfObject)
+			throws IOException, InterruptedException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -652,8 +613,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public Object[] batch(String tableName, List<? extends Row> paramList)
-			throws IOException, InterruptedException {
+	public Object[] batch(String tableName, List<? extends Row> paramList) throws IOException, InterruptedException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -677,8 +637,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public Result[] get(String tableName, List<Get> paramList)
-			throws IOException {
+	public Result[] get(String tableName, List<Get> paramList) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -689,9 +648,11 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	/** @deprecated */
-	public Result getRowOrBefore(String tableName, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2) throws IOException {
+	/**
+	 * @deprecated
+	 */
+	public Result getRowOrBefore(String tableName, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2)
+			throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -702,8 +663,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public ResultScanner getScanner(String tableName, Scan paramScan)
-			throws IOException {
+	public ResultScanner getScanner(String tableName, Scan paramScan) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -714,8 +674,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public ResultScanner getScanner(String tableName, byte[] paramArrayOfByte)
-			throws IOException {
+	public ResultScanner getScanner(String tableName, byte[] paramArrayOfByte) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -726,8 +685,8 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public ResultScanner getScanner(String tableName, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2) throws IOException {
+	public ResultScanner getScanner(String tableName, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2)
+			throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -758,14 +717,13 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public boolean checkAndPut(String tableName, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, byte[] paramArrayOfByte3,
-			byte[] paramArrayOfByte4, Put paramPut) throws IOException {
+	public boolean checkAndPut(String tableName, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2,
+			byte[] paramArrayOfByte3, byte[] paramArrayOfByte4, Put paramPut) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
-			return table.checkAndPut(paramArrayOfByte1, paramArrayOfByte2,
-					paramArrayOfByte3, paramArrayOfByte4, paramPut);
+			return table.checkAndPut(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3, paramArrayOfByte4,
+					paramPut);
 		} catch (IOException e) {
 			handleException(e);
 		}
@@ -782,8 +740,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public void delete(String tableName, List<Delete> paramList)
-			throws IOException {
+	public void delete(String tableName, List<Delete> paramList) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -793,22 +750,20 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public boolean checkAndDelete(String tableName, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, byte[] paramArrayOfByte3,
-			byte[] paramArrayOfByte4, Delete paramDelete) throws IOException {
+	public boolean checkAndDelete(String tableName, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2,
+			byte[] paramArrayOfByte3, byte[] paramArrayOfByte4, Delete paramDelete) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
-			return table.checkAndDelete(paramArrayOfByte1, paramArrayOfByte2,
-					paramArrayOfByte3, paramArrayOfByte4, paramDelete);
+			return table.checkAndDelete(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3, paramArrayOfByte4,
+					paramDelete);
 		} catch (IOException e) {
 			handleException(e);
 		}
 		return false;
 	}
 
-	public void mutateRow(String tableName, RowMutations paramRowMutations)
-			throws IOException {
+	public void mutateRow(String tableName, RowMutations paramRowMutations) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -818,8 +773,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public Result append(String tableName, Append paramAppend)
-			throws IOException {
+	public Result append(String tableName, Append paramAppend) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -830,8 +784,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public Result increment(String tableName, Increment paramIncrement)
-			throws IOException {
+	public Result increment(String tableName, Increment paramIncrement) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -842,29 +795,24 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public long incrementColumnValue(String tableName,
-			byte[] paramArrayOfByte1, byte[] paramArrayOfByte2,
+	public long incrementColumnValue(String tableName, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2,
 			byte[] paramArrayOfByte3, long paramLong) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
-			return table.incrementColumnValue(paramArrayOfByte1,
-					paramArrayOfByte2, paramArrayOfByte3, paramLong);
+			return table.incrementColumnValue(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3, paramLong);
 		} catch (IOException e) {
 			handleException(e);
 		}
 		return 0L;
 	}
 
-	public long incrementColumnValue(String tableName,
-			byte[] paramArrayOfByte1, byte[] paramArrayOfByte2,
-			byte[] paramArrayOfByte3, long paramLong, boolean paramBoolean)
-			throws IOException {
+	public long incrementColumnValue(String tableName, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2,
+			byte[] paramArrayOfByte3, long paramLong, boolean paramBoolean) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
-			return table.incrementColumnValue(paramArrayOfByte1,
-					paramArrayOfByte2, paramArrayOfByte3, paramLong,
+			return table.incrementColumnValue(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3, paramLong,
 					paramBoolean);
 		} catch (IOException e) {
 			handleException(e);
@@ -902,9 +850,10 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	/** @deprecated */
-	public RowLock lockRow(String tableName, byte[] paramArrayOfByte)
-			throws IOException {
+	/**
+	 * @deprecated
+	 */
+	public RowLock lockRow(String tableName, byte[] paramArrayOfByte) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -915,9 +864,10 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	/** @deprecated */
-	public void unlockRow(String tableName, RowLock paramRowLock)
-			throws IOException {
+	/**
+	 * @deprecated
+	 */
+	public void unlockRow(String tableName, RowLock paramRowLock) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -927,8 +877,8 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public <T extends CoprocessorProtocol> T coprocessorProxy(String tableName,
-			Class<T> paramClass, byte[] paramArrayOfByte) {
+	public <T extends CoprocessorProtocol> T coprocessorProxy(String tableName, Class<T> paramClass,
+			byte[] paramArrayOfByte) {
 		try {
 			checkOpen();
 			HTableInterface table = getTable(tableName);
@@ -938,15 +888,13 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public <T extends CoprocessorProtocol, R> Map<byte[], R> coprocessorExec(
-			String tableName, Class<T> paramClass, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, Batch.Call<T, R> paramCall)
-			throws IOException, Throwable {
+	public <T extends CoprocessorProtocol, R> Map<byte[], R> coprocessorExec(String tableName, Class<T> paramClass,
+			byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, Batch.Call<T, R> paramCall)
+					throws IOException, Throwable {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
-			return table.coprocessorExec(paramClass, paramArrayOfByte1,
-					paramArrayOfByte2, paramCall);
+			return table.coprocessorExec(paramClass, paramArrayOfByte1, paramArrayOfByte2, paramCall);
 		} catch (IOException e) {
 			handleException(e);
 		} catch (Throwable e) {
@@ -955,15 +903,13 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		return null;
 	}
 
-	public <T extends CoprocessorProtocol, R> void coprocessorExec(
-			String tableName, Class<T> paramClass, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, Batch.Call<T, R> paramCall,
+	public <T extends CoprocessorProtocol, R> void coprocessorExec(String tableName, Class<T> paramClass,
+			byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, Batch.Call<T, R> paramCall,
 			Batch.Callback<R> paramCallback) throws IOException, Throwable {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
-			table.coprocessorExec(paramClass, paramArrayOfByte1,
-					paramArrayOfByte2, paramCall, paramCallback);
+			table.coprocessorExec(paramClass, paramArrayOfByte1, paramArrayOfByte2, paramCall, paramCallback);
 		} catch (IOException e) {
 			handleException(e);
 		} catch (Throwable e) {
@@ -981,8 +927,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public void setAutoFlush(String tableName, boolean paramBoolean1,
-			boolean paramBoolean2) {
+	public void setAutoFlush(String tableName, boolean paramBoolean1, boolean paramBoolean2) {
 		try {
 			checkOpen();
 			HTableInterface table = getTable(tableName);
@@ -1002,8 +947,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
-	public void setWriteBufferSize(String tableName, long paramLong)
-			throws IOException {
+	public void setWriteBufferSize(String tableName, long paramLong) throws IOException {
 		checkOpen();
 		try {
 			HTableInterface table = getTable(tableName);
@@ -1015,8 +959,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 
 	// --------------------------------------------------
 
-	protected void handleException(ZooKeeperConnectionException e)
-			throws ZooKeeperConnectionException {
+	protected void handleException(ZooKeeperConnectionException e) throws ZooKeeperConnectionException {
 		throw e;
 	}
 
@@ -1024,8 +967,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		throw e;
 	}
 
-	protected void handleException(MasterNotRunningException e)
-			throws MasterNotRunningException {
+	protected void handleException(MasterNotRunningException e) throws MasterNotRunningException {
 		throw e;
 	}
 
@@ -1033,8 +975,7 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		throw e;
 	}
 
-	protected void handleException(InterruptedException e)
-			throws InterruptedException {
+	protected void handleException(InterruptedException e) throws InterruptedException {
 		throw e;
 	}
 

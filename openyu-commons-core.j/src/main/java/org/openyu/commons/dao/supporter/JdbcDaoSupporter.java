@@ -12,34 +12,31 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
 import org.openyu.commons.dao.JdbcDao;
 import org.openyu.commons.mark.Supporter;
-import org.openyu.commons.thread.ThreadService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
-		JdbcDao, Supporter {
+public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements JdbcDao, Supporter {
 
-	private static transient final Logger log = LogManager
-			.getLogger(JdbcDaoSupporter.class);
+	private static final long serialVersionUID = 3210960982854227767L;
+
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(JdbcDaoSupporter.class);
 
 	// @Autowired
 	// @Qualifier("threadService")
-	protected transient ThreadService threadService;
+	// protected transient ThreadService threadService;
 
 	public JdbcDaoSupporter() {
 	}
 
-	public <E> List<E> find(String sqlString, String[] paramNames,
-			Object[] values, String[] columnAliases, Object[] types) {
+	public <E> List<E> find(String sqlString, String[] paramNames, Object[] values, String[] columnAliases,
+			Object[] types) {
 		// getSimpleJdbcTemplate().query(sqlString, rm, args);
 		throw new UnsupportedOperationException();
 	}
 
-	public <E> List<E> find(String sqlString, String[] paramNames,
-			Object[] values, Map<String, Object> scalars) {
+	public <E> List<E> find(String sqlString, String[] paramNames, Object[] values, Map<String, Object> scalars) {
 		// getSimpleJdbcTemplate().query(sqlString, rm, args);
 		throw new UnsupportedOperationException();
 	}
@@ -52,8 +49,7 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 		return 0;
 	}
 
-	public int insert(String sqlString, String[] paramNames, Object[] values,
-			String modifiedUser) {
+	public int insert(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -65,8 +61,7 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 		return 0;
 	}
 
-	public int update(String sqlString, String[] paramNames, Object[] values,
-			String modifiedUser) {
+	public int update(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -75,8 +70,7 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 		return 0;
 	}
 
-	public int delete(String sqlString, String[] paramNames, Object[] values,
-			String modifiedUser) {
+	public int delete(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -111,8 +105,7 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 		return i == null ? null : !i.equals(0);
 	}
 
-	protected void setLong(PreparedStatement ps, int index, Long x)
-			throws SQLException {
+	protected void setLong(PreparedStatement ps, int index, Long x) throws SQLException {
 		if (x == null) {
 			ps.setNull(index, Types.NUMERIC);
 		} else {
@@ -120,8 +113,7 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 		}
 	}
 
-	protected void setBigDecimal(PreparedStatement ps, int index, BigDecimal x)
-			throws SQLException {
+	protected void setBigDecimal(PreparedStatement ps, int index, BigDecimal x) throws SQLException {
 		if (x == null) {
 			ps.setNull(index, Types.FLOAT);
 		} else {
@@ -129,8 +121,7 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 		}
 	}
 
-	protected void setInteger(PreparedStatement ps, int index, Integer x)
-			throws SQLException {
+	protected void setInteger(PreparedStatement ps, int index, Integer x) throws SQLException {
 		if (x == null) {
 			ps.setNull(index, Types.NUMERIC);
 		} else {
@@ -138,8 +129,7 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 		}
 	}
 
-	protected void setString(PreparedStatement ps, int index, String x)
-			throws SQLException {
+	protected void setString(PreparedStatement ps, int index, String x) throws SQLException {
 		if (x == null) {
 			ps.setNull(index, Types.VARCHAR);
 		} else {
@@ -147,8 +137,7 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 		}
 	}
 
-	protected void setDate(PreparedStatement ps, int index, Date x)
-			throws SQLException {
+	protected void setDate(PreparedStatement ps, int index, Date x) throws SQLException {
 		if (x == null) {
 			ps.setNull(index, Types.DATE);
 		} else {
@@ -156,8 +145,7 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 		}
 	}
 
-	protected void setTimestamp(PreparedStatement ps, int index, Timestamp x)
-			throws SQLException {
+	protected void setTimestamp(PreparedStatement ps, int index, Timestamp x) throws SQLException {
 		if (x == null) {
 			ps.setNull(index, Types.TIMESTAMP);
 		} else {
@@ -165,8 +153,7 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 		}
 	}
 
-	protected void setTimestamp(PreparedStatement ps, int index, Date x)
-			throws SQLException {
+	protected void setTimestamp(PreparedStatement ps, int index, Date x) throws SQLException {
 		if (x == null) {
 			ps.setNull(index, Types.TIMESTAMP);
 		} else {
@@ -174,8 +161,7 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 		}
 	}
 
-	protected void setBytes(PreparedStatement ps, int index, byte[] x)
-			throws SQLException {
+	protected void setBytes(PreparedStatement ps, int index, byte[] x) throws SQLException {
 		if (x == null) {
 			ps.setNull(index, Types.BLOB);
 		} else {
@@ -184,24 +170,20 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 	}
 
 	//
-	protected String getString(ResultSet resultSet, String columnName)
-			throws SQLException {
+	protected String getString(ResultSet resultSet, String columnName) throws SQLException {
 		return resultSet.getString(columnName);
 	}
 
-	protected String getString(ResultSet resultSet, int index)
-			throws SQLException {
+	protected String getString(ResultSet resultSet, int index) throws SQLException {
 		return resultSet.getString(index);
 	}
 
 	//
-	protected Boolean getBoolean(ResultSet resultSet, String columnName)
-			throws SQLException {
+	protected Boolean getBoolean(ResultSet resultSet, String columnName) throws SQLException {
 		return getBoolean(resultSet.getObject(columnName));
 	}
 
-	protected Boolean getBoolean(ResultSet resultSet, int index)
-			throws SQLException {
+	protected Boolean getBoolean(ResultSet resultSet, int index) throws SQLException {
 		return getBoolean(resultSet.getObject(index));
 	}
 
@@ -214,14 +196,12 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 			result = ((Boolean) obj).booleanValue();
 		} else {
 			result = null;
-			log.warn("can't handle: " + obj);
 		}
 		return result;
 	}
 
 	//
-	protected Date getDate(ResultSet resultSet, String columnName)
-			throws SQLException {
+	protected Date getDate(ResultSet resultSet, String columnName) throws SQLException {
 		return resultSet.getDate(columnName);
 	}
 
@@ -230,24 +210,20 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 	}
 
 	//
-	protected Timestamp getTimestamp(ResultSet resultSet, String columnName)
-			throws SQLException {
+	protected Timestamp getTimestamp(ResultSet resultSet, String columnName) throws SQLException {
 		return resultSet.getTimestamp(columnName);
 	}
 
-	protected Timestamp getTimestamp(ResultSet resultSet, int index)
-			throws SQLException {
+	protected Timestamp getTimestamp(ResultSet resultSet, int index) throws SQLException {
 		return resultSet.getTimestamp(index);
 	}
 
 	//
-	protected Integer getInt(ResultSet resultSet, String columnName)
-			throws SQLException {
+	protected Integer getInt(ResultSet resultSet, String columnName) throws SQLException {
 		return getInteger(resultSet.getObject(columnName));
 	}
 
-	protected Integer getInt(ResultSet resultSet, int index)
-			throws SQLException {
+	protected Integer getInt(ResultSet resultSet, int index) throws SQLException {
 		return getInteger(resultSet.getObject(index));
 	}
 
@@ -263,8 +239,7 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 	}
 
 	//
-	protected Long getLong(ResultSet resultSet, String columnName)
-			throws SQLException {
+	protected Long getLong(ResultSet resultSet, String columnName) throws SQLException {
 		return getLong(resultSet.getObject(columnName));
 	}
 
@@ -284,19 +259,16 @@ public abstract class JdbcDaoSupporter extends BaseDaoSupporter implements
 			result = ((Integer) obj).longValue();
 		} else {
 			result = null;
-			log.warn("can't handle: " + obj);
 		}
 		return result;
 	}
 
 	//
-	protected BigDecimal getBigDecimal(ResultSet resultSet, String columnName)
-			throws SQLException {
+	protected BigDecimal getBigDecimal(ResultSet resultSet, String columnName) throws SQLException {
 		return resultSet.getBigDecimal(columnName);
 	}
 
-	protected BigDecimal getBigDecimal(ResultSet resultSet, int index)
-			throws SQLException {
+	protected BigDecimal getBigDecimal(ResultSet resultSet, int index) throws SQLException {
 		return resultSet.getBigDecimal(index);
 	}
 

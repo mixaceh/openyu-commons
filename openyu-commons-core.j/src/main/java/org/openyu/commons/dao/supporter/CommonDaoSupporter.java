@@ -1134,7 +1134,6 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	// 傳回 list(Object[]) or one column
 	// --------------------------------------------------
 
-	@SuppressWarnings("unchecked")
 	/**
 	 * sql查詢多筆資料
 	 * 

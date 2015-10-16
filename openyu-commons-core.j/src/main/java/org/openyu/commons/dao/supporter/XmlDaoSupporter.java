@@ -7,32 +7,32 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.openyu.commons.dao.XmlDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class XmlDaoSupporter extends BaseDaoSupporter implements
-		XmlDao {
+public abstract class XmlDaoSupporter extends BaseDaoSupporter implements XmlDao {
 
-	private static transient final Logger log = LogManager
-			.getLogger(XmlDaoSupporter.class);
+	private static final long serialVersionUID = -7661235306121443371L;
+
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(CommonDaoSupporter.class);
 
 	// xml data list
-	private List list;
+	private List<Object> list;
 
 	public XmlDaoSupporter() {
 		this.list = Collections.synchronizedList(read(null));
 	}
 
-	public synchronized List getList() {
+	public synchronized List<Object> getList() {
 		return list;
 	}
 
-	public synchronized void setList(List list) {
+	public synchronized void setList(List<Object> list) {
 		this.list = list;
 	}
 
-	public synchronized List find(Class entityClass) {
+	public synchronized List<Object> find(Class entityClass) {
 		return list;
 	}
 
@@ -88,8 +88,7 @@ public abstract class XmlDaoSupporter extends BaseDaoSupporter implements
 		throw new UnsupportedOperationException();
 	}
 
-	public <T> T delete(Class<?> entityClass, Serializable seq,
-			String modifiedUser) {
+	public <T> T delete(Class<?> entityClass, Serializable seq, String modifiedUser) {
 		throw new UnsupportedOperationException();
 	}
 

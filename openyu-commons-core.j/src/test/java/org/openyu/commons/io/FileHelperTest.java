@@ -104,7 +104,7 @@ public class FileHelperTest {
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
 
 		System.out.println(result);
-		assertEquals("/D:/dev/openyu/trunk/openyu-commons-core.j/src/",
+		assertEquals("/D:/dev/openyu7/trunk/openyu-commons.j/openyu-commons-core.j/src/",
 				result.getFile());
 		//
 		result = FileHelper.toUrl("scr123");
@@ -114,7 +114,7 @@ public class FileHelperTest {
 		result = FileHelper.toUrl(new File("src/test/config/etc/config.xml"));
 		System.out.println(result);
 		assertEquals(
-				"/D:/dev/openyu/trunk/openyu-commons-core.j/src/test/config/etc/config.xml",
+				"/D:/dev/openyu7/trunk/openyu-commons.j/openyu-commons-core.j/src/test/config/etc/config.xml",
 				result.getFile());
 		//
 		result = FileHelper.toUrl((String) null);

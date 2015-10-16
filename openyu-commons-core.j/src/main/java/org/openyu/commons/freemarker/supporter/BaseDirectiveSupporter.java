@@ -25,8 +25,7 @@ import freemarker.template.TemplateModel;
 /**
  * 基底標籤
  */
-public abstract class BaseDirectiveSupporter implements BaseDirective, Supporter
-{
+public abstract class BaseDirectiveSupporter implements BaseDirective, Supporter {
 	private static transient final Logger log = LogManager.getLogger(BaseDirectiveSupporter.class);
 
 	/**
@@ -39,66 +38,52 @@ public abstract class BaseDirectiveSupporter implements BaseDirective, Supporter
 	 */
 	private boolean logEnable;
 
-	public BaseDirectiveSupporter()
-	{
+	public BaseDirectiveSupporter() {
 
 	}
 
-	public boolean isDisable()
-	{
+	public boolean isDisable() {
 		return disable;
 	}
 
-	public void setDisable(boolean disable)
-	{
+	public void setDisable(boolean disable) {
 		this.disable = disable;
 	}
 
-	public boolean isLogEnable()
-	{
+	public boolean isLogEnable() {
 		return logEnable;
 	}
 
-	public void setLogEnable(boolean logEnable)
-	{
+	public void setLogEnable(boolean logEnable) {
 		this.logEnable = logEnable;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void execute(Environment env, Map params, TemplateModel[] loopVars,
-						TemplateDirectiveBody body) throws TemplateException, IOException
-	{
-		try
-		{
-			if (!disable)
-			{
+	public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body)
+			throws TemplateException, IOException {
+		try {
+			if (!disable) {
 				directive(env, params, loopVars, body);
 				log(log, params);
 			}
-		}
-		catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
-	protected void log(Logger log, Map<String, TemplateModel> params)
-	{
+	protected void log(Logger log, Map<String, TemplateModel> params) {
 		log(log, params, null);
 	}
 
-	protected void log(Logger log, Map<String, TemplateModel> params, StopWatch stopWatch)
-	{
-		if (logEnable)
-		{
+	protected void log(Logger log, Map<String, TemplateModel> params, StopWatch stopWatch) {
+		if (logEnable) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("[thread-");
 			sb.append(Thread.currentThread().getId());
 			sb.append("] ");
 			sb.append(params);
 			//
-			if (stopWatch != null)
-			{
+			if (stopWatch != null) {
 				sb.append(" in ");
 				sb.append(stopWatch.getTotalTimeMillis());
 				sb.append(" mills.");
@@ -116,9 +101,8 @@ public abstract class BaseDirectiveSupporter implements BaseDirective, Supporter
 	 * @throws TemplateException
 	 * @throws IOException
 	 */
-	public void render(Environment env, TemplateDirectiveBody body,
-						Map<String, TemplateModel> variables) throws TemplateException, IOException
-	{
+	public void render(Environment env, TemplateDirectiveBody body, Map<String, TemplateModel> variables)
+			throws TemplateException, IOException {
 		Map<String, TemplateModel> origVariables = addVariables(env, variables);
 		body.render(env.getOut());
 		removeVariables(env, variables, origVariables);
@@ -132,22 +116,17 @@ public abstract class BaseDirectiveSupporter implements BaseDirective, Supporter
 	 * @return
 	 * @throws TemplateException
 	 */
-	public Map<String, TemplateModel> addVariables(Environment env,
-													Map<String, TemplateModel> variables)
-		throws TemplateException
-	{
+	public Map<String, TemplateModel> addVariables(Environment env, Map<String, TemplateModel> variables)
+			throws TemplateException {
 		Map<String, TemplateModel> origVariables = new HashMap<String, TemplateModel>();
-		if (variables.size() <= 0)
-		{
+		if (variables.size() <= 0) {
 			return origVariables;
 		}
 		//
-		for (Map.Entry<String, TemplateModel> entry : variables.entrySet())
-		{
+		for (Map.Entry<String, TemplateModel> entry : variables.entrySet()) {
 			String key = entry.getKey();
 			TemplateModel value = env.getVariable(key);
-			if (value != null)
-			{
+			if (value != null) {
 				origVariables.put(key, value);
 			}
 			env.setVariable(key, entry.getValue());
@@ -164,15 +143,12 @@ public abstract class BaseDirectiveSupporter implements BaseDirective, Supporter
 	 * @param origVariables
 	 */
 	public void removeVariables(Environment env, Map<String, TemplateModel> variables,
-								Map<String, TemplateModel> origVariables) throws TemplateException
-	{
-		if (variables.size() <= 0)
-		{
+			Map<String, TemplateModel> origVariables) throws TemplateException {
+		if (variables.size() <= 0) {
 			return;
 		}
 		//
-		for (String key : variables.keySet())
-		{
+		for (String key : variables.keySet()) {
 			env.setVariable(key, origVariables.get(key));
 		}
 	}
@@ -181,68 +157,55 @@ public abstract class BaseDirectiveSupporter implements BaseDirective, Supporter
 	// 只是為了簡化寫法
 	// ----------------------------------------------------------------
 
-	protected boolean toBoolean(String name, Map<String, TemplateModel> params)
-	{
+	protected boolean toBoolean(String name, Map<String, TemplateModel> params) {
 		return FreeMarkerHelper.toBoolean(name, params);
 	}
 
-	protected char toChar(String name, Map<String, TemplateModel> params)
-	{
+	protected char toChar(String name, Map<String, TemplateModel> params) {
 		return FreeMarkerHelper.toChar(name, params);
 	}
 
-	protected String toString(String name, Map<String, TemplateModel> params)
-	{
+	protected String toString(String name, Map<String, TemplateModel> params) {
 		return FreeMarkerHelper.toString(name, params);
 	}
 
-	protected byte toByte(String name, Map<String, TemplateModel> params)
-	{
+	protected byte toByte(String name, Map<String, TemplateModel> params) {
 		return FreeMarkerHelper.toByte(name, params);
 	}
 
-	protected short toShort(String name, Map<String, TemplateModel> params)
-	{
+	protected short toShort(String name, Map<String, TemplateModel> params) {
 		return FreeMarkerHelper.toShort(name, params);
 	}
 
-	protected int toInt(String name, Map<String, TemplateModel> params)
-	{
+	protected int toInt(String name, Map<String, TemplateModel> params) {
 		return FreeMarkerHelper.toInt(name, params);
 	}
 
-	protected long toLong(String name, Map<String, TemplateModel> params)
-	{
+	protected long toLong(String name, Map<String, TemplateModel> params) {
 		return FreeMarkerHelper.toLong(name, params);
 	}
 
-	protected float toFloat(String name, Map<String, TemplateModel> params)
-	{
+	protected float toFloat(String name, Map<String, TemplateModel> params) {
 		return FreeMarkerHelper.toFloat(name, params);
 	}
 
-	protected double toDouble(String name, Map params)
-	{
+	protected double toDouble(String name, Map<String, TemplateModel> params) {
 		return FreeMarkerHelper.toDouble(name, params);
 	}
 
-	protected Date toDate(String name, Map<String, TemplateModel> params)
-	{
+	protected Date toDate(String name, Map<String, TemplateModel> params) {
 		return FreeMarkerHelper.toDate(name, params);
 	}
 
-	protected Timestamp toTimestamp(String name, Map<String, TemplateModel> params)
-	{
+	protected Timestamp toTimestamp(String name, Map<String, TemplateModel> params) {
 		return FreeMarkerHelper.toTimestamp(name, params);
 	}
 
-	protected Locale toLocale(String name, Map<String, TemplateModel> params)
-	{
+	protected Locale toLocale(String name, Map<String, TemplateModel> params) {
 		return FreeMarkerHelper.toLocale(name, params);
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 

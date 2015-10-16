@@ -28,8 +28,7 @@ import org.slf4j.LoggerFactory;
 public class FileHelper implements Supporter {
 
 	/** The Constant LOGGER. */
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(FileHelper.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(FileHelper.class);
 
 	private FileHelper() {
 		super();
@@ -146,8 +145,9 @@ public class FileHelper implements Supporter {
 		URL result = null;
 		try {
 			if (isExist(file)) {
-				// file.toURI().toURL();
-				result = file.toURL(); // file:D:/dev/openyu/trunk/openyu-commons-core.j/src/main/java
+				// result = file.toURL(); //
+				// file:D:/dev/openyu/trunk/openyu-commons-core.j/src/main/java
+				result = file.toURI().toURL();
 			}
 		} catch (Exception ex) {
 			// ex.printStackTrace();
@@ -372,7 +372,8 @@ public class FileHelper implements Supporter {
 	/**
 	 * class 系統, 取得資源, /log4j.properties
 	 * 
-	 * file:D:/dev/openyu/trunk/openyu-commons-core.j/target/test-classes/log4j.properties
+	 * file:D:/dev/openyu/trunk/openyu-commons-core.j/target/test-classes/log4j.
+	 * properties
 	 * 
 	 * @param name
 	 * @return
@@ -387,7 +388,8 @@ public class FileHelper implements Supporter {
 	/**
 	 * class 系統, 取得資源檔名, /log4j.properties
 	 * 
-	 * D:/dev/openyu/trunk/openyu-commons-core.j/target/test-classes/log4j.properties
+	 * D:/dev/openyu/trunk/openyu-commons-core.j/target/test-classes/log4j.
+	 * properties
 	 * 
 	 * @param name
 	 * @return
@@ -569,8 +571,7 @@ public class FileHelper implements Supporter {
 				//
 				if (result != null) {
 					for (File entry : result) {
-						result = ArrayHelper.addUnique(result,
-								dir(entry, filter), File[].class);
+						result = ArrayHelper.addUnique(result, dir(entry, filter), File[].class);
 					}
 				}
 			}
@@ -636,8 +637,7 @@ public class FileHelper implements Supporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static EncryptDirResult encryptDir(String pathName,
-			String assignKey, String algorithm) {
+	public static EncryptDirResult encryptDir(String pathName, String assignKey, String algorithm) {
 		if (pathName == null) {
 			return null;
 		}
@@ -652,8 +652,7 @@ public class FileHelper implements Supporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static EncryptDirResult encryptDir(File file, String assignKey,
-			String algorithm) {
+	public static EncryptDirResult encryptDir(File file, String assignKey, String algorithm) {
 		EncryptDirResult result = new EncryptDirResult();
 		//
 		try {
@@ -675,10 +674,8 @@ public class FileHelper implements Supporter {
 					// 檔案
 					else if (entry.isFile()) {
 						// System.out.println(file);
-						EncryptFileResult encryptFileResult = encryptFile(
-								entry, assignKey, algorithm);
-						result.getFiles().put(entry,
-								encryptFileResult.getDestName());
+						EncryptFileResult encryptFileResult = encryptFile(entry, assignKey, algorithm);
+						result.getFiles().put(entry, encryptFileResult.getDestName());
 					}
 
 				}
@@ -698,8 +695,7 @@ public class FileHelper implements Supporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static String encryptMd(String pathName, String assignKey,
-			String algorithm) {
+	public static String encryptMd(String pathName, String assignKey, String algorithm) {
 		if (pathName == null) {
 			return null;
 		}
@@ -719,16 +715,13 @@ public class FileHelper implements Supporter {
 		//
 		try {
 			if (file != null) {
-				String[] names = StringUtils.splitPreserveAllTokens(
-						file.getPath(), File.separator);
+				String[] names = StringUtils.splitPreserveAllTokens(file.getPath(), File.separator);
 
 				// 指定key
-				SecretKey secretKey = SecurityHelper.createSecretKey(assignKey,
-						algorithm);
+				SecretKey secretKey = SecurityHelper.createSecretKey(assignKey, algorithm);
 				// 目錄加密
 				for (int i = 0; i < names.length; i++) {
-					String encrypt = SecurityHelper.encryptHex(names[i],
-							secretKey, algorithm);
+					String encrypt = SecurityHelper.encryptHex(names[i], secretKey, algorithm);
 					result.append(encrypt);
 					//
 					if (i < names.length - 1) {
@@ -769,8 +762,7 @@ public class FileHelper implements Supporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static DecryptDirResult decryptDir(String pathName,
-			String assignKey, String algorithm) {
+	public static DecryptDirResult decryptDir(String pathName, String assignKey, String algorithm) {
 		if (pathName == null) {
 			return null;
 		}
@@ -785,8 +777,7 @@ public class FileHelper implements Supporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static DecryptDirResult decryptDir(File file, String assignKey,
-			String algorithm) {
+	public static DecryptDirResult decryptDir(File file, String assignKey, String algorithm) {
 		DecryptDirResult result = new DecryptDirResult();
 		//
 		try {
@@ -807,10 +798,8 @@ public class FileHelper implements Supporter {
 					// 當檔案時
 					else if (entry.isFile()) {
 						// System.out.println(file);
-						DecryptFileResult decryptFileResult = decryptFile(
-								entry, assignKey, algorithm);
-						result.getFiles().put(entry,
-								decryptFileResult.getDestName());
+						DecryptFileResult decryptFileResult = decryptFile(entry, assignKey, algorithm);
+						result.getFiles().put(entry, decryptFileResult.getDestName());
 					}
 
 				}
@@ -830,8 +819,7 @@ public class FileHelper implements Supporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static String decryptMd(String pathName, String assignKey,
-			String algorithm) {
+	public static String decryptMd(String pathName, String assignKey, String algorithm) {
 		if (pathName == null) {
 			return null;
 		}
@@ -852,16 +840,13 @@ public class FileHelper implements Supporter {
 			// 加個後綴,避免覆蓋原始目錄
 			final String SUFFIX = "-decrypt";
 			//
-			String[] names = StringUtils.splitPreserveAllTokens(file.getPath(),
-					File.separator);
+			String[] names = StringUtils.splitPreserveAllTokens(file.getPath(), File.separator);
 			StringBuilder dir = new StringBuilder();
 			// 指定key
-			SecretKey secretKey = SecurityHelper.createSecretKey(assignKey,
-					algorithm);
+			SecretKey secretKey = SecurityHelper.createSecretKey(assignKey, algorithm);
 			// 目錄解密
 			for (int i = 0; i < names.length; i++) {
-				byte[] decrypt = SecurityHelper.decryptHex(names[i], secretKey,
-						algorithm);
+				byte[] decrypt = SecurityHelper.decryptHex(names[i], secretKey, algorithm);
 				dir.append(ByteHelper.toString(decrypt));
 				if (i == 0) {
 					dir.append(SUFFIX);
@@ -920,8 +905,7 @@ public class FileHelper implements Supporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static EncryptFileResult encryptFile(String fileName,
-			String assignKey, String algorithm) {
+	public static EncryptFileResult encryptFile(String fileName, String assignKey, String algorithm) {
 		if (fileName == null) {
 			return null;
 		}
@@ -936,39 +920,32 @@ public class FileHelper implements Supporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static EncryptFileResult encryptFile(File file, String assignKey,
-			String algorithm) {
+	public static EncryptFileResult encryptFile(File file, String assignKey, String algorithm) {
 		EncryptFileResult result = new EncryptFileResult();
 		if (isExist(file)) {
 			// 指定key
-			SecretKey secretKey = SecurityHelper.createSecretKey(assignKey,
-					algorithm);
+			SecretKey secretKey = SecurityHelper.createSecretKey(assignKey, algorithm);
 
 			// 目錄,encryptToHex
-			String encryptDir = encryptMd(file.getParent(), assignKey,
-					algorithm);
+			String encryptDir = encryptMd(file.getParent(), assignKey, algorithm);
 			// System.out.println("dir: " + encryptDir);
 
 			// 檔名,encryptToHex
-			String encryptFileName = SecurityHelper.encryptHex(file.getName(),
-					secretKey, algorithm);
+			String encryptFileName = SecurityHelper.encryptHex(file.getName(), secretKey, algorithm);
 			// System.out.println("fileName: " + encryptFileName);
 
 			// 內容,encryptToBase64
 			byte[] contents = IoHelper.read(file);
-			String encryptContent = SecurityHelper.encryptBase64(contents,
-					secretKey, algorithm);
+			String encryptContent = SecurityHelper.encryptBase64(contents, secretKey, algorithm);
 			// System.out.println("content: " + encryptContent);
 
 			//
-			Writer writer = IoHelper.createWriter(encryptDir + File.separator
-					+ encryptFileName);
+			Writer writer = IoHelper.createWriter(encryptDir + File.separator + encryptFileName);
 			try {
 				IoHelper.write(writer, encryptContent);
 				//
 				result.setOrigFile(file);
-				result.setDestName(encryptDir + File.separator
-						+ encryptFileName);
+				result.setDestName(encryptDir + File.separator + encryptFileName);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			} finally {
@@ -997,8 +974,7 @@ public class FileHelper implements Supporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static DecryptFileResult decryptFile(String fileName,
-			String assignKey, String algorithm) {
+	public static DecryptFileResult decryptFile(String fileName, String assignKey, String algorithm) {
 		if (fileName == null) {
 			return null;
 		}
@@ -1013,41 +989,36 @@ public class FileHelper implements Supporter {
 	 * @param algorithm
 	 * @return
 	 */
-	public static DecryptFileResult decryptFile(File file, String assignKey,
-			String algorithm) {
+	public static DecryptFileResult decryptFile(File file, String assignKey, String algorithm) {
 		DecryptFileResult result = new DecryptFileResult();
 		OutputStream out = null;
 		try {
 			if (isExist(file)) {
 				// 指定key
-				SecretKey secretKey = SecurityHelper.createSecretKey(assignKey,
-						algorithm);
+				SecretKey secretKey = SecurityHelper.createSecretKey(assignKey, algorithm);
 
 				// 目錄,decryptFromHex
-				String decryptDir = decryptMd(file.getParent(), assignKey,
-						algorithm);
+				String decryptDir = decryptMd(file.getParent(), assignKey, algorithm);
 				// System.out.println("dir: " + decryptDir);
 
 				// 檔名,decryptFromHex
-				String decryptFileName = ByteHelper.toString(SecurityHelper
-						.decryptHex(file.getName(), secretKey, algorithm));
-				// System.out.println("fileName: " + decryptFileName);
+				String decryptFileName = ByteHelper
+						.toString(SecurityHelper.decryptHex(file.getName(), secretKey, algorithm));
+						// System.out.println("fileName: " + decryptFileName);
 
 				// 內容,decryptFromBase64
 				byte[] contents = IoHelper.read(file);
-				byte[] decryptContent = SecurityHelper.decryptBase64(contents,
-						secretKey, algorithm);
+				byte[] decryptContent = SecurityHelper.decryptBase64(contents, secretKey, algorithm);
 				// System.out.println("content: " +
 				// ByteHelper.toString(decryptContent));
 
-				// System.out.println(decryptDir+" isExist: "+isExist(decryptDir));
-				out = IoHelper.createOutputStream(decryptDir + File.separator
-						+ decryptFileName);
+				// System.out.println(decryptDir+" isExist:
+				// "+isExist(decryptDir));
+				out = IoHelper.createOutputStream(decryptDir + File.separator + decryptFileName);
 				IoHelper.write(out, decryptContent);
 				//
 				result.setOrigFile(file);
-				result.setDestName(decryptDir + File.separator
-						+ decryptFileName);
+				result.setDestName(decryptDir + File.separator + decryptFileName);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -1161,8 +1132,7 @@ public class FileHelper implements Supporter {
 		if (isExist(zipName)) {
 			try {
 				ZipFile zipFile = new ZipFile(zipName);
-				for (Enumeration<?> e = zipFile.getEntries(); e
-						.hasMoreElements();) {
+				for (Enumeration<?> e = zipFile.getEntries(); e.hasMoreElements();) {
 					ZipEntry zipEntry = (ZipEntry) e.nextElement();
 					StringBuilder name = new StringBuilder();
 					// 目錄
@@ -1171,8 +1141,7 @@ public class FileHelper implements Supporter {
 							name.append(pathName);
 							name.append(File.separator);
 						}
-						name.append(zipEntry.getName().substring(0,
-								zipEntry.getName().length() - 1));
+						name.append(zipEntry.getName().substring(0, zipEntry.getName().length() - 1));
 						md(name.toString());
 					}
 					// 檔案
@@ -1182,8 +1151,7 @@ public class FileHelper implements Supporter {
 							name.append(File.separator);
 						}
 						name.append(zipEntry.getName());
-						OutputStream out = IoHelper.createOutputStream(name
-								.toString());
+						OutputStream out = IoHelper.createOutputStream(name.toString());
 						md(name.toString(), true);
 						//
 						InputStream in = zipFile.getInputStream(zipEntry);

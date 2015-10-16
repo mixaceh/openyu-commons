@@ -13,6 +13,9 @@ import org.openyu.commons.service.supporter.BaseServiceSupporter;
 public abstract class BaseControlSupporter extends BaseServiceSupporter
 		implements BaseControl {
 
+
+	private static final long serialVersionUID = 58280665705027859L;
+	
 	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory
 			.getLogger(BaseControlSupporter.class);
