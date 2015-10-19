@@ -12,11 +12,9 @@ import org.openyu.commons.thread.TriggerQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class TriggerQueueSupporter<E> extends BaseRunnableSupporter
-		implements TriggerQueue<E> {
+public abstract class TriggerQueueSupporter<E> extends BaseRunnableQueueSupporter<E>implements TriggerQueue<E> {
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(TriggerQueueSupporter.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(TriggerQueueSupporter.class);
 
 	private Queue<E> elements = new ConcurrentLinkedQueue<E>();
 

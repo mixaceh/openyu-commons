@@ -7,20 +7,15 @@ package org.openyu.commons.thread;
  * 
  * 比固定時間的loop更有效率
  */
-public interface TriggerQueue<E> extends BaseRunnable {
+public interface TriggerQueue<E> extends BaseRunnableQueue<E> {
 
-	/**
-	 * 加入元素
-	 * 
-	 * @param e
-	 * @return
-	 */
-	boolean offer(E e);
-
-	// /**
-	// * 處理真正要處理的邏輯
-	// *
-	// * @param e
-	// */
-	// void process(E e);
+//	/**
+//	 * 加入元素
+//	 * 
+//	 * remove to BaseRunnableQueue.offer
+//	 * 
+//	 * @param e
+//	 * @return
+//	 */
+//	boolean offer(E e);
 }

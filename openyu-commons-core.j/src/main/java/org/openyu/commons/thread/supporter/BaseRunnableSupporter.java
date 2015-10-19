@@ -88,6 +88,7 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 	/**
 	 * 啟動
 	 */
+	@Override
 	public void start() {
 		if (threadService != null) {
 			this.shutdown = false;
@@ -103,10 +104,15 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 	/**
 	 * 關閉
 	 */
+	@Override
 	public void shutdown() {
 		this.shutdown = true;
 	}
 
+	/**
+	 * 是否關閉
+	 */
+	@Override
 	public boolean isShutdown() {
 		return shutdown;
 	}
