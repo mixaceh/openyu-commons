@@ -22,7 +22,7 @@ public class StackCacheFactoryImplTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static StackCacheFactory<Parser> stackCacheFactory;
+	private static StackCacheFactoryFactoryBean<Parser, StackCacheFactory<Parser>> stackCacheFactoryFactoryBean;
 
 	private static StackCacheFactoryImpl<Parser> stackCacheFactoryImpl;
 
@@ -32,35 +32,63 @@ public class StackCacheFactoryImplTest extends BaseTestSupporter {
 		// new CacheableObjectFactorySupporter<Parser>() {
 		//
 		// 改用newInstance
-		stackCacheFactory = StackCacheFactoryImpl
-				.createInstance(new CacheableObjectFactorySupporter<Parser>() {
+		// stackCacheFactory = StackCacheFactoryImpl.createInstance(new
+		// CacheableObjectFactorySupporter<Parser>() {
+		//
+		// private static final long serialVersionUID = -5161964541145838308L;
+		//
+		// public Parser makeObject() throws Exception {
+		// return new Parser();
+		// }
+		//
+		// public void destroyObject(Parser obj) throws Exception {
+		// obj.close();
+		// }
+		//
+		// public boolean validateObject(Parser obj) {
+		// return true;
+		// }
+		//
+		// public void activateObject(Parser obj) throws Exception {
+		// }
+		//
+		// public void passivateObject(Parser obj) throws Exception {
+		// obj.flush();
+		// obj.reset();
+		// }
+		// });
+		//
+		// stackCacheFactoryImpl = (StackCacheFactoryImpl<Parser>)
+		// stackCacheFactory;
 
-					private static final long serialVersionUID = -5161964541145838308L;
+		// 改用FactoryBean
+		stackCacheFactoryFactoryBean = new StackCacheFactoryFactoryBean<Parser, StackCacheFactory<Parser>>();
+		stackCacheFactoryFactoryBean.setCacheableObjectFactory(new CacheableObjectFactorySupporter<Parser>() {
 
-					public Parser makeObject() throws Exception {
-						return new Parser();
-					}
+			private static final long serialVersionUID = -5161964541145838308L;
 
-					public void destroyObject(Parser obj) throws Exception {
-						obj.close();
-					}
+			public Parser makeObject() throws Exception {
+				return new Parser();
+			}
 
-					public boolean validateObject(Parser obj) {
-						return true;
-					}
+			public void destroyObject(Parser obj) throws Exception {
+				obj.close();
+			}
 
-					public void activateObject(Parser obj) throws Exception {
-					}
+			public boolean validateObject(Parser obj) {
+				return true;
+			}
 
-					public void passivateObject(Parser obj) throws Exception {
-						obj.flush();
-						obj.reset();
-					}
-				});
+			public void activateObject(Parser obj) throws Exception {
+			}
 
-		stackCacheFactoryImpl = (StackCacheFactoryImpl<Parser>) stackCacheFactory;
-
-		// stackCacheFactoryImpl.initialize();
+			public void passivateObject(Parser obj) throws Exception {
+				obj.flush();
+				obj.reset();
+			}
+		});
+		stackCacheFactoryFactoryBean.start();
+		stackCacheFactoryImpl = (StackCacheFactoryImpl<Parser>) stackCacheFactoryFactoryBean.getObject();
 	}
 
 	@Test
@@ -125,8 +153,7 @@ public class StackCacheFactoryImplTest extends BaseTestSupporter {
 		// System.out.println(result);
 		stackCacheFactoryImpl.closeCache();
 		//
-		System.out.println("[" + Thread.currentThread().getName() + "] "
-				+ result);
+		System.out.println("[" + Thread.currentThread().getName() + "] " + result);
 		ThreadHelper.sleep(1 * 1000);
 	}
 
@@ -162,8 +189,7 @@ public class StackCacheFactoryImplTest extends BaseTestSupporter {
 					throw new CacheException(ex);
 				}
 				//
-				System.out.println("[" + Thread.currentThread().getName()
-						+ "] " + cache);
+				System.out.println("[" + Thread.currentThread().getName() + "] " + cache);
 				return result;
 			}
 		});

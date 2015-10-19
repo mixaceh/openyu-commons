@@ -23,28 +23,30 @@ public class StackCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 	public StackCacheFactoryImpl() {
 	}
 
-	/**
-	 * new建構
-	 * 
-	 * @return
-	 */
-	public static <T> StackCacheFactory<T> createInstance(
-			CacheableObjectFactory<T> cacheableObjectFactory) {
-		StackCacheFactoryImpl<T> result = null;
-		try {
-			result = new StackCacheFactoryImpl<T>(cacheableObjectFactory);
-			result.setCreateInstance(true);
-			// 啟動
-			result.start();
-		} catch (Exception e) {
-			LOGGER.error(
-					new StringBuilder().append(
-							"Exception encountered during createInstance()")
-							.toString(), e);
-			result = (StackCacheFactoryImpl<T>) shutdownInstance(result);
-		}
-		return result;
-	}
+//	/**
+//	 * new建構
+//	 * 
+//	 * remove to StackCacheFactoryFactoryBean.createService()
+//	 * 
+//	 * @return
+//	 */
+//	public static <T> StackCacheFactory<T> createInstance(
+//			CacheableObjectFactory<T> cacheableObjectFactory) {
+//		StackCacheFactoryImpl<T> result = null;
+//		try {
+//			result = new StackCacheFactoryImpl<T>(cacheableObjectFactory);
+//			result.setCreateInstance(true);
+//			// 啟動
+//			result.start();
+//		} catch (Exception e) {
+//			LOGGER.error(
+//					new StringBuilder().append(
+//							"Exception encountered during createInstance()")
+//							.toString(), e);
+//			result = (StackCacheFactoryImpl<T>) shutdownInstance(result);
+//		}
+//		return result;
+//	}
 
 	/**
 	 * 內部啟動

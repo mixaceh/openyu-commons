@@ -25,6 +25,7 @@ public class SoftReferenceCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 
 //	/**
 //	 * new建構
+//	 * remove to SoftReferenceCacheFactoryFactoryBean.createService()
 //	 * 
 //	 * @return
 //	 */
