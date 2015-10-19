@@ -8,7 +8,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.openyu.commons.commons.pool.CacheCallback;
 import org.openyu.commons.commons.pool.GenericCacheFactory;
+import org.openyu.commons.commons.pool.GenericCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
+import org.openyu.commons.commons.pool.impl.GenericCacheFactoryImplTest.Parser;
 import org.openyu.commons.commons.pool.supporter.CacheableObjectFactorySupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.NumberHelper;
@@ -21,7 +23,7 @@ public class GenericCacheFactoryImplTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static GenericCacheFactory<Parser> genericCacheFactory;
+	private static GenericCacheFactoryFactoryBean<Parser, GenericCacheFactory<Parser>> genericCacheFactoryFactoryBean;
 
 	private static GenericCacheFactoryImpl<Parser> genericCacheFactoryImpl;
 
@@ -31,34 +33,63 @@ public class GenericCacheFactoryImplTest extends BaseTestSupporter {
 		// new CacheableObjectFactorySupporter<Parser>() {
 		//
 		// 改用newInstance
-		genericCacheFactory = GenericCacheFactoryImpl
-				.createInstance(new CacheableObjectFactorySupporter<Parser>() {
+		// genericCacheFactory = GenericCacheFactoryImpl.createInstance(new
+		// CacheableObjectFactorySupporter<Parser>() {
+		//
+		// private static final long serialVersionUID = -5161964541145838308L;
+		//
+		// public Parser makeObject() throws Exception {
+		// return new Parser();
+		// }
+		//
+		// public void destroyObject(Parser obj) throws Exception {
+		// obj.close();
+		// }
+		//
+		// public boolean validateObject(Parser obj) {
+		// return true;
+		// }
+		//
+		// public void activateObject(Parser obj) throws Exception {
+		// }
+		//
+		// public void passivateObject(Parser obj) throws Exception {
+		// obj.flush();
+		// obj.reset();
+		// }
+		// });
+		// genericCacheFactoryImpl = (GenericCacheFactoryImpl<Parser>)
+		// genericCacheFactory;
 
-					private static final long serialVersionUID = -5161964541145838308L;
+		// 改用FactoryBean
+		genericCacheFactoryFactoryBean = new GenericCacheFactoryFactoryBean<Parser, GenericCacheFactory<Parser>>();
+		genericCacheFactoryFactoryBean.setCacheableObjectFactory(new CacheableObjectFactorySupporter<Parser>() {
 
-					public Parser makeObject() throws Exception {
-						return new Parser();
-					}
+			private static final long serialVersionUID = -5161964541145838308L;
 
-					public void destroyObject(Parser obj) throws Exception {
-						obj.close();
-					}
+			public Parser makeObject() throws Exception {
+				return new Parser();
+			}
 
-					public boolean validateObject(Parser obj) {
-						return true;
-					}
+			public void destroyObject(Parser obj) throws Exception {
+				obj.close();
+			}
 
-					public void activateObject(Parser obj) throws Exception {
-					}
+			public boolean validateObject(Parser obj) {
+				return true;
+			}
 
-					public void passivateObject(Parser obj) throws Exception {
-						obj.flush();
-						obj.reset();
-					}
-				});
-		genericCacheFactoryImpl = (GenericCacheFactoryImpl<Parser>) genericCacheFactory;
+			public void activateObject(Parser obj) throws Exception {
+			}
 
-		// genericCacheFactoryImpl.initialize();
+			public void passivateObject(Parser obj) throws Exception {
+				obj.flush();
+				obj.reset();
+			}
+		});
+		genericCacheFactoryFactoryBean.start();
+		genericCacheFactoryImpl = (GenericCacheFactoryImpl<Parser>) genericCacheFactoryFactoryBean.getObject();
+
 	}
 
 	@Test
@@ -123,8 +154,7 @@ public class GenericCacheFactoryImplTest extends BaseTestSupporter {
 		// System.out.println(result);
 		genericCacheFactoryImpl.closeCache();
 		//
-		System.out.println("[" + Thread.currentThread().getName() + "] "
-				+ result);
+		System.out.println("[" + Thread.currentThread().getName() + "] " + result);
 		Thread.sleep(1 * 1000);
 	}
 
@@ -161,8 +191,7 @@ public class GenericCacheFactoryImplTest extends BaseTestSupporter {
 					throw new CacheException(ex);
 				}
 				//
-				System.out.println("[" + Thread.currentThread().getName()
-						+ "] " + cache);
+				System.out.println("[" + Thread.currentThread().getName() + "] " + cache);
 				return result;
 			}
 		});

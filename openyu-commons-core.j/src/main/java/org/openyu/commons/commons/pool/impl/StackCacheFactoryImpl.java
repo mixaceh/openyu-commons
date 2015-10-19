@@ -1,6 +1,6 @@
 package org.openyu.commons.commons.pool.impl;
 
-import org.apache.commons.pool.impl.StackObjectPool;
+import org.apache.commons.pool.impl.StackObjectPoolFactory;
 import org.openyu.commons.commons.pool.CacheableObjectFactory;
 import org.openyu.commons.commons.pool.StackCacheFactory;
 import org.openyu.commons.commons.pool.supporter.CacheFactorySupporter;
@@ -55,7 +55,9 @@ public class StackCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 	protected void doStart() throws Exception {
 		super.doStart();
 		//
-		this.objectPool = new StackObjectPool<T>(cacheableObjectFactory);
+		// this.objectPool = new StackObjectPool<T>(cacheableObjectFactory);
+		this.objectPoolFactory = new StackObjectPoolFactory<T>(cacheableObjectFactory);
+		this.objectPool = objectPoolFactory.createPool();
 	}
 
 }

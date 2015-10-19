@@ -143,36 +143,32 @@ public class GenericCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 		this.config.lifo = lifo;
 	}
 
-	/**
-	 * new建構
-	 * 
-	 * @return
-	 */
-	public static <T> GenericCacheFactory<T> createInstance(
-			CacheableObjectFactory<T> cacheableObjectFactory,
-			GenericObjectPool.Config config) {
-		GenericCacheFactoryImpl<T> result = null;
-		try {
-			result = new GenericCacheFactoryImpl<T>(cacheableObjectFactory,
-					config);
-			result.setCreateInstance(true);
-			// 啟動
-			result.start();
-		} catch (Exception e) {
-			LOGGER.error(
-					new StringBuilder().append(
-							"Exception encountered during createInstance()")
-							.toString(), e);
-			result = (GenericCacheFactoryImpl<T>) shutdownInstance(result);
-		}
-		return result;
-	}
-
-	public static <T> GenericCacheFactory<T> createInstance(
-			CacheableObjectFactory<T> cacheableObjectFactory) {
-		return createInstance(cacheableObjectFactory,
-				new GenericObjectPool.Config());
-	}
+//	/**
+//	 * new建構
+//	 * 
+//	 * remove to GenericCacheFactoryFactoryBean.createService()
+//	 * 
+//	 * @return
+//	 */
+//	public static <T> GenericCacheFactory<T> createInstance(
+//			CacheableObjectFactory<T> cacheableObjectFactory,
+//			GenericObjectPool.Config config) {
+//		GenericCacheFactoryImpl<T> result = null;
+//		try {
+//			result = new GenericCacheFactoryImpl<T>(cacheableObjectFactory,
+//					config);
+//			result.setCreateInstance(true);
+//			// 啟動
+//			result.start();
+//		} catch (Exception e) {
+//			LOGGER.error(
+//					new StringBuilder().append(
+//							"Exception encountered during createInstance()")
+//							.toString(), e);
+//			result = (GenericCacheFactoryImpl<T>) shutdownInstance(result);
+//		}
+//		return result;
+//	}
 
 	/**
 	 * 內部啟動
