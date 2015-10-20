@@ -1,6 +1,6 @@
 package org.openyu.commons.thread;
 
-public interface BaseRunnableQueueGroup<E> {
+public interface RunnableQueueGroup<E> {
 
 	/**
 	 * 加入queues
@@ -17,17 +17,19 @@ public interface BaseRunnableQueueGroup<E> {
 	 * @param e
 	 * @return
 	 */
-	boolean offer(E e);
+	boolean offer(E e) throws Exception;
 
 	/**
 	 * 啟動
 	 */
-	void start();
+	void start() throws Exception;
+
+	boolean isStarted();
 
 	/**
 	 * 關閉
 	 */
-	void shutdown();
+	void shutdown() throws Exception;
 
 	/**
 	 * 是否關閉

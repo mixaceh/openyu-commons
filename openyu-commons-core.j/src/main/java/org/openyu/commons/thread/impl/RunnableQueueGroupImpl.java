@@ -1,17 +1,18 @@
-package org.openyu.commons.thread.supporter;
+package org.openyu.commons.thread.impl;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.openyu.commons.thread.BaseRunnableQueue;
-import org.openyu.commons.thread.BaseRunnableQueueGroup;
+import org.openyu.commons.thread.RunnableQueueGroup;
 
-public class BaseRunnableQueueGroupSupporter<E> implements BaseRunnableQueueGroup<E> {
+public class RunnableQueueGroupImpl<E> implements RunnableQueueGroup<E> {
 
-	private BaseRunnableQueue<E> queues[] = null;
+	private BaseRunnableQueue<E> queues[];
 
 	private int queueSize;
 
 	private AtomicInteger counter = new AtomicInteger(0);
+
 	private boolean shutdown;
 
 	@Override
@@ -46,7 +47,7 @@ public class BaseRunnableQueueGroupSupporter<E> implements BaseRunnableQueueGrou
 		return this.queues[index];
 	}
 
-	public boolean offer(E e) {
+	public boolean offer(E e) throws Exception {
 		return getNextQueue().offer(e);
 	}
 
@@ -54,7 +55,7 @@ public class BaseRunnableQueueGroupSupporter<E> implements BaseRunnableQueueGrou
 	 * 啟動
 	 */
 	@Override
-	public void start() {
+	public void start() throws Exception {
 		for (BaseRunnableQueue<E> queue : queues) {
 			queue.start();
 		}
@@ -64,7 +65,7 @@ public class BaseRunnableQueueGroupSupporter<E> implements BaseRunnableQueueGrou
 	 * 關閉
 	 */
 	@Override
-	public void shutdown() {
+	public void shutdown() throws Exception {
 		for (BaseRunnableQueue<E> queue : queues) {
 			queue.shutdown();
 		}
