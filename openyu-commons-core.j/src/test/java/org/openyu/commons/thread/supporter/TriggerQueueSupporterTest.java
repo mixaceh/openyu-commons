@@ -14,7 +14,7 @@ import org.openyu.commons.thread.ThreadHelper;
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
-public class LoopQueueSupporterTest extends BaseTestSupporter {
+public class TriggerQueueSupporterTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
@@ -115,7 +115,7 @@ public class LoopQueueSupporterTest extends BaseTestSupporter {
 		}
 	}
 
-	protected static class Queue<E> extends LoopQueueSupporter<String> {
+	protected static class Queue<E> extends TriggerQueueSupporter<String> {
 
 		public Queue(ExecutorService executorService) {
 			super(executorService);
@@ -123,7 +123,7 @@ public class LoopQueueSupporterTest extends BaseTestSupporter {
 
 		@Override
 		protected void doExecute(String e) throws Exception {
-			System.out.println("T[" + Thread.currentThread().getId() + "] " + e);
+			System.out.println("T[" + Thread.currentThread().getId() + "] "+e);
 		}
 	}
 }

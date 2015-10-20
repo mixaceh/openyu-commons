@@ -18,9 +18,7 @@ public abstract class TriggerQueueSupporter<E> extends BaseRunnableQueueSupporte
 
 	private Queue<E> elements = new ConcurrentLinkedQueue<E>();
 
-	private Lock lock = new ReentrantLock();
-
-	private Condition notEmpty = lock.newCondition();
+	private transient Condition notEmpty = lock.newCondition();
 
 	public TriggerQueueSupporter(ThreadService threadService) {
 		super(threadService);
@@ -30,20 +28,30 @@ public abstract class TriggerQueueSupporter<E> extends BaseRunnableQueueSupporte
 		super(executorService);
 	}
 
-	public boolean offer(E e) {
+	public boolean offer(E e) throws Exception {
 		boolean result = false;
 		try {
-			lock.lockInterruptibly();
+			this.lock.lockInterruptibly();
 			try {
+				// 沒啟動,不加入元素
+				if (!isStarted()) {
+					throw new IllegalStateException(
+							new StringBuilder().append(getDisplayName()).append(" was not started").toString());
+				}
+				//
 				result = elements.offer(e);
 				if (result) {
 					notEmpty.signalAll();
 				}
+			} catch (Throwable ex) {
+				LOGGER.error(new StringBuilder("Exception encountered during offer()").toString(), ex);
+				throw ex;
 			} finally {
-				lock.unlock();
+				this.lock.unlock();
 			}
 		} catch (InterruptedException ex) {
-			ex.printStackTrace();
+			LOGGER.error(new StringBuilder("Exception encountered during offer()").toString(), ex);
+			throw ex;
 		}
 		return result;
 	}
@@ -69,28 +77,34 @@ public abstract class TriggerQueueSupporter<E> extends BaseRunnableQueueSupporte
 	/**
 	 * 內部執行
 	 */
-	protected void execute() {
+	protected void execute() throws Exception {
 		E e = null;
 		try {
-			lock.lockInterruptibly();
+			this.lock.lockInterruptibly();
 			try {
-				try {
-					while (elements.isEmpty()) {
-						notEmpty.await();
-					}
-					e = elements.poll();
-				} catch (Exception ex) {
-					LOGGER.error("Failed", ex);
+				while (elements.isEmpty()) {
+					notEmpty.await();
 				}
+				try {
+
+					e = elements.poll();
+					if (e != null) {
+						doExecute(e);
+					}
+				} catch (Throwable ex) {
+					LOGGER.error(new StringBuilder("Exception encountered during execute()").toString(), ex);
+				}
+			} catch (Throwable ex) {
+				throw ex;
 			} finally {
-				lock.unlock();
+				this.lock.unlock();
 			}
-			// 真正要處理的邏輯
-			if (e != null) {
-				doExecute(e);
-			}
-		} catch (Exception ex) {
-			LOGGER.error("Failed", ex);
+			// if (e != null) {
+			// doExecute(e);
+			// }
+		} catch (InterruptedException ex) {
+			LOGGER.error(new StringBuilder("Exception encountered during execute()").toString(), ex);
+			throw ex;
 		}
 	}
 

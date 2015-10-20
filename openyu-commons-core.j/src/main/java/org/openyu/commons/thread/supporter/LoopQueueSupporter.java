@@ -124,7 +124,7 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 							doExecute(e);
 						}
 					} catch (Throwable ex) {
-						LOGGER.error(new StringBuilder("Exception encountered during doExecute()").toString(), ex);
+						LOGGER.error(new StringBuilder("Exception encountered during execute()").toString(), ex);
 					}
 				}
 			} catch (Throwable ex) {

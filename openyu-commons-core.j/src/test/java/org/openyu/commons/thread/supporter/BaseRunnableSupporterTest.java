@@ -90,6 +90,25 @@ public class BaseRunnableSupporterTest extends BaseTestSupporter {
 		ThreadHelper.sleep(3000L);
 	}
 
+	public static class MultiThreadTest extends BaseTestSupporter {
+
+		@Rule
+		public BenchmarkRule benchmarkRule = new BenchmarkRule();
+
+		@Test
+		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+		public void start() throws Exception {
+			ExecutorService executorService = Executors.newFixedThreadPool(2);
+			//
+			Runner runner = new Runner(executorService);
+			runner.start();
+			//
+			runner = new Runner(executorService);
+			runner.start();
+			ThreadHelper.sleep(10 * 1000L);
+		}
+	}
+
 	protected static class Runner extends BaseRunnableSupporter {
 
 		public Runner(ExecutorService executorService) {
