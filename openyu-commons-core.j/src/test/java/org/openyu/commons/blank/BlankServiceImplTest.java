@@ -14,6 +14,7 @@ import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class BlankServiceImplTest extends BaseTestSupporter {
+
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
