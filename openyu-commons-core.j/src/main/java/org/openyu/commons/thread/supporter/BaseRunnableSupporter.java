@@ -1,6 +1,7 @@
 package org.openyu.commons.thread.supporter;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -39,7 +40,7 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 	/**
 	 * start/shutdown lock
 	 */
-	private transient final ReentrantLock lock = new ReentrantLock();
+	protected transient final Lock lock = new ReentrantLock();
 
 	public BaseRunnableSupporter(ThreadService threadService) {
 		this.threadService = threadService;
@@ -85,20 +86,18 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 	 * 啟動
 	 */
 	@Override
-	public final void start() {
+	public final void start() throws Exception {
 		try {
 			this.lock.lockInterruptibly();
 			try {
 				if (this.starting) {
 					throw new IllegalStateException(
-							new StringBuilder().append("T[" + Thread.currentThread().getId() + "] ")
-									.append(getDisplayName()).append(" is starting").toString());
+							new StringBuilder().append(getDisplayName()).append(" is starting").toString());
 				}
 				//
 				if (this.started) {
 					throw new IllegalStateException(
-							new StringBuilder().append("T[" + Thread.currentThread().getId() + "] ")
-									.append(getDisplayName()).append(" was already started").toString());
+							new StringBuilder().append(getDisplayName()).append(" was already started").toString());
 				}
 				//
 				if (threadService == null && executorService == null) {
@@ -106,8 +105,7 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 				}
 				//
 				this.starting = true;
-				LOGGER.info(new StringBuilder().append("Starting ").append("T[" + Thread.currentThread().getId() + "] ")
-						.append(getDisplayName()).toString());
+				LOGGER.info(new StringBuilder().append("Starting ").append(getDisplayName()).toString());
 				// --------------------------------------------------
 				if (threadService != null) {
 					this.threadService.submit(this);
@@ -119,50 +117,55 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 				this.started = true;
 				this.shutdown = false;
 			} catch (Throwable e) {
+				LOGGER.error(new StringBuilder("Exception encountered during start()").toString(), e);
 				throw e;
 			} finally {
 				this.lock.unlock();
 			}
 		} catch (InterruptedException e) {
 			LOGGER.error(new StringBuilder("Exception encountered during start()").toString(), e);
+			throw e;
 		}
+	}
+
+	public boolean isStarted() {
+		return started;
 	}
 
 	/**
 	 * 關閉
 	 */
 	@Override
-	public final void shutdown() {
+	public final void shutdown() throws Exception {
 		try {
 			this.lock.lockInterruptibly();
 			try {
 				if (this.shuttingdown) {
 					throw new IllegalStateException(
-							new StringBuilder().append("T[" + Thread.currentThread().getId() + "] ")
-									.append(getDisplayName()).append(" is shuttingdown").toString());
+							new StringBuilder().append(getDisplayName()).append(" is shuttingdown").toString());
 				}
 				//
 				if (this.shutdown) {
 					throw new IllegalStateException(
-							new StringBuilder().append("T[" + Thread.currentThread().getId() + "] ")
-									.append(getDisplayName()).append(" was already shutdown").toString());
+							new StringBuilder().append(getDisplayName()).append(" was already shutdown").toString());
 				}
 				//
 				this.shuttingdown = true;
-				LOGGER.info(new StringBuilder().append("T[" + Thread.currentThread().getId() + "] ")
-						.append("Shutting down ").append(getDisplayName()).toString());
+				LOGGER.info(new StringBuilder().append("Shutting down ").append(getDisplayName()).toString());
 				// --------------------------------------------------
 				this.shutdown = true;
 				// --------------------------------------------------
 				this.shuttingdown = false;
 				this.started = false;
 			} catch (Throwable e) {
+				LOGGER.error(new StringBuilder("Exception encountered during shutdown()").toString(), e);
 				throw e;
 			} finally {
 				this.lock.unlock();
 			}
 		} catch (InterruptedException e) {
 			LOGGER.error(new StringBuilder("Exception encountered during shutdown()").toString(), e);
+			throw e;
 		}
 	}
 

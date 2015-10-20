@@ -3,8 +3,6 @@ package org.openyu.commons.thread.supporter;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.openyu.commons.thread.LoopQueue;
 import org.openyu.commons.thread.ThreadHelper;
@@ -28,8 +26,6 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 	 */
 	private long listenMills = DEFAULT_LISTEN_MILLS;
 
-	protected transient Lock lock = new ReentrantLock();
-
 	public LoopQueueSupporter(ThreadService threadService) {
 		super(threadService);
 	}
@@ -46,25 +42,34 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 		this.listenMills = listenMills;
 	}
 
-	public boolean offer(E e) {
+	public final boolean offer(E e) throws Exception {
 		boolean result = false;
 		// issue: synchronized慢
 		// synchronized (elements) {
 		// result = elements.offer(e);
 		// }
 		//
+
 		// fix: 改用lock
 		try {
-			lock.lockInterruptibly();
+			this.lock.lockInterruptibly();
 			try {
+				// 沒啟動,不加入元素
+				if (!isStarted()) {
+					throw new IllegalStateException(
+							new StringBuilder().append(getDisplayName()).append(" was not started").toString());
+				}
+				//
 				result = elements.offer(e);
-			} catch (Exception ex) {
-				ex.printStackTrace();
+			} catch (Throwable ex) {
+				LOGGER.error(new StringBuilder("Exception encountered during offer()").toString(), ex);
+				throw ex;
 			} finally {
-				lock.unlock();
+				this.lock.unlock();
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (InterruptedException ex) {
+			LOGGER.error(new StringBuilder("Exception encountered during offer()").toString(), ex);
+			throw ex;
 		}
 		return result;
 	}
@@ -74,7 +79,7 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 	 */
 	@Override
 	protected void doRun() throws Exception {
-		while (true) {
+		for (;;) {
 			try {
 				if (isShutdown()) {
 					break;
@@ -91,7 +96,7 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 	/**
 	 * 執行
 	 */
-	protected void execute() {
+	protected void execute() throws Exception {
 		E e = null;
 		try {
 			// issue: synchronized慢
@@ -110,7 +115,7 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 			// }
 			//
 			// fix: 改用lock
-			lock.lockInterruptibly();
+			this.lock.lockInterruptibly();
 			try {
 				while (!elements.isEmpty()) {
 					try {
@@ -118,18 +123,18 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 						if (e != null) {
 							doExecute(e);
 						}
-					} catch (Exception ex) {
-						LOGGER.error("Failed", ex);
+					} catch (Throwable ex) {
+						LOGGER.error(new StringBuilder("Exception encountered during doExecute()").toString(), ex);
 					}
 				}
-			} catch (Exception ex) {
-				LOGGER.error("Failed", ex);
+			} catch (Throwable ex) {
+				throw ex;
 			} finally {
-				lock.unlock();
+				this.lock.unlock();
 			}
-
-		} catch (Exception ex) {
-			LOGGER.error("Failed", ex);
+		} catch (InterruptedException ex) {
+			LOGGER.error(new StringBuilder("Exception encountered during execute()").toString(), ex);
+			throw ex;
 		}
 	}
 

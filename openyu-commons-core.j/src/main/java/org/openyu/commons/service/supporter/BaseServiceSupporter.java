@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
@@ -65,7 +66,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	/**
 	 * start/shutdown/restart lock
 	 */
-	private transient final ReentrantLock lock = new ReentrantLock();
+	protected transient final Lock lock = new ReentrantLock();
 
 	/**
 	 * 狀態

@@ -8,6 +8,6 @@ public interface BaseRunnableQueue<E> extends BaseRunnable {
 	 * @param e
 	 * @return
 	 */
-	boolean offer(E e);
+	boolean offer(E e) throws Exception;
 
 }
