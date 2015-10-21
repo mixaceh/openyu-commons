@@ -130,15 +130,6 @@ public class RunnableQueueGroupImpl<E> implements RunnableQueueGroup<E> {
 	}
 
 	/**
-	 * 是否啟動
-	 */
-
-	@Override
-	public boolean isStarted() {
-		return started;
-	}
-
-	/**
 	 * 關閉
 	 */
 	@Override
@@ -176,13 +167,4 @@ public class RunnableQueueGroupImpl<E> implements RunnableQueueGroup<E> {
 			throw e;
 		}
 	}
-
-	/**
-	 * 是否關閉
-	 */
-	@Override
-	public boolean isShutdown() {
-		return shutdown;
-	}
-
 }
