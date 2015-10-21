@@ -69,6 +69,11 @@ public class RunnableQueueGroupImpl<E> implements RunnableQueueGroup<E> {
 	}
 
 	public boolean offer(E e) throws Exception {
+		// 沒啟動,不加入元素
+		if (!this.started) {
+			throw new IllegalStateException(
+					new StringBuilder().append(getDisplayName()).append(" was not started").toString());
+		}
 		return getNextQueue().offer(e);
 	}
 
