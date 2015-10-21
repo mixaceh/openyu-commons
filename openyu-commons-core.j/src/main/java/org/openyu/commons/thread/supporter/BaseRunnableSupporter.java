@@ -128,6 +128,10 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 		}
 	}
 
+	/**
+	 * 是否啟動
+	 */
+	@Override
 	public boolean isStarted() {
 		return started;
 	}

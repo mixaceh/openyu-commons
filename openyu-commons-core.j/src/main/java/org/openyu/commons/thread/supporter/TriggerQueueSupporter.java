@@ -84,7 +84,6 @@ public abstract class TriggerQueueSupporter<E> extends BaseRunnableQueueSupporte
 					notEmpty.await();
 				}
 				try {
-
 					e = elements.poll();
 					if (e != null) {
 						doExecute(e);

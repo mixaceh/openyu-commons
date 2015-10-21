@@ -24,6 +24,11 @@ public interface RunnableQueueGroup<E> {
 	 */
 	void start() throws Exception;
 
+	/**
+	 * 是否啟動
+	 * 
+	 * @return
+	 */
 	boolean isStarted();
 
 	/**
