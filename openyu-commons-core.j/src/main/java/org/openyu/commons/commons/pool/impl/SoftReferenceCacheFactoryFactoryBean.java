@@ -43,6 +43,11 @@ public final class SoftReferenceCacheFactoryFactoryBean<T, U extends SoftReferen
 		SoftReferenceCacheFactoryImpl<T> result = null;
 		try {
 			result = new SoftReferenceCacheFactoryImpl<T>(cacheableObjectFactory);
+			//
+			result.setApplicationContext(applicationContext);
+			result.setBeanFactory(beanFactory);
+			result.setResourceLoader(resourceLoader);
+			//
 			result.setCreateInstance(true);
 
 			/**

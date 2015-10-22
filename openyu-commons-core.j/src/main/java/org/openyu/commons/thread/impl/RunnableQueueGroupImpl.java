@@ -68,7 +68,7 @@ public class RunnableQueueGroupImpl<E> implements RunnableQueueGroup<E> {
 		return this.queues[index];
 	}
 
-	public boolean offer(E e) throws Exception {
+	public boolean offer(E e) {
 		// 沒啟動,不加入元素
 		if (!this.started) {
 			throw new IllegalStateException(

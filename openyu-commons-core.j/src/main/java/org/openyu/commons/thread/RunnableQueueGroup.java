@@ -17,13 +17,12 @@ public interface RunnableQueueGroup<E> {
 	 * @param e
 	 * @return
 	 */
-	boolean offer(E e) throws Exception;
+	boolean offer(E e);
 
 	/**
 	 * 啟動
 	 */
 	void start() throws Exception;
-
 
 	/**
 	 * 關閉

@@ -57,8 +57,12 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 		ThreadServiceImpl result = null;
 		try {
 			result = new ThreadServiceImpl();
+			//
+			result.setApplicationContext(applicationContext);
+			result.setBeanFactory(beanFactory);
+			result.setResourceLoader(resourceLoader);
+			//
 			result.setCreateInstance(true);
-
 			/**
 			 * extendedProperties
 			 */

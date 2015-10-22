@@ -25,6 +25,11 @@ public final class BlankServiceFactoryBean<T extends BlankService> extends BaseS
 		BlankServiceImpl result = null;
 		try {
 			result = new BlankServiceImpl();
+			//
+			result.setApplicationContext(applicationContext);
+			result.setBeanFactory(beanFactory);
+			result.setResourceLoader(resourceLoader);
+			//
 			result.setCreateInstance(true);
 
 			/**

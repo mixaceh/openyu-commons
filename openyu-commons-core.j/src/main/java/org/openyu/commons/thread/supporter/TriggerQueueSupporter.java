@@ -26,7 +26,7 @@ public abstract class TriggerQueueSupporter<E> extends BaseRunnableQueueSupporte
 		super(executorService);
 	}
 
-	public boolean offer(E e) throws Exception {
+	public final boolean offer(E e) {
 		boolean result = false;
 		try {
 			this.lock.lockInterruptibly();
@@ -49,7 +49,6 @@ public abstract class TriggerQueueSupporter<E> extends BaseRunnableQueueSupporte
 			}
 		} catch (InterruptedException ex) {
 			LOGGER.error(new StringBuilder("Exception encountered during offer()").toString(), ex);
-			throw ex;
 		}
 		return result;
 	}

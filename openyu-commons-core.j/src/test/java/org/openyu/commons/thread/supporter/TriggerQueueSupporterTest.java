@@ -89,7 +89,7 @@ public class TriggerQueueSupporterTest extends BaseTestSupporter {
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	public void offerWithException() throws Exception {
+	public void offerWithException() {
 		queue.offer("aaa");
 		ThreadHelper.sleep(3000L);
 	}
@@ -123,7 +123,7 @@ public class TriggerQueueSupporterTest extends BaseTestSupporter {
 
 		@Override
 		protected void doExecute(String e) throws Exception {
-			System.out.println("T[" + Thread.currentThread().getId() + "] "+e);
+			System.out.println("T[" + Thread.currentThread().getId() + "] " + e);
 		}
 	}
 }

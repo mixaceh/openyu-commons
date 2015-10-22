@@ -77,6 +77,11 @@ public final class AuthKeyServiceFactoryBean<T extends AuthKeyService>
 		AuthKeyServiceImpl result = null;
 		try {
 			result = new AuthKeyServiceImpl();
+			//
+			result.setApplicationContext(applicationContext);
+			result.setBeanFactory(beanFactory);
+			result.setResourceLoader(resourceLoader);
+			//
 			result.setCreateInstance(true);
 
 			/**

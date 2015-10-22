@@ -89,7 +89,7 @@ public class LoopQueueSupporterTest extends BaseTestSupporter {
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	public void offerWithException() throws Exception {
+	public void offerWithException() {
 		queue.offer("aaa");
 		ThreadHelper.sleep(3000L);
 	}

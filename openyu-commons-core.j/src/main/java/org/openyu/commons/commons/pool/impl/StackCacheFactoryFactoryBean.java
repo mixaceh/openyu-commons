@@ -43,6 +43,11 @@ public final class StackCacheFactoryFactoryBean<T, U extends StackCacheFactory<T
 		StackCacheFactoryImpl<T> result = null;
 		try {
 			result = new StackCacheFactoryImpl<T>(cacheableObjectFactory);
+			//
+			result.setApplicationContext(applicationContext);
+			result.setBeanFactory(beanFactory);
+			result.setResourceLoader(resourceLoader);
+			//
 			result.setCreateInstance(true);
 
 			/**

@@ -43,6 +43,11 @@ public final class GenericCacheFactoryFactoryBean<T, U extends GenericCacheFacto
 		GenericCacheFactoryImpl<T> result = null;
 		try {
 			result = new GenericCacheFactoryImpl<T>(cacheableObjectFactory);
+			//
+			result.setApplicationContext(applicationContext);
+			result.setBeanFactory(beanFactory);
+			result.setResourceLoader(resourceLoader);
+			//
 			result.setCreateInstance(true);
 
 			/**

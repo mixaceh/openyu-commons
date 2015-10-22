@@ -42,7 +42,7 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 		this.listenMills = listenMills;
 	}
 
-	public final boolean offer(E e) throws Exception {
+	public final boolean offer(E e) {
 		boolean result = false;
 		// issue: synchronized慢
 		// synchronized (elements) {
@@ -69,7 +69,6 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 			}
 		} catch (InterruptedException ex) {
 			LOGGER.error(new StringBuilder("Exception encountered during offer()").toString(), ex);
-			throw ex;
 		}
 		return result;
 	}
