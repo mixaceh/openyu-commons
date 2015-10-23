@@ -1,7 +1,5 @@
 package org.openyu.commons.thread.supporter;
 
-//import java.lang.reflect.Method;
-
 import java.util.concurrent.ExecutorService;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -9,9 +7,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openyu.commons.lang.ClassHelper;
-//import org.springframework.util.StopWatch;
-//import org.openyu.commons.lang.ClassHelper;
-//import org.openyu.commons.lang.StringHelper;
 import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.thread.BaseCallable;
 import org.openyu.commons.thread.ThreadService;

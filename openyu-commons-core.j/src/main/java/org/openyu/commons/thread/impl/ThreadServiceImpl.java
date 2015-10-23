@@ -202,13 +202,13 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 	}
 
 	@Override
-	public Future<?> submit(Callable<?> callable) {
-		return nextExecutor().submit(callable);
+	public <T> Future<T> submit(Callable<T> task) {
+		return nextExecutor().submit(task);
 	}
 
 	@Override
-	public Future<?> submit(Runnable runnable) {
-		return nextExecutor().submit(runnable);
+	public Future<?> submit(Runnable task) {
+		return nextExecutor().submit(task);
 	}
 
 	/**

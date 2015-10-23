@@ -283,38 +283,6 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 		}
 	}
 
-	// protected final boolean isStarting() {
-	// return (this.states & STARTING) != 0;
-	// }
-	//
-	// protected final boolean isStarted() {
-	// return (this.states & STARTED) != 0;
-	// }
-	//
-	// protected final boolean isShuttingdown() {
-	// return (this.states & SHUTTINGDOWN) != 0;
-	// }
-	//
-	// protected final boolean isShutdown() {
-	// return (this.states & SHUTDOWN) != 0;
-	// }
-	//
-	// protected final boolean isRestarting() {
-	// return (this.states & RESTARTING) != 0;
-	// }
-	//
-	// protected final boolean isRestarted() {
-	// return (this.states & RESTARTED) != 0;
-	// }
-	//
-	// protected boolean isGetInstance() {
-	// return (this.states & GET_INSTANCE) != 0;
-	// }
-	//
-	// protected boolean isCreateInstance() {
-	// return (this.states & CREATE_INSTANCE) != 0;
-	// }
-
 	/**
 	 * 取得國際化訊息
 	 * 

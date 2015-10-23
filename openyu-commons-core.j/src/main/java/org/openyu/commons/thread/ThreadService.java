@@ -31,18 +31,18 @@ public interface ThreadService extends BaseService {
 	void setQueueCapacity(int queueCapacity);
 
 	/**
-	 * 提交 Callable
+	 * 提交 Callable, 有傳回值
 	 * 
 	 * @param callable
 	 * @return
 	 */
-	Future<?> submit(Callable<?> callable);
+	<T> Future<T> submit(Callable<T> task);
 
 	/**
-	 * 提交 Runnable
+	 * 提交 Runnable, 無傳回值
 	 * 
 	 * @param runnable
 	 * @return
 	 */
-	Future<?> submit(Runnable runnable);
+	Future<?> submit(Runnable task);
 }

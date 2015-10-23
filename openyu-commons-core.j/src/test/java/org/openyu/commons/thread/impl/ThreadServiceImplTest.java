@@ -4,6 +4,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.junit.BeforeClass;
@@ -132,7 +134,7 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 		threadServiceImpl.submit(runner);// thread1
 		threadServiceImpl.submit(runner);// thread2
 		//
-		ThreadHelper.sleep(5 * 1000);
+		ThreadHelper.sleep(3 * 1000);
 	}
 
 	protected class Runner implements Runnable {
@@ -147,22 +149,20 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void submitWithBlocking() throws Exception {
-		Callable<Boolean> caller = new Caller<Boolean>();
-		Future<?> future = threadServiceImpl.submit(caller);// thread1
-
-		boolean result = (Boolean) future.get(); // thread1跑完後,才會繼續往下走
+		Caller caller = new Caller();
+		Future<Boolean> future = threadServiceImpl.submit(caller);// thread1
+		boolean result = future.get(); // thread1跑完後,才會繼續往下走
 		System.out.println(result);
-
-		threadServiceImpl.submit(caller);// thread2
 		//
-		ThreadHelper.sleep(5 * 1000);
+		threadServiceImpl.submit(caller);// thread2
+		ThreadHelper.sleep(3 * 1000);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void submitWithNonBlocking() throws Exception {
-		Callable<Boolean> caller = new Caller<Boolean>();
-		Future<?> future = threadServiceImpl.submit(caller);// thread1
+		Caller caller = new Caller();
+		Future<Boolean> future = threadServiceImpl.submit(caller);// thread1
 		System.out.println(future);
 
 		// 若無此future.get(),不管thread1是否跑完,都會繼續往下走
@@ -171,16 +171,16 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 
 		threadServiceImpl.submit(caller);// thread2
 		//
-		ThreadHelper.sleep(5 * 1000);
+		ThreadHelper.sleep(3 * 1000);
 	}
 
-	protected class Caller<E> implements Callable<Boolean> {
+	protected class Caller implements Callable<Boolean> {
 
 		public Boolean call() throws Exception {
 			for (int i = 0; i < 5; i++) {
 				System.out.println("T[" + Thread.currentThread().getId() + "] i = " + i);
 			}
-			ThreadHelper.sleep(5 * 1000);
+			ThreadHelper.sleep(3 * 1000);
 			return Boolean.TRUE;
 		}
 	}
