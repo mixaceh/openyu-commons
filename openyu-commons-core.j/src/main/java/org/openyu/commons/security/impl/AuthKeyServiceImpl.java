@@ -102,7 +102,6 @@ public class AuthKeyServiceImpl extends BaseServiceSupporter implements AuthKeyS
 			checkExpiredRunner = new CheckExpiredRunner(threadService);
 			checkExpiredRunner.start();
 		}
-
 	}
 
 	/**
