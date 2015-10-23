@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.openyu.commons.enumz.EnumHelper;
 import org.openyu.commons.lang.ByteHelper;
 import org.openyu.commons.misc.UnsafeHelper;
@@ -320,16 +319,6 @@ public class ChecksumProcessorImpl extends BaseProcessorSupporter implements Che
 	// return EncodingHelper.encodeHexString(ByteHelper.toByteArray(execute(
 	// checksumType, value, checksumKey)));
 	// }
-
-	public String toString() {
-		ToStringBuilder builder = new ToStringBuilder(this);
-		builder.append("checksum", checksum);
-		builder.append("checksumType", checksumType);
-		builder.append("checksumKey", checksumKey);
-		//
-		builder.append("checksumTypes", checksumTypes);
-		return builder.toString();
-	}
 
 	public Object clone() {
 		ChecksumProcessorImpl copy = null;
