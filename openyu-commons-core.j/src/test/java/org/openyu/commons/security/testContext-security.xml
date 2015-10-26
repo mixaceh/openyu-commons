@@ -28,11 +28,11 @@
 		id="authKeyService"
 		class="org.openyu.commons.security.impl.AuthKeyServiceImpl"
 		parent="baseServiceSupporter"
-		p:aliveMills="${aliveMills}"
-		p:listenMills="${listenMills}"
-		p:security="${security}"
-		p:securityType="${securityType}"
-		p:securityKey="${securityKey}" />
+		p:aliveMills="180000"
+		p:listenMills="30000"
+		p:security="true"
+		p:securityType="HmacMD5"
+		p:securityKey="FarFarAway" />
 
 	<bean
 		id="authKeyServiceFactoryBean"

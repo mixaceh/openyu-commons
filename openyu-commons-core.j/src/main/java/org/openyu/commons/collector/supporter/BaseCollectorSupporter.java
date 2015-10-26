@@ -133,7 +133,7 @@ public abstract class BaseCollectorSupporter extends BaseModelSupporter
 	/**
 	 * 檢查是否有啟動
 	 */
-	public void checkStarted() {
+	protected void checkStarted() {
 		if (!this.started) {
 			throw new IllegalStateException(new StringBuilder()
 					.append(getDisplayName())

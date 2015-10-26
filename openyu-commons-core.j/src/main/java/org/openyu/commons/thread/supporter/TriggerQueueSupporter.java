@@ -26,6 +26,10 @@ public abstract class TriggerQueueSupporter<E> extends BaseRunnableQueueSupporte
 		super(executorService);
 	}
 
+	public TriggerQueueSupporter() {
+		super();
+	}
+
 	public final boolean offer(E e) {
 		boolean result = false;
 		try {
@@ -99,8 +103,8 @@ public abstract class TriggerQueueSupporter<E> extends BaseRunnableQueueSupporte
 			// doExecute(e);
 			// }
 		} catch (InterruptedException ex) {
-			LOGGER.error(new StringBuilder("Exception encountered during execute()").toString(), ex);
-			throw ex;
+			//LOGGER.error(new StringBuilder("Exception encountered during execute()").toString(), ex);
+			//throw ex;
 		}
 	}
 

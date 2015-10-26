@@ -145,19 +145,5 @@ public class BlankServiceImplCreateInstanceTest extends BaseTestSupporter {
 			// start. Call start()
 			impl.restart();
 		}
-
-		@Test
-		@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-		public void checkStarted() {
-			BlankServiceImplCreateInstance impl = new BlankServiceImplCreateInstance();
-			// 一開始沒啟動,有可能是忘了call start()
-			// impl.start();
-			System.out.println(impl);
-			assertNotNull(impl);
-			// 會丟出ex
-			// java.lang.IllegalStateException: BlankServiceImpl (new) not
-			// start. Call start()
-			impl.checkStarted();
-		}
 	}
 }

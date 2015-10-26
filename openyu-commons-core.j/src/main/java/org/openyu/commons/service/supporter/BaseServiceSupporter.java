@@ -520,7 +520,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	/**
 	 * 檢查是否有啟動
 	 */
-	public synchronized void checkStarted() {
+	protected void checkStarted() {
 		if (!isStates(STARTED)) {
 			throw new IllegalStateException(
 					new StringBuilder().append(getDisplayName()).append(" not start. Call start()").toString());

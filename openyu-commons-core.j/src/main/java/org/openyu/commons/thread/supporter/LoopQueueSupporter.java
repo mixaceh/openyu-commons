@@ -34,6 +34,10 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 		super(executorService);
 	}
 
+	public LoopQueueSupporter() {
+		super();
+	}
+
 	public long getListenMills() {
 		return listenMills;
 	}

@@ -1,6 +1,7 @@
 package org.openyu.commons.thread.supporter;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.FutureTask;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -33,6 +34,10 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 
 	public BaseCallableSupporter(ExecutorService executorService) {
 		this.executorService = executorService;
+	}
+
+	public BaseCallableSupporter() {
+		this((ExecutorService) null);
 	}
 
 	public V call() {
@@ -71,7 +76,11 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 			this.shutdown = false;
 			this.executorService.submit(this);
 		} else {
-			AssertHelper.notNull(null, "The ThreadService or ExecutorService must not be null");
+			this.shutdown = false;
+			// use thread
+			FutureTask<V> future = new FutureTask<V>(this);
+			Thread thread = new Thread(future);
+			thread.start();
 		}
 	}
 

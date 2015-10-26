@@ -50,6 +50,10 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 		this.executorService = executorService;
 	}
 
+	public BaseRunnableSupporter() {
+		this((ExecutorService) null);
+	}
+
 	public final void run() {
 		try {
 			LOGGER.info(new StringBuilder().append("Running ").append("T[" + Thread.currentThread().getId() + "] ")
@@ -100,17 +104,18 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 							new StringBuilder().append(getDisplayName()).append(" was already started").toString());
 				}
 				//
-				if (threadService == null && executorService == null) {
-					AssertHelper.notNull(null, "ThreadService or ExecutorService must not be null");
-				}
-				//
 				this.starting = true;
-				LOGGER.info(new StringBuilder().append("Starting ").append(getDisplayName()).toString());
+				// LOGGER.info(new StringBuilder().append("Starting
+				// ").append(getDisplayName()).toString());
 				// --------------------------------------------------
 				if (threadService != null) {
 					this.threadService.submit(this);
-				} else {
+				} else if (executorService != null) {
 					this.executorService.submit(this);
+				} else {
+					// use thread
+					Thread thread = new Thread(this);
+					thread.start();
 				}
 				// --------------------------------------------------
 				this.starting = false;
@@ -155,7 +160,8 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 				}
 				//
 				this.shuttingdown = true;
-				LOGGER.info(new StringBuilder().append("Shutting down ").append(getDisplayName()).toString());
+				// LOGGER.info(new StringBuilder().append("Shutting down
+				// ").append(getDisplayName()).toString());
 				// --------------------------------------------------
 				this.shutdown = true;
 				// --------------------------------------------------

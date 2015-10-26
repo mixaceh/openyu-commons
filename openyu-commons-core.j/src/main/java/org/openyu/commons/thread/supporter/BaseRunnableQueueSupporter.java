@@ -19,4 +19,8 @@ public abstract class BaseRunnableQueueSupporter<E> extends BaseRunnableSupporte
 		super(executorService);
 	}
 
+	public BaseRunnableQueueSupporter() {
+		super();
+	}
+
 }

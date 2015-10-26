@@ -180,7 +180,7 @@ public abstract class BaseHelperSupporter implements Supporter {
 	/**
 	 * 檢查是否有啟動
 	 */
-	public void checkStarted() {
+	protected void checkStarted() {
 		if (!isStarted()) {
 			throw new IllegalStateException(
 					new StringBuilder().append(getDisplayName()).append(" not start. Call start()").toString());

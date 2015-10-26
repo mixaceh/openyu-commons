@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 /**
  * BaseService工廠類
  * 
- * 1.service
+ * 1.實作 BaseService 的 service
+ * 
+ * 2.否則該用 BaseFactorySupporter
  */
 public abstract class BaseServiceFactorySupporter<T extends BaseService> extends BaseFactorySupporter<BaseService> {
 
