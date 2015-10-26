@@ -84,7 +84,8 @@ public abstract class TriggerQueueSupporter<E> extends BaseRunnableQueueSupporte
 			this.lock.lockInterruptibly();
 			try {
 				while (elements.isEmpty()) {
-					notEmpty.await();
+					// notEmpty.await();
+					notEmpty.awaitUninterruptibly();
 				}
 				try {
 					e = elements.poll();
@@ -99,12 +100,9 @@ public abstract class TriggerQueueSupporter<E> extends BaseRunnableQueueSupporte
 			} finally {
 				this.lock.unlock();
 			}
-			// if (e != null) {
-			// doExecute(e);
-			// }
 		} catch (InterruptedException ex) {
-			//LOGGER.error(new StringBuilder("Exception encountered during execute()").toString(), ex);
-			//throw ex;
+			LOGGER.error(new StringBuilder("Exception encountered during execute()").toString(), ex);
+			throw ex;
 		}
 	}
 
