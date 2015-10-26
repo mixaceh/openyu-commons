@@ -12,12 +12,13 @@ import org.openyu.commons.lang.ClassHelper;
 import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.thread.BaseRunnable;
 import org.openyu.commons.thread.ThreadService;
-import org.openyu.commons.util.AssertHelper;
 
 /**
- * 1.使用 ThreadService
+ * 1.ThreadService
  *
- * 2.或是 ExecutorService
+ * 2.ExecutorService
+ * 
+ * 3.new Thread()
  */
 public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 
@@ -54,6 +55,16 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 		this((ExecutorService) null);
 	}
 
+	protected String getDisplayName() {
+		if (displayName == null) {
+			StringBuilder buff = new StringBuilder();
+			buff.append(ClassHelper.getSimpleName(getClass()));
+			buff.append(" @" + Integer.toHexString(hashCode()));
+			displayName = buff.toString();
+		}
+		return displayName;
+	}
+
 	public final void run() {
 		try {
 			LOGGER.info(new StringBuilder().append("Running ").append("T[" + Thread.currentThread().getId() + "] ")
@@ -75,16 +86,6 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 	 * 內部執行
 	 */
 	protected abstract void doRun() throws Exception;
-
-	protected String getDisplayName() {
-		if (displayName == null) {
-			StringBuilder buff = new StringBuilder();
-			buff.append(ClassHelper.getSimpleName(getClass()));
-			buff.append(" @" + Integer.toHexString(hashCode()));
-			displayName = buff.toString();
-		}
-		return displayName;
-	}
 
 	/**
 	 * 啟動
@@ -116,6 +117,7 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 					// use thread
 					Thread thread = new Thread(this);
 					thread.start();
+					LOGGER.info(new StringBuilder().append("Using new Thread() to start").toString());
 				}
 				// --------------------------------------------------
 				this.starting = false;

@@ -2,6 +2,8 @@ package org.openyu.commons.thread.supporter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -11,12 +13,13 @@ import org.openyu.commons.lang.ClassHelper;
 import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.thread.BaseCallable;
 import org.openyu.commons.thread.ThreadService;
-import org.openyu.commons.util.AssertHelper;
 
 /**
- * 1.使用 ThreadService
+ * 1.ThreadService
  *
- * 2.或是 ExecutorService
+ * 2.ExecutorService
+ * 
+ * 3.new Thread()
  */
 public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Supporter {
 
@@ -26,7 +29,20 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 
 	private transient ExecutorService executorService;
 
-	private boolean shutdown;
+	private transient boolean starting;
+
+	private transient boolean started;
+
+	private transient boolean shuttingdown;
+
+	private transient boolean shutdown;
+
+	private transient String displayName;
+
+	/**
+	 * start/shutdown lock
+	 */
+	protected transient final Lock lock = new ReentrantLock();
 
 	public BaseCallableSupporter(ThreadService threadService) {
 		this.threadService = threadService;
@@ -40,22 +56,30 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 		this((ExecutorService) null);
 	}
 
+	protected String getDisplayName() {
+		if (displayName == null) {
+			StringBuilder buff = new StringBuilder();
+			buff.append(ClassHelper.getSimpleName(getClass()));
+			buff.append(" @" + Integer.toHexString(hashCode()));
+			displayName = buff.toString();
+		}
+		return displayName;
+	}
+
 	public V call() {
 		try {
 			LOGGER.info(new StringBuilder().append("Calling ").append("T[" + Thread.currentThread().getId() + "] ")
-					.append(ClassHelper.getSimpleName(getClass())).append(" @" + Integer.toHexString(hashCode()))
-					.toString());
+					.append(getDisplayName()).toString());
 			// --------------------------------------------------
 			return doCall();
 			// --------------------------------------------------
 		} catch (Throwable e) {
-			LOGGER.error(new StringBuilder("Exception encountered during run()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during call()").toString(), e);
 		}
 		//
 		if (this.shutdown) {
 			LOGGER.info(new StringBuilder().append("Interrupted ").append("T[" + Thread.currentThread().getId() + "] ")
-					.append(ClassHelper.getSimpleName(getClass())).append(" @" + Integer.toHexString(hashCode()))
-					.toString());
+					.append(getDisplayName()).toString());
 		}
 		return null;
 	}
@@ -68,29 +92,105 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 	/**
 	 * 啟動
 	 */
-	public void start() {
-		if (threadService != null) {
-			this.shutdown = false;
-			this.threadService.submit(this);
-		} else if (executorService != null) {
-			this.shutdown = false;
-			this.executorService.submit(this);
-		} else {
-			this.shutdown = false;
-			// use thread
-			FutureTask<V> future = new FutureTask<V>(this);
-			Thread thread = new Thread(future);
-			thread.start();
+	@Override
+	public final void start() throws Exception {
+		try {
+			this.lock.lockInterruptibly();
+			try {
+				if (this.starting) {
+					throw new IllegalStateException(
+							new StringBuilder().append(getDisplayName()).append(" is starting").toString());
+				}
+				//
+				if (this.started) {
+					throw new IllegalStateException(
+							new StringBuilder().append(getDisplayName()).append(" was already started").toString());
+				}
+				//
+				this.starting = true;
+				// LOGGER.info(new StringBuilder().append("Starting
+				// ").append(getDisplayName()).toString());
+				// --------------------------------------------------
+				if (threadService != null) {
+					this.shutdown = false;
+					this.threadService.submit(this);
+				} else if (executorService != null) {
+					this.shutdown = false;
+					this.executorService.submit(this);
+				} else {
+					this.shutdown = false;
+					// use thread
+					FutureTask<V> future = new FutureTask<V>(this);
+					Thread thread = new Thread(future);
+					thread.start();
+					LOGGER.info(new StringBuilder().append("Using new Thread() to start").toString());
+				}
+				// --------------------------------------------------
+				this.starting = false;
+				this.started = true;
+				this.shutdown = false;
+			} catch (Throwable e) {
+				LOGGER.error(new StringBuilder("Exception encountered during start()").toString(), e);
+				throw e;
+			} finally {
+				this.lock.unlock();
+			}
+		} catch (InterruptedException e) {
+			LOGGER.error(new StringBuilder("Exception encountered during start()").toString(), e);
+			throw e;
 		}
+	}
+
+	/**
+	 * 是否啟動
+	 */
+	@Override
+	public boolean isStarted() {
+		return started;
 	}
 
 	/**
 	 * 關閉
 	 */
-	public void shutdown() {
-		this.shutdown = true;
+	@Override
+	public final void shutdown() throws Exception {
+		try {
+			this.lock.lockInterruptibly();
+			try {
+				if (this.shuttingdown) {
+					throw new IllegalStateException(
+							new StringBuilder().append(getDisplayName()).append(" is shuttingdown").toString());
+				}
+				//
+				if (this.shutdown) {
+					throw new IllegalStateException(
+							new StringBuilder().append(getDisplayName()).append(" was already shutdown").toString());
+				}
+				//
+				this.shuttingdown = true;
+				// LOGGER.info(new StringBuilder().append("Shutting down
+				// ").append(getDisplayName()).toString());
+				// --------------------------------------------------
+				this.shutdown = true;
+				// --------------------------------------------------
+				this.shuttingdown = false;
+				this.started = false;
+			} catch (Throwable e) {
+				LOGGER.error(new StringBuilder("Exception encountered during shutdown()").toString(), e);
+				throw e;
+			} finally {
+				this.lock.unlock();
+			}
+		} catch (InterruptedException e) {
+			LOGGER.error(new StringBuilder("Exception encountered during shutdown()").toString(), e);
+			throw e;
+		}
 	}
 
+	/**
+	 * 是否關閉
+	 */
+	@Override
 	public boolean isShutdown() {
 		return shutdown;
 	}

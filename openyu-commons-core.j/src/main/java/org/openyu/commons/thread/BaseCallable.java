@@ -4,15 +4,27 @@ import java.util.concurrent.Callable;
 
 public interface BaseCallable<V> extends Callable<V> {
 
-	// /**
-	// * 執行
-	// execute()改成 supporter.doCall()
-	// */
-	// V execute();
+	/**
+	 * 啟動
+	 */
+	void start() throws Exception;
 
-	void start();
+	/**
+	 * 是否啟動
+	 * 
+	 * @return
+	 */
+	boolean isStarted();
 
-	void shutdown();
+	/**
+	 * 關閉
+	 */
+	void shutdown() throws Exception;
 
+	/**
+	 * 是否關閉
+	 * 
+	 * @return
+	 */
 	boolean isShutdown();
 }

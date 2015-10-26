@@ -6,7 +6,12 @@ public interface BaseRunnable extends Runnable {
 	 * 啟動
 	 */
 	void start() throws Exception;
-	
+
+	/**
+	 * 是否啟動
+	 * 
+	 * @return
+	 */
 	boolean isStarted();
 
 	/**
