@@ -20,13 +20,11 @@ import org.slf4j.LoggerFactory;
 
 @XmlRootElement(name = "compressProcessor")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class CompressProcessorImpl extends BaseModelSupporter implements
-		CompressProcessor {
+public class CompressProcessorImpl extends BaseModelSupporter implements CompressProcessor {
 
 	private static final long serialVersionUID = 7763775982495411425L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(CompressProcessorImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(CompressProcessorImpl.class);
 
 	// --------------------------------------------------
 	// 此有系統預設值,只是為了轉出xml,並非給企劃編輯用
@@ -39,10 +37,14 @@ public class CompressProcessorImpl extends BaseModelSupporter implements
 
 	// --------------------------------------------------
 
-	/** 是否壓縮 */
+	/**
+	 * 是否壓縮
+	 */
 	private boolean compress;
 
-	/** 壓縮類別 */
+	/**
+	 * 壓縮類別
+	 */
 	private CompressType compressType;
 
 	static {
@@ -105,8 +107,7 @@ public class CompressProcessorImpl extends BaseModelSupporter implements
 	 * @return
 	 */
 	public byte[] compress(String compressTypeValue, byte[] value) {
-		CompressType compressType = EnumHelper.valueOf(CompressType.class,
-				compressTypeValue);
+		CompressType compressType = EnumHelper.valueOf(CompressType.class, compressTypeValue);
 		AssertHelper.notNull(compressType, "The CompressType must not be null");
 		this.compressType = compressType;
 		return compress(value);
@@ -122,8 +123,7 @@ public class CompressProcessorImpl extends BaseModelSupporter implements
 	 * @return
 	 */
 	public byte[] compress(int compressTypeValue, byte[] value) {
-		CompressType compressType = EnumHelper.valueOf(CompressType.class,
-				compressTypeValue);
+		CompressType compressType = EnumHelper.valueOf(CompressType.class, compressTypeValue);
 		AssertHelper.notNull(compressType, "The CompressType must not be null");
 		this.compressType = compressType;
 		return compress(value);
@@ -174,8 +174,7 @@ public class CompressProcessorImpl extends BaseModelSupporter implements
 			break;
 		}
 		default: {
-			AssertHelper.unsupported("The CompressType [" + compressType
-					+ "] is unsupported");
+			AssertHelper.unsupported("The CompressType [" + compressType + "] is unsupported");
 		}
 		}
 		// LOGGER.info("Compressed the value with " + compressType);
@@ -192,8 +191,7 @@ public class CompressProcessorImpl extends BaseModelSupporter implements
 	 * @return
 	 */
 	public byte[] uncompress(String compressTypeValue, byte[] value) {
-		CompressType compressType = EnumHelper.valueOf(CompressType.class,
-				compressTypeValue);
+		CompressType compressType = EnumHelper.valueOf(CompressType.class, compressTypeValue);
 		AssertHelper.notNull(compressType, "The CompressType must not be null");
 		this.compressType = compressType;
 		return uncompress(value);
@@ -209,8 +207,7 @@ public class CompressProcessorImpl extends BaseModelSupporter implements
 	 * @return
 	 */
 	public byte[] uncompress(int compressTypeValue, byte[] value) {
-		CompressType compressType = EnumHelper.valueOf(CompressType.class,
-				compressTypeValue);
+		CompressType compressType = EnumHelper.valueOf(CompressType.class, compressTypeValue);
 		AssertHelper.notNull(compressType, "The CompressType must not be null");
 		this.compressType = compressType;
 		return uncompress(value);
@@ -262,8 +259,7 @@ public class CompressProcessorImpl extends BaseModelSupporter implements
 			break;
 		}
 		default: {
-			AssertHelper.unsupported("The CompressType [" + compressType
-					+ "] is unsupported");
+			AssertHelper.unsupported("The CompressType [" + compressType + "] is unsupported");
 		}
 		}
 		// LOGGER.info("Uncompressed the value with " + compressType);

@@ -40,34 +40,19 @@ public class ChecksumProcessorImpl extends BaseProcessorSupporter implements Che
 	// --------------------------------------------------
 
 	/**
-	 * 預設是否檢查碼
-	 */
-	public static final boolean DEFAULT_CHECKSUM = true;
-
-	/**
 	 * 是否檢查碼
 	 */
-	private boolean checksum = DEFAULT_CHECKSUM;
-
-	/**
-	 * 預設檢查碼類別
-	 */
-	public static final ChecksumType DEFAULT_CHECKSUM_TYPE = ChecksumType.ADLER32;
+	private boolean checksum;
 
 	/**
 	 * 檢查碼類別
 	 */
-	private ChecksumType checksumType = DEFAULT_CHECKSUM_TYPE;
-
-	/**
-	 * 預設檢查碼key
-	 */
-	public static final String DEFAULT_CHECKSUM_KEY = "checksumKey";
-
+	private ChecksumType checksumType;
+	
 	/**
 	 * 檢查碼key
 	 */
-	private String checksumKey = DEFAULT_CHECKSUM_KEY;
+	private String checksumKey;
 
 	static {
 		// 此有系統預設值,只是為了轉出xml,並非給企劃編輯用

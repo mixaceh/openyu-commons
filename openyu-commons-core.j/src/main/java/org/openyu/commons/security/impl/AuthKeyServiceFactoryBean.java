@@ -37,6 +37,9 @@ public final class AuthKeyServiceFactoryBean<T extends AuthKeyService>
 	 */
 	public static final long DEFAULT_LISTEN_MILLS = 10 * 1000L;
 
+	/**
+	 * security
+	 */
 	public final static String SECURITY = "security";
 
 	/**
@@ -56,6 +59,7 @@ public final class AuthKeyServiceFactoryBean<T extends AuthKeyService>
 	 * 預設加密key
 	 */
 	public static final String DEFAULT_SECURITY_KEY = "securityKey";
+
 	/**
 	 * 所有屬性
 	 */
@@ -89,13 +93,11 @@ public final class AuthKeyServiceFactoryBean<T extends AuthKeyService>
 			 */
 			result.setAliveMills(extendedProperties.getLong(ALIVE_MILLS, DEFAULT_ALIVE_MILLS));
 			result.setListenMills(extendedProperties.getLong(LISTEN_MILLS, DEFAULT_LISTEN_MILLS));
-			//
+			// security
 			result.setSecurity(extendedProperties.getBoolean(SECURITY, DEFAULT_SECURITY));
-			//
 			String securityTypeValue = extendedProperties.getString(SECURITY_TYPE, DEFAULT_SECURITY_TYPE.getValue());
 			SecurityType securityType = EnumHelper.valueOf(SecurityType.class, securityTypeValue);
 			result.setSecurityType(securityType);
-			//
 			result.setSecurityKey(extendedProperties.getString(SECURITY_KEY, DEFAULT_SECURITY_KEY));
 
 			/**
