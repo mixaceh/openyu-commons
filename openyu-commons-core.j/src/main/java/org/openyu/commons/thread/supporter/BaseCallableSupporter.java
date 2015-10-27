@@ -71,7 +71,7 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 	public V call() {
 		try {
 			if (createThread) {
-				LOGGER.info(new StringBuilder().append("Using new Thread() ").append("call ")
+				LOGGER.info(new StringBuilder().append("Using new Thread() instead of pool to call ")
 						.append("T[" + Thread.currentThread().getId() + "] ").append(getDisplayName()).toString());
 			} else {
 				LOGGER.info(new StringBuilder().append("Calling ").append("T[" + Thread.currentThread().getId() + "] ")
@@ -119,13 +119,10 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 				// ").append(getDisplayName()).toString());
 				// --------------------------------------------------
 				if (threadService != null) {
-					this.shutdown = false;
 					this.threadService.submit(this);
 				} else if (executorService != null) {
-					this.shutdown = false;
 					this.executorService.submit(this);
 				} else {
-					this.shutdown = false;
 					// use thread
 					FutureTask<V> future = new FutureTask<V>(this);
 					Thread thread = new Thread(future);

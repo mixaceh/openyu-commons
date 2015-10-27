@@ -70,7 +70,7 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 	public final void run() {
 		try {
 			if (createThread) {
-				LOGGER.info(new StringBuilder().append("Using new Thread() ").append("run ")
+				LOGGER.info(new StringBuilder().append("Using new Thread() instead of pool to run")
 						.append("T[" + Thread.currentThread().getId() + "] ").append(getDisplayName()).toString());
 			} else {
 				LOGGER.info(new StringBuilder().append("Running ").append("T[" + Thread.currentThread().getId() + "] ")
