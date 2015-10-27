@@ -123,7 +123,7 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 					FutureTask<V> future = new FutureTask<V>(this);
 					Thread thread = new Thread(future);
 					thread.start();
-					LOGGER.info(new StringBuilder().append("Using new Thread() to start").toString());
+					LOGGER.info(new StringBuilder().append("Using new Thread()").toString());
 				}
 				// --------------------------------------------------
 				this.starting = false;

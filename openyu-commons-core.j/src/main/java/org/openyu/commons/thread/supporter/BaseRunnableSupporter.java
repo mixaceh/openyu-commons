@@ -117,7 +117,7 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 					// use thread
 					Thread thread = new Thread(this);
 					thread.start();
-					LOGGER.info(new StringBuilder().append("Using new Thread() to start").toString());
+					LOGGER.info(new StringBuilder().append("Using new Thread()").toString());
 				}
 				// --------------------------------------------------
 				this.starting = false;

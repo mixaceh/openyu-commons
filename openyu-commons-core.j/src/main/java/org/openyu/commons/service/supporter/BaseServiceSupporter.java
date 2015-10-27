@@ -175,7 +175,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
 		this.beanFactory = (DefaultListableBeanFactory) beanFactory;
 		// #fix circular reference
-		if (!hack.get()) {
+		if (this.beanFactory != null && !hack.get()) {
 			this.beanFactory.setAllowRawInjectionDespiteWrapping(true);
 			hack.set(true);
 		}
