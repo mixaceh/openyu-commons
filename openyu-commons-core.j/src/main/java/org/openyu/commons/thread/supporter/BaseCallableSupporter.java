@@ -37,6 +37,8 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 
 	private transient boolean shutdown;
 
+	private transient boolean createThread;
+	
 	private transient String displayName;
 
 	/**
@@ -68,8 +70,13 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 
 	public V call() {
 		try {
-			LOGGER.info(new StringBuilder().append("Calling ").append("T[" + Thread.currentThread().getId() + "] ")
-					.append(getDisplayName()).toString());
+			if (createThread) {
+				LOGGER.info(new StringBuilder().append("Using new Thread() ").append("call ")
+						.append("T[" + Thread.currentThread().getId() + "] ").append(getDisplayName()).toString());
+			} else {
+				LOGGER.info(new StringBuilder().append("Calling ").append("T[" + Thread.currentThread().getId() + "] ")
+						.append(getDisplayName()).toString());
+			}
 			// --------------------------------------------------
 			return doCall();
 			// --------------------------------------------------
@@ -123,7 +130,7 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 					FutureTask<V> future = new FutureTask<V>(this);
 					Thread thread = new Thread(future);
 					thread.start();
-					LOGGER.info(new StringBuilder().append("Using new Thread()").toString());
+					this.createThread = true;
 				}
 				// --------------------------------------------------
 				this.starting = false;

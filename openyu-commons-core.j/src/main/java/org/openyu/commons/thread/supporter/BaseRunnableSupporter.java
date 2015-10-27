@@ -36,6 +36,8 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 
 	private transient boolean shutdown;
 
+	private transient boolean createThread;
+
 	private transient String displayName;
 
 	/**
@@ -67,8 +69,13 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 
 	public final void run() {
 		try {
-			LOGGER.info(new StringBuilder().append("Running ").append("T[" + Thread.currentThread().getId() + "] ")
-					.append(getDisplayName()).toString());
+			if (createThread) {
+				LOGGER.info(new StringBuilder().append("Using new Thread() ").append("run ")
+						.append("T[" + Thread.currentThread().getId() + "] ").append(getDisplayName()).toString());
+			} else {
+				LOGGER.info(new StringBuilder().append("Running ").append("T[" + Thread.currentThread().getId() + "] ")
+						.append(getDisplayName()).toString());
+			}
 			// --------------------------------------------------
 			doRun();
 			// --------------------------------------------------
@@ -117,7 +124,7 @@ public abstract class BaseRunnableSupporter implements BaseRunnable, Supporter {
 					// use thread
 					Thread thread = new Thread(this);
 					thread.start();
-					LOGGER.info(new StringBuilder().append("Using new Thread()").toString());
+					this.createThread = true;
 				}
 				// --------------------------------------------------
 				this.starting = false;
