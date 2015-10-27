@@ -20,7 +20,8 @@
 		<property name="locations">
 			<list>
 				<value>file:src/test/config/etc/ThreadService.properties</value>
-				<value>file:src/test/config/etc/BlockingThreadService.properties</value>
+				<value>file:src/test/config/etc/BlockingThreadService.properties
+				</value>
 			</list>
 		</property>
 	</bean>
@@ -37,11 +38,8 @@
 	<bean
 		id="threadServiceFactoryBean"
 		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
-		parent="baseServiceFactorySupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/ThreadService.properties" />
-	</bean>
+		parent="baseServiceFactorySupporter"
+		p:configLocation="file:src/test/config/etc/ThreadService.properties" />
 
 	<bean
 		id="blockingThreadService"
@@ -55,10 +53,7 @@
 	<bean
 		id="blockingThreadServiceFactoryBean"
 		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
-		parent="baseServiceFactorySupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/BlockingThreadService.properties" />
-	</bean>
+		parent="baseServiceFactorySupporter"
+		p:configLocation="file:src/test/config/etc/BlockingThreadService.properties" />
 
 </beans>

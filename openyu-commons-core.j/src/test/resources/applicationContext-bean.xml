@@ -14,19 +14,15 @@
 	<bean
 		id="threadService"
 		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
-		parent="baseServiceFactorySupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/ThreadService.properties" />
-	</bean>
+		parent="baseServiceFactorySupporter"
+		p:configLocation="file:src/test/config/etc/ThreadService.properties" />
+
 	<bean
 		id="blockingThreadService"
 		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
-		parent="baseServiceFactorySupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/BlockingThreadService.properties" />
-	</bean>
+		parent="baseServiceFactorySupporter"
+		p:configLocation="file:src/test/config/etc/BlockingThreadService.properties" />
+
 	<!-- aop -->
 	<import resource="classpath:org/openyu/commons/aop/applicationContext-aop.xml" />
 	<!-- lang -->
@@ -39,11 +35,9 @@
 	<bean
 		id="authKeyService"
 		class="org.openyu.commons.security.impl.AuthKeyServiceFactoryBean"
-		parent="baseServiceFactorySupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/AuthKeyService.properties" />
-	</bean>	
+		parent="baseServiceFactorySupporter"
+		p:configLocation="file:src/test/config/etc/AuthKeyService.properties" />
+
 	<!-- freemarker -->
 	<import
 		resource="classpath:org/openyu/commons/freemarker/applicationContext-freemarker.xml" />
@@ -97,20 +91,9 @@
 			value="true" />
 		<property name="locations">
 			<list>
-				<!-- hbase zookeeper -->
-				<value>file:src/test/config/etc/hbase-zookeeper.properties</value>
-				
-				<!-- hbase thrift -->
-				<value>file:src/test/config/etc/hbase-thrift.properties</value>
-
-				<!-- cassandra thrift -->
-				<value>file:src/test/config/etc/cassandra-thrift.properties</value>
-
-				<!-- commons net ftp -->
-				<value>file:src/test/config/etc/commons-net-ftp.properties</value>
-
-				<!--  rabbit mq -->
-				<value>file:src/test/config/etc/rabbitmq.properties</value>
+				<!--  
+				<value>file:src/test/config/etc/???.properties</value>
+				-->
 			</list>
 		</property>
 	</bean>
