@@ -203,12 +203,30 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 
 	@Override
 	public <T> Future<T> submit(Callable<T> task) {
-		return nextExecutor().submit(task);
+		ThreadPoolTaskExecutor executor = nextExecutor();
+		//
+		int maxPoolSize = executor.getMaxPoolSize();
+		int activeCount = executor.getActiveCount();
+		if (activeCount == maxPoolSize) {
+			LOGGER.warn(new StringBuilder("MaxPoolSize [" + maxPoolSize + "] is full").toString());
+			LOGGER.warn(new StringBuilder(task.getClass().getName()).append(" waiting to execute").toString());
+		}
+		//
+		return executor.submit(task);
 	}
 
 	@Override
 	public Future<?> submit(Runnable task) {
-		return nextExecutor().submit(task);
+		ThreadPoolTaskExecutor executor = nextExecutor();
+		//
+		int maxPoolSize = executor.getMaxPoolSize();
+		int activeCount = executor.getActiveCount();
+		if (activeCount == maxPoolSize) {
+			LOGGER.warn(new StringBuilder("MaxPoolSize [" + maxPoolSize + "] is full").toString());
+			LOGGER.warn(new StringBuilder(task.getClass().getName()).append(" waiting to execute").toString());
+		}
+		//
+		return executor.submit(task);
 	}
 
 	/**

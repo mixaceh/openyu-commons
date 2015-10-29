@@ -4,8 +4,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.junit.BeforeClass;
@@ -131,8 +129,16 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void submit() {
 		Runner runner = new Runner();
-		threadServiceImpl.submit(runner);// thread1
-		threadServiceImpl.submit(runner);// thread2
+		threadServiceImpl.submit(runner);// t1
+		threadServiceImpl.submit(runner);// t2
+		threadServiceImpl.submit(runner);// t3
+		threadServiceImpl.submit(runner);// t4
+		threadServiceImpl.submit(runner);// t5
+		threadServiceImpl.submit(runner);// t6
+		threadServiceImpl.submit(runner);// t7
+		threadServiceImpl.submit(runner);// t8
+		threadServiceImpl.submit(runner);// t9
+		threadServiceImpl.submit(runner);// t10
 		//
 		ThreadHelper.sleep(3 * 1000);
 	}
@@ -143,6 +149,7 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 			for (int i = 0; i < 5; i++) {
 				System.out.println("T[" + Thread.currentThread().getId() + "] i = " + i);
 			}
+			ThreadHelper.sleep(3 * 1000);
 		}
 	}
 
