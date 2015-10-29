@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.openyu.commons.lang.ClassHelper;
 import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.service.ShutdownCallback;
 import org.openyu.commons.service.StartCallback;
@@ -205,11 +206,11 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 	public <T> Future<T> submit(Callable<T> task) {
 		ThreadPoolTaskExecutor executor = nextExecutor();
 		//
-		int maxPoolSize = executor.getMaxPoolSize();
 		int activeCount = executor.getActiveCount();
+		int maxPoolSize = executor.getMaxPoolSize();
 		if (activeCount == maxPoolSize) {
-			LOGGER.warn(new StringBuilder("MaxPoolSize [" + maxPoolSize + "] is full").toString());
-			LOGGER.warn(new StringBuilder(task.getClass().getName()).append(" waiting to execute").toString());
+			LOGGER.warn(new StringBuilder("MaxPoolSize [" + maxPoolSize + "] is full, ")
+					.append(ClassHelper.getSimpleName(task.getClass())).append(" waiting to execute").toString());
 		}
 		//
 		return executor.submit(task);
@@ -219,11 +220,11 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 	public Future<?> submit(Runnable task) {
 		ThreadPoolTaskExecutor executor = nextExecutor();
 		//
-		int maxPoolSize = executor.getMaxPoolSize();
 		int activeCount = executor.getActiveCount();
+		int maxPoolSize = executor.getMaxPoolSize();
 		if (activeCount == maxPoolSize) {
-			LOGGER.warn(new StringBuilder("MaxPoolSize [" + maxPoolSize + "] is full").toString());
-			LOGGER.warn(new StringBuilder(task.getClass().getName()).append(" waiting to execute").toString());
+			LOGGER.warn(new StringBuilder("MaxPoolSize [" + maxPoolSize + "] is full, ")
+					.append(ClassHelper.getSimpleName(task.getClass())).append(" waiting to execute").toString());
 		}
 		//
 		return executor.submit(task);
