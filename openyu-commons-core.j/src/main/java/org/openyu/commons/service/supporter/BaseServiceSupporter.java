@@ -503,6 +503,14 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	}
 
 	/**
+	 * 是否啟動
+	 */
+	@Override
+	public boolean isStarted() {
+		return isStates(STARTED);
+	}
+
+	/**
 	 * 內部啟動
 	 */
 	protected final void doStartCallback(StartCallback action) throws Exception {
@@ -588,6 +596,14 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 			LOGGER.error(new StringBuilder("Exception encountered during shutdown()").toString(), e);
 			throw new ServiceException(e);
 		}
+	}
+
+	/**
+	 * 是否關閉
+	 */
+	@Override
+	public boolean isShutdown() {
+		return isStates(SHUTDOWN);
 	}
 
 	/**
