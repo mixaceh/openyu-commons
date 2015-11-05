@@ -9,6 +9,9 @@ import org.openyu.commons.lang.ObjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 檢核
+ */
 public class AssertHelper extends BaseHelperSupporter {
 
 	/** The Constant LOGGER. */
