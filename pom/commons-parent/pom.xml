@@ -2158,6 +2158,18 @@
 			<artifactId>imgscalr-lib</artifactId>
 			<version>4.2</version>
 		</dependency>
+		
+		<!-- 2015/11/10 -->
+		<dependency>
+			<groupId>com.atomikos</groupId>
+			<artifactId>transactions-jdbc</artifactId>
+			<version>4.0.0M4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.atomikos</groupId>
+			<artifactId>transactions-hibernate4</artifactId>
+			<version>4.0.0M4</version>
+		</dependency>
 	</dependencies>
 
 	<build>

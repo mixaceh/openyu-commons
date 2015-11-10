@@ -33,40 +33,7 @@ public final class BasicDataSourceGroupFactoryBean extends BasicDataSourceFactor
 			result = new BasicDataSource[extendedProperties.getInt(MAX_DATA_SOURCE_SIZE, DEFAULT_MAX_DATA_SOURCE_SIZE)];
 			//
 			for (int i = 0; i < result.length; i++) {
-				BasicDataSource dataSource = new BasicDataSource();
-
-				/**
-				 * extendedProperties
-				 */
-				// TODO url
-				dataSource.setUrl(extendedProperties.getString(URL, DEFAULT_URL));
-				dataSource.setDriverClassName(extendedProperties.getString(DRIVER_CLASSNAME, DEFAULT_DRIVER_CLASSNAME));
-				dataSource.setUsername(extendedProperties.getString(USERNAME, DEFAULT_USERNAME));
-				dataSource.setPassword(extendedProperties.getString(PASSWORD, DEFAULT_PASSWORD));
-				//
-				dataSource.setMaxActive(extendedProperties.getInt(MAX_ACTIVE, DEFAULT_MAX_ACTIVE));
-				dataSource.setInitialSize(extendedProperties.getInt(INITIAL_SIZE, DEFAULT_INITIAL_SIZE));
-				dataSource.setMaxWait(extendedProperties.getLong(MAX_WAIT, DEFAULT_MAX_WAIT));
-				dataSource.setMinIdle(extendedProperties.getInt(MIN_IDLE, DEFAULT_MIN_IDLE));
-				dataSource.setMaxIdle(extendedProperties.getInt(MAX_IDLE, DEFAULT_MAX_IDLE));
-				//
-				dataSource.setTimeBetweenEvictionRunsMillis(extendedProperties
-						.getLong(TIME_BETWEEN_EVICTION_RUNS_MILLIS, DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS));
-				dataSource.setMinEvictableIdleTimeMillis(extendedProperties.getLong(MIN_EVICTABLE_IDLE_TIME_MILLIS,
-						DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS));
-				dataSource.setValidationQuery(extendedProperties.getString(VALIDATION_QUERY, DEFAULT_VALIDATION_QUERY));
-				dataSource.setTestWhileIdle(extendedProperties.getBoolean(TEST_WHILE_IDLE, DEFAULT_TEST_WHILE_IDLE));
-				dataSource.setTestOnBorrow(extendedProperties.getBoolean(TEST_ON_BORROW, DEFAULT_TEST_ON_BORROW));
-				dataSource.setTestOnReturn(extendedProperties.getBoolean(TEST_ON_RETURN, DEFAULT_TEST_ON_RETURN));
-				//
-				dataSource.setPoolPreparedStatements(
-						extendedProperties.getBoolean(POOL_PREPARED_STATEMENTS, DEFAULT_POOL_PREPARED_STATEMENTS));
-				dataSource
-						.setRemoveAbandoned(extendedProperties.getBoolean(REMOVE_ABANDONED, DEFAULT_REMOVE_ABANDONED));
-				dataSource.setRemoveAbandonedTimeout(
-						extendedProperties.getInt(REMOVE_EABANDONED_TIMEOUT, DEFAULT_REMOVE_EABANDONED_TIMEOUT));
-				dataSource.setLogAbandoned(extendedProperties.getBoolean(LOG_ABANDONED, DEFAULT_LOG_ABANDONED));
-				//
+				BasicDataSource dataSource =  createBasicDataSource();
 				result[i] = dataSource;
 			}
 
@@ -80,6 +47,10 @@ public final class BasicDataSourceGroupFactoryBean extends BasicDataSourceFactor
 			throw e;
 		}
 		return result;
+	}
+	
+	protected BasicDataSource shutdownBasicDataSource() throws Exception {
+		return null;
 	}
 
 	/**

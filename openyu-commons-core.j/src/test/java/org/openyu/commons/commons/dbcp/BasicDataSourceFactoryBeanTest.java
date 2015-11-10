@@ -27,7 +27,7 @@ public class BasicDataSourceFactoryBeanTest extends BaseTestSupporter {
 				"org/openyu/commons/commons/dbcp/testContext-dbcp.xml",//
 
 		});
-		basicDataSource = (BasicDataSource) applicationContext.getBean("basicDataSourceFactoryBean");
+		basicDataSource = applicationContext.getBean("basicDataSourceFactoryBean", BasicDataSource.class);
 	}
 
 	@Test
