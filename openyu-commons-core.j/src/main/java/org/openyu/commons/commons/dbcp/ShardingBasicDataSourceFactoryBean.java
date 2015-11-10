@@ -8,8 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * ShardingBasicDataSource工廠
  */
-public final class ShardingBasicDataSourceFactoryBean<T extends BasicDataSource>
-		extends BaseFactorySupporter<BasicDataSource[]> {
+public final class ShardingBasicDataSourceFactoryBean extends BaseFactorySupporter<BasicDataSource[]> {
 
 	private static final long serialVersionUID = 5865182754049441001L;
 
@@ -95,7 +94,7 @@ public final class ShardingBasicDataSourceFactoryBean<T extends BasicDataSource>
 
 	public static final boolean DEFAULT_LOG_ABANDONED = false;
 
-	private T[] basicDataSource;
+	private BasicDataSource[] basicDataSources;
 
 	public ShardingBasicDataSourceFactoryBean() {
 	}
@@ -105,59 +104,59 @@ public final class ShardingBasicDataSourceFactoryBean<T extends BasicDataSource>
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	protected T createBasicDataSource() throws Exception {
+	protected BasicDataSource[] createBasicDataSources() throws Exception {
 		BasicDataSource[] result = null;
 		try {
 			result = new BasicDataSource[extendedProperties.getInt(MAX_SHARDING_SIZE, DEFAULT_MAX_SHARDING_SIZE)];
 			//
 			for (int i = 0; i < result.length; i++) {
-				BasicDataSource ds = new BasicDataSource();
+				BasicDataSource dataSource = new BasicDataSource();
 
 				/**
 				 * extendedProperties
 				 */
 				// TODO url
-				ds.setUrl(extendedProperties.getString(URL, DEFAULT_URL));
-				ds.setDriverClassName(extendedProperties.getString(DRIVER_CLASSNAME, DEFAULT_DRIVER_CLASSNAME));
-				ds.setUsername(extendedProperties.getString(USERNAME, DEFAULT_USERNAME));
-				ds.setPassword(extendedProperties.getString(PASSWORD, DEFAULT_PASSWORD));
+				dataSource.setUrl(extendedProperties.getString(URL, DEFAULT_URL));
+				dataSource.setDriverClassName(extendedProperties.getString(DRIVER_CLASSNAME, DEFAULT_DRIVER_CLASSNAME));
+				dataSource.setUsername(extendedProperties.getString(USERNAME, DEFAULT_USERNAME));
+				dataSource.setPassword(extendedProperties.getString(PASSWORD, DEFAULT_PASSWORD));
 				//
-				ds.setMaxActive(extendedProperties.getInt(MAX_ACTIVE, DEFAULT_MAX_ACTIVE));
-				ds.setInitialSize(extendedProperties.getInt(INITIAL_SIZE, DEFAULT_INITIAL_SIZE));
-				ds.setMaxWait(extendedProperties.getLong(MAX_WAIT, DEFAULT_MAX_WAIT));
-				ds.setMinIdle(extendedProperties.getInt(MIN_IDLE, DEFAULT_MIN_IDLE));
-				ds.setMaxIdle(extendedProperties.getInt(MAX_IDLE, DEFAULT_MAX_IDLE));
+				dataSource.setMaxActive(extendedProperties.getInt(MAX_ACTIVE, DEFAULT_MAX_ACTIVE));
+				dataSource.setInitialSize(extendedProperties.getInt(INITIAL_SIZE, DEFAULT_INITIAL_SIZE));
+				dataSource.setMaxWait(extendedProperties.getLong(MAX_WAIT, DEFAULT_MAX_WAIT));
+				dataSource.setMinIdle(extendedProperties.getInt(MIN_IDLE, DEFAULT_MIN_IDLE));
+				dataSource.setMaxIdle(extendedProperties.getInt(MAX_IDLE, DEFAULT_MAX_IDLE));
 				//
-				ds.setTimeBetweenEvictionRunsMillis(extendedProperties.getLong(TIME_BETWEEN_EVICTION_RUNS_MILLIS,
-						DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS));
-				ds.setMinEvictableIdleTimeMillis(extendedProperties.getLong(MIN_EVICTABLE_IDLE_TIME_MILLIS,
+				dataSource.setTimeBetweenEvictionRunsMillis(extendedProperties
+						.getLong(TIME_BETWEEN_EVICTION_RUNS_MILLIS, DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS));
+				dataSource.setMinEvictableIdleTimeMillis(extendedProperties.getLong(MIN_EVICTABLE_IDLE_TIME_MILLIS,
 						DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS));
-				ds.setValidationQuery(extendedProperties.getString(VALIDATION_QUERY, DEFAULT_VALIDATION_QUERY));
-				ds.setTestWhileIdle(extendedProperties.getBoolean(TEST_WHILE_IDLE, DEFAULT_TEST_WHILE_IDLE));
-				ds.setTestOnBorrow(extendedProperties.getBoolean(TEST_ON_BORROW, DEFAULT_TEST_ON_BORROW));
-				ds.setTestOnReturn(extendedProperties.getBoolean(TEST_ON_RETURN, DEFAULT_TEST_ON_RETURN));
+				dataSource.setValidationQuery(extendedProperties.getString(VALIDATION_QUERY, DEFAULT_VALIDATION_QUERY));
+				dataSource.setTestWhileIdle(extendedProperties.getBoolean(TEST_WHILE_IDLE, DEFAULT_TEST_WHILE_IDLE));
+				dataSource.setTestOnBorrow(extendedProperties.getBoolean(TEST_ON_BORROW, DEFAULT_TEST_ON_BORROW));
+				dataSource.setTestOnReturn(extendedProperties.getBoolean(TEST_ON_RETURN, DEFAULT_TEST_ON_RETURN));
 				//
-				ds.setPoolPreparedStatements(
+				dataSource.setPoolPreparedStatements(
 						extendedProperties.getBoolean(POOL_PREPARED_STATEMENTS, DEFAULT_POOL_PREPARED_STATEMENTS));
-				ds.setRemoveAbandoned(extendedProperties.getBoolean(REMOVE_ABANDONED, DEFAULT_REMOVE_ABANDONED));
-				ds.setRemoveAbandonedTimeout(
+				dataSource
+						.setRemoveAbandoned(extendedProperties.getBoolean(REMOVE_ABANDONED, DEFAULT_REMOVE_ABANDONED));
+				dataSource.setRemoveAbandonedTimeout(
 						extendedProperties.getInt(REMOVE_EABANDONED_TIMEOUT, DEFAULT_REMOVE_EABANDONED_TIMEOUT));
-				ds.setLogAbandoned(extendedProperties.getBoolean(LOG_ABANDONED, DEFAULT_LOG_ABANDONED));
+				dataSource.setLogAbandoned(extendedProperties.getBoolean(LOG_ABANDONED, DEFAULT_LOG_ABANDONED));
 				//
-				result[i] = ds;
+				result[i] = dataSource;
 			}
 
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during createBasicDataSource()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during createBasicDataSources()").toString(), e);
 			try {
-				result = (BasicDataSource[]) shutdownBasicDataSource();
+				result = (BasicDataSource[]) shutdownBasicDataSources();
 			} catch (Exception sie) {
 				throw sie;
 			}
 			throw e;
 		}
-		return (T[]) result;
+		return result;
 	}
 
 	/**
@@ -165,21 +164,22 @@ public final class ShardingBasicDataSourceFactoryBean<T extends BasicDataSource>
 	 *
 	 * @return
 	 */
-	protected T shutdownBasicDataSource() throws Exception {
+	protected BasicDataSource[] shutdownBasicDataSources() throws Exception {
 		try {
-			if (this.basicDataSource != null) {
-				for (int i = 0; i < basicDataSource.length; i++) {
-					T oldInstance = this.basicDataSource[i];
+			if (this.basicDataSources != null) {
+				for (int i = 0; i < this.basicDataSources.length; i++) {
+					BasicDataSource oldInstance = this.basicDataSources[i];
 					oldInstance.close();
-					oldInstance = null;
-					this.basicDataSource = null;
+					this.basicDataSources[i] = null;
 				}
+				//
+				this.basicDataSources = null;
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during shutdownBasicDataSource()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during shutdownBasicDataSources()").toString(), e);
 			throw e;
 		}
-		return  this.basicDataSource;
+		return this.basicDataSources;
 	}
 
 	/**
@@ -187,17 +187,17 @@ public final class ShardingBasicDataSourceFactoryBean<T extends BasicDataSource>
 	 *
 	 * @return
 	 */
-	protected T restartBasicDataSource() throws Exception {
+	protected BasicDataSource[] restartBasicDataSources() throws Exception {
 		try {
-			if (this.basicDataSource != null) {
-				this.basicDataSource = shutdownBasicDataSource();
-				this.basicDataSource = createBasicDataSource();
+			if (this.basicDataSources != null) {
+				this.basicDataSources = shutdownBasicDataSources();
+				this.basicDataSources = createBasicDataSources();
 			}
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during restartService()").toString(), e);
 			throw e;
 		}
-		return this.basicDataSource;
+		return this.basicDataSources;
 	}
 
 	/**
@@ -205,7 +205,7 @@ public final class ShardingBasicDataSourceFactoryBean<T extends BasicDataSource>
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		this.basicDataSource = createBasicDataSource();
+		this.basicDataSources = createBasicDataSources();
 	}
 
 	/**
@@ -213,7 +213,7 @@ public final class ShardingBasicDataSourceFactoryBean<T extends BasicDataSource>
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		this.basicDataSource = shutdownBasicDataSource();
+		this.basicDataSources = shutdownBasicDataSources();
 	}
 
 	/**
@@ -221,17 +221,17 @@ public final class ShardingBasicDataSourceFactoryBean<T extends BasicDataSource>
 	 */
 	@Override
 	protected void doRestart() throws Exception {
-		this.basicDataSource = restartBasicDataSource();
+		this.basicDataSources = restartBasicDataSources();
 	}
 
 	@Override
 	public BasicDataSource[] getObject() throws Exception {
-		return basicDataSource;
+		return basicDataSources;
 	}
 
 	@Override
 	public Class<?> getObjectType() {
-		return ((this.basicDataSource != null) ? this.basicDataSource.getClass() : BasicDataSource[].class);
+		return ((this.basicDataSources != null) ? this.basicDataSources.getClass() : BasicDataSource[].class);
 	}
 
 	@Override

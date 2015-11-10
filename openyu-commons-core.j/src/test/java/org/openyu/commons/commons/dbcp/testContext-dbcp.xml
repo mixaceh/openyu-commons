@@ -104,4 +104,15 @@
 			name="dataSource"
 			ref="dataSource" />
 	</bean>
+	
+	<!-- sharding -->
+	<bean
+		id="shardingBasicDataSourceFactoryBean"
+		class="org.openyu.commons.commons.dbcp.ShardingBasicDataSourceFactoryBean"
+		parent="baseFactorySupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/dbcp.properties" />
+	</bean>
+	
 </beans>

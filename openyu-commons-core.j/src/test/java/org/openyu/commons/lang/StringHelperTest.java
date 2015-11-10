@@ -132,8 +132,7 @@ public class StringHelperTest extends BaseTestSupporter {
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
 			result = StringHelper.randomString();
-			System.out
-					.println("[" + i + "] " + result + ", " + result.length());
+			System.out.println("[" + i + "] " + result + ", " + result.length());
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -288,6 +287,7 @@ public class StringHelperTest extends BaseTestSupporter {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
 	public void isEmpty() {
 		boolean result = StringHelper.isEmpty(null);
 		System.out.println(result);
@@ -349,8 +349,7 @@ public class StringHelperTest extends BaseTestSupporter {
 	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
 	public void extractList() {
 		String value = "style=\"line-height:18pt; margin:0pt 0pt 10pt; orphans:0; text-indent:85.05pt; widows:0\"><span style=\"color:#385068; font-family:Arial; font-size:14pt; font-style:italic; font-weight:bold\">";
-		List<String> result = StringHelper
-				.extractList(value, "style=\"", "\">");
+		List<String> result = StringHelper.extractList(value, "style=\"", "\">");
 		System.out.println(result);
 		//
 		assertTrue(result.size() > 0);
