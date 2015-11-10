@@ -28,12 +28,12 @@ public class ShardingBasicDataSourceFactoryBeanTest extends BaseTestSupporter {
 				"org/openyu/commons/commons/dbcp/testContext-dbcp.xml",//
 
 		});
-		basicDataSources = (BasicDataSource[]) applicationContext.getBean("shardingBasicDataSourceFactoryBean");
+		basicDataSources = applicationContext.getBean("shardingBasicDataSourceFactoryBean", BasicDataSource[].class);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void basicDataSourceArray() {
+	public void basicDataSources() {
 		System.out.println(basicDataSources);
 		assertNotNull(basicDataSources);
 		//
