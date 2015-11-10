@@ -14,7 +14,7 @@ import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.SystemHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class ShardingBasicDataSourceFactoryBeanTest extends BaseTestSupporter {
+public class BasicDataSourceGroupFactoryBeanTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
@@ -28,7 +28,7 @@ public class ShardingBasicDataSourceFactoryBeanTest extends BaseTestSupporter {
 				"org/openyu/commons/commons/dbcp/testContext-dbcp.xml",//
 
 		});
-		basicDataSources = applicationContext.getBean("shardingBasicDataSourceFactoryBean", BasicDataSource[].class);
+		basicDataSources = applicationContext.getBean("basicDataSourceGroupFactoryBean", BasicDataSource[].class);
 	}
 
 	@Test

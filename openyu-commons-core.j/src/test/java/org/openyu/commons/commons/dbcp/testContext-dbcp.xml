@@ -105,10 +105,10 @@
 			ref="dataSource" />
 	</bean>
 	
-	<!-- sharding -->
+	<!-- group -->
 	<bean
-		id="shardingBasicDataSourceFactoryBean"
-		class="org.openyu.commons.commons.dbcp.ShardingBasicDataSourceFactoryBean"
+		id="basicDataSourceGroupFactoryBean"
+		class="org.openyu.commons.commons.dbcp.BasicDataSourceGroupFactoryBean"
 		parent="baseFactorySupporter">
 		<property
 			name="configLocation"
