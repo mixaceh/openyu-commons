@@ -1,4 +1,4 @@
-package org.openyu.commons.commons.dbcp;
+package org.openyu.commons.atomikos;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -16,13 +16,13 @@ import org.openyu.commons.lang.ByteHelper;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BenchmarkDbcpTest extends BenchmarkDatabaseTestSupporter {
+public class BenchmarkAtomikosTest extends BenchmarkDatabaseTestSupporter {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/commons/dbcp/testContext-dbcp.xml",//
+				"org/openyu/commons/atomikos/testContext-atomikos.xml",//
 
 		});
 		// ---------------------------------------------------
@@ -30,7 +30,7 @@ public class BenchmarkDbcpTest extends BenchmarkDatabaseTestSupporter {
 		// ---------------------------------------------------
 	}
 
-	public static class BeanTest extends BenchmarkDbcpTest {
+	public static class BeanTest extends BenchmarkAtomikosTest {
 		@Test
 		public void dataSource() {
 			System.out.println(dataSource);
@@ -47,19 +47,12 @@ public class BenchmarkDbcpTest extends BenchmarkDatabaseTestSupporter {
 	// ---------------------------------------------------
 	// optimized
 	// ---------------------------------------------------
-	public static class OptimizedTest extends BenchmarkDbcpTest {
+	public static class OptimizedTest extends BenchmarkAtomikosTest {
 
 		@Test
-		// insert: 10000 rows, 102400000 bytes / 29690 ms. = 3448.97 BYTES/MS,
-		// 3368.14 K/S, 3.29 MB/S
-
-		// 2015/10/09
-		// insert: 10000 rows, 102628000 bytes / 82989 ms. = 1236.65 BYTES/MS,
-		// 1207.66 K/S, 1.18 MB/S
-
 		// 2015/11/12
-		// 10000 rows, 102628000 bytes / 62640 ms. = 1638.38 BYTES/MS, 1599.98
-		// K/S, 1.56 MB/S
+		// 10000 rows, 102628000 bytes / 41593 ms. = 2467.43 BYTES/MS, 2409.6
+		// K/S, 2.35 MB/S
 		public void insert() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -81,11 +74,13 @@ public class BenchmarkDbcpTest extends BenchmarkDatabaseTestSupporter {
 						try {
 							//
 							for (int i = 0; i < NUM_OF_TIMES; i++) {
-								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
+								// byte[] buff =
+								// ByteHelper.randomByteArray(LENGTH_OF_BYTES);
+								byte[] buff = new byte[LENGTH_OF_BYTES];
 								try {
 									StringBuilder sql = new StringBuilder();
 									sql.append("insert into TEST_BENCHMARK (seq, id, info) ");
-									sql.append("values (:seq, :id, :info)");
+									sql.append("values (?, ?, ?)");
 
 									long seq = seqCounter.getAndIncrement();
 									// 0_0

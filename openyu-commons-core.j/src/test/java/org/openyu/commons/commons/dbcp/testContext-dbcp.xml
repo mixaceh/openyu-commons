@@ -53,17 +53,17 @@
 			name="maxIdle"
 			value="10" />
 
-      <!-- 获取连接等待超时的时间 -->
+      <!-- 獲取連接等待超時的時間 -->
 		<property
 			name="maxWait"
 			value="60000" />
 
-      <!-- 间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+      <!-- 間隔多久才進行一次檢測，檢測需要關閉的空閒連接，單位是毫秒 -->
 		<property
 			name="timeBetweenEvictionRunsMillis"
 			value="60000" />
 
-      <!-- 一个连接在池中最小生存的时间，单位是毫秒 -->
+      <!-- 一個連接在池中最小生存的時間，單位是毫秒 -->
 		<property
 			name="minEvictableIdleTimeMillis"
 			value="300000" />
@@ -81,7 +81,7 @@
 			name="testOnReturn"
 			value="false" />
 
-      <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+      <!-- 打開PSCache，並且指定每個連接上PSCache的大小 -->
 		<property
 			name="poolPreparedStatements"
 			value="false" />
@@ -114,5 +114,5 @@
 			name="configLocation"
 			value="file:src/test/config/etc/dbcp.properties" />
 	</bean>
-	
+
 </beans>

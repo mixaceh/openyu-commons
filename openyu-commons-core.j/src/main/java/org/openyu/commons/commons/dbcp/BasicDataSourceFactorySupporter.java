@@ -111,7 +111,7 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactorySupp
 			// i=0, jdbc:hsqldb:hsql://localhost:9001/commons
 			// i=1, jdbc:hsqldb:hsql://localhost:9001/commons_2
 			String url = nextUrl(extendedProperties.getString(URL, DEFAULT_URL), i);
-			LOGGER.info("url: " + url);
+			LOGGER.info("URL: " + url);
 			result.setUrl(url);
 			//
 			result.setDriverClassName(extendedProperties.getString(DRIVER_CLASSNAME, DEFAULT_DRIVER_CLASSNAME));

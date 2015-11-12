@@ -54,13 +54,13 @@
 
 	<!-- Hibernate transaction manager -->
 	<bean
-		id="logTxManager"
+		id="logTx"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
 		p:sessionFactory-ref="logSessionFactory" />
 
 	<tx:advice
 		id="logTxAdvice"
-		transaction-manager="logTxManager">
+		transaction-manager="logTx">
 		<tx:attributes>
 			<tx:method
 				name="find*"
@@ -95,12 +95,13 @@
 		</tx:attributes>
 	</tx:advice>
 
-	<tx:annotation-driven transaction-manager="logTxManager" />
+	<tx:annotation-driven transaction-manager="logTx" />
 
 	<!-- log dao supporter 
 	<bean id="logOjDaoSupporter" class="org.openyu.commons.dao.supporter.OjDaoSupporter"
 		p:sessionFactory-ref="logSessionFactory" />
 	-->
+	
 	<bean
 		id="logCommonDaoSupporter"
 		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"

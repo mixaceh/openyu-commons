@@ -55,15 +55,15 @@
 
 	<!-- Hibernate transaction manager -->
 	<bean
-		id="txManager"
+		id="commonTx"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
 		p:sessionFactory-ref="sessionFactory">
 		<qualifier value="main" />
 	</bean>
 
 	<tx:advice
-		id="txAdvice"
-		transaction-manager="txManager">
+		id="commonTxAdvice"
+		transaction-manager="commonTx">
 		<tx:attributes>
 			<tx:method
 				name="find*"
@@ -98,7 +98,7 @@
 		</tx:attributes>
 	</tx:advice>
 
-	<tx:annotation-driven transaction-manager="txManager" />
+	<tx:annotation-driven transaction-manager="commonTx" />
 
 	<!-- dao supporter, use sessionFactory
 	<bean
