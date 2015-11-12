@@ -6,10 +6,11 @@ import java.util.concurrent.Future;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Qualifier;
 import org.openyu.commons.aop.supporter.BaseMethodInterceptorSupporter;
 import org.openyu.commons.thread.ThreadService;
+import org.openyu.commons.thread.anno.BlockingThreadService;
 
 /**
  * 阻塞型多緒攔截器
@@ -29,8 +30,9 @@ public class BlockingThreadAdvice extends BaseMethodInterceptorSupporter {
 	/**
 	 * 阻塞型線程服務
 	 */
-	@Autowired
-	@Qualifier("blockingThreadService")
+	// @Autowired
+	// @Qualifier("blockingThreadService")
+	@BlockingThreadService
 	private transient ThreadService threadService;
 
 	/**

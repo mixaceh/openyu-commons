@@ -26,8 +26,8 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.apache.struts2.interceptor.SessionAware;
 import org.apache.struts2.util.ServletContextAware;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 
 import org.openyu.commons.bean.BeanCollector;
@@ -46,6 +46,7 @@ import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.lang.StringHelper;
 import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.thread.ThreadService;
+import org.openyu.commons.thread.anno.DefaultThreadService;
 import org.openyu.commons.util.CollectionHelper;
 import org.openyu.commons.util.DateHelper;
 import org.openyu.commons.util.TimeZoneHelper;
@@ -76,8 +77,9 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 
 	protected transient ApplicationContext applicationContext;
 
-	@Autowired
-	@Qualifier("threadService")
+	// @Autowired
+	// @Qualifier("threadService")
+	@DefaultThreadService
 	protected transient ThreadService threadService;
 
 	/**

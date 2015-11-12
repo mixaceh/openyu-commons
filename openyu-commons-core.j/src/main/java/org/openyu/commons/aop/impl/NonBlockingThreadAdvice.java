@@ -3,10 +3,11 @@ package org.openyu.commons.aop.impl;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Qualifier;
 import org.openyu.commons.aop.supporter.BaseMethodInterceptorSupporter;
 import org.openyu.commons.thread.ThreadService;
+import org.openyu.commons.thread.anno.DefaultThreadService;
 
 /**
  * 非阻塞型多緒攔截器
@@ -29,8 +30,9 @@ public class NonBlockingThreadAdvice extends
 	/**
 	 * 線程服務
 	 */
-	@Autowired
-	@Qualifier("threadService")
+//	@Autowired
+//	@Qualifier("threadService")
+	@DefaultThreadService
 	private transient ThreadService threadService;
 
 	/**

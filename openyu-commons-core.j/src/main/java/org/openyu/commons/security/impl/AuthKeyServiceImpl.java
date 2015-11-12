@@ -17,11 +17,12 @@ import org.openyu.commons.service.StartCallback;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 import org.openyu.commons.thread.ThreadHelper;
 import org.openyu.commons.thread.ThreadService;
+import org.openyu.commons.thread.anno.DefaultThreadService;
 import org.openyu.commons.thread.supporter.BaseRunnableSupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * 認證碼服務
@@ -35,8 +36,9 @@ public class AuthKeyServiceImpl extends BaseServiceSupporter implements AuthKeyS
 	/**
 	 * 線程服務
 	 */
-	@Autowired
-	@Qualifier("threadService")
+//	@Autowired
+//	@Qualifier("threadService")
+	@DefaultThreadService
 	private transient ThreadService threadService;
 
 	/**

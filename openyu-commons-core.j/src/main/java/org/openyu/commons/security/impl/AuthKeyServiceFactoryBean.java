@@ -5,10 +5,11 @@ import org.openyu.commons.security.AuthKeyService;
 import org.openyu.commons.security.SecurityType;
 import org.openyu.commons.service.supporter.BaseServiceFactorySupporter;
 import org.openyu.commons.thread.ThreadService;
+import org.openyu.commons.thread.anno.DefaultThreadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * 認證碼服務工廠
@@ -20,8 +21,9 @@ public final class AuthKeyServiceFactoryBean<T extends AuthKeyService>
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(AuthKeyServiceFactoryBean.class);
 
-	@Autowired
-	@Qualifier("threadService")
+//	@Autowired
+//	@Qualifier("threadService")
+	@DefaultThreadService
 	private transient ThreadService threadService;
 
 	public static final String ALIVE_MILLS = "aliveMills";

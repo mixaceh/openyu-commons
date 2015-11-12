@@ -12,6 +12,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @Retention(RetentionPolicy.RUNTIME)
 @Autowired
 @Qualifier("threadService")
-public @interface ThreadService {
+public @interface DefaultThreadService {
 
 }

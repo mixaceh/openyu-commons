@@ -13,17 +13,19 @@ import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StopWatch;
 
 import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.thread.ThreadService;
+import org.openyu.commons.thread.anno.DefaultThreadService;
 import org.openyu.commons.web.struts2.BaseAction;
 import org.openyu.commons.web.struts2.BaseWebInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionProxy;
@@ -40,8 +42,7 @@ public abstract class BaseWebInterceptorSupporter extends AbstractInterceptor im
 
 	private static final long serialVersionUID = 1155259612617422182L;
 
-	private static transient final Logger log = LogManager
-			.getLogger(BaseWebInterceptorSupporter.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(BaseWebInterceptorSupporter.class);
 
 	/**
 	 * 停用
@@ -58,6 +59,7 @@ public abstract class BaseWebInterceptorSupporter extends AbstractInterceptor im
 	 */
 //	@Autowired
 //	@Qualifier("threadService")
+	@DefaultThreadService
 	protected transient ThreadService threadService;
 
 	public BaseWebInterceptorSupporter()
@@ -98,7 +100,7 @@ public abstract class BaseWebInterceptorSupporter extends AbstractInterceptor im
 				ActionProxy proxy = actionInvocation.getProxy();
 				//
 				result = intercept(actionInvocation, actionContext, action);
-				log(log, proxy);
+				log(LOGGER, proxy);
 			}
 			else
 			{

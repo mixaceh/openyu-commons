@@ -10,12 +10,13 @@ import org.openyu.commons.dao.aware.CommonDaoAware;
 import org.openyu.commons.service.QueueService;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 import org.openyu.commons.thread.ThreadService;
+import org.openyu.commons.thread.anno.DefaultThreadService;
 import org.openyu.commons.thread.supporter.LoopQueueSupporter;
 import org.openyu.commons.util.CollectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * 資料庫佇列服務
@@ -33,8 +34,9 @@ public class QueueServiceImpl extends BaseServiceSupporter implements
 	/**
 	 * 線程服務
 	 */
-	@Autowired
-	@Qualifier("threadService")
+//	@Autowired
+//	@Qualifier("threadService")
+	@DefaultThreadService
 	private transient ThreadService threadService;
 
 	/**
