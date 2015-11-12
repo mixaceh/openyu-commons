@@ -11,7 +11,6 @@ import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
-import org.openyu.commons.lang.SystemHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class BasicDataSourceGroupFactoryBeanTest extends BaseTestSupporter {
@@ -33,11 +32,13 @@ public class BasicDataSourceGroupFactoryBeanTest extends BaseTestSupporter {
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void basicDataSources() {
+	public void basicDataSources() throws Exception {
 		System.out.println(basicDataSources);
 		assertNotNull(basicDataSources);
 		//
-		SystemHelper.println(basicDataSources);
+		for (BasicDataSource dataSource : basicDataSources) {
+			System.out.println(dataSource.getConnection());
+		}
 	}
 
 	@Test

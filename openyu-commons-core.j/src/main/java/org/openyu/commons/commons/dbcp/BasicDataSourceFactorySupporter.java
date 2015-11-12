@@ -2,6 +2,7 @@ package org.openyu.commons.commons.dbcp;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.openyu.commons.service.supporter.BaseFactorySupporter;
+import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,7 +100,7 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactorySupp
 	 * 
 	 * @return
 	 */
-	protected BasicDataSource createBasicDataSource() throws Exception {
+	protected BasicDataSource createBasicDataSource(int i) throws Exception {
 		BasicDataSource result = null;
 		try {
 			result = new BasicDataSource();
@@ -107,7 +108,12 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactorySupp
 			/**
 			 * extendedProperties
 			 */
-			result.setUrl(extendedProperties.getString(URL, DEFAULT_URL));
+			// i=0, jdbc:hsqldb:hsql://localhost:9001/commons
+			// i=1, jdbc:hsqldb:hsql://localhost:9001/commons_2
+			String url = nextUrl(extendedProperties.getString(URL, DEFAULT_URL), i);
+			LOGGER.info("url: " + url);
+			result.setUrl(url);
+			//
 			result.setDriverClassName(extendedProperties.getString(DRIVER_CLASSNAME, DEFAULT_DRIVER_CLASSNAME));
 			result.setUsername(extendedProperties.getString(USERNAME, DEFAULT_USERNAME));
 			result.setPassword(extendedProperties.getString(PASSWORD, DEFAULT_PASSWORD));
@@ -144,6 +150,45 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactorySupp
 			throw e;
 		}
 		return result;
+	}
+
+	/**
+	 * jdbc:hsqldb:hsql://localhost:9001/commons
+	 * 
+	 * jdbc:hsqldb:hsql://localhost:9001/commons_2
+	 * 
+	 * @param url
+	 * @param i
+	 * @return
+	 */
+	protected String nextUrl(String url, int i) {
+		AssertHelper.notNull(url, "The Url must not be null");
+		//
+		StringBuilder result = new StringBuilder();
+		if (i < 1) {
+			return url;
+		}
+		//
+		StringBuilder jdbc = new StringBuilder();
+		StringBuilder database = new StringBuilder();
+		StringBuilder param = new StringBuilder();
+		int pos = url.lastIndexOf("/");
+		if (pos > -1) {
+			jdbc.append(url.substring(0, pos + 1));
+			database.append(url.substring(pos + 1, url.length()));
+			pos = database.indexOf("?");
+			if (pos > -1) {
+				param.append(database.substring(pos, database.length()));
+				database = new StringBuilder(database.substring(0, pos));
+			}
+		}
+		//
+		result.append(jdbc);
+		result.append(database);
+		result.append("_");
+		result.append(i + 1);
+		result.append(param);
+		return result.toString();
 	}
 
 	protected abstract BasicDataSource shutdownBasicDataSource() throws Exception;

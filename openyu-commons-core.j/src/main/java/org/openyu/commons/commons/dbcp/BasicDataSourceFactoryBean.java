@@ -46,7 +46,7 @@ public final class BasicDataSourceFactoryBean extends BasicDataSourceFactorySupp
 		try {
 			if (this.basicDataSource != null) {
 				this.basicDataSource = shutdownBasicDataSource();
-				this.basicDataSource = createBasicDataSource();
+				this.basicDataSource = createBasicDataSource(0);
 			}
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during restartBasicDataSource()").toString(), e);
@@ -60,7 +60,7 @@ public final class BasicDataSourceFactoryBean extends BasicDataSourceFactorySupp
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		this.basicDataSource = createBasicDataSource();
+		this.basicDataSource = createBasicDataSource(0);
 	}
 
 	/**

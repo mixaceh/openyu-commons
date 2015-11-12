@@ -1,7 +1,6 @@
 package org.openyu.commons.commons.dbcp;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +33,7 @@ public final class BasicDataSourceGroupFactoryBean extends BasicDataSourceFactor
 			result = new BasicDataSource[extendedProperties.getInt(MAX_DATA_SOURCE_SIZE, DEFAULT_MAX_DATA_SOURCE_SIZE)];
 			//
 			for (int i = 0; i < result.length; i++) {
-				BasicDataSource dataSource = createBasicDataSource();
+				BasicDataSource dataSource = createBasicDataSource(i);
 				result[i] = dataSource;
 			}
 
@@ -48,43 +47,6 @@ public final class BasicDataSourceGroupFactoryBean extends BasicDataSourceFactor
 			throw e;
 		}
 		return result;
-	}
-
-	/**
-	 * jdbc:hsqldb:hsql://localhost:9001/commons
-	 * 
-	 * @param url
-	 * @param i
-	 * @return
-	 */
-	protected String nextUrl(String url, int i) {
-		AssertHelper.notNull(url, "The Url must not be null");
-		//
-		StringBuilder result = new StringBuilder();
-		if (i < 1) {
-			return url;
-		}
-		//
-		StringBuilder jdbc = new StringBuilder();
-		StringBuilder database = new StringBuilder();
-		StringBuilder param = new StringBuilder();
-		int pos = url.lastIndexOf("/");
-		if (pos > -1) {
-			jdbc.append(url.substring(0, pos + 1));
-			database.append(url.substring(pos + 1, url.length()));
-			pos = database.indexOf("?");
-			if (pos > -1) {
-				param.append(database.substring(pos, database.length()));
-				database = new StringBuilder(database.substring(0, pos));
-			}
-		}
-		//
-		result.append(jdbc);
-		result.append(database);
-		result.append("_");
-		result.append(i + 1);
-		result.append(param);
-		return result.toString();
 	}
 
 	protected BasicDataSource shutdownBasicDataSource() throws Exception {
