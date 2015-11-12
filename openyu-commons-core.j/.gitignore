@@ -4,3 +4,5 @@
 /search/
 /lib/
 /lib-provided/
+/*.lck
+/*.log
