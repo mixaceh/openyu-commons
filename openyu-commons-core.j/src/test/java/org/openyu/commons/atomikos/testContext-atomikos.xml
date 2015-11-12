@@ -124,7 +124,7 @@
 		parent="baseFactorySupporter">
 		<property
 			name="configLocation"
-			value="file:src/test/config/etc/atomikos2.properties" />
+			value="file:src/test/config/etc/atomikosX.properties" />
 	</bean>
 
 
