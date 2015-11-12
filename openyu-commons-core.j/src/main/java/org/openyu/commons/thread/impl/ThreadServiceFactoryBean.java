@@ -15,34 +15,34 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(ThreadServiceFactoryBean.class);
 
-	public final static String MAX_EXECUTOR_SIZE = "maxExecutorSize";
+	public static final  String MAX_EXECUTOR_SIZE = "maxExecutorSize";
 	/**
 	 * 預設executor的最大數目
 	 */
 	public static final int DEFAULT_MAX_EXECUTOR_SIZE = 1;
 
-	public final static String _CORE_POOL_SIZE = "corePoolSize";
+	public static final  String _CORE_POOL_SIZE = "corePoolSize";
 
 	public static final int DEFAULT_CORE_POOL_SIZE = 8;
 
-	public final static String KEEP_ALIVE_SECONDS = "keepAliveSeconds";
+	public static final  String KEEP_ALIVE_SECONDS = "keepAliveSeconds";
 
 	public static final int DEFAULT_KEEP_ALIVE_SECONDS = 60;
 
-	public final static String MAX_POOL_SIZE = "maxPoolSize";
+	public static final  String MAX_POOL_SIZE = "maxPoolSize";
 	/**
 	 * 預設thread的最大數目
 	 */
 	public static final int DEFAULT_MAX_POOL_SIZE = 8;
 
-	public final static String QUEUE_CAPACITY = "queueCapacity";
+	public static final  String QUEUE_CAPACITY = "queueCapacity";
 
 	public static final int DEFAULT_QUEUE_CAPACITY = 8;
 
 	/**
 	 * 所有屬性
 	 */
-	public final static String[] ALL_PROPERTIES = { MAX_EXECUTOR_SIZE, _CORE_POOL_SIZE, KEEP_ALIVE_SECONDS,
+	public static final String[] ALL_PROPERTIES = { MAX_EXECUTOR_SIZE, _CORE_POOL_SIZE, KEEP_ALIVE_SECONDS,
 			MAX_POOL_SIZE, QUEUE_CAPACITY };
 
 	public ThreadServiceFactoryBean() {

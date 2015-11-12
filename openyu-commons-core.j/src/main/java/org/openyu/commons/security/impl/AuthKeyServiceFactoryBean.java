@@ -24,14 +24,14 @@ public final class AuthKeyServiceFactoryBean<T extends AuthKeyService>
 	@Qualifier("threadService")
 	private transient ThreadService threadService;
 
-	public final static String ALIVE_MILLS = "aliveMills";
+	public static final String ALIVE_MILLS = "aliveMills";
 
 	/**
 	 * 預設key存活毫秒, 3分鐘
 	 */
 	public static final long DEFAULT_ALIVE_MILLS = 180 * 1000L;
 
-	public final static String LISTEN_MILLS = "listenMills";
+	public static final String LISTEN_MILLS = "listenMills";
 	/**
 	 * 預設監聽毫秒, 10秒
 	 */
@@ -40,21 +40,21 @@ public final class AuthKeyServiceFactoryBean<T extends AuthKeyService>
 	/**
 	 * security
 	 */
-	public final static String SECURITY = "security";
+	public static final String SECURITY = "security";
 
 	/**
 	 * 預設是否加密
 	 */
 	public static final boolean DEFAULT_SECURITY = true;
 
-	public final static String SECURITY_TYPE = "securityType";
+	public static final String SECURITY_TYPE = "securityType";
 
 	/**
 	 * 預設加密類型
 	 */
 	public static final SecurityType DEFAULT_SECURITY_TYPE = SecurityType.HmacSHA1;
 
-	public final static String SECURITY_KEY = "securityKey";
+	public static final String SECURITY_KEY = "securityKey";
 	/**
 	 * 預設加密key
 	 */
@@ -63,7 +63,7 @@ public final class AuthKeyServiceFactoryBean<T extends AuthKeyService>
 	/**
 	 * 所有屬性
 	 */
-	public final static String[] ALL_PROPERTIES = { ALIVE_MILLS, LISTEN_MILLS, SECURITY, SECURITY_TYPE, SECURITY_KEY };
+	public static final String[] ALL_PROPERTIES = { ALIVE_MILLS, LISTEN_MILLS, SECURITY, SECURITY_TYPE, SECURITY_KEY };
 
 	public AuthKeyServiceFactoryBean() {
 	}
