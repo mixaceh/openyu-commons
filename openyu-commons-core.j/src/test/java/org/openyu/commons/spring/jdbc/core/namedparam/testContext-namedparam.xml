@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<bean
+		id="testConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property
+			name="order"
+			value="1" />
+		<property
+			name="ignoreUnresolvablePlaceholders"
+			value="true" />
+		<property name="locations">
+			<list>
+				<value>file:src/test/config/etc/dbcp.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- group -->
+	<bean
+		id="basicDataSourceGroupFactoryBean"
+		class="org.openyu.commons.commons.dbcp.BasicDataSourceGroupFactoryBean"
+		parent="baseFactorySupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/dbcp.properties" />
+	</bean>
+
+	<bean
+		id="namedParameterJdbcTemplateGroupFactoryBean"
+		class="org.openyu.commons.spring.jdbc.core.namedparam.NamedParameterJdbcTemplateGroupFactoryBean"
+		parent="baseFactorySupporter">
+		<!--  
+		<constructor-arg ref="basicDataSourceGroupFactoryBean" />
+		-->
+		<property
+			name="targetDataSources"
+			ref="basicDataSourceGroupFactoryBean" />
+	</bean>
+</beans>
