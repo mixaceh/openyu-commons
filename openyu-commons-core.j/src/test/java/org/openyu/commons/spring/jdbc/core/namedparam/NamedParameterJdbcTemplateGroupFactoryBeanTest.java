@@ -37,8 +37,8 @@ public class NamedParameterJdbcTemplateGroupFactoryBeanTest extends BaseTestSupp
 		System.out.println(namedParameterJdbcTemplates);
 		assertNotNull(namedParameterJdbcTemplates);
 		//
-		for (NamedParameterJdbcTemplate proxy : namedParameterJdbcTemplates) {
-			System.out.println(proxy.getJdbcOperations());
+		for (NamedParameterJdbcTemplate e : namedParameterJdbcTemplates) {
+			System.out.println(e.getJdbcOperations());
 		}
 	}
 

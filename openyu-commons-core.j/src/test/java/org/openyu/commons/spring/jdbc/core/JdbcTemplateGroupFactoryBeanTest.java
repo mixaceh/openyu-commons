@@ -1,4 +1,4 @@
-package org.openyu.commons.spring.jdbc.datasource;
+package org.openyu.commons.spring.jdbc.core;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -11,42 +11,42 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-public class LazyConnectionDataSourceProxyGroupFactoryBeanTest extends BaseTestSupporter {
+public class JdbcTemplateGroupFactoryBeanTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static LazyConnectionDataSourceProxy[] lazyConnectionDataSourceProxys;
+	private static JdbcTemplate[] jdbcTemplates;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/spring/jdbc/datasource/testContext-datasource.xml",//
+				"org/openyu/commons/spring/jdbc/core/testContext-core.xml",//
 
 		});
-		lazyConnectionDataSourceProxys = applicationContext.getBean("lazyConnectionDataSourceProxyGroupFactoryBean",
-				LazyConnectionDataSourceProxy[].class);
+		jdbcTemplates = applicationContext.getBean("jdbcTemplateGroupFactoryBean",
+				JdbcTemplate[].class);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void lazyConnectionDataSourceProxys() throws Exception {
-		System.out.println(lazyConnectionDataSourceProxys);
-		assertNotNull(lazyConnectionDataSourceProxys);
+	public void jdbcTemplates() throws Exception {
+		System.out.println(jdbcTemplates);
+		assertNotNull(jdbcTemplates);
 		//
-		for (LazyConnectionDataSourceProxy e : lazyConnectionDataSourceProxys) {
-			System.out.println(e.getTargetDataSource().getConnection());
+		for (JdbcTemplate e : jdbcTemplates) {
+			System.out.println(e.getDataSource().getConnection());
 		}
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void close() {
-		System.out.println(lazyConnectionDataSourceProxys);
-		assertNotNull(lazyConnectionDataSourceProxys);
+		System.out.println(jdbcTemplates);
+		assertNotNull(jdbcTemplates);
 		applicationContext.close();
 		// 多次,不會丟出ex
 		applicationContext.close();
@@ -55,8 +55,8 @@ public class LazyConnectionDataSourceProxyGroupFactoryBeanTest extends BaseTestS
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void refresh() {
-		System.out.println(lazyConnectionDataSourceProxys);
-		assertNotNull(lazyConnectionDataSourceProxys);
+		System.out.println(jdbcTemplates);
+		assertNotNull(jdbcTemplates);
 		applicationContext.refresh();
 		// 多次,不會丟出ex
 		applicationContext.refresh();
