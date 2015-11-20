@@ -76,7 +76,7 @@ public class SortHelperTest extends BaseTestSupporter {
 	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
 	// round: 0.00
 	public void selection() {
-		int[] value = new int[] { 10, 4, 9, 1, 2, 5, 3, 8, 7, 6, };
+		int[] value = new int[] { 10, 4, 9, 1, 2, 5, 3, 8, 7, 6 };
 		//
 		final int COUNT = 10000;
 		for (int i = 0; i < COUNT; i++) {
