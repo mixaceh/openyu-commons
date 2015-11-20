@@ -15,8 +15,7 @@ import org.slf4j.LoggerFactory;
 public class AssertHelper extends BaseHelperSupporter {
 
 	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(AssertHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(AssertHelper.class);
 
 	/**
 	 * Instantiates a new AssertHelper.
@@ -69,8 +68,7 @@ public class AssertHelper extends BaseHelperSupporter {
 	}
 
 	public static void notNull(Object object) {
-		notNull(object,
-				"[Assertion failed] - this argument is required; it must not be null");
+		notNull(object, "[Assertion failed] - this argument is required; it must not be null");
 	}
 
 	public static void notEmpty(String text, String message) {
@@ -79,9 +77,7 @@ public class AssertHelper extends BaseHelperSupporter {
 	}
 
 	public static void notEmpty(String text) {
-		notEmpty(
-				text,
-				"[Assertion failed] - this String argument must have length; it must not be null or empty");
+		notEmpty(text, "[Assertion failed] - this String argument must have length; it must not be null or empty");
 	}
 
 	public static void notBlank(String text, String message) {
@@ -90,26 +86,20 @@ public class AssertHelper extends BaseHelperSupporter {
 	}
 
 	public static void notBlank(String text) {
-		notBlank(
-				text,
+		notBlank(text,
 				"[Assertion failed] - this String argument must have text; it must not be null, empty, or blank");
 	}
 
-	public static void doesNotContain(String textToSearch, String substring,
-			String message) {
-		if ((!(StringHelper.notEmpty(textToSearch)))
-				|| (!(StringHelper.notEmpty(substring)))
+	public static void doesNotContain(String textToSearch, String substring, String message) {
+		if ((!(StringHelper.notEmpty(textToSearch))) || (!(StringHelper.notEmpty(substring)))
 				|| (!(textToSearch.contains(substring))))
 			return;
 		throw new IllegalArgumentException(message);
 	}
 
 	public static void doesNotContain(String textToSearch, String substring) {
-		doesNotContain(
-				textToSearch,
-				substring,
-				new StringBuilder()
-						.append("[Assertion failed] - this String argument must not contain the substring [")
+		doesNotContain(textToSearch, substring,
+				new StringBuilder().append("[Assertion failed] - this String argument must not contain the substring [")
 						.append(substring).append("]").toString());
 	}
 
@@ -119,9 +109,7 @@ public class AssertHelper extends BaseHelperSupporter {
 	}
 
 	public static void notEmpty(Object[] array) {
-		notEmpty(
-				array,
-				"[Assertion failed] - this array must not be empty: it must contain at least 1 element");
+		notEmpty(array, "[Assertion failed] - this array must not be empty: it must contain at least 1 element");
 	}
 
 	public static void noNullElements(Object[] array, String message) {
@@ -132,8 +120,7 @@ public class AssertHelper extends BaseHelperSupporter {
 	}
 
 	public static void noNullElements(Object[] array) {
-		noNullElements(array,
-				"[Assertion failed] - this array must not contain any null elements");
+		noNullElements(array, "[Assertion failed] - this array must not contain any null elements");
 	}
 
 	public static void notEmpty(Collection<?> collection, String message) {
@@ -142,8 +129,7 @@ public class AssertHelper extends BaseHelperSupporter {
 	}
 
 	public static void notEmpty(Collection<?> collection) {
-		notEmpty(
-				collection,
+		notEmpty(collection,
 				"[Assertion failed] - this collection must not be empty: it must contain at least 1 element");
 	}
 
@@ -153,9 +139,7 @@ public class AssertHelper extends BaseHelperSupporter {
 	}
 
 	public static void notEmpty(Map<?, ?> map) {
-		notEmpty(
-				map,
-				"[Assertion failed] - this map must not be empty; it must contain at least one entry");
+		notEmpty(map, "[Assertion failed] - this map must not be empty; it must contain at least one entry");
 	}
 
 	public static void isInstanceOf(Class<?> clazz, Object obj) {
@@ -168,10 +152,9 @@ public class AssertHelper extends BaseHelperSupporter {
 			return;
 		}
 		throw new IllegalArgumentException(new StringBuilder()
-				.append((StringHelper.notEmpty(message)) ? new StringBuilder()
-						.append(message).append(" ").toString() : "")
-				.append("Object of class [")
-				.append((obj != null) ? obj.getClass().getName() : "null")
+				.append((StringHelper.notEmpty(message)) ? new StringBuilder().append(message).append(" ").toString()
+						: "")
+				.append("Object of class [").append((obj != null) ? obj.getClass().getName() : "null")
 				.append("] must be an instance of ").append(type).toString());
 	}
 
@@ -179,14 +162,11 @@ public class AssertHelper extends BaseHelperSupporter {
 		isAssignable(superType, subType, "");
 	}
 
-	public static void isAssignable(Class<?> superType, Class<?> subType,
-			String message) {
+	public static void isAssignable(Class<?> superType, Class<?> subType, String message) {
 		notNull(superType, "Type to check against must not be null");
 		if ((subType == null) || (!(superType.isAssignableFrom(subType))))
-			throw new IllegalArgumentException(new StringBuilder()
-					.append(message).append(subType)
-					.append(" is not assignable to ").append(superType)
-					.toString());
+			throw new IllegalArgumentException(new StringBuilder().append(message).append(subType)
+					.append(" is not assignable to ").append(superType).toString());
 	}
 
 	/**
@@ -201,8 +181,7 @@ public class AssertHelper extends BaseHelperSupporter {
 	}
 
 	public static void state(boolean expression) {
-		state(expression,
-				"[Assertion failed] - this state invariant must be true");
+		state(expression, "[Assertion failed] - this state invariant must be true");
 	}
 
 	public static void unsupported(String message) {
@@ -211,5 +190,10 @@ public class AssertHelper extends BaseHelperSupporter {
 
 	public static void unsupported() {
 		unsupported("[Assertion failed] - is unsupported");
+	}
+
+	public static void isBetween(int value, int min, int max, String message) {
+		if (!(value >= min && value <= max))
+			throw new IllegalArgumentException(message);
 	}
 }
