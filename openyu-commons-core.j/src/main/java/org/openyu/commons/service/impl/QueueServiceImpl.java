@@ -21,21 +21,19 @@ import org.slf4j.LoggerFactory;
 /**
  * 資料庫佇列服務
  */
-public class QueueServiceImpl extends BaseServiceSupporter implements
-		QueueService, CommonDaoAware {
+public class QueueServiceImpl extends BaseServiceSupporter implements QueueService, CommonDaoAware {
 
 	private static final long serialVersionUID = -436838930128568344L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(QueueServiceImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(QueueServiceImpl.class);
 
 	private transient CommonDao commonDao;
 
 	/**
 	 * 線程服務
 	 */
-//	@Autowired
-//	@Qualifier("threadService")
+	// @Autowired
+	// @Qualifier("threadService")
 	@DefaultThreadService
 	private transient ThreadService threadService;
 
@@ -62,6 +60,10 @@ public class QueueServiceImpl extends BaseServiceSupporter implements
 	public QueueServiceImpl() {
 	}
 
+	public void setThreadService(ThreadService threadService) {
+		this.threadService = threadService;
+	}
+
 	/**
 	 * 內部啟動
 	 */
@@ -79,7 +81,7 @@ public class QueueServiceImpl extends BaseServiceSupporter implements
 		//
 		deleteQueue = new DeleteQueue<Object>(threadService);
 		deleteQueue.setListenMills(LISTEN_MILLS);
-//		threadService.submit(deleteQueue);
+		// threadService.submit(deleteQueue);
 		deleteQueue.start();
 	}
 
@@ -182,8 +184,7 @@ public class QueueServiceImpl extends BaseServiceSupporter implements
 	 * @param seqs
 	 * @return
 	 */
-	public List<Boolean> offerDelete(Class<?> entityClass,
-			Collection<Serializable> seqs) {
+	public List<Boolean> offerDelete(Class<?> entityClass, Collection<Serializable> seqs) {
 		List<Boolean> result = new LinkedList<Boolean>();
 		//
 		if (CollectionHelper.notEmpty(seqs)) {
@@ -217,8 +218,7 @@ public class QueueServiceImpl extends BaseServiceSupporter implements
 		return commonDao.delete(entityClass, seq);
 	}
 
-	public <E> List<E> delete(Class<?> entityClass,
-			Collection<Serializable> seqs) {
+	public <E> List<E> delete(Class<?> entityClass, Collection<Serializable> seqs) {
 		return commonDao.delete(entityClass, seqs);
 	}
 
