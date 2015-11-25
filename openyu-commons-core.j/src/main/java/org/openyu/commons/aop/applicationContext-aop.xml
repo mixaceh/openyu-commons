@@ -13,9 +13,6 @@
 		abstract="true"
 		class="org.openyu.commons.aop.supporter.BaseMethodInterceptorSupporter"
 		parent="baseServiceSupporter">
-		<property
-			name="cancel"
-			value="false" />
 	</bean>
 
 	<bean
