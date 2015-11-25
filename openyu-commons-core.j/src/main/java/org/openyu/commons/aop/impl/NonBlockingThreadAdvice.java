@@ -41,7 +41,7 @@ public class NonBlockingThreadAdvice extends
 	public NonBlockingThreadAdvice() {
 	}
 
-	protected Object invokeInternal(final MethodInvocation methodInvocation)
+	protected Object doInvoke(final MethodInvocation methodInvocation)
 			throws Throwable {
 		Object result = null;
 		//

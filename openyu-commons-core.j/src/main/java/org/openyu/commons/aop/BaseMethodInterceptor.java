@@ -11,20 +11,20 @@ public interface BaseMethodInterceptor extends BaseService, MethodInterceptor {
 	/** The key. */
 	String KEY = BaseMethodInterceptor.class.getName();
 
-	/**
-	 * 取消
-	 *
-	 * @return true, if is cancel
-	 */
-	boolean isCancel();
-
-	/**
-	 * Sets the cancel.
-	 *
-	 * @param cancel
-	 *            the new cancel
-	 */
-	void setCancel(boolean cancel);
+//	/**
+//	 * 取消
+//	 *
+//	 * @return true, if is cancel
+//	 */
+//	boolean isCancel();
+//
+//	/**
+//	 * Sets the cancel.
+//	 *
+//	 * @param cancel
+//	 *            the new cancel
+//	 */
+//	void setCancel(boolean cancel);
 
 	// /**
 	// * 記錄.

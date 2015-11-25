@@ -20,8 +20,8 @@ public abstract class BaseMethodInterceptorSupporter extends BaseServiceSupporte
 	/** The Constant log. */
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(BaseMethodInterceptorSupporter.class);
 
-	/** 取消 */
-	private boolean cancel;
+	// /** 取消 */
+	// private boolean cancel;
 
 	// /** 記錄 */
 	// private boolean logEnable;
@@ -48,15 +48,15 @@ public abstract class BaseMethodInterceptorSupporter extends BaseServiceSupporte
 
 	}
 
-	@Override
-	public boolean isCancel() {
-		return cancel;
-	}
-
-	@Override
-	public void setCancel(boolean cancel) {
-		this.cancel = cancel;
-	}
+	// @Override
+	// public boolean isCancel() {
+	// return cancel;
+	// }
+	//
+	// @Override
+	// public void setCancel(boolean cancel) {
+	// this.cancel = cancel;
+	// }
 
 	// public boolean isLogEnable() {
 	// return logEnable;
@@ -70,20 +70,10 @@ public abstract class BaseMethodInterceptorSupporter extends BaseServiceSupporte
 	public Object invoke(MethodInvocation methodInvocation) throws Throwable {
 		Object result = null;
 		try {
-			if (!this.cancel) {
-				LOGGER.info(new StringBuilder().append("Invoking ").append(getDisplayName()).toString());
-				result = invokeInternal(methodInvocation);
-			} else {
-				result = methodInvocation.proceed();
-			}
+			LOGGER.info(new StringBuilder().append("Invoking ").append(getDisplayName()).toString());
+			result = doInvoke(methodInvocation);
 		} catch (Throwable e) {
-			if (!this.cancel) {
-				LOGGER.error(new StringBuilder("Exception encountered during invoke(MethodInvocation)").toString(), e);
-			} else {
-				LOGGER.error(
-						new StringBuilder().append("Proceeding ").append(getDisplayName()).append(" failed").toString(),
-						e);
-			}
+			LOGGER.error(new StringBuilder("Exception encountered during invoke()").toString(), e);
 		}
 		return result;
 	}
@@ -91,7 +81,7 @@ public abstract class BaseMethodInterceptorSupporter extends BaseServiceSupporte
 	/**
 	 * 內部觸發
 	 */
-	protected abstract Object invokeInternal(MethodInvocation methodInvocation) throws Throwable;
+	protected abstract Object doInvoke(MethodInvocation methodInvocation) throws Throwable;
 
 	// /**
 	// * Log.

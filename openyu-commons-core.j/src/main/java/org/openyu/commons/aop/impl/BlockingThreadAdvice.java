@@ -42,7 +42,7 @@ public class BlockingThreadAdvice extends BaseMethodInterceptorSupporter {
 	}
 
 	@Override
-	protected Object invokeInternal(final MethodInvocation methodInvocation)
+	protected Object doInvoke(final MethodInvocation methodInvocation)
 			throws Throwable {
 		Object result = null;
 		//
