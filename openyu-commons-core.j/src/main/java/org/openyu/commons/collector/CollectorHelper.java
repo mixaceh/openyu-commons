@@ -265,8 +265,12 @@ public class CollectorHelper extends BaseHelperSupporter {
 			if (writed) {
 				result = serName;
 			}
-		} catch (Exception ex) {
-			throw new CollectorException(ex);
+		} catch (CollectorException e) {
+			LOGGER.error(new StringBuilder("Exception encountered during writeToSer()").toString(), e);
+			// throw e;
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during writeToSer()").toString(), e);
+			// throw new CollectorException(e);
 		} finally {
 			// IoHelper.close(baos);
 			IoHelper.close(fileOut);
@@ -409,10 +413,13 @@ public class CollectorHelper extends BaseHelperSupporter {
 
 			// #fix 使用pool
 			result = SerializeHelper.deserializeWithProcessor(dataIn, clazz);
-
 			//
-		} catch (Exception ex) {
-			throw new CollectorException(ex);
+		} catch (CollectorException e) {
+			LOGGER.error(new StringBuilder("Exception encountered during readFromSer()").toString(), e);
+			// throw e;
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during readFromSer()").toString(), e);
+			// throw new CollectorException(e);
 		} finally {
 			IoHelper.close(in);
 		}
@@ -477,8 +484,9 @@ public class CollectorHelper extends BaseHelperSupporter {
 			if (writed) {
 				result = xmlName;
 			}
-		} catch (Exception ex) {
-			throw new CollectorException(ex);
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during writeToXml()").toString(), e);
+			// throw new CollectorException(ex);
 		} finally {
 			IoHelper.close(out);
 		}
@@ -549,8 +557,12 @@ public class CollectorHelper extends BaseHelperSupporter {
 			in = IoHelper.createInputStream(xmlName);
 			// jaxb
 			result = (T) JaxbHelper.unmarshal(in, clazz);
-		} catch (Exception ex) {
-			throw new CollectorException(ex);
+		} catch (CollectorException e) {
+			LOGGER.error(new StringBuilder("Exception encountered during readFromXml()").toString(), e);
+			// throw e;
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during readFromXml()").toString(), e);
+			// throw new CollectorException(e);
 		} finally {
 			IoHelper.close(in);
 		}
