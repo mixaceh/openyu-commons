@@ -36,8 +36,8 @@ public class AuthKeyServiceImpl extends BaseServiceSupporter implements AuthKeyS
 	/**
 	 * 線程服務
 	 */
-//	@Autowired
-//	@Qualifier("threadService")
+	// @Autowired
+	// @Qualifier("threadService")
 	@DefaultThreadService
 	private transient ThreadService threadService;
 
