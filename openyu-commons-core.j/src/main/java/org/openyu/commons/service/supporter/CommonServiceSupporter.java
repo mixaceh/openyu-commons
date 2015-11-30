@@ -40,13 +40,11 @@ import org.openyu.commons.util.concurrent.impl.MapCacheImpl;
  fireServiceBeanAdded, 表新增後/修改後/刪除後,可用於:
  1.發送訊息通知 
  */
-public class CommonServiceSupporter extends BaseServiceSupporter implements
-		CommonService, CommonDaoAware {
+public class CommonServiceSupporter extends BaseServiceSupporter implements CommonService, CommonDaoAware {
 
 	private static final long serialVersionUID = 1915658408145401655L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(CommonServiceSupporter.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(CommonServiceSupporter.class);
 
 	protected transient CommonDao commonDao;
 
@@ -92,9 +90,15 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		insertQueue.shutdown();
-		updateQueue.shutdown();
-		deleteQueue.shutdown();
+		if (insertQueue != null) {
+			insertQueue.shutdown();
+		}
+		if (updateQueue != null) {
+			updateQueue.shutdown();
+		}
+		if (deleteQueue != null) {
+			deleteQueue.shutdown();
+		}
 	}
 
 	public CommonDao getCommonDao() {
@@ -151,8 +155,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 	public BeanListener[] getBeanListeners() {
 		BeanListener[] result = null;
 		if (beanListeners != null) {
-			result = (BeanListener[]) beanListeners
-					.getListeners(BeanListener.class);
+			result = (BeanListener[]) beanListeners.getListeners(BeanListener.class);
 		}
 		return result;
 	}
@@ -261,8 +264,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 			if (isVoClass) {
 				Class<?> poClass = ClassHelper.vo2PoClass(entityClass);
 				if (poClass != null) {
-					EventAttach<List<E>, List<E>> eventAttach = EventHelper
-							.eventAttach(null, null);
+					EventAttach<List<E>, List<E>> eventAttach = EventHelper.eventAttach(null, null);
 					//
 					fireBeanFinding(this, eventAttach);
 					List<E> orig = commonDao.find(poClass);
@@ -279,8 +281,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 			}
 			// #2 entityClass=poClass,傳入 po class
 			else {
-				EventAttach<List<E>, List<E>> eventAttach = EventHelper
-						.eventAttach(null, null);
+				EventAttach<List<E>, List<E>> eventAttach = EventHelper.eventAttach(null, null);
 				fireBeanFinding(this, eventAttach);
 				List<E> orig = commonDao.find(entityClass);
 				if (orig != null && !orig.isEmpty()) {
@@ -330,8 +331,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 	}
 
 	// is2Vo=是否要將找到的po轉為vo
-	protected <T> T findReturnVoOrNot(Class<?> entityClass, Serializable seq,
-			boolean is2Vo) {
+	protected <T> T findReturnVoOrNot(Class<?> entityClass, Serializable seq, boolean is2Vo) {
 		// return commonDao.find(entityClass, seq);
 		T dest = null;
 		try {
@@ -340,15 +340,13 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 			if (isVoClass) {
 				Class<?> poClass = ClassHelper.vo2PoClass(entityClass);
 				if (poClass != null) {
-					EventAttach<T, T> eventAttach = EventHelper.eventAttach(
-							null, null);
+					EventAttach<T, T> eventAttach = EventHelper.eventAttach(null, null);
 					fireBeanFinding(this, eventAttach);
 					T orig = commonDao.find(poClass, seq);
 					if (orig != null) {
 						// 是否要轉為vo
 						if (is2Vo) {
-							dest = ClassHelper
-									.copyProperties(orig, entityClass);// po->vo
+							dest = ClassHelper.copyProperties(orig, entityClass);// po->vo
 						} else {
 							dest = orig;
 						}
@@ -359,8 +357,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 			}
 			// #2 entityClass=poClass,傳入 po class
 			else {
-				EventAttach<T, T> eventAttach = EventHelper.eventAttach(null,
-						null);
+				EventAttach<T, T> eventAttach = EventHelper.eventAttach(null, null);
 				fireBeanFinding(this, eventAttach);
 				T orig = commonDao.find(entityClass, seq);// po
 				if (orig != null) {
@@ -434,9 +431,8 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 				//
 				if (poEntity != null) {
 					// 觸發事件傳入vo/po,voEntity!=null,則vo,voEntity==null,則po
-					EventAttach<T, T> eventAttach = EventHelper.eventAttach(
-							null, (voEntity != null ? (T) voEntity
-									: (T) poEntity));
+					EventAttach<T, T> eventAttach = EventHelper.eventAttach(null,
+							(voEntity != null ? (T) voEntity : (T) poEntity));
 					fireBeanInserting(this, eventAttach);
 					result = commonDao.insert(poEntity, modifiedUser);
 					// System.out.println("poEntity: "+poEntity);
@@ -446,14 +442,10 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 						// #issue,當集合時,會重複添加,原本+新的
 						if (isVoClass) {
 							// System.out.println("poEntity: " + poEntity);
-							voEntity = ClassHelper.copyProperties(poEntity,
-									voEntity);
+							voEntity = ClassHelper.copyProperties(poEntity, voEntity);
 							// System.out.println("entity: " + entity);
 						}
-						eventAttach = EventHelper
-								.eventAttach(null,
-										(voEntity != null ? (T) voEntity
-												: (T) poEntity));
+						eventAttach = EventHelper.eventAttach(null, (voEntity != null ? (T) voEntity : (T) poEntity));
 						fireBeanInserted(this, eventAttach);
 					}
 				}
@@ -497,9 +489,8 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 				//
 				if (poEntity != null) {
 					// 觸發事件傳入vo/po,voEntity!=null,則vo,voEntity==null,則po
-					EventAttach<T, T> eventAttach = EventHelper.eventAttach(
-							null, (voEntity != null ? (T) voEntity
-									: (T) poEntity));
+					EventAttach<T, T> eventAttach = EventHelper.eventAttach(null,
+							(voEntity != null ? (T) voEntity : (T) poEntity));
 					fireBeanUpdating(this, eventAttach);
 					// System.out.println("before version: "
 					// + ((SeqEntity) poEntity).getVersion());
@@ -523,15 +514,11 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 							// #fix version已有加1,不要再加了
 							// 2014/09/30又沒加1,所以又改成手動+1
 
-							voEntity = ClassHelper.copyProperties(poEntity,
-									voEntity);
+							voEntity = ClassHelper.copyProperties(poEntity, voEntity);
 							// System.out.println("copy version: "
 							// + ((SeqBean) voEntity).getVersion());
 						}
-						eventAttach = EventHelper
-								.eventAttach(null,
-										(voEntity != null ? (T) voEntity
-												: (T) poEntity));
+						eventAttach = EventHelper.eventAttach(null, (voEntity != null ? (T) voEntity : (T) poEntity));
 						fireBeanUpdated(this, eventAttach);
 					}
 				}
@@ -579,9 +566,8 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 				//
 				if (poEntity != null) {
 					// 觸發事件傳入vo/po,voEntity!=null,則vo,voEntity==null,則po
-					EventAttach<T, T> eventAttach = EventHelper.eventAttach(
-							null, (voEntity != null ? (T) voEntity
-									: (T) poEntity));
+					EventAttach<T, T> eventAttach = EventHelper.eventAttach(null,
+							(voEntity != null ? (T) voEntity : (T) poEntity));
 					fireBeanDeleting(this, eventAttach);
 					// if (isVoClass)
 					// {
@@ -590,10 +576,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 					// org.hibernate.NonUniqueObjectException
 					ret = commonDao.delete(poEntity, modifiedUser);// po
 					if (ret > 0) {
-						eventAttach = EventHelper
-								.eventAttach(null,
-										(voEntity != null ? (T) voEntity
-												: (T) poEntity));
+						eventAttach = EventHelper.eventAttach(null, (voEntity != null ? (T) voEntity : (T) poEntity));
 						fireBeanDeleted(this, eventAttach);
 					}
 				}
@@ -609,8 +592,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T delete(Class<?> entityClass, Serializable seq,
-			String modifiedUser) {
+	public <T> T delete(Class<?> entityClass, Serializable seq, String modifiedUser) {
 		T result = null;
 		// 此時為po
 		Object entity = findReturnVoOrNot(entityClass, seq, false);
@@ -627,13 +609,11 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 		return result;
 	}
 
-	public <E> List<E> delete(Class<?> entityClass,
-			Collection<Serializable> seqs) {
+	public <E> List<E> delete(Class<?> entityClass, Collection<Serializable> seqs) {
 		return delete(entityClass, seqs, null);
 	}
 
-	public <E> List<E> delete(Class<?> entityClass,
-			Collection<Serializable> seqs, String modifiedUser) {
+	public <E> List<E> delete(Class<?> entityClass, Collection<Serializable> seqs, String modifiedUser) {
 		List<E> result = new LinkedList<E>();
 		if (CollectionHelper.notEmpty(seqs)) {
 			for (Serializable seq : seqs) {
@@ -669,18 +649,16 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 	// ------------------------------------
 	// sql find(select)
 	// ------------------------------------
-	public <E> List<E> find(String sqlString, String[] paramNames,
-			Object[] values, String[] columnAliases, Object[] types) {
+	public <E> List<E> find(String sqlString, String[] paramNames, Object[] values, String[] columnAliases,
+			Object[] types) {
 		return commonDao.find(sqlString, paramNames, values, columnAliases, types);
 	}
 
-	public <E> List<E> find(String sqlString, String[] paramNames,
-			Object[] values, Map<String, Object> scalars) {
+	public <E> List<E> find(String sqlString, String[] paramNames, Object[] values, Map<String, Object> scalars) {
 		return commonDao.find(sqlString, paramNames, values, scalars);
 	}
 
-	public <E> List<E> find(String sqlString, Map<String, Object> params,
-			Map<String, Object> scalars) {
+	public <E> List<E> find(String sqlString, Map<String, Object> params, Map<String, Object> scalars) {
 		return commonDao.find(sqlString, params, scalars);
 	}
 
@@ -691,12 +669,10 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 		return insert(sqlString, paramNames, values, null);
 	}
 
-	public int insert(String sqlString, String[] paramNames, Object[] values,
-			String modifiedUser) {
+	public int insert(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
 		int result = 0;
 		try {
-			Map<String, Object> params = CollectionHelper.toMap(paramNames,
-					values);
+			Map<String, Object> params = CollectionHelper.toMap(paramNames, values);
 			fireBeanInserting(params, this);
 			result = commonDao.insert(sqlString, paramNames, values, modifiedUser);
 			if (result > 0) {
@@ -712,8 +688,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 		return insert(sqlString, params, null);
 	}
 
-	public int insert(String sqlString, Map<String, Object> params,
-			String modifiedUser) {
+	public int insert(String sqlString, Map<String, Object> params, String modifiedUser) {
 		int result = 0;
 		try {
 			fireBeanInserting(params, this);
@@ -734,12 +709,10 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 		return update(sqlString, paramNames, values, null);
 	}
 
-	public int update(String sqlString, String[] paramNames, Object[] values,
-			String modifiedUser) {
+	public int update(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
 		int result = 0;
 		try {
-			Map<String, Object> params = CollectionHelper.toMap(paramNames,
-					values);
+			Map<String, Object> params = CollectionHelper.toMap(paramNames, values);
 			fireBeanUpdating(params, this);
 			result = commonDao.update(sqlString, paramNames, values, modifiedUser);
 			if (result > 0) {
@@ -755,8 +728,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 		return update(sqlString, params, null);
 	}
 
-	public int update(String sqlString, Map<String, Object> params,
-			String modifiedUser) {
+	public int update(String sqlString, Map<String, Object> params, String modifiedUser) {
 		int result = 0;
 		try {
 			fireBeanUpdating(params, this);
@@ -777,12 +749,10 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 		return delete(sqlString, paramNames, values, null);
 	}
 
-	public int delete(String sqlString, String[] paramNames, Object[] values,
-			String modifiedUser) {
+	public int delete(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
 		int result = 0;
 		try {
-			Map<String, Object> params = CollectionHelper.toMap(paramNames,
-					values);
+			Map<String, Object> params = CollectionHelper.toMap(paramNames, values);
 			fireBeanDeleting(params, this);
 			result = commonDao.delete(sqlString, paramNames, values, modifiedUser);
 			if (result > 0) {
@@ -798,8 +768,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 		return delete(sqlString, params, null);
 	}
 
-	public int delete(String sqlString, Map<String, Object> params,
-			String modifiedUser) {
+	public int delete(String sqlString, Map<String, Object> params, String modifiedUser) {
 		int result = 0;
 		try {
 			fireBeanDeleting(params, this);
@@ -977,8 +946,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements
 	 * @param seqs
 	 * @return
 	 */
-	public List<Boolean> offerDelete(Class<?> entityClass,
-			Collection<Serializable> seqs) {
+	public List<Boolean> offerDelete(Class<?> entityClass, Collection<Serializable> seqs) {
 		List<Boolean> result = new LinkedList<Boolean>();
 		//
 		if (CollectionHelper.notEmpty(seqs)) {
