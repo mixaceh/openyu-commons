@@ -703,7 +703,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 			final StringBuffer hqlBuffer = new StringBuffer(hqlProcessed);
 
 			if (oldLen == hqlProcessed.length()) {
-				hqlBuffer.insert(0, "select count(*) ");
+				hqlBuffer.insert(0, "SELECT COUNT(1) ");
 			}
 			// System.out.println("rowCount:" + hqlBuffer.toString());
 
@@ -740,7 +740,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		long result = 0L;
 		try {
 			final String sQLProcessed = sqlString.replaceFirst(
-					"select\\s+(?:.*)\\s+from", "select count(*) from");
+					"select\\s+(?:.*)\\s+from", "SELECT COUNT(1) from");
 
 			Long buff = getHibernateTemplate().executeWithNativeSession(
 					new HibernateCallback<Long>() {
