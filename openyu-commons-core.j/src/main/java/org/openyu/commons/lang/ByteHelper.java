@@ -14,6 +14,7 @@ import org.openyu.commons.enumz.ShortEnum;
 import org.openyu.commons.enumz.StringEnum;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
+import org.openyu.commons.util.AssertHelper;
 import org.openyu.commons.util.SerializeHelper;
 import org.openyu.commons.util.SerializeType;
 import org.slf4j.Logger;
@@ -21,8 +22,7 @@ import org.slf4j.LoggerFactory;
 
 public class ByteHelper extends BaseHelperSupporter {
 
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(ByteHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(ByteHelper.class);
 
 	/**
 	 * Instantiates a new helper.
@@ -40,7 +40,7 @@ public class ByteHelper extends BaseHelperSupporter {
 	private static class InstanceHolder {
 
 		/** The Constant INSTANCE. */
-//		private static final ByteHelper INSTANCE = new ByteHelper();
+		// private static final ByteHelper INSTANCE = new ByteHelper();
 		private static ByteHelper INSTANCE = new ByteHelper();
 	}
 
@@ -203,6 +203,9 @@ public class ByteHelper extends BaseHelperSupporter {
 
 	// int -> short -> 2 byte
 	public static byte[] toShortByteArray(int value) {
+		AssertHelper.isBetween(value, Short.MIN_VALUE, Short.MAX_VALUE,
+				"The Value is " + value + " must be between " + Short.MIN_VALUE + " and " + Short.MAX_VALUE);
+
 		// byte[] result = new byte[2];
 		// result[1] = (byte) (value & 0x00ff);
 		// result[0] = (byte) ((value & 0x00ff) >>> 8);
@@ -333,8 +336,7 @@ public class ByteHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] toByteArray(SerializeType serializeType,
-			Serializable value) {
+	public static byte[] toByteArray(SerializeType serializeType, Serializable value) {
 		// jdk 序列化
 		return SerializeHelper.serialize(value);
 	}
@@ -625,8 +627,7 @@ public class ByteHelper extends BaseHelperSupporter {
 	 * @param destPos
 	 * @param length
 	 */
-	public static void byteArraycopy(byte[] src, int srcPos, byte[] dest,
-			int destPos, int length) {
+	public static void byteArraycopy(byte[] src, int srcPos, byte[] dest, int destPos, int length) {
 		System.arraycopy(src, srcPos, dest, destPos, length);
 	}
 

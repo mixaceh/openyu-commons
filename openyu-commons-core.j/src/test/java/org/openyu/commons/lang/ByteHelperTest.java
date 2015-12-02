@@ -188,33 +188,17 @@ public class ByteHelperTest {
 	}
 
 	@Test
-	// 1000000 times: 81 mills.
-	// 1000000 times: 98 mills.
-	// 1000000 times: 87 mills.
-	// verified
 	public void toShortByteArray() {
 		int value = Short.MAX_VALUE;
 		byte[] result = null;
 		//
-		int count = 1000000;
-
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = ByteHelper.toShortByteArray(value);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		result = ByteHelper.toShortByteArray(value);
 
 		ByteHelper.println(result);
 		assertEquals(2, result.length);
 		//
 		int newValue = 0;
-		beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			newValue = ByteHelper.fromShortInt(result);
-		}
-		end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		newValue = ByteHelper.fromShortInt(result);
 
 		System.out.println(newValue);
 		assertEquals(value, newValue);
