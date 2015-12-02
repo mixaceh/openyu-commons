@@ -55,8 +55,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 
 	private static final long serialVersionUID = 565018661823278805L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(CommonDaoSupporter.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(CommonDaoSupporter.class);
 
 	// protected transient ApplicationContext applicationContext;
 
@@ -81,26 +80,20 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @throws IllegalArgumentException
 	 */
 	protected final void checkConfig() {
-		AssertHelper.notNull(hibernateTemplate,
-				"The HibernateTemplate is required");
-		AssertHelper.notNull(this.hibernateTemplate.getSessionFactory(),
-				"The SessionFactory is required");
+		AssertHelper.notNull(hibernateTemplate, "The HibernateTemplate is required");
+		AssertHelper.notNull(this.hibernateTemplate.getSessionFactory(), "The SessionFactory is required");
 	}
 
 	public final SessionFactory getSessionFactory() {
-		return ((this.hibernateTemplate != null ? this.hibernateTemplate
-				.getSessionFactory() : null));
+		return ((this.hibernateTemplate != null ? this.hibernateTemplate.getSessionFactory() : null));
 	}
 
 	public final void setSessionFactory(SessionFactory sessionFactory) {
-		if ((this.hibernateTemplate == null)
-				|| (sessionFactory != this.hibernateTemplate
-						.getSessionFactory()))
+		if ((this.hibernateTemplate == null) || (sessionFactory != this.hibernateTemplate.getSessionFactory()))
 			this.hibernateTemplate = createHibernateTemplate(sessionFactory);
 	}
 
-	protected HibernateTemplate createHibernateTemplate(
-			SessionFactory sessionFactory) {
+	protected HibernateTemplate createHibernateTemplate(SessionFactory sessionFactory) {
 		return new HibernateTemplate(sessionFactory);
 	}
 
@@ -263,13 +256,11 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		return findUniqueByHql(hql, null);
 	}
 
-	protected <T> T findUniqueByHql(StringBuilder hql,
-			Map<String, Object> params) {
+	protected <T> T findUniqueByHql(StringBuilder hql, Map<String, Object> params) {
 		return findUniqueByHql(null, hql, params);
 	}
 
-	protected <T> T findUniqueByHql(Locale locale, StringBuilder hql,
-			Map<String, Object> params) {
+	protected <T> T findUniqueByHql(Locale locale, StringBuilder hql, Map<String, Object> params) {
 		return findUniqueByHql(locale, hql.toString(), params);
 	}
 
@@ -283,28 +274,25 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @param params
 	 * @return
 	 */
-	protected <T> T findUniqueByHql(final Locale locale,
-			final String hqlString, final Map<String, Object> params) {
+	protected <T> T findUniqueByHql(final Locale locale, final String hqlString, final Map<String, Object> params) {
 		T result = null;
 		try {
-			result = getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<T>() {
-						@SuppressWarnings("unchecked")
-						public T doInHibernate(Session session)
-								throws HibernateException {
-							Query query = session.createQuery(hqlString);
-							cacheQuery(query);
-							processQueryParamters(query, params);
-							query.setMaxResults(1);
-							Object buff = query.uniqueResult();
-							//
-							if (locale != null) {
-								// 2012/03/27 處理多語系的name
-								EntityHelper.filterName(buff, locale);
-							}
-							return (T) buff;
-						}
-					});
+			result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<T>() {
+				@SuppressWarnings("unchecked")
+				public T doInHibernate(Session session) throws HibernateException {
+					Query query = session.createQuery(hqlString);
+					cacheQuery(query);
+					processQueryParamters(query, params);
+					query.setMaxResults(1);
+					Object buff = query.uniqueResult();
+					//
+					if (locale != null) {
+						// 2012/03/27 處理多語系的name
+						EntityHelper.filterName(buff, locale);
+					}
+					return (T) buff;
+				}
+			});
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
@@ -315,23 +303,19 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		return findByHql(null, null, hqlString, params);
 	}
 
-	protected <T> List<T> findByHql(Inquiry inquiry, String hqlString,
-			Map<String, Object> params) {
+	protected <T> List<T> findByHql(Inquiry inquiry, String hqlString, Map<String, Object> params) {
 		return findByHql(inquiry, null, hqlString, params);
 	}
 
-	protected <T> List<T> findByHql(StringBuilder hql,
-			Map<String, Object> params) {
+	protected <T> List<T> findByHql(StringBuilder hql, Map<String, Object> params) {
 		return findByHql(null, null, hql, params);
 	}
 
-	protected <T> List<T> findByHql(Inquiry inquiry, StringBuilder hql,
-			Map<String, Object> params) {
+	protected <T> List<T> findByHql(Inquiry inquiry, StringBuilder hql, Map<String, Object> params) {
 		return findByHql(inquiry, null, hql, params);
 	}
 
-	protected <T> List<T> findByHql(Inquiry inquiry, Locale locale,
-			StringBuilder hql, Map<String, Object> params) {
+	protected <T> List<T> findByHql(Inquiry inquiry, Locale locale, StringBuilder hql, Map<String, Object> params) {
 		return findByHql(inquiry, locale, hql.toString(), params);
 	}
 
@@ -348,21 +332,19 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T> List<T> findByHql(final Inquiry inquiry, final Locale locale,
-			final String hqlString, final Map<String, Object> params) {
+	protected <T> List<T> findByHql(final Inquiry inquiry, final Locale locale, final String hqlString,
+			final Map<String, Object> params) {
 		List<T> result = new LinkedList<T>();
 		try {
 			if (inquiry == null) {
-				result = getHibernateTemplate().executeWithNativeSession(
-						new HibernateCallback<List<T>>() {
-							public List<T> doInHibernate(Session session)
-									throws HibernateException {
-								Query query = session.createQuery(hqlString);
-								cacheQuery(query);
-								processQueryParamters(query, params);
-								return query.list();
-							}
-						});
+				result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<T>>() {
+					public List<T> doInHibernate(Session session) throws HibernateException {
+						Query query = session.createQuery(hqlString);
+						cacheQuery(query);
+						processQueryParamters(query, params);
+						return query.list();
+					}
+				});
 
 			} else {
 				final StopWatch stopWatch = new StopWatch();
@@ -373,41 +355,35 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 				// 處理排序
 				processSort(inquiry, buff);
 				//
-				result = getHibernateTemplate().executeWithNativeSession(
-						new HibernateCallback<List<T>>() {
-							public List<T> doInHibernate(Session session)
-									throws HibernateException {
-								Query query = session.createQuery(buff
-										.toString());
-								cacheQuery(query);
-								processQueryParamters(query, params);
-								//
-								Pagination pagination = inquiry.getPagination();
-								if (pagination == null) {
-									LOGGER.warn("pagination is null, no data can be queried");
-									return new LinkedList<T>();
-								} else {
-									if (!inquiry.isExport()) {
-										query.setFirstResult(pagination
-												.getFirstResult());
-										query.setMaxResults(pagination
-												.getMaxResults());
-										//
-										Long rowCount = rowCountByHql(
-												hqlString, params);
-										pagination.setRowCount(rowCount
-												.intValue());
-									}
-									//
-									List<T> buff = query.list();
-									//
-									stopWatch.stop();
-									pagination.setProcessTime(stopWatch
-											.getTotalTimeSeconds());
-									return buff;
-								}
+				result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<T>>() {
+					public List<T> doInHibernate(Session session) throws HibernateException {
+						Query query = session.createQuery(buff.toString());
+						cacheQuery(query);
+						processQueryParamters(query, params);
+						//
+						Pagination pagination = inquiry.getPagination();
+						if (pagination == null) {
+							LOGGER.warn("The Pagination is null, no data can be queried");
+							return new LinkedList<T>();
+						} else {
+							if (!inquiry.isExport()) {
+								// 從哪個index開始傳回，Index是從0開始算
+								query.setFirstResult(pagination.getFirstResult());
+								// count：由Index開始，總共要傳回幾筆資料
+								query.setMaxResults(pagination.getMaxResults());
+								// TODO 該放到外面取rowCount
+								Long rowCount = rowCountByHql(hqlString, params);
+								pagination.setRowCount(rowCount.intValue());
 							}
-						});
+							//
+							List<T> buff = query.list();
+							//
+							stopWatch.stop();
+							pagination.setProcessTime(stopWatch.getTotalTimeSeconds());
+							return buff;
+						}
+					}
+				});
 			}
 			// 2012/03/27 處理多語系的name
 			if (locale != null) {
@@ -469,8 +445,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	// --------------------------------------------------
 	// sql 查詢
 	// --------------------------------------------------
-	protected <T> List<T> findBySql(Inquiry inquiry, StringBuilder sql,
-			Map<String, Object> params) {
+	protected <T> List<T> findBySql(Inquiry inquiry, StringBuilder sql, Map<String, Object> params) {
 		return findBySql(inquiry, sql.toString(), params);
 	}
 
@@ -483,22 +458,18 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T> List<T> findBySql(final Inquiry inquiry,
-			final String sqlString, final Map<String, Object> params) {
+	protected <T> List<T> findBySql(final Inquiry inquiry, final String sqlString, final Map<String, Object> params) {
 		List<T> result = new LinkedList<T>();
 		try {
 			if (inquiry == null) {
-				result = getHibernateTemplate().executeWithNativeSession(
-						new HibernateCallback<List<T>>() {
-							public List<T> doInHibernate(Session session)
-									throws HibernateException {
-								SQLQuery query = session
-										.createSQLQuery(sqlString);
-								cacheQuery(query);
-								processQueryParamters(query, params);
-								return query.list();
-							}
-						});
+				result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<T>>() {
+					public List<T> doInHibernate(Session session) throws HibernateException {
+						SQLQuery query = session.createSQLQuery(sqlString);
+						cacheQuery(query);
+						processQueryParamters(query, params);
+						return query.list();
+					}
+				});
 			} else {
 				final StopWatch stopWatch = new StopWatch();
 				stopWatch.start();
@@ -509,43 +480,33 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 				// 處理排序
 				processSort(inquiry, buff);
 				//
-				result = getHibernateTemplate().executeWithNativeSession(
-						new HibernateCallback<List<T>>() {
-							public List<T> doInHibernate(Session session)
-									throws HibernateException {
-								SQLQuery query = session.createSQLQuery(buff
-										.toString());
-								cacheQuery(query);
-								processQueryParamters(query, params);
-								//
-								Pagination pagination = inquiry.getPagination();
-								if (pagination == null) {
-									LOGGER.warn("pagination is null, no data can be queried");
-									return new LinkedList<T>();
-								} else {
-									if (!inquiry.isExport()) {
-										query.setFirstResult(pagination
-												.getFirstResult());
-										query.setMaxResults(pagination
-												.getMaxResults());
-										//
-										Long rowCount = rowCountBySql(
-												sqlString, params);
-										pagination.setRowCount(rowCount
-												.intValue());
-									}
-									//
-									List<T> buff = query.setResultTransformer(
-											Criteria.ALIAS_TO_ENTITY_MAP)
-											.list();
-									//
-									stopWatch.stop();
-									pagination.setProcessTime(stopWatch
-											.getTotalTimeSeconds());
-									return buff;
-								}
+				result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<T>>() {
+					public List<T> doInHibernate(Session session) throws HibernateException {
+						SQLQuery query = session.createSQLQuery(buff.toString());
+						cacheQuery(query);
+						processQueryParamters(query, params);
+						//
+						Pagination pagination = inquiry.getPagination();
+						if (pagination == null) {
+							LOGGER.warn("pagination is null, no data can be queried");
+							return new LinkedList<T>();
+						} else {
+							if (!inquiry.isExport()) {
+								query.setFirstResult(pagination.getFirstResult());
+								query.setMaxResults(pagination.getMaxResults());
+								// TODO 該放到外面取rowCount
+								Long rowCount = rowCountBySql(sqlString, params);
+								pagination.setRowCount(rowCount.intValue());
 							}
-						});
+							//
+							List<T> buff = query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP).list();
+							//
+							stopWatch.stop();
+							pagination.setProcessTime(stopWatch.getTotalTimeSeconds());
+							return buff;
+						}
+					}
+				});
 			}
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
@@ -554,8 +515,8 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	}
 
 	//
-	protected <T> List<T> searchByLql(Inquiry inquiry,
-			org.apache.lucene.search.Query luceneQuery, Class<?>... entities) {
+	protected <T> List<T> searchByLql(Inquiry inquiry, org.apache.lucene.search.Query luceneQuery,
+			Class<?>... entities) {
 		return searchByLql(inquiry, null, luceneQuery, entities);
 	}
 
@@ -569,53 +530,44 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T> List<T> searchByLql(final Inquiry inquiry,
-			final Locale locale,
-			final org.apache.lucene.search.Query luceneQuery,
-			final Class<?>... entities) {
+	protected <T> List<T> searchByLql(final Inquiry inquiry, final Locale locale,
+			final org.apache.lucene.search.Query luceneQuery, final Class<?>... entities) {
 		List<T> result = new LinkedList<T>();
 		//
 		try {
-			result = getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<List<T>>() {
-						public List<T> doInHibernate(Session session)
-								throws HibernateException {
-							if (inquiry == null) {
-								FullTextQuery fullTextQuery = createFullTextQuery(
-										session, luceneQuery, entities);
-								return fullTextQuery.list();
-							} else {
-								StopWatch stopWatch = new StopWatch();
-								stopWatch.start();
+			result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<T>>() {
+				public List<T> doInHibernate(Session session) throws HibernateException {
+					if (inquiry == null) {
+						FullTextQuery fullTextQuery = createFullTextQuery(session, luceneQuery, entities);
+						return fullTextQuery.list();
+					} else {
+						StopWatch stopWatch = new StopWatch();
+						stopWatch.start();
 
-								FullTextQuery fullTextQuery = createFullTextQuery(
-										session, luceneQuery, entities);
+						FullTextQuery fullTextQuery = createFullTextQuery(session, luceneQuery, entities);
 
-								// 處理排序
-								// 在全文檢索下,會影響效率,第一次會變慢,之後似乎恢復正常
-								processSort(inquiry, fullTextQuery);
+						// 處理排序
+						// 在全文檢索下,會影響效率,第一次會變慢,之後似乎恢復正常
+						processSort(inquiry, fullTextQuery);
 
-								Pagination pagination = inquiry.getPagination();
-								if (!inquiry.isExport()) {
-									fullTextQuery.setFirstResult(pagination
-											.getFirstResult());
-									fullTextQuery.setMaxResults(pagination
-											.getMaxResults());
-									int rowCount = fullTextQuery
-											.getResultSize();
-									// System.out.println("rowCount: "+rowCount);
-									pagination.setRowCount(rowCount);
-								}
-								//
-								List<T> buff = fullTextQuery.list();
-								//
-								stopWatch.stop();
-								pagination.setProcessTime(stopWatch
-										.getTotalTimeSeconds());
-								return buff;
-							}
+						Pagination pagination = inquiry.getPagination();
+						if (!inquiry.isExport()) {
+							fullTextQuery.setFirstResult(pagination.getFirstResult());
+							fullTextQuery.setMaxResults(pagination.getMaxResults());
+							// TODO 該放到外面取rowCount
+							long rowCount = fullTextQuery.getResultSize();
+							// System.out.println("rowCount: "+rowCount);
+							pagination.setRowCount(rowCount);
 						}
-					});
+						//
+						List<T> buff = fullTextQuery.list();
+						//
+						stopWatch.stop();
+						pagination.setProcessTime(stopWatch.getTotalTimeSeconds());
+						return buff;
+					}
+				}
+			});
 
 			// 2012/03/27 處理多語系的name
 			if (locale != null) {
@@ -666,8 +618,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 					// 升冪
 					boolean reverse = (OrderType.ASC != order.getId());
 					// false:升序, true:降序
-					SortField sortField = new SortField(sort.getId(),
-							SortField.STRING, reverse);
+					SortField sortField = new SortField(sort.getId(), SortField.STRING, reverse);
 					//
 					org.apache.lucene.search.Sort luceneSort = new org.apache.lucene.search.Sort();
 					luceneSort.setSort(sortField);
@@ -689,8 +640,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @param params
 	 * @return
 	 */
-	protected Long rowCountByHql(String hqlString,
-			final Map<String, Object> params) {
+	protected Long rowCountByHql(String hqlString, final Map<String, Object> params) {
 		Long result = 0L;
 		try {
 			String hqlProcessed = hqlString.replaceAll(JOIN_FETCH_PATTERN, "");
@@ -698,8 +648,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 			int oldLen = hqlProcessed.length();
 
 			// select distinct user from ->select count(distinct user) from
-			hqlProcessed = hqlProcessed.replaceFirst(SELECT_DISTINCT_PATTERN,
-					SELECT_DISTINCT_REPLACE);
+			hqlProcessed = hqlProcessed.replaceFirst(SELECT_DISTINCT_PATTERN, SELECT_DISTINCT_REPLACE);
 			final StringBuffer hqlBuffer = new StringBuffer(hqlProcessed);
 
 			if (oldLen == hqlProcessed.length()) {
@@ -707,17 +656,14 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 			}
 			// System.out.println("rowCount:" + hqlBuffer.toString());
 
-			result = getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<Long>() {
-						public Long doInHibernate(Session session)
-								throws HibernateException {
-							Query query = session.createQuery(hqlBuffer
-									.toString());
-							cacheQuery(query);
-							processQueryParamters(query, params);
-							return (Long) query.iterate().next();
-						}
-					});
+			result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Long>() {
+				public Long doInHibernate(Session session) throws HibernateException {
+					Query query = session.createQuery(hqlBuffer.toString());
+					cacheQuery(query);
+					processQueryParamters(query, params);
+					return (Long) query.iterate().next();
+				}
+			});
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
@@ -735,24 +681,19 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @param params
 	 * @return
 	 */
-	protected long rowCountBySql(String sqlString,
-			final Map<String, Object> params) {
+	protected long rowCountBySql(String sqlString, final Map<String, Object> params) {
 		long result = 0L;
 		try {
-			final String sQLProcessed = sqlString.replaceFirst(
-					"select\\s+(?:.*)\\s+from", "SELECT COUNT(1) from");
+			final String sQLProcessed = sqlString.replaceFirst("select\\s+(?:.*)\\s+from", "SELECT COUNT(1) from");
 
-			Long buff = getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<Long>() {
-						public Long doInHibernate(Session session)
-								throws HibernateException {
-							SQLQuery query = session
-									.createSQLQuery(sQLProcessed);
-							cacheQuery(query);
-							processQueryParamters(query, params);
-							return (Long) query.iterate().next();
-						}
-					});
+			Long buff = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Long>() {
+				public Long doInHibernate(Session session) throws HibernateException {
+					SQLQuery query = session.createSQLQuery(sQLProcessed);
+					cacheQuery(query);
+					processQueryParamters(query, params);
+					return (Long) query.iterate().next();
+				}
+			});
 			result = safeGet(buff);
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
@@ -1003,8 +944,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T delete(Class<?> entityClass, Serializable seq,
-			String modifiedUser) {
+	public <T> T delete(Class<?> entityClass, Serializable seq, String modifiedUser) {
 		T result = null;
 		try {
 			final Object entity = find(entityClass, seq);
@@ -1027,8 +967,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @param seqs
 	 * @return
 	 */
-	public <E> List<E> delete(Class<?> entityClass,
-			Collection<Serializable> seqs) {
+	public <E> List<E> delete(Class<?> entityClass, Collection<Serializable> seqs) {
 		return delete(entityClass, seqs, null);
 	}
 
@@ -1040,8 +979,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @param modifiedUser
 	 * @return
 	 */
-	public <E> List<E> delete(Class<?> entityClass,
-			Collection<Serializable> seqs, String modifiedUser) {
+	public <E> List<E> delete(Class<?> entityClass, Collection<Serializable> seqs, String modifiedUser) {
 		List<E> result = new LinkedList<E>();
 		if (CollectionHelper.notEmpty(seqs)) {
 			for (Serializable seq : seqs) {
@@ -1072,16 +1010,13 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 				hql.append(entityClass.getName());
 				hql.append(" entity");
 				// System.out.println(hql);
-				Long buff = getHibernateTemplate().executeWithNativeSession(
-						new HibernateCallback<Long>() {
-							public Long doInHibernate(Session session)
-									throws HibernateException {
-								Query query = session.createQuery(hql
-										.toString());
-								cacheQuery(query);
-								return (Long) query.uniqueResult();
-							}
-						});
+				Long buff = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Long>() {
+					public Long doInHibernate(Session session) throws HibernateException {
+						Query query = session.createQuery(hql.toString());
+						cacheQuery(query);
+						return (Long) query.uniqueResult();
+					}
+				});
 				result = safeGet(buff);
 			} catch (Exception ex) {
 				throw new CommonDaoException(ex);
@@ -1102,20 +1037,17 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @param params
 	 * @return
 	 */
-	protected int executeByHql(final String hqlString,
-			final Map<String, Object> params) {
+	protected int executeByHql(final String hqlString, final Map<String, Object> params) {
 		int result = 0;
 		try {
-			Integer buff = getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<Integer>() {
-						public Integer doInHibernate(Session session)
-								throws HibernateException {
-							Query query = session.createQuery(hqlString);
-							cacheQuery(query);
-							processQueryParamters(query, params);
-							return query.executeUpdate();
-						}
-					});
+			Integer buff = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Integer>() {
+				public Integer doInHibernate(Session session) throws HibernateException {
+					Query query = session.createQuery(hqlString);
+					cacheQuery(query);
+					processQueryParamters(query, params);
+					return query.executeUpdate();
+				}
+			});
 			//
 			result = safeGet(buff);
 		} catch (Exception ex) {
@@ -1143,10 +1075,9 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @param columnAliases
 	 * @param types
 	 */
-	public <E> List<E> find(String sqlString, String[] paramNames,
-			Object[] values, String[] columnAliases, Object[] types) {
-		return findBySql(sqlString, paramNames, values, columnAliases, types,
-				null);
+	public <E> List<E> find(String sqlString, String[] paramNames, Object[] values, String[] columnAliases,
+			Object[] types) {
+		return findBySql(sqlString, paramNames, values, columnAliases, types, null);
 	}
 
 	/**
@@ -1159,50 +1090,43 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @param types
 	 * @param top
 	 */
-	protected <E> List<E> findBySql(final String sqlString,
-			final String[] paramNames, final Object[] values,
-			final String[] columnAliases, final Object[] types,
-			final Integer top) {
+	protected <E> List<E> findBySql(final String sqlString, final String[] paramNames, final Object[] values,
+			final String[] columnAliases, final Object[] types, final Integer top) {
 		List<E> result = new LinkedList<E>();
 		try {
-			result = (List<E>) getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<List<E>>() {
-						@SuppressWarnings("unchecked")
-						public List<E> doInHibernate(Session session)
-								throws HibernateException {
-							SQLQuery query = session.createSQLQuery(sqlString);
-							cacheQuery(query);
-							processQueryParamters(query, paramNames, values);
-							processSQLQueryScalar(query, columnAliases, types);
-							if (top != null) {
-								query.setMaxResults(top);
-							}
-							return query.list();
-						}
-					});
+			result = (List<E>) getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<E>>() {
+				@SuppressWarnings("unchecked")
+				public List<E> doInHibernate(Session session) throws HibernateException {
+					SQLQuery query = session.createSQLQuery(sqlString);
+					cacheQuery(query);
+					processQueryParamters(query, paramNames, values);
+					processSQLQueryScalar(query, columnAliases, types);
+					if (top != null) {
+						query.setMaxResults(top);
+					}
+					return query.list();
+				}
+			});
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
 
-	protected Object[] findUniqueBySql(final String sqlString,
-			final String[] paramNames, final Object[] values,
+	protected Object[] findUniqueBySql(final String sqlString, final String[] paramNames, final Object[] values,
 			final String[] columnAliases, final Object[] types) {
 		Object[] result = null;
 		try {
-			result = getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<Object[]>() {
-						public Object[] doInHibernate(Session session)
-								throws HibernateException {
-							SQLQuery query = session.createSQLQuery(sqlString);
-							cacheQuery(query);
-							processQueryParamters(query, paramNames, values);
-							processSQLQueryScalar(query, columnAliases, types);
-							query.setMaxResults(1);
-							return (Object[]) query.uniqueResult();
-						}
-					});
+			result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Object[]>() {
+				public Object[] doInHibernate(Session session) throws HibernateException {
+					SQLQuery query = session.createSQLQuery(sqlString);
+					cacheQuery(query);
+					processQueryParamters(query, paramNames, values);
+					processSQLQueryScalar(query, columnAliases, types);
+					query.setMaxResults(1);
+					return (Object[]) query.uniqueResult();
+				}
+			});
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
@@ -1222,8 +1146,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @param values
 	 * @param scalars
 	 */
-	public <E> List<E> find(String sqlString, String[] paramNames,
-			Object[] values, Map<String, Object> scalars) {
+	public <E> List<E> find(String sqlString, String[] paramNames, Object[] values, Map<String, Object> scalars) {
 		return findBySql(sqlString, paramNames, values, scalars, null);
 	}
 
@@ -1237,57 +1160,50 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @param values
 	 * @param scalars
 	 */
-	public <E> List<E> find(String sqlString, Map<String, Object> params,
-			Map<String, Object> scalars) {
+	public <E> List<E> find(String sqlString, Map<String, Object> params, Map<String, Object> scalars) {
 		return findBySql(sqlString, params, scalars, null);
 	}
 
 	// select id from adm_user where id = ?
 	// select id from adm_user where id = :id
 	// 傳回 list(Object[]) or one column
-	protected <E> List<E> findBySql(final String sqlString,
-			final String[] paramNames, final Object[] values,
+	protected <E> List<E> findBySql(final String sqlString, final String[] paramNames, final Object[] values,
 			final Map<String, Object> scalars, final Integer top) {
 		List<E> result = new LinkedList<E>();
 		try {
-			result = (List<E>) getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<List<E>>() {
-						@SuppressWarnings("unchecked")
-						public List<E> doInHibernate(Session session)
-								throws HibernateException {
-							SQLQuery query = session.createSQLQuery(sqlString);
-							cacheQuery(query);
-							processQueryParamters(query, paramNames, values);
-							processSQLQueryScalar(query, scalars);
-							if (top != null) {
-								query.setMaxResults(top);
-							}
-							return query.list();
-						}
-					});
+			result = (List<E>) getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<E>>() {
+				@SuppressWarnings("unchecked")
+				public List<E> doInHibernate(Session session) throws HibernateException {
+					SQLQuery query = session.createSQLQuery(sqlString);
+					cacheQuery(query);
+					processQueryParamters(query, paramNames, values);
+					processSQLQueryScalar(query, scalars);
+					if (top != null) {
+						query.setMaxResults(top);
+					}
+					return query.list();
+				}
+			});
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
 
-	protected Object[] findUniqueBySql(final String sqlString,
-			final String[] paramNames, final Object[] values,
+	protected Object[] findUniqueBySql(final String sqlString, final String[] paramNames, final Object[] values,
 			final Map<String, Object> scalars) {
 		Object[] result = null;
 		try {
-			result = getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<Object[]>() {
-						public Object[] doInHibernate(Session session)
-								throws HibernateException {
-							SQLQuery query = session.createSQLQuery(sqlString);
-							cacheQuery(query);
-							processQueryParamters(query, paramNames, values);
-							processSQLQueryScalar(query, scalars);
-							query.setMaxResults(1);
-							return (Object[]) query.uniqueResult();
-						}
-					});
+			result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Object[]>() {
+				public Object[] doInHibernate(Session session) throws HibernateException {
+					SQLQuery query = session.createSQLQuery(sqlString);
+					cacheQuery(query);
+					processQueryParamters(query, paramNames, values);
+					processSQLQueryScalar(query, scalars);
+					query.setMaxResults(1);
+					return (Object[]) query.uniqueResult();
+				}
+			});
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
@@ -1295,8 +1211,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	}
 
 	// --------------------------------------------------
-	protected <E> List<E> findBySql(String sqlString,
-			Map<String, Object> params, Map<String, Object> scalars) {
+	protected <E> List<E> findBySql(String sqlString, Map<String, Object> params, Map<String, Object> scalars) {
 		return findBySql(sqlString, params, scalars, null);
 	}
 
@@ -1304,25 +1219,22 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	// select id from adm_user where id = :id
 	// 傳回 list(Object[]) or one column
 	@SuppressWarnings("unchecked")
-	protected <E> List<E> findBySql(final String sqlString,
-			final Map<String, Object> params,
+	protected <E> List<E> findBySql(final String sqlString, final Map<String, Object> params,
 			final Map<String, Object> scalars, final Integer top) {
 		List<E> result = new LinkedList<E>();
 		try {
-			result = (List<E>) getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<List<E>>() {
-						public List<E> doInHibernate(Session session)
-								throws HibernateException {
-							SQLQuery query = session.createSQLQuery(sqlString);
-							cacheQuery(query);
-							processQueryParamters(query, params);
-							processSQLQueryScalar(query, scalars);
-							if (top != null) {
-								query.setMaxResults(top);
-							}
-							return query.list();
-						}
-					});
+			result = (List<E>) getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<E>>() {
+				public List<E> doInHibernate(Session session) throws HibernateException {
+					SQLQuery query = session.createSQLQuery(sqlString);
+					cacheQuery(query);
+					processQueryParamters(query, params);
+					processSQLQueryScalar(query, scalars);
+					if (top != null) {
+						query.setMaxResults(top);
+					}
+					return query.list();
+				}
+			});
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
@@ -1330,54 +1242,49 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	}
 
 	// 只有一個column
-	protected List<Object> findObjectBySql(final String sqlString,
-			final Map<String, Object> params, final Map<String, Object> scalars) {
+	protected List<Object> findObjectBySql(final String sqlString, final Map<String, Object> params,
+			final Map<String, Object> scalars) {
 		return findObjectBySql(sqlString, params, scalars, null);
 	}
 
 	// 只有一個column
 	@SuppressWarnings({ "unchecked" })
-	protected List<Object> findObjectBySql(final String sqlString,
-			final Map<String, Object> params,
+	protected List<Object> findObjectBySql(final String sqlString, final Map<String, Object> params,
 			final Map<String, Object> scalars, final Integer top) {
 		List<Object> result = new LinkedList<Object>();
 		try {
-			result = (List<Object>) getHibernateTemplate()
-					.executeWithNativeSession(new HibernateCallback<List<?>>() {
-						public List<?> doInHibernate(Session session)
-								throws HibernateException {
-							SQLQuery query = session.createSQLQuery(sqlString);
-							cacheQuery(query);
-							processQueryParamters(query, params);
-							processSQLQueryScalar(query, scalars);
-							if (top != null) {
-								query.setMaxResults(top);
-							}
-							return query.list();
-						}
-					});
+			result = (List<Object>) getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<?>>() {
+				public List<?> doInHibernate(Session session) throws HibernateException {
+					SQLQuery query = session.createSQLQuery(sqlString);
+					cacheQuery(query);
+					processQueryParamters(query, params);
+					processSQLQueryScalar(query, scalars);
+					if (top != null) {
+						query.setMaxResults(top);
+					}
+					return query.list();
+				}
+			});
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
 		return result;
 	}
 
-	protected Object[] findUniqueBySql(final String sqlString,
-			final Map<String, Object> params, final Map<String, Object> scalars) {
+	protected Object[] findUniqueBySql(final String sqlString, final Map<String, Object> params,
+			final Map<String, Object> scalars) {
 		Object[] result = null;
 		try {
-			result = getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<Object[]>() {
-						public Object[] doInHibernate(Session session)
-								throws HibernateException {
-							SQLQuery query = session.createSQLQuery(sqlString);
-							cacheQuery(query);
-							processQueryParamters(query, params);
-							processSQLQueryScalar(query, scalars);
-							query.setMaxResults(1);
-							return (Object[]) query.uniqueResult();
-						}
-					});
+			result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Object[]>() {
+				public Object[] doInHibernate(Session session) throws HibernateException {
+					SQLQuery query = session.createSQLQuery(sqlString);
+					cacheQuery(query);
+					processQueryParamters(query, params);
+					processSQLQueryScalar(query, scalars);
+					query.setMaxResults(1);
+					return (Object[]) query.uniqueResult();
+				}
+			});
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
@@ -1394,8 +1301,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		return insert(sqlString, paramNames, values, null);
 	}
 
-	public int insert(String sqlString, String[] paramNames, Object[] values,
-			String modifiedUser) {
+	public int insert(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
 		return executeBySql(sqlString, paramNames, values, modifiedUser);
 	}
 
@@ -1403,8 +1309,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		return insert(sqlString, params, null);
 	}
 
-	public int insert(String sqlString, Map<String, Object> params,
-			String modifiedUser) {
+	public int insert(String sqlString, Map<String, Object> params, String modifiedUser) {
 		return executeBySql(sqlString, params, modifiedUser);
 	}
 
@@ -1415,8 +1320,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		return update(sqlString, paramNames, values, null);
 	}
 
-	public int update(String sqlString, String[] paramNames, Object[] values,
-			String modifiedUser) {
+	public int update(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
 		return executeBySql(sqlString, paramNames, values, modifiedUser);
 	}
 
@@ -1424,8 +1328,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		return update(sqlString, params, null);
 	}
 
-	public int update(String sqlString, Map<String, Object> params,
-			String modifiedUser) {
+	public int update(String sqlString, Map<String, Object> params, String modifiedUser) {
 		return executeBySql(sqlString, params, modifiedUser);
 	}
 
@@ -1436,8 +1339,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		return delete(sqlString, paramNames, values, null);
 	}
 
-	public int delete(String sqlString, String[] paramNames, Object[] values,
-			String modifiedUser) {
+	public int delete(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
 		return executeBySql(sqlString, paramNames, values, modifiedUser);
 	}
 
@@ -1445,26 +1347,22 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		return delete(sqlString, params, null);
 	}
 
-	public int delete(String sqlString, Map<String, Object> params,
-			String modifiedUser) {
+	public int delete(String sqlString, Map<String, Object> params, String modifiedUser) {
 		return executeBySql(sqlString, params, modifiedUser);
 	}
 
-	protected int executeBySql(final String sqlString,
-			final String[] paramNames, final Object[] values,
+	protected int executeBySql(final String sqlString, final String[] paramNames, final Object[] values,
 			String modifiedUser) {
 		int result = 0;
 		try {
-			Integer buff = getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<Integer>() {
-						public Integer doInHibernate(Session session)
-								throws HibernateException {
-							SQLQuery query = session.createSQLQuery(sqlString);
-							cacheQuery(query);
-							processQueryParamters(query, paramNames, values);
-							return query.executeUpdate();
-						}
-					});
+			Integer buff = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Integer>() {
+				public Integer doInHibernate(Session session) throws HibernateException {
+					SQLQuery query = session.createSQLQuery(sqlString);
+					cacheQuery(query);
+					processQueryParamters(query, paramNames, values);
+					return query.executeUpdate();
+				}
+			});
 			//
 			result = safeGet(buff);
 		} catch (Exception ex) {
@@ -1473,20 +1371,17 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		return result;
 	}
 
-	protected int executeBySql(final String sqlString,
-			final Map<String, Object> params, String modifiedUser) {
+	protected int executeBySql(final String sqlString, final Map<String, Object> params, String modifiedUser) {
 		int result = 0;
 		try {
-			Integer buff = getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<Integer>() {
-						public Integer doInHibernate(Session session)
-								throws HibernateException {
-							SQLQuery query = session.createSQLQuery(sqlString);
-							cacheQuery(query);
-							processQueryParamters(query, params);
-							return query.executeUpdate();
-						}
-					});
+			Integer buff = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Integer>() {
+				public Integer doInHibernate(Session session) throws HibernateException {
+					SQLQuery query = session.createSQLQuery(sqlString);
+					cacheQuery(query);
+					processQueryParamters(query, params);
+					return query.executeUpdate();
+				}
+			});
 			//
 			result = safeGet(buff);
 		} catch (Exception ex) {
@@ -1565,10 +1460,9 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		// getHibernateTemplate().getSessionFactory());
 	}
 
-	public FullTextQuery createFullTextQuery(Session session,
-			org.apache.lucene.search.Query luceneQuery, Class<?>... entities) {
-		FullTextQuery fullTextQuery = getFullTextSession(session)
-				.createFullTextQuery(luceneQuery, entities);
+	public FullTextQuery createFullTextQuery(Session session, org.apache.lucene.search.Query luceneQuery,
+			Class<?>... entities) {
+		FullTextQuery fullTextQuery = getFullTextSession(session).createFullTextQuery(luceneQuery, entities);
 		return fullTextQuery;
 	}
 
@@ -1580,8 +1474,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 
 	// select * from user where user.id = :id and user.code = :code
 	@SuppressWarnings("rawtypes")
-	protected void processQueryParamters(Query query, String[] paramNames,
-			Object[] values) {
+	protected void processQueryParamters(Query query, String[] paramNames, Object[] values) {
 		if (values == null || values.length == 0) {
 			return;
 		}
@@ -1627,13 +1520,10 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	}
 
 	// use by sqlQuery
-	protected void processSQLQueryScalar(SQLQuery sqlQuery,
-			String[] columnAliases, Object[] types) {
-		if (columnAliases == null || columnAliases.length == 0
-				|| !(types instanceof Type[] || types.length == 0)
+	protected void processSQLQueryScalar(SQLQuery sqlQuery, String[] columnAliases, Object[] types) {
+		if (columnAliases == null || columnAliases.length == 0 || !(types instanceof Type[] || types.length == 0)
 				|| columnAliases.length != types.length) {
-			throw new RuntimeException("columnAliases=" + trace(columnAliases)
-					+ " ,types=" + trace(types));
+			throw new RuntimeException("columnAliases=" + trace(columnAliases) + " ,types=" + trace(types));
 
 		}
 		//
@@ -1643,8 +1533,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		}
 	}
 
-	protected void processSQLQueryScalar(SQLQuery sqlQuery,
-			Map<String, Object> scalars) {
+	protected void processSQLQueryScalar(SQLQuery sqlQuery, Map<String, Object> scalars) {
 		if (scalars == null || scalars.size() == 0) {
 			throw new RuntimeException("columnAliases and types are null!!!");
 		}
@@ -1652,8 +1541,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		for (Map.Entry<String, Object> entry : scalars.entrySet()) {
 			Object value = entry.getValue();
 			if (!(value instanceof Type)) {
-				throw new RuntimeException(
-						"value not instaoceof Hibernate.Type");
+				throw new RuntimeException("value not instaoceof Hibernate.Type");
 			}
 			sqlQuery.addScalar(entry.getKey(), (Type) value);
 		}
@@ -1668,8 +1556,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 					Type type = (Type) objects[i];
 					sb.append(type.getName());
 				} else {
-					sb.append(objects[i] != null ? objects[i].toString()
-							: "null");
+					sb.append(objects[i] != null ? objects[i].toString() : "null");
 				}
 				if (i < objects.length - 1) {
 					sb.append(",");
@@ -1703,12 +1590,9 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		return fullTextSession;
 	}
 
-	protected Highlighter createHighlighter(
-			org.apache.lucene.search.Query luceneQuery) {
-		SimpleHTMLFormatter format = new SimpleHTMLFormatter(
-				"<b><font color='red'>", "</font></b>");
-		Highlighter highlighter = new Highlighter(format, new QueryScorer(
-				luceneQuery));// 高亮
+	protected Highlighter createHighlighter(org.apache.lucene.search.Query luceneQuery) {
+		SimpleHTMLFormatter format = new SimpleHTMLFormatter("<b><font color='red'>", "</font></b>");
+		Highlighter highlighter = new Highlighter(format, new QueryScorer(luceneQuery));// 高亮
 		// highlighter.setTextFragmenter(new
 		// SimpleFragmenter(Integer.MAX_VALUE));
 		highlighter.setTextFragmenter(new SimpleFragmenter(200));
@@ -1733,13 +1617,11 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	public boolean reindex(final Class<?> entityClass) {
 		boolean result = false;
 		try {
-			result = getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<Boolean>() {
-						public Boolean doInHibernate(Session session)
-								throws HibernateException {
-							return reindex(session, entityClass);
-						}
-					});
+			result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Boolean>() {
+				public Boolean doInHibernate(Session session) throws HibernateException {
+					return reindex(session, entityClass);
+				}
+			});
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
@@ -1751,8 +1633,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		try {
 			LOGGER.info("reindex: [" + entityClass.getSimpleName() + "]");
 			FullTextSession fullTextSession = getFullTextSession(session);
-			MassIndexer massIndexer = fullTextSession
-					.createIndexer(entityClass);
+			MassIndexer massIndexer = fullTextSession.createIndexer(entityClass);
 			massIndexer.startAndWait();
 			result = true;
 		} catch (Exception ex) {
@@ -1770,13 +1651,11 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	public <T> boolean reindex(final T entity) {
 		boolean result = false;
 		try {
-			result = getHibernateTemplate().executeWithNativeSession(
-					new HibernateCallback<Boolean>() {
-						public Boolean doInHibernate(Session session)
-								throws HibernateException {
-							return reindex(session, entity);
-						}
-					});
+			result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Boolean>() {
+				public Boolean doInHibernate(Session session) throws HibernateException {
+					return reindex(session, entity);
+				}
+			});
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}

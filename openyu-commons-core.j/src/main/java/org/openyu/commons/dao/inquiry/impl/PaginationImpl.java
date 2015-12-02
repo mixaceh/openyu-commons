@@ -47,7 +47,7 @@ public class PaginationImpl extends BaseModelSupporter implements Pagination
 	 * 總計筆數
 	 */
 	@XmlTransient
-	private int rowCount;
+	private long rowCount;
 
 	/**
 	 * 搜尋時間,秒數
@@ -133,12 +133,12 @@ public class PaginationImpl extends BaseModelSupporter implements Pagination
 		return getPageSize();
 	}
 
-	public int getRowCount()
+	public long getRowCount()
 	{
 		return rowCount;
 	}
 
-	public void setRowCount(int rowCount)
+	public void setRowCount(long rowCount)
 	{
 		this.rowCount = rowCount;
 	}

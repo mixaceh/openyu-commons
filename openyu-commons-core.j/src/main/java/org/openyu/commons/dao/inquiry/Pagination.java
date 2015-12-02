@@ -11,11 +11,10 @@ import com.sun.xml.bind.AnyTypeAdapter;
  * 分頁條件
  */
 @XmlJavaTypeAdapter(AnyTypeAdapter.class)
-public interface Pagination extends BaseModel
-{
+public interface Pagination extends BaseModel {
 
 	/**
-	 * 預設第0筆
+	 * 預設第0頁
 	 */
 	int DEFAULT_PAGE_INDEX = 0;
 
@@ -87,9 +86,9 @@ public interface Pagination extends BaseModel
 	 * 
 	 * @return
 	 */
-	int getRowCount();
+	long getRowCount();
 
-	void setRowCount(int rowCount);
+	void setRowCount(long rowCount);
 
 	/**
 	 * 搜尋時間,秒數
