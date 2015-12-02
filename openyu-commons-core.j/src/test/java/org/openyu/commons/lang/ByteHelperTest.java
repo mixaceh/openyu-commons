@@ -188,6 +188,7 @@ public class ByteHelperTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
 	public void toShortByteArray() {
 		int value = Short.MAX_VALUE;
 		byte[] result = null;
@@ -205,66 +206,38 @@ public class ByteHelperTest {
 	}
 
 	@Test
-	// 1000000 times: 81 mills.
-	// 1000000 times: 98 mills.
-	// 1000000 times: 87 mills.
-	// verified
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
 	public void toByteByteArray() {
 		int value = Byte.MAX_VALUE;
 		byte[] result = null;
 		//
-		int count = 1000000;
-
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = ByteHelper.toByteByteArray(value);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		result = ByteHelper.toByteByteArray(value);
 
 		ByteHelper.println(result);
 		assertEquals(1, result.length);
 		//
 		int newValue = 0;
-		beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			newValue = ByteHelper.fromByteInt(result);
-		}
-		end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		newValue = ByteHelper.fromByteInt(result);
 
 		System.out.println(newValue);
 		assertEquals(value, newValue);
 	}
 
 	@Test
-	// 1000000 times: 81 mills.
-	// 1000000 times: 98 mills.
-	// 1000000 times: 87 mills.
-	// verified
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
 	public void toIntByteArray() {
 		long value = Integer.MAX_VALUE;
+		// 不要用Integer.MAX_VALUE+1,會變成 -2147483648
+		// long value = Long.MAX_VALUE;
 		byte[] result = null;
 		//
-		int count = 1;
-
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = ByteHelper.toIntByteArray(value);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		result = ByteHelper.toIntByteArray(value);
 
 		ByteHelper.println(result);
 		assertEquals(4, result.length);
 		//
 		long newValue = 0;
-		beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			newValue = ByteHelper.fromIntLong(result);
-		}
-		end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		newValue = ByteHelper.fromIntLong(result);
 
 		System.out.println(newValue);
 		assertEquals(value, newValue);

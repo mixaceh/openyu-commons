@@ -201,7 +201,25 @@ public class ByteHelper extends BaseHelperSupporter {
 		return toShortByteArray(NumberHelper.safeGet(value));
 	}
 
-	// int -> short -> 2 byte
+	/**
+	 * int -> byte -> 1 byte
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static byte[] toByteByteArray(int value) {
+		AssertHelper.isBetween(value, Byte.MIN_VALUE, Byte.MAX_VALUE,
+				"The Value is " + value + " must be between " + Byte.MIN_VALUE + " and " + Byte.MAX_VALUE);
+		//
+		return toByteArray((byte) value);
+	}
+
+	/**
+	 * int -> short -> 2 byte
+	 * 
+	 * @param value
+	 * @return
+	 */
 	public static byte[] toShortByteArray(int value) {
 		AssertHelper.isBetween(value, Short.MIN_VALUE, Short.MAX_VALUE,
 				"The Value is " + value + " must be between " + Short.MIN_VALUE + " and " + Short.MAX_VALUE);
@@ -213,13 +231,16 @@ public class ByteHelper extends BaseHelperSupporter {
 		return toByteArray((short) value);
 	}
 
-	// int -> byte -> 1 byte
-	public static byte[] toByteByteArray(int value) {
-		return toByteArray((byte) value);
-	}
-
-	// long -> int -> 4 byte
+	/**
+	 * long -> int -> 4 byte
+	 * 
+	 * @param value
+	 * @return
+	 */
 	public static byte[] toIntByteArray(long value) {
+		AssertHelper.isBetween(value, Integer.MIN_VALUE, Integer.MAX_VALUE,
+				"The Value is " + value + " must be between " + Integer.MIN_VALUE + " and " + Integer.MAX_VALUE);
+		//
 		return toByteArray((int) value);
 	}
 

@@ -196,4 +196,9 @@ public class AssertHelper extends BaseHelperSupporter {
 		if (!(value >= min && value <= max))
 			throw new IllegalArgumentException(message);
 	}
+	
+	public static void isBetween(long value, long min, long max, String message) {
+		if (!(value >= min && value <= max))
+			throw new IllegalArgumentException(message);
+	}
 }
