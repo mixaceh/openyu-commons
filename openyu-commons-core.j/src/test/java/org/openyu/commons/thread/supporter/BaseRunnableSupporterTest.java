@@ -21,12 +21,12 @@ public class BaseRunnableSupporterTest extends BaseTestSupporter {
 
 	private static ExecutorService executorService;
 
-	private static Runner runner;
+	private static TestRunner runner;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		executorService = Executors.newFixedThreadPool(10);
-		runner = new Runner(executorService);
+		runner = new TestRunner(executorService);
 	}
 
 	@Test
@@ -100,18 +100,18 @@ public class BaseRunnableSupporterTest extends BaseTestSupporter {
 		public void start() throws Exception {
 			ExecutorService executorService = Executors.newFixedThreadPool(2);
 			//
-			Runner runner = new Runner(executorService);
+			TestRunner runner = new TestRunner(executorService);
 			runner.start();
 			//
-			runner = new Runner(executorService);
+			runner = new TestRunner(executorService);
 			runner.start();
 			ThreadHelper.sleep(10 * 1000L);
 		}
 	}
 
-	protected static class Runner extends BaseRunnableSupporter {
+	protected static class TestRunner extends BaseRunnableSupporter {
 
-		public Runner(ExecutorService executorService) {
+		public TestRunner(ExecutorService executorService) {
 			super(executorService);
 		}
 
