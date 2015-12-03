@@ -16,13 +16,12 @@ import org.openyu.commons.model.supporter.BaseModelSupporter;
 /**
  * 分頁條件
  */
-//--------------------------------------------------
-//jaxb
-//--------------------------------------------------
+// --------------------------------------------------
+// jaxb
+// --------------------------------------------------
 @XmlRootElement(name = "pagination")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class PaginationImpl extends BaseModelSupporter implements Pagination
-{
+public class PaginationImpl extends BaseModelSupporter implements Pagination {
 
 	private static final long serialVersionUID = 7334670915999011413L;
 
@@ -61,56 +60,45 @@ public class PaginationImpl extends BaseModelSupporter implements Pagination
 	@XmlTransient
 	private int navSize = DEFAULT_NAV_SIZE;
 
-	public PaginationImpl()
-	{}
+	public PaginationImpl() {
+	}
 
-	public int getPageIndex()
-	{
-		if (pageIndex == 0)
-		{
+	public int getPageIndex() {
+		if (pageIndex == 0) {
 			return DEFAULT_PAGE_INDEX;
 		}
-		if (pageIndex < 0)
-		{
+		if (pageIndex < 0) {
 			return DEFAULT_PAGE_INDEX;
 		}
 		return pageIndex;
 	}
 
-	public void setPageIndex(int pageIndex)
-	{
+	public void setPageIndex(int pageIndex) {
 		this.pageIndex = pageIndex;
 	}
 
-	public int getPageSize()
-	{
-		if (pageSize == 0)
-		{
+	public int getPageSize() {
+		if (pageSize == 0) {
 			return DEFAULT_PAGE_SIZE;
 		}
 		return pageSize;
 	}
 
-	public void setPageSize(int pageSize)
-	{
+	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
 
-	public List<Integer> getPageSizes()
-	{
+	public List<Integer> getPageSizes() {
 		return pageSizes;
 	}
 
-	public void setPageSizes(List<Integer> pageSizes)
-	{
+	public void setPageSizes(List<Integer> pageSizes) {
 		this.pageSizes = pageSizes;
 	}
 
-	public int getPageCount()
-	{
-		if (rowCount != 0)
-		{
-			return (int) Math.ceil((double) rowCount / getMaxResults());
+	public int getPageCount() {
+		if (rowCount != 0) {
+			return (int) Math.ceil(rowCount / (double) getMaxResults());
 
 			// if (rowCount % getMaxResults() == 0) {
 			// return rowCount / getMaxResults();
@@ -123,62 +111,50 @@ public class PaginationImpl extends BaseModelSupporter implements Pagination
 
 	// 內部從0開始算
 	// reverseIndex= rowCount - getFirstResult()
-	public int getFirstResult()
-	{
+	public int getFirstResult() {
 		return getPageIndex() * getMaxResults();
 	}
 
-	public int getMaxResults()
-	{
+	public int getMaxResults() {
 		return getPageSize();
 	}
 
-	public long getRowCount()
-	{
+	public long getRowCount() {
 		return rowCount;
 	}
 
-	public void setRowCount(long rowCount)
-	{
+	public void setRowCount(long rowCount) {
 		this.rowCount = rowCount;
 	}
 
-	public double getProcessTime()
-	{
+	public double getProcessTime() {
 		return processTime;
 	}
 
-	public void setProcessTime(double processTime)
-	{
+	public void setProcessTime(double processTime) {
 		this.processTime = processTime;
 	}
 
-	public int getNavIndex()
-	{
+	public int getNavIndex() {
 		return getPageIndex() / getNavSize();
 	}
 
-	public int getNavSize()
-	{
-		if (navSize != 0)
-		{
+	public int getNavSize() {
+		if (navSize != 0) {
 			return navSize;
 		}
 		return DEFAULT_NAV_SIZE;
 	}
 
-	public void setNavSize(int navSize)
-	{
+	public void setNavSize(int navSize) {
 		this.navSize = navSize;
 	}
 
-	public int getNavCount()
-	{
+	public int getNavCount() {
 		return getPageCount() / getNavSize();
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		ToStringBuilder builder = new ToStringBuilder(this);
 		builder.append("pageSizes", pageSizes);
 		builder.append("rowCount", rowCount);
@@ -193,8 +169,7 @@ public class PaginationImpl extends BaseModelSupporter implements Pagination
 		return builder.toString();
 	}
 
-	public Object clone()
-	{
+	public Object clone() {
 		PaginationImpl copy = null;
 		copy = (PaginationImpl) super.clone();
 		copy.pageSizes = clone(pageSizes);
