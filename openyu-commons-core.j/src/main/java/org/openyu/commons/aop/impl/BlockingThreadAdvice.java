@@ -24,26 +24,19 @@ public class BlockingThreadAdvice extends BaseMethodInterceptorSupporter {
 	private static final long serialVersionUID = -6718879850739838005L;
 
 	/** The Constant log. */
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(BlockingThreadAdvice.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(BlockingThreadAdvice.class);
 
 	/**
 	 * 阻塞型線程服務
 	 */
-	// @Autowired
-	// @Qualifier("blockingThreadService")
 	@BlockingThreadService
 	private transient ThreadService threadService;
 
-	/**
-	 * Instantiates a new blocking thread interceptor.
-	 */
 	public BlockingThreadAdvice() {
 	}
 
 	@Override
-	protected Object doInvoke(final MethodInvocation methodInvocation)
-			throws Throwable {
+	protected Object doInvoke(final MethodInvocation methodInvocation) throws Throwable {
 		Object result = null;
 		//
 		Future<?> future = threadService.submit(new Callable<Object>() {
@@ -54,8 +47,8 @@ public class BlockingThreadAdvice extends BaseMethodInterceptorSupporter {
 					// --------------------------------------------------
 					obj = methodInvocation.proceed();
 					// --------------------------------------------------
-				} catch (Throwable ex) {
-					LOGGER.error("Failed", ex);
+				} catch (Throwable e) {
+					LOGGER.error(new StringBuilder("Exception encountered during call()").toString(), e);
 				}
 				return obj;
 			}

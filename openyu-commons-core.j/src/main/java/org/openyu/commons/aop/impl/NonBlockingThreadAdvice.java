@@ -18,20 +18,18 @@ import org.openyu.commons.thread.anno.DefaultThreadService;
  *
  * 缺點:無法有傳回值,無法有順序執行
  */
-public class NonBlockingThreadAdvice extends
-		BaseMethodInterceptorSupporter {
+public class NonBlockingThreadAdvice extends BaseMethodInterceptorSupporter {
 
 	private static final long serialVersionUID = -2697604382610079339L;
 
 	/** The Constant log. */
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(NonBlockingThreadAdvice.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(NonBlockingThreadAdvice.class);
 
 	/**
 	 * 線程服務
 	 */
-//	@Autowired
-//	@Qualifier("threadService")
+	// @Autowired
+	// @Qualifier("threadService")
 	@DefaultThreadService
 	private transient ThreadService threadService;
 
@@ -41,8 +39,7 @@ public class NonBlockingThreadAdvice extends
 	public NonBlockingThreadAdvice() {
 	}
 
-	protected Object doInvoke(final MethodInvocation methodInvocation)
-			throws Throwable {
+	protected Object doInvoke(final MethodInvocation methodInvocation) throws Throwable {
 		Object result = null;
 		//
 		threadService.submit(new Runnable() {
@@ -50,8 +47,8 @@ public class NonBlockingThreadAdvice extends
 				// --------------------------------------------------
 				try {
 					methodInvocation.proceed();
-				} catch (Throwable ex) {
-					LOGGER.error("Failed", ex);
+				} catch (Throwable e) {
+					LOGGER.error(new StringBuilder("Exception encountered during run()").toString(), e);
 				}
 				// --------------------------------------------------
 			}
