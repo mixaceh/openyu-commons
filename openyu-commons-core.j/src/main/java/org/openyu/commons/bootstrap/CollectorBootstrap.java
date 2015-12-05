@@ -245,13 +245,13 @@ public final class CollectorBootstrap extends BootstrapSupporter {
 					sumDur += dur;
 					bestTime = Math.min(bestTime, dur);
 					result.add(collector);
-					LOGGER.info("#." + (count + 1) + " Create instance "
+					LOGGER.info("#." + (count + 1) + " Create "
 							+ collector.getClass().getSimpleName()
 							+ " success in " + dur + " ms");
 				} catch (NullPointerException ex) {
 					LOGGER.info("#." + (count + 1) + " " + ex.getMessage());
 				} catch (Exception ex) {
-					LOGGER.info("#." + (count + 1) + " Create instance "
+					LOGGER.info("#." + (count + 1) + " Create "
 							+ collectorName + " failed", ex);
 				}
 				//
