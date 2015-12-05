@@ -38,7 +38,7 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 	private transient boolean shutdown;
 
 	private transient boolean createThread;
-	
+
 	private transient String displayName;
 
 	/**
@@ -71,10 +71,10 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 	public V call() {
 		try {
 			if (createThread) {
-				LOGGER.info(new StringBuilder().append("Using new Thread() instead of pool to call ")
-						.append("T[" + Thread.currentThread().getId() + "] ").append(getDisplayName()).toString());
+				LOGGER.info(new StringBuilder().append("T[" + Thread.currentThread().getId() + "] ")
+						.append("Using new Thread() instead of pool to call ").append(getDisplayName()).toString());
 			} else {
-				LOGGER.info(new StringBuilder().append("Calling ").append("T[" + Thread.currentThread().getId() + "] ")
+				LOGGER.info(new StringBuilder().append("T[" + Thread.currentThread().getId() + "] ").append("Calling ")
 						.append(getDisplayName()).toString());
 			}
 			// --------------------------------------------------
@@ -85,7 +85,7 @@ public abstract class BaseCallableSupporter<V> implements BaseCallable<V>, Suppo
 		}
 		//
 		if (this.shutdown) {
-			LOGGER.info(new StringBuilder().append("Interrupted ").append("T[" + Thread.currentThread().getId() + "] ")
+			LOGGER.info(new StringBuilder().append("T[" + Thread.currentThread().getId() + "] ").append("Interrupted ")
 					.append(getDisplayName()).toString());
 		}
 		return null;
