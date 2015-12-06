@@ -21,7 +21,7 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 	 */
 	public static final int DEFAULT_MAX_EXECUTOR_SIZE = 1;
 
-	public static final  String _CORE_POOL_SIZE = "corePoolSize";
+	public static final  String CORE_POOL_SIZE = "corePoolSize";
 
 	public static final int DEFAULT_CORE_POOL_SIZE = 8;
 
@@ -42,7 +42,7 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 	/**
 	 * 所有屬性
 	 */
-	public static final String[] ALL_PROPERTIES = { MAX_EXECUTOR_SIZE, _CORE_POOL_SIZE, KEEP_ALIVE_SECONDS,
+	public static final String[] ALL_PROPERTIES = { MAX_EXECUTOR_SIZE, CORE_POOL_SIZE, KEEP_ALIVE_SECONDS,
 			MAX_POOL_SIZE, QUEUE_CAPACITY };
 
 	public ThreadServiceFactoryBean() {
@@ -67,7 +67,7 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 			 * extendedProperties
 			 */
 			result.setMaxExecutorSize(extendedProperties.getInt(MAX_EXECUTOR_SIZE, DEFAULT_MAX_EXECUTOR_SIZE));
-			result.setCorePoolSize(extendedProperties.getInt(_CORE_POOL_SIZE, DEFAULT_CORE_POOL_SIZE));
+			result.setCorePoolSize(extendedProperties.getInt(CORE_POOL_SIZE, DEFAULT_CORE_POOL_SIZE));
 			result.setKeepAliveSeconds(extendedProperties.getInt(KEEP_ALIVE_SECONDS, DEFAULT_KEEP_ALIVE_SECONDS));
 			result.setMaxPoolSize(extendedProperties.getInt(MAX_POOL_SIZE, DEFAULT_MAX_POOL_SIZE));
 			result.setQueueCapacity(extendedProperties.getInt(QUEUE_CAPACITY, DEFAULT_QUEUE_CAPACITY));
