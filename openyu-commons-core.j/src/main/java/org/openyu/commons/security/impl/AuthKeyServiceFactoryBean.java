@@ -21,8 +21,6 @@ public final class AuthKeyServiceFactoryBean<T extends AuthKeyService>
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(AuthKeyServiceFactoryBean.class);
 
-//	@Autowired
-//	@Qualifier("threadService")
 	@DefaultThreadService
 	private transient ThreadService threadService;
 
