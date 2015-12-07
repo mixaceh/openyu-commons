@@ -22,17 +22,4 @@ public abstract class BootstrapSupporter implements Supporter {
 
 	}
 
-//	/**
-//	 * 建構applicationContext
-//	 * 
-//	 * @param configLocations
-//	 */
-//	protected static void buildApplicationContext(String[] configLocations) {
-//		applicationContext = new ClassPathXmlApplicationContext(configLocations);
-//		if (applicationContext == null) {
-//			throw new IllegalArgumentException(
-//					"The ApplicationContext must not be null");
-//		}
-//	}
-
 }
