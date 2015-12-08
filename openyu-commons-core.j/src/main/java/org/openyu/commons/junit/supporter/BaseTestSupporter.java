@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.io.Serializable;
 
 import org.springframework.context.ConfigurableApplicationContext;
@@ -418,7 +417,6 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 			usedMemory = Math.max(usedMemory, (RuntimeHelper.usedMemory() - memory));
 		}
 		long durTime = endTime - begTime;
-		durTime = TimeUnit.NANOSECONDS.toMillis(durTime);
 		//
 		RuntimeHelper.gc();
 		usedMemory = Math.max(usedMemory, (RuntimeHelper.usedMemory() - memory));
