@@ -1136,7 +1136,7 @@ public class ClassHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static Field[] getDeclaredFieldsAndCache(Class<?> clazz) {
-		AssertHelper.notNull(clazz, "The Class must not be null");
+		//AssertHelper.notNull(clazz, "The Class must not be null");
 		//
 		Field[] fields = new Field[0];
 		if (clazz != null) {
