@@ -19,7 +19,7 @@
 	<!-- bean -->
 	<import resource="classpath:applicationContext-bean.xml" />
 	<!-- i18n -->
-	<import resource="classpath:applicationContext-message.xml" />
+	<import resource="classpath:applicationContext-i18n.xml" />
 	<!-- database -->
 	<import resource="classpath:applicationContext-database.xml" />
 	<import resource="classpath:applicationContext-database-log.xml" />

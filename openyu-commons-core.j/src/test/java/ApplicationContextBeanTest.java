@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.config.PropertyOverrideConfigurer;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
+//import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+//import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
 import freemarker.template.Configuration;
 
