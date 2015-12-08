@@ -90,11 +90,11 @@ public class NioHelper extends BaseHelperSupporter {
 		return address;
 	}
 
-	public static void close(SelectionKey key) {
+	public static void cancel(SelectionKey key) {
 		if (key != null) {
 			try {
 				key.cancel();
-				key.channel().close();
+				//key.channel().close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
