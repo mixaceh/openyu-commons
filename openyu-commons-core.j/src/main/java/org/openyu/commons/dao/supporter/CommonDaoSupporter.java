@@ -77,10 +77,10 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	/**
 	 * 檢查設置
 	 * 
-	 * @throws IllegalArgumentException
+	 * @throws Exception
 	 */
-	protected final void checkConfig() {
-		AssertHelper.notNull(hibernateTemplate, "The HibernateTemplate is required");
+	protected final void checkConfig() throws Exception {
+		AssertHelper.notNull(this.hibernateTemplate, "The HibernateTemplate is required");
 		AssertHelper.notNull(this.hibernateTemplate.getSessionFactory(), "The SessionFactory is required");
 	}
 

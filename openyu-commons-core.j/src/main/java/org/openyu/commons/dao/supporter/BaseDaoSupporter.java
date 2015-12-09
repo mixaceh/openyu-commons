@@ -36,7 +36,7 @@ public abstract class BaseDaoSupporter extends BaseServiceSupporter implements B
 	/**
 	 * 檢查設置
 	 * 
-	 * @throws IllegalArgumentException
+	 * @throws Exception
 	 */
-	protected abstract void checkConfig() throws IllegalArgumentException;
+	protected abstract void checkConfig() throws Exception;
 }

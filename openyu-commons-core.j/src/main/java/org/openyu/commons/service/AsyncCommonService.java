@@ -9,7 +9,7 @@ import org.openyu.commons.dao.BaseDao;
 /**
  * 異步共用服務
  */
-public interface AsnycCommonService extends BaseDao {
+public interface AsyncCommonService extends BaseDao {
 
 	// ------------------------------------
 	// 異步操作
@@ -69,63 +69,4 @@ public interface AsnycCommonService extends BaseDao {
 	 */
 	List<Boolean> offerDelete(Class<?> entityClass, Collection<Serializable> seqs);
 
-	// ------------------------------------
-	// 同步操作
-	// ------------------------------------
-	/**
-	 * orm新增
-	 * 
-	 * =save()
-	 * 
-	 * @param entity
-	 * @return pk
-	 */
-	<T> Serializable insert(T entity);
-
-	/**
-	 * orm修改
-	 * 
-	 * =update()
-	 * 
-	 * @param entity
-	 * @return
-	 */
-	<T> int update(T entity);
-
-	/**
-	 * orm刪除
-	 *
-	 * @param <T>
-	 *            the generic type
-	 * @param entity
-	 *            the entity
-	 * @return the int
-	 */
-	<T> int delete(T entity);
-
-	/**
-	 * orm刪除.
-	 *
-	 * @param <T>
-	 *            the generic type
-	 * @param entityClass
-	 *            the entity class
-	 * @param seq
-	 *            the seq
-	 * @return the t
-	 */
-	<T> T delete(Class<?> entityClass, Serializable seq);
-
-	/**
-	 * orm刪除.
-	 *
-	 * @param <E>
-	 *            the element type
-	 * @param entityClass
-	 *            the entity class
-	 * @param seqs
-	 *            the seqs
-	 * @return the list
-	 */
-	<E> List<E> delete(Class<?> entityClass, Collection<Serializable> seqs);
 }

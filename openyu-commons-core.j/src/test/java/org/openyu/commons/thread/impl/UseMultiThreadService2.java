@@ -19,11 +19,6 @@ public class UseMultiThreadService2 extends BaseServiceSupporter {
 
 	}
 
-//	@BlockingThreadService
-//	public void setThreadService(ThreadService threadService) {
-//		this.threadService = threadService;
-//	}
-
 	@Override
 	protected void doStart() throws Exception {
 	}
