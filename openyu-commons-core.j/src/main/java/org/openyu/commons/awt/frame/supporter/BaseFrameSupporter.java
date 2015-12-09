@@ -11,44 +11,37 @@ import org.openyu.commons.mark.Supporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BaseFrameSupporter extends JFrame implements BaseFrame, Supporter {
+public abstract class BaseFrameSupporter extends JFrame implements BaseFrame, Supporter {
 
 	private static final long serialVersionUID = 7358946866504632420L;
 
 	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(BaseFrameSupporter.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseFrameSupporter.class);
 
 	public BaseFrameSupporter(String title) throws HeadlessException {
 		super(title);
-		initialize();
+		doStart();
 	}
 
 	public BaseFrameSupporter() throws HeadlessException {
 		super();
-		initialize();
+		doStart();
 	}
 
 	public BaseFrameSupporter(GraphicsConfiguration gc) {
 		super(gc);
-		initialize();
+		doStart();
 	}
 
 	public BaseFrameSupporter(String title, GraphicsConfiguration gc) {
 		super(title, gc);
-		initialize();
+		doStart();
 	}
 
 	/**
-	 * 初始
+	 * 內部啟動
 	 */
-	public void initialize() {
-		StringBuilder buff = new StringBuilder();
-		buff.append("Initializing ");
-		buff.append(getClass().getSimpleName());
-		//
-		LOGGER.info(buff.toString());
-	}
+	protected abstract void doStart();
 
 	public void windowOpened(WindowEvent e) {
 	}
