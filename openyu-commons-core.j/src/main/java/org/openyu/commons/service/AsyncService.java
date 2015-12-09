@@ -7,9 +7,9 @@ import java.util.List;
 import org.openyu.commons.dao.BaseDao;
 
 /**
- * 異步共用服務
+ * 異步服務
  */
-public interface AsyncCommonService extends BaseDao {
+public interface AsyncService extends BaseDao {
 
 	// ------------------------------------
 	// 異步操作

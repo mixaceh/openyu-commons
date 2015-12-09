@@ -94,6 +94,11 @@
 				rollback-for="java.lang.Exception"
 				propagation="REQUIRED"
 				read-only="false" />
+			<tx:method
+				name="offer*"
+				rollback-for="java.lang.Exception"
+				propagation="REQUIRED"
+				read-only="false" />
 		</tx:attributes>
 	</tx:advice>
 
@@ -116,5 +121,23 @@
 		id="commonServiceSupporter"
 		parent="baseServiceSupporter"
 		class="org.openyu.commons.service.supporter.CommonServiceSupporter" />
+		
+	<!--  async service -->
+	<bean
+		id="asyncService"
+		class="org.openyu.commons.service.impl.AsyncServiceImpl"
+		parent="baseServiceSupporter"
+		p:commonDao-ref="commonDaoSupporter" />
+		
+	<!--  async service advisor -->
+	<aop:config>
+		<aop:pointcut
+			id="asyncServiceTxPointcut"
+			expression="bean(asyncService)" />
+		<aop:advisor
+			id="asyncServiceTxAdvisor"
+			advice-ref="commonTxAdvice"
+			pointcut-ref="asyncServiceTxPointcut" />
+	</aop:config>
 
 </beans>

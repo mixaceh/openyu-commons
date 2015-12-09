@@ -57,19 +57,13 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(CommonDaoSupporter.class);
 
-	// protected transient ApplicationContext applicationContext;
-
-	protected HibernateTemplate hibernateTemplate;
+	protected transient HibernateTemplate hibernateTemplate;
 
 	private static final String JOIN_FETCH_PATTERN = "(?:(?:(?:(?:left)|(?:right)){1}(?:\\souter)?)|(?:inner))?\\s+join\\s+fetch\\s+\\w+(?:[.]\\w+)*";
 
 	private static final String SELECT_DISTINCT_PATTERN = "select\\s+((?:distinct\\s+)?\\w+(?:[.]\\w+)*)\\s+from";
 
 	private static final String SELECT_DISTINCT_REPLACE = "select count($1) from";
-
-	// @Autowired
-	// @Qualifier("threadService")
-	// protected transient ThreadService threadService;
 
 	public CommonDaoSupporter() {
 	}

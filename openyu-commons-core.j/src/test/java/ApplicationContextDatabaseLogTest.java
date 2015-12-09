@@ -18,7 +18,7 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
-import org.openyu.commons.service.AsyncCommonService;
+import org.openyu.commons.service.AsyncService;
 import org.openyu.commons.service.BaseLogService;
 import org.openyu.commons.thread.ThreadHelper;
 
@@ -99,14 +99,14 @@ public class ApplicationContextDatabaseLogTest extends BaseTestSupporter {
 	}
 
 	@Test
-	public void logAsyncCommonService() {
-		AsyncCommonService bean = (AsyncCommonService) applicationContext.getBean("logAsyncCommonService");
+	public void logAsyncService() {
+		AsyncService bean = (AsyncService) applicationContext.getBean("logAsyncService");
 		System.out.println(bean);
 		assertNotNull(bean);
 		//
 		ThreadHelper.sleep(3 * 1000);
 		BeanDefinitionRegistry factory = (BeanDefinitionRegistry) applicationContext.getAutowireCapableBeanFactory();
-		factory.removeBeanDefinition("logAsyncCommonService");
+		factory.removeBeanDefinition("logAsyncService");
 		ThreadHelper.sleep(3 * 1000);
 	}
 

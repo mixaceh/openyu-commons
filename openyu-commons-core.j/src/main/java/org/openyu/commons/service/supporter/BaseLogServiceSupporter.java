@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.openyu.commons.service.AsyncCommonService;
+import org.openyu.commons.service.AsyncService;
 import org.openyu.commons.service.BaseLogService;
 
 /**
@@ -18,17 +18,15 @@ public class BaseLogServiceSupporter extends BaseServiceSupporter implements Bas
 
 	private static final long serialVersionUID = -730966546995347276L;
 
-	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseLogServiceSupporter.class);
 
-	/** 佇列服務. */
-	@Autowired
-	@Qualifier("logAsyncCommonService")
-	protected transient AsyncCommonService asyncCommonService;
-
 	/**
-	 * Instantiates a new base log service supporter.
+	 * 異步服務
 	 */
+	@Autowired
+	@Qualifier("logAsyncService")
+	protected transient AsyncService asyncService;
+
 	public BaseLogServiceSupporter() {
 	}
 
@@ -49,23 +47,23 @@ public class BaseLogServiceSupporter extends BaseServiceSupporter implements Bas
 	}
 
 	public <T> boolean offerInsert(T entity) {
-		return asyncCommonService.offerInsert(entity);
+		return asyncService.offerInsert(entity);
 	}
 
 	public <T> boolean offerUpdate(T entity) {
-		return asyncCommonService.offerUpdate(entity);
+		return asyncService.offerUpdate(entity);
 	}
 
 	public <T> boolean offerDelete(T entity) {
-		return asyncCommonService.offerDelete(entity);
+		return asyncService.offerDelete(entity);
 	}
 
 	public boolean offerDelete(Class<?> entityClass, Serializable seq) {
-		return asyncCommonService.offerDelete(entityClass, seq);
+		return asyncService.offerDelete(entityClass, seq);
 	}
 
 	public List<Boolean> offerDelete(Class<?> entityClass, Collection<Serializable> seqs) {
-		return asyncCommonService.offerDelete(entityClass, seqs);
+		return asyncService.offerDelete(entityClass, seqs);
 	}
 
 }

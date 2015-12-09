@@ -7,17 +7,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
-import org.openyu.commons.service.AsyncCommonService;
+import org.openyu.commons.service.AsyncService;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
-public class AsyncCommonServiceImplTest extends BaseTestSupporter {
+public class AsyncServiceImplTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static AsyncCommonService asyncCommonService;
+	private static AsyncService asyncService;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -29,21 +29,21 @@ public class AsyncCommonServiceImplTest extends BaseTestSupporter {
 				"org/openyu/commons/service/testContext-service.xml", //
 
 		});
-		asyncCommonService = (AsyncCommonService) applicationContext.getBean("asyncCommonService");
+		asyncService = (AsyncService) applicationContext.getBean("asyncService");
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void asyncCommonService() {
-		System.out.println(asyncCommonService);
-		assertNotNull(asyncCommonService);
+	public void asyncService() {
+		System.out.println(asyncService);
+		assertNotNull(asyncService);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void close() {
-		System.out.println(asyncCommonService);
-		assertNotNull(asyncCommonService);
+		System.out.println(asyncService);
+		assertNotNull(asyncService);
 		applicationContext.close();
 		// 多次,不會丟出ex
 		applicationContext.close();
@@ -52,8 +52,8 @@ public class AsyncCommonServiceImplTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void refresh() {
-		System.out.println(asyncCommonService);
-		assertNotNull(asyncCommonService);
+		System.out.println(asyncService);
+		assertNotNull(asyncService);
 		applicationContext.refresh();
 		// 多次,不會丟出ex
 		applicationContext.refresh();

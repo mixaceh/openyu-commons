@@ -9,7 +9,7 @@ import java.util.List;
 import org.openyu.commons.dao.CommonDao;
 import org.openyu.commons.dao.aware.CommonDaoAware;
 import org.openyu.commons.dao.supporter.BaseDaoSupporter;
-import org.openyu.commons.service.AsyncCommonService;
+import org.openyu.commons.service.AsyncService;
 import org.openyu.commons.thread.RunnableQueueGroup;
 import org.openyu.commons.thread.ThreadService;
 import org.openyu.commons.thread.anno.DefaultThreadService;
@@ -21,13 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 異步 Dao
+ * 異步服務
  */
-public class AsyncCommonServiceImpl extends BaseDaoSupporter implements AsyncCommonService, CommonDaoAware {
+public class AsyncServiceImpl extends BaseDaoSupporter implements AsyncService, CommonDaoAware {
 
 	private static final long serialVersionUID = -3447849710358203197L;
 
-	private static transient final Logger LOGGER = LoggerFactory.getLogger(AsyncCommonServiceImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(AsyncServiceImpl.class);
 
 	private transient CommonDao commonDao;
 
@@ -109,7 +109,7 @@ public class AsyncCommonServiceImpl extends BaseDaoSupporter implements AsyncCom
 
 	// ------------------------------------------------
 
-	public AsyncCommonServiceImpl() {
+	public AsyncServiceImpl() {
 	}
 
 	public long getInsertQueueListenMills() {
@@ -290,9 +290,9 @@ public class AsyncCommonServiceImpl extends BaseDaoSupporter implements AsyncCom
 	/**
 	 * 檢查設置
 	 * 
-	 * @throws IllegalArgumentException
+	 * @throws Exception
 	 */
-	protected final void checkConfig() {
+	protected final void checkConfig() throws Exception {
 		AssertHelper.notNull(this.commonDao, "The CommonDao is required");
 	}
 
@@ -424,8 +424,17 @@ public class AsyncCommonServiceImpl extends BaseDaoSupporter implements AsyncCom
 		}
 
 		protected void doExecute(E e) throws Exception {
-			commonDao.insert(e);
+			insert(e);
 		}
+	}
+
+	/**
+	 * 新增
+	 * 
+	 * @param e
+	 */
+	public <E> void insert(E e) {
+		commonDao.insert(e);
 	}
 
 	/**
@@ -438,8 +447,17 @@ public class AsyncCommonServiceImpl extends BaseDaoSupporter implements AsyncCom
 		}
 
 		protected void doExecute(E e) throws Exception {
-			commonDao.update(e);
+			update(e);
 		}
+	}
+
+	/**
+	 * 修改
+	 * 
+	 * @param e
+	 */
+	public <E> void update(E e) {
+		commonDao.update(e);
 	}
 
 	/**
@@ -452,7 +470,16 @@ public class AsyncCommonServiceImpl extends BaseDaoSupporter implements AsyncCom
 		}
 
 		protected void doExecute(E e) throws Exception {
-			commonDao.delete(e);
+			delete(e);
 		}
+	}
+
+	/**
+	 * 刪除
+	 * 
+	 * @param e
+	 */
+	public <E> void delete(E e) {
+		commonDao.delete(e);
 	}
 }

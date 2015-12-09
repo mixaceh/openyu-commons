@@ -92,6 +92,11 @@
 				rollback-for="java.lang.Exception"
 				propagation="REQUIRED"
 				read-only="false" />
+			<tx:method
+				name="offer*"
+				rollback-for="java.lang.Exception"
+				propagation="REQUIRED"
+				read-only="false" />
 		</tx:attributes>
 	</tx:advice>
 
@@ -109,20 +114,20 @@
 
 	<!-- log async service -->
 	<bean
-		id="logAsyncCommonService"
-		class="org.openyu.commons.service.impl.AsyncCommonServiceImpl"
+		id="logAsyncService"
+		class="org.openyu.commons.service.impl.AsyncServiceImpl"
 		parent="baseServiceSupporter"
 		p:commonDao-ref="logCommonDaoSupporter" />
 		
-	<!-- advisor -->
+	<!-- log async service advisor -->
 	<aop:config>
 		<aop:pointcut
-			id="logAsyncCommonServiceTxPointcut"
-			expression="bean(logAsyncCommonService)" />
+			id="logAsyncServiceTxPointcut"
+			expression="bean(logAsyncService)" />
 		<aop:advisor
-			id="logAsyncCommonServiceTxAdvisor"
+			id="logAsyncServiceTxAdvisor"
 			advice-ref="logTxAdvice"
-			pointcut-ref="logAsyncCommonServiceTxPointcut" />
+			pointcut-ref="logAsyncServiceTxPointcut" />
 	</aop:config>		
 
 	<!-- log service supporter -->
