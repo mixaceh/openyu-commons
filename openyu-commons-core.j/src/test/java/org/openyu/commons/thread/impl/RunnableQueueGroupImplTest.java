@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.thread.BaseRunnableQueue;
+import org.openyu.commons.thread.LoopQueue;
 import org.openyu.commons.thread.RunnableQueueGroup;
 import org.openyu.commons.thread.ThreadHelper;
 import org.openyu.commons.thread.supporter.LoopQueueSupporter;
@@ -30,9 +31,10 @@ public class RunnableQueueGroupImplTest extends BaseTestSupporter {
 		executorService = Executors.newFixedThreadPool(10);
 		//
 		@SuppressWarnings("unchecked")
-		BaseRunnableQueue<String>[] queues = new Queue[3];
+		LoopQueue<String>[] queues = new PrintQueue[3];
 		for (int i = 0; i < queues.length; ++i) {
-			Queue<String> queue = new Queue<String>(executorService);
+			PrintQueue<String> queue = new PrintQueue<String>(executorService);
+			queue.setListenMills(3 * 1000L);
 			queues[i] = queue;
 		}
 		runnableQueueGroup = new RunnableQueueGroupImpl<String>(queues);
@@ -104,9 +106,9 @@ public class RunnableQueueGroupImplTest extends BaseTestSupporter {
 		ThreadHelper.sleep(3000L);
 	}
 
-	protected static class Queue<E> extends LoopQueueSupporter<String> {
+	protected static class PrintQueue<E> extends LoopQueueSupporter<String> {
 
-		public Queue(ExecutorService executorService) {
+		public PrintQueue(ExecutorService executorService) {
 			super(executorService);
 		}
 

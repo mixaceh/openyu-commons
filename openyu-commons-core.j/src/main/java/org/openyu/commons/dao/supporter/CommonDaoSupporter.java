@@ -105,6 +105,14 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		this.hibernateTemplate = hibernateTemplate;
 	}
 
+	public <E> InputStream write(Collection<E> list) {
+		throw new UnsupportedOperationException();
+	}
+
+	public <E> List<E> read(InputStream inputStream) {
+		throw new UnsupportedOperationException();
+	}
+
 	// ----------------------------------------------------------------
 	// getHibernateTemplate()
 	// getSession()
@@ -1597,15 +1605,6 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		// SimpleFragmenter(Integer.MAX_VALUE));
 		highlighter.setTextFragmenter(new SimpleFragmenter(200));
 		return highlighter;
-	}
-
-	// ---------------------------------------------------------------
-	public <E> InputStream write(Collection<E> list) {
-		throw new UnsupportedOperationException();
-	}
-
-	public <E> List<E> read(InputStream inputStream) {
-		throw new UnsupportedOperationException();
 	}
 
 	/**

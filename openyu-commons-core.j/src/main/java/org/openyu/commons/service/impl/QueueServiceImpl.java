@@ -15,8 +15,6 @@ import org.openyu.commons.thread.supporter.LoopQueueSupporter;
 import org.openyu.commons.util.CollectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * 資料庫佇列服務
@@ -32,8 +30,6 @@ public class QueueServiceImpl extends BaseServiceSupporter implements QueueServi
 	/**
 	 * 線程服務
 	 */
-	// @Autowired
-	// @Qualifier("threadService")
 	@DefaultThreadService
 	private transient ThreadService threadService;
 
@@ -71,17 +67,14 @@ public class QueueServiceImpl extends BaseServiceSupporter implements QueueServi
 	protected void doStart() throws Exception {
 		insertQueue = new InsertQueue<Object>(threadService);
 		insertQueue.setListenMills(LISTEN_MILLS);
-		// threadService.submit(insertQueue);
 		insertQueue.start();
 		//
 		updateQueue = new UpdateQueue<Object>(threadService);
 		updateQueue.setListenMills(LISTEN_MILLS);
-		// threadService.submit(updateQueue);
 		updateQueue.start();
 		//
 		deleteQueue = new DeleteQueue<Object>(threadService);
 		deleteQueue.setListenMills(LISTEN_MILLS);
-		// threadService.submit(deleteQueue);
 		deleteQueue.start();
 	}
 

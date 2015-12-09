@@ -2,14 +2,17 @@ package org.openyu.commons.dao.supporter;
 
 import org.openyu.commons.dao.BaseDao;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 基底Relational Data Access Object
  */
-public abstract class BaseDaoSupporter extends BaseServiceSupporter implements
-		BaseDao {
+public abstract class BaseDaoSupporter extends BaseServiceSupporter implements BaseDao {
 
 	private static final long serialVersionUID = -7248126336974035005L;
+	
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(BaseDaoSupporter.class);
 
 	public BaseDaoSupporter() {
 	}

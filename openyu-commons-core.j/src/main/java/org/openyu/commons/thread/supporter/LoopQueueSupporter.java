@@ -10,7 +10,7 @@ import org.openyu.commons.thread.ThreadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E>implements LoopQueue<E> {
+public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E> implements LoopQueue<E> {
 
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(LoopQueueSupporter.class);
 
