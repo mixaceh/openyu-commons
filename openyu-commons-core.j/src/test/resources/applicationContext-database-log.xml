@@ -107,10 +107,10 @@
 		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
 		p:hibernateTemplate-ref="logHibernateTemplate" />
 
-	<!-- queue service -->
+	<!-- log async service -->
 	<bean
-		id="logQueueService"
-		class="org.openyu.commons.service.impl.QueueServiceImpl"
+		id="logAsyncCommonService"
+		class="org.openyu.commons.service.impl.AsyncCommonServiceImpl"
 		parent="baseServiceSupporter"
 		p:commonDao-ref="logCommonDaoSupporter" />
 

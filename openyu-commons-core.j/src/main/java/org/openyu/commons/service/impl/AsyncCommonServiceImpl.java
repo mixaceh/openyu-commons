@@ -312,10 +312,13 @@ public class AsyncCommonServiceImpl extends BaseDaoSupporter implements AsyncCom
 	public <T> boolean offerInsert(T entity) {
 		boolean result = false;
 		//
-		try {
+		if (this.insertQueueEnabled) {
 			result = insertQueueGroup.offer(entity);
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during offerInsert()").toString(), e);
+		} else {
+			Serializable pk = commonDao.insert(entity);
+			if (pk != null) {
+				result = true;
+			}
 		}
 		//
 		return result;
@@ -329,10 +332,13 @@ public class AsyncCommonServiceImpl extends BaseDaoSupporter implements AsyncCom
 	public <T> boolean offerUpdate(T entity) {
 		boolean result = false;
 		//
-		try {
+		if (this.updateQueueEnabled) {
 			result = updateQueueGroup.offer(entity);
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during offerUpdate()").toString(), e);
+		} else {
+			int updated = commonDao.update(entity);
+			if (updated > 0) {
+				result = true;
+			}
 		}
 		//
 		return result;
@@ -346,10 +352,13 @@ public class AsyncCommonServiceImpl extends BaseDaoSupporter implements AsyncCom
 	public <T> boolean offerDelete(T entity) {
 		boolean result = false;
 		//
-		try {
+		if (this.deleteQueueEnabled) {
 			result = deleteQueueGroup.offer(entity);
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during offerDelete()").toString(), e);
+		} else {
+			int deleted = commonDao.delete(entity);
+			if (deleted > 0) {
+				result = true;
+			}
 		}
 		//
 		return result;
@@ -365,15 +374,11 @@ public class AsyncCommonServiceImpl extends BaseDaoSupporter implements AsyncCom
 	public boolean offerDelete(Class<?> entityClass, Serializable seq) {
 		boolean result = false;
 		//
-		try {
-			// 搜尋entity
-			Object entity = commonDao.find(entityClass, seq);
-			if (entity != null) {
-				result = offerDelete(entity);
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		Object entity = commonDao.find(entityClass, seq);
+		if (entity == null) {
+			return result;
 		}
+		result = offerDelete(entity);
 		//
 		return result;
 	}
@@ -394,8 +399,8 @@ public class AsyncCommonServiceImpl extends BaseDaoSupporter implements AsyncCom
 					continue;
 				}
 				//
-				boolean offerDelete = offerDelete(entityClass, seq);
-				result.add(offerDelete);
+				boolean deleted = offerDelete(entityClass, seq);
+				result.add(deleted);
 			}
 		}
 		return result;

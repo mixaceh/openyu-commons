@@ -1,20 +1,13 @@
 package org.openyu.commons.service.impl;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.service.AsyncCommonService;
-import org.openyu.commons.thread.ThreadHelper;
-import org.openyu.commons.thread.ThreadService;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;

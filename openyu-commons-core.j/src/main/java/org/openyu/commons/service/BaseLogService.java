@@ -9,13 +9,61 @@ import java.util.List;
  */
 public interface BaseLogService extends BaseService {
 
-	<T> Serializable insert(T entity);
+	// ------------------------------------
+	// 異步操作
+	// ------------------------------------
+	/**
+	 * 加到佇列新增
+	 *
+	 * @param <T>
+	 *            the generic type
+	 * @param entity
+	 *            the entity
+	 * @return true, if successful
+	 */
+	<T> boolean offerInsert(T entity);
 
-	<T> int update(T entity);
+	/**
+	 * 加到佇列儲存
+	 *
+	 * @param <T>
+	 *            the generic type
+	 * @param entity
+	 *            the entity
+	 * @return true, if successful
+	 */
+	<T> boolean offerUpdate(T entity);
 
-	<T> int delete(T entity);
+	/**
+	 * 加到佇列刪除
+	 *
+	 * @param <T>
+	 *            the generic type
+	 * @param entity
+	 *            the entity
+	 * @return true, if successful
+	 */
+	<T> boolean offerDelete(T entity);
 
-	<T> T delete(Class<?> entityClass, Serializable seq);
+	/**
+	 * 加到佇列刪除,會先用find找entity
+	 *
+	 * @param entityClass
+	 *            the entity class
+	 * @param seq
+	 *            the seq
+	 * @return true, if successful
+	 */
+	boolean offerDelete(Class<?> entityClass, Serializable seq);
 
-	<E> List<E> delete(Class<?> entityClass, Collection<Serializable> seqs);
+	/**
+	 * 多筆加到佇列刪除, 會先用find找entity
+	 *
+	 * @param entityClass
+	 *            the entity class
+	 * @param seqs
+	 *            the seqs
+	 * @return the list
+	 */
+	List<Boolean> offerDelete(Class<?> entityClass, Collection<Serializable> seqs);
 }
