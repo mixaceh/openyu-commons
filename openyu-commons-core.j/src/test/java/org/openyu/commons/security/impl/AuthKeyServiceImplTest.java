@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.security.AuthKey;
+import org.openyu.commons.security.AuthKeyService;
 import org.openyu.commons.security.impl.AuthKeyServiceImpl;
 import org.openyu.commons.thread.ThreadHelper;
 
@@ -22,7 +23,7 @@ public class AuthKeyServiceImplTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static AuthKeyServiceImpl authKeyServiceImpl;
+	private static AuthKeyService authKeyService;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -31,21 +32,21 @@ public class AuthKeyServiceImplTest extends BaseTestSupporter {
 				"org/openyu/commons/thread/testContext-thread.xml", //
 				"org/openyu/commons/security/testContext-security.xml",//
 		});
-		authKeyServiceImpl = (AuthKeyServiceImpl) applicationContext.getBean("authKeyService");
+		authKeyService = (AuthKeyService) applicationContext.getBean("authKeyService");
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
 	public void authKeyServiceImpl() {
-		System.out.println(authKeyServiceImpl);
-		assertNotNull(authKeyServiceImpl);
+		System.out.println(authKeyService);
+		assertNotNull(authKeyService);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void close() {
-		System.out.println(authKeyServiceImpl);
-		assertNotNull(authKeyServiceImpl);
+		System.out.println(authKeyService);
+		assertNotNull(authKeyService);
 		applicationContext.close();
 		// 多次,不會丟出ex
 		applicationContext.close();
@@ -54,8 +55,8 @@ public class AuthKeyServiceImplTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void refresh() {
-		System.out.println(authKeyServiceImpl);
-		assertNotNull(authKeyServiceImpl);
+		System.out.println(authKeyService);
+		assertNotNull(authKeyService);
 		applicationContext.refresh();
 		// 多次,不會丟出ex
 		applicationContext.refresh();
@@ -67,9 +68,9 @@ public class AuthKeyServiceImplTest extends BaseTestSupporter {
 	// 0.00], GC.calls: 2, GC.time: 0.01, time.total: 0.10, time.warmup: 0.01,
 	// time.bench: 0.09
 	public void createAuthKey() {
-		authKeyServiceImpl.setSecurity(false);
+		authKeyService.setSecurity(false);
 		// aliveMills=180*1000,有效期限3分鐘
-		AuthKey result = authKeyServiceImpl.createAuthKey();
+		AuthKey result = authKeyService.createAuthKey();
 		// 16, df9a82e3-0a5e-45b7-887e-c6e1d40e64f8
 		System.out.println(result.getId().length() + ", " + result);
 		assertNotNull(result);
@@ -81,9 +82,9 @@ public class AuthKeyServiceImplTest extends BaseTestSupporter {
 	// 0.00], GC.calls: 2, GC.time: 0.01, time.total: 0.29, time.warmup: 0.02,
 	// time.bench: 0.28
 	public void createAuthKeyWithSecurity() {
-		authKeyServiceImpl.setSecurity(true);
+		authKeyService.setSecurity(true);
 		// aliveMills=180*1000,有效期限3分鐘
-		AuthKey result = authKeyServiceImpl.createAuthKey();
+		AuthKey result = authKeyService.createAuthKey();
 		// 不定, df9a82e3-0a5e-45b7-887e-c6e1d40e64f8
 		System.out.println(result.getId().length() + ", " + result);
 		assertNotNull(result);
@@ -98,20 +99,20 @@ public class AuthKeyServiceImplTest extends BaseTestSupporter {
 		// 建構key
 		int count = 10;
 		for (int i = 0; i < count; i++) {
-			AuthKey authKey = authKeyServiceImpl.createAuthKey();
+			AuthKey authKey = authKeyService.createAuthKey();
 			authKey.setAliveMills(0L);// 0=表都到期了
 			// 加入到mem上
-			authKeyServiceImpl.addAuthKey(authKey.getId(), authKey);
+			authKeyService.addAuthKey(authKey.getId(), authKey);
 			ThreadHelper.sleep(50);
 		}
-		int size = authKeyServiceImpl.getAuthKeys().size();
+		int size = authKeyService.getAuthKeys().size();
 		System.out.println(size);
 		assertEquals(10, size);
 
 		// 檢查key,應該都到期了
-		authKeyServiceImpl.checkExpired();
+		((AuthKeyServiceImpl) authKeyService).checkExpired();
 		//
-		size = authKeyServiceImpl.sizeOfAuthKey();
+		size = authKeyService.sizeOfAuthKey();
 		System.out.println(size);
 		assertEquals(0, size);
 	}

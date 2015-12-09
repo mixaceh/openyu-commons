@@ -23,9 +23,9 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static ThreadServiceImpl threadServiceImpl;
+	private static ThreadService threadService;
 
-	private static ThreadServiceImpl blockingThreadServiceImpl;
+	private static ThreadService blockingThreadService;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -34,29 +34,29 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 				"org/openyu/commons/thread/testContext-thread.xml", //
 
 		});
-		threadServiceImpl = (ThreadServiceImpl) applicationContext.getBean("threadService");
-		blockingThreadServiceImpl = (ThreadServiceImpl) applicationContext.getBean("blockingThreadService");
+		threadService = (ThreadService) applicationContext.getBean("threadService");
+		blockingThreadService = (ThreadService) applicationContext.getBean("blockingThreadService");
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void threadServiceImpl() {
-		System.out.println(threadServiceImpl);
-		assertNotNull(threadServiceImpl);
+	public void threadService() {
+		System.out.println(threadService);
+		assertNotNull(threadService);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void blockingThreadServiceImpl() {
-		System.out.println(blockingThreadServiceImpl);
-		assertNotNull(blockingThreadServiceImpl);
+	public void blockingThreadService() {
+		System.out.println(blockingThreadService);
+		assertNotNull(blockingThreadService);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void close() {
-		System.out.println(threadServiceImpl);
-		assertNotNull(threadServiceImpl);
+		System.out.println(threadService);
+		assertNotNull(threadService);
 		applicationContext.close();
 		// 多次,不會丟出ex
 		applicationContext.close();
@@ -65,8 +65,8 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void refresh() {
-		System.out.println(threadServiceImpl);
-		assertNotNull(threadServiceImpl);
+		System.out.println(threadService);
+		assertNotNull(threadService);
 		applicationContext.refresh();
 		// 多次,不會丟出ex
 		applicationContext.refresh();
@@ -120,7 +120,7 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 5, warmupRounds = 0, concurrency = 1)
 	public void nextExecutor() {
-		ThreadPoolTaskExecutor executor = threadServiceImpl.nextExecutor();
+		ThreadPoolTaskExecutor executor = ((ThreadServiceImpl) threadService).nextExecutor();
 		System.out.println(executor);
 		assertNotNull(executor);
 	}
@@ -129,16 +129,16 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void submit() {
 		Runner runner = new Runner();
-		threadServiceImpl.submit(runner);// t1
-		threadServiceImpl.submit(runner);// t2
-		threadServiceImpl.submit(runner);// t3
-		threadServiceImpl.submit(runner);// t4
-		threadServiceImpl.submit(runner);// t5
-		threadServiceImpl.submit(runner);// t6
-		threadServiceImpl.submit(runner);// t7
-		threadServiceImpl.submit(runner);// t8
-		threadServiceImpl.submit(runner);// t9
-		threadServiceImpl.submit(runner);// t10
+		threadService.submit(runner);// t1
+		threadService.submit(runner);// t2
+		threadService.submit(runner);// t3
+		threadService.submit(runner);// t4
+		threadService.submit(runner);// t5
+		threadService.submit(runner);// t6
+		threadService.submit(runner);// t7
+		threadService.submit(runner);// t8
+		threadService.submit(runner);// t9
+		threadService.submit(runner);// t10
 		//
 		ThreadHelper.sleep(3 * 1000);
 	}
@@ -157,11 +157,11 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void submitWithBlocking() throws Exception {
 		Caller caller = new Caller();
-		Future<Boolean> future = threadServiceImpl.submit(caller);// thread1
+		Future<Boolean> future = threadService.submit(caller);// thread1
 		boolean result = future.get(); // thread1跑完後,才會繼續往下走
 		System.out.println(result);
 		//
-		threadServiceImpl.submit(caller);// thread2
+		threadService.submit(caller);// thread2
 		ThreadHelper.sleep(3 * 1000);
 	}
 
@@ -169,14 +169,14 @@ public class ThreadServiceImplTest extends BaseTestSupporter {
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void submitWithNonBlocking() throws Exception {
 		Caller caller = new Caller();
-		Future<Boolean> future = threadServiceImpl.submit(caller);// thread1
+		Future<Boolean> future = threadService.submit(caller);// thread1
 		System.out.println(future);
 
 		// 若無此future.get(),不管thread1是否跑完,都會繼續往下走
 		// boolean result = (Boolean) future.get();
 		// System.out.println(result);
 
-		threadServiceImpl.submit(caller);// thread2
+		threadService.submit(caller);// thread2
 		//
 		ThreadHelper.sleep(3 * 1000);
 	}

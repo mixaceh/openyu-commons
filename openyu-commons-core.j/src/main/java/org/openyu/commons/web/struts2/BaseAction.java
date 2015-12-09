@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.openyu.commons.web.servlet.BaseWeb;
 
 /**
- * 基底控制器
+ * 控制器
  */
 public interface BaseAction extends ApplicationContextAware, BaseWeb
 {

@@ -4,7 +4,7 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.openyu.commons.service.BaseService;
 
 /**
- * 基底方法攔截器.
+ * 方法攔截器.
  */
 public interface BaseMethodInterceptor extends BaseService, MethodInterceptor {
 

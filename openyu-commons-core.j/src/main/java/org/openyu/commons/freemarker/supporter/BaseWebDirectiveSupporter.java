@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 基底web標籤
+ * web標籤
  * 
  * 需搭配struts2
  */

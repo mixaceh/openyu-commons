@@ -4,7 +4,7 @@ import org.openyu.commons.bao.BaseBao;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
 /**
- * 基底File Transfer Object
+ * File Transfer Object
  */
 public abstract class BaseFtoSupporter extends BaseServiceSupporter implements
 		BaseBao {

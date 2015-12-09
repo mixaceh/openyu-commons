@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.openyu.commons.web.struts2.ListAction;
 
 /**
- * 基底列表控制器
+ * 列表控制器
  */
 public class ListActionSupporter extends BaseActionSupporter implements ListAction
 {

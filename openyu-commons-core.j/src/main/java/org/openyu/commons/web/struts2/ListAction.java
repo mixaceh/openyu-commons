@@ -1,10 +1,10 @@
 package org.openyu.commons.web.struts2;
 
 /**
- * 基底列表控制器
+ * 列表控制器
  */
-public interface ListAction extends BaseAction
-{
+public interface ListAction extends BaseAction {
+
 	String KEY = ListAction.class.getName();
 
 	/**

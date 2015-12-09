@@ -23,7 +23,7 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
 
 /**
- * 基底標籤
+ * 標籤
  */
 public abstract class BaseDirectiveSupporter implements BaseDirective, Supporter {
 	private static transient final Logger log = LogManager.getLogger(BaseDirectiveSupporter.class);

@@ -32,7 +32,7 @@ import com.opensymphony.xwork2.ActionProxy;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
 /**
- * 基底web攔截器
+ * web攔截器
  * 
  * round advice,可在invoke前後,處理其他邏輯
  */

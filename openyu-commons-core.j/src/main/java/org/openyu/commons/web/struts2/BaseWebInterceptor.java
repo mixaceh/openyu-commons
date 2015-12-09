@@ -5,7 +5,7 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 
 /**
- * 基底web攔截器
+ * web攔截器
  */
 public interface BaseWebInterceptor extends BaseWeb
 {

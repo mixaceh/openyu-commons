@@ -55,7 +55,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 /**
- * 基底控制器
+ * 控制器
  * 
  * SUCCESS = "success"
  * 

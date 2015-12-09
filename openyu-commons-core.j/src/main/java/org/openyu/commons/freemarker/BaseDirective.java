@@ -10,7 +10,7 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
 
 /**
- * 基底標籤
+ * 標籤
  */
 public interface BaseDirective extends TemplateDirectiveModel
 {

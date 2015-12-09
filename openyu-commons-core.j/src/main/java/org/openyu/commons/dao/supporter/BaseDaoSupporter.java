@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 基底Relational Data Access Object
+ * Data Access Object
  */
 public abstract class BaseDaoSupporter extends BaseServiceSupporter implements BaseDao {
 

@@ -4,7 +4,7 @@ import org.openyu.commons.mqo.BaseMqo;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
 /**
- * 基底Message Queue Object
+ * Message Queue Object
  */
 public abstract class BaseMqoSupporter extends BaseServiceSupporter implements
 		BaseMqo {

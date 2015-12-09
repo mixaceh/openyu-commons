@@ -8,7 +8,7 @@ import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
 /**
- * 基底方法攔截器
+ * 方法攔截器
  *
  * round advice,可在proceed前後,處理其他邏輯.
  */

@@ -5,11 +5,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 基底日誌服務.
+ * 日誌服務
  */
 public interface BaseLogService extends BaseService {
-
-	// ------------------------------------
 
 	<T> Serializable insert(T entity);
 

@@ -7,7 +7,7 @@ import java.util.List;
 import org.openyu.commons.service.BaseService;
 
 /**
- * 基底Relational Data Access Object
+ * Data Access Object
  */
 public interface BaseDao extends BaseService {
 

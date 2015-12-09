@@ -9,7 +9,6 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
-import org.openyu.commons.thread.BaseRunnableQueue;
 import org.openyu.commons.thread.LoopQueue;
 import org.openyu.commons.thread.RunnableQueueGroup;
 import org.openyu.commons.thread.ThreadHelper;

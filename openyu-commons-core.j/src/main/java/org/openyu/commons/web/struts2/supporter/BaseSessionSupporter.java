@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import org.openyu.commons.web.struts2.BaseSession;
 
 /**
- * 基底使用者session,web用
+ * 使用者session,web用
  */
 public class BaseSessionSupporter extends BaseActionSupporter implements BaseSession
 {
