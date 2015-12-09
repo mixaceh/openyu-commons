@@ -101,7 +101,7 @@
 	<bean id="logOjDaoSupporter" class="org.openyu.commons.dao.supporter.OjDaoSupporter"
 		p:sessionFactory-ref="logSessionFactory" />
 	-->
-	
+
 	<bean
 		id="logCommonDaoSupporter"
 		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
@@ -113,6 +113,17 @@
 		class="org.openyu.commons.service.impl.AsyncCommonServiceImpl"
 		parent="baseServiceSupporter"
 		p:commonDao-ref="logCommonDaoSupporter" />
+		
+	<!-- advisor -->
+	<aop:config>
+		<aop:pointcut
+			id="logAsyncCommonServiceTxPointcut"
+			expression="bean(logAsyncCommonService)" />
+		<aop:advisor
+			id="logAsyncCommonServiceTxAdvisor"
+			advice-ref="logTxAdvice"
+			pointcut-ref="logAsyncCommonServiceTxPointcut" />
+	</aop:config>		
 
 	<!-- log service supporter -->
 	<bean
