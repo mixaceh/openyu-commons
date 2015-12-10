@@ -221,8 +221,8 @@ public class ByteHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static byte[] toShortByteArray(int value) {
-//		AssertHelper.isBetween(value, Short.MIN_VALUE, Short.MAX_VALUE,
-//				"The Value is " + value + " must be between " + Short.MIN_VALUE + " and " + Short.MAX_VALUE);
+		AssertHelper.isBetween(value, Short.MIN_VALUE, Short.MAX_VALUE,
+				"The Value is " + value + " must be between " + Short.MIN_VALUE + " and " + Short.MAX_VALUE);
 
 		// byte[] result = new byte[2];
 		// result[1] = (byte) (value & 0x00ff);
