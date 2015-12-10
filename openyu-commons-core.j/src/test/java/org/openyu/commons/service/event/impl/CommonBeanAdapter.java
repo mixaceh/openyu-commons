@@ -45,7 +45,7 @@ public class CommonBeanAdapter extends BeanAdapter
 			String key = getKey(newValue);
 			if (key != null)
 			{
-				commonService.getBeanCache().put(key, newValue);
+				commonService.getBeans().put(key, newValue);
 			}
 		}
 	}
@@ -72,7 +72,7 @@ public class CommonBeanAdapter extends BeanAdapter
 					String key = getKey(object);
 					if (key != null)
 					{
-						commonService.getBeanCache().put(key, object);
+						commonService.getBeans().put(key, object);
 					}
 				}
 			}
@@ -81,7 +81,7 @@ public class CommonBeanAdapter extends BeanAdapter
 				String key = getKey(newValue);
 				if (key != null)
 				{
-					commonService.getBeanCache().put(key, newValue);
+					commonService.getBeans().put(key, newValue);
 				}
 			}
 		}
@@ -105,7 +105,7 @@ public class CommonBeanAdapter extends BeanAdapter
 			String key = getKey(newValue);
 			if (key != null)
 			{
-				commonService.getBeanCache().put(key, newValue);
+				commonService.getBeans().put(key, newValue);
 			}
 		}
 	}
@@ -127,7 +127,7 @@ public class CommonBeanAdapter extends BeanAdapter
 			String key = getKey(newValue);
 			if (key != null)
 			{
-				commonService.getBeanCache().put(key, newValue);
+				commonService.getBeans().put(key, newValue);
 			}
 		}
 	}
@@ -151,7 +151,7 @@ public class CommonBeanAdapter extends BeanAdapter
 			//若存在則從beans刪除
 			if (key != null)
 			{
-				commonService.getBeanCache().remove(key);
+				commonService.getBeans().remove(key);
 			}
 		}
 	}
@@ -174,7 +174,7 @@ public class CommonBeanAdapter extends BeanAdapter
 			//若存在則從beans刪除
 			if (key != null)
 			{
-				commonService.getBeanCache().remove(key);
+				commonService.getBeans().remove(key);
 			}
 		}
 	}

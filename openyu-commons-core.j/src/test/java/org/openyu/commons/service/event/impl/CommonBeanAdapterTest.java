@@ -99,22 +99,22 @@ public class CommonBeanAdapterTest {
 			dogPo.setId(id);
 			// create
 			commonServiceSupporter.insert(dogPo);
-			System.out.println("insert: " + commonServiceSupporter.getBeanCache());
+			System.out.println("insert: " + commonServiceSupporter.getBeans());
 
 			// retrieve
 			DogImpl existDog = commonServiceSupporter.find(DogPoImpl.class,
 					dogPo.getSeq());
-			System.out.println("find: " + commonServiceSupporter.getBeanCache());
+			System.out.println("find: " + commonServiceSupporter.getBeans());
 			assertEquals(id, existDog.getId());
 
 			// update
 			dogPo.setValid(false);
 			commonServiceSupporter.update(dogPo);
-			System.out.println("update: " + commonServiceSupporter.getBeanCache());
+			System.out.println("update: " + commonServiceSupporter.getBeans());
 
 			// delete
 			commonServiceSupporter.delete(dogPo);
-			System.out.println("delete: " + commonServiceSupporter.getBeanCache());
+			System.out.println("delete: " + commonServiceSupporter.getBeans());
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");

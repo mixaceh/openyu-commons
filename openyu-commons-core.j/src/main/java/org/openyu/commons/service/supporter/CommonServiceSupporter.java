@@ -20,8 +20,6 @@ import org.openyu.commons.service.CommonService;
 import org.openyu.commons.service.event.BeanEvent;
 import org.openyu.commons.service.event.BeanListener;
 import org.openyu.commons.service.ex.CommonServiceException;
-import org.openyu.commons.thread.ThreadService;
-import org.openyu.commons.thread.supporter.TriggerQueueSupporter;
 import org.openyu.commons.util.CollectionHelper;
 import org.openyu.commons.util.concurrent.MapCache;
 import org.openyu.commons.util.concurrent.impl.MapCacheImpl;
@@ -56,24 +54,10 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 
 	/**
 	 * 存放bean快取,當多緒時,物件需注意資料同步
+	 * 
+	 * <id,bean>
 	 */
-	// <id,bean>
 	protected MapCache<String, Object> beans = new MapCacheImpl<String, Object>();
-
-	/**
-	 * 新增佇列
-	 */
-	protected transient InsertQueue<Object> insertQueue;
-
-	/**
-	 * 修改佇列
-	 */
-	protected transient UpdateQueue<Object> updateQueue;
-
-	/**
-	 * 刪除佇列
-	 */
-	protected transient DeleteQueue<Object> deleteQueue;
 
 	public CommonServiceSupporter() {
 	}
@@ -90,15 +74,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		if (insertQueue != null) {
-			insertQueue.shutdown();
-		}
-		if (updateQueue != null) {
-			updateQueue.shutdown();
-		}
-		if (deleteQueue != null) {
-			deleteQueue.shutdown();
-		}
+		beans.clear();
 	}
 
 	public CommonDao getCommonDao() {
@@ -109,7 +85,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 		this.commonDao = commonDao;
 	}
 
-	public MapCache<String, Object> getBeanCache() {
+	public MapCache<String, Object> getBeans() {
 		return beans;
 	}
 
@@ -864,143 +840,4 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	// }
 	// }
 
-	// --------------------------------------------------
-	/**
-	 * 加到佇列新增
-	 * 
-	 * @param entity
-	 */
-	public <T> boolean offerInsert(T entity) {
-		boolean result = false;
-		//
-		try {
-			result = insertQueue.offer(entity);
-		} catch (Exception ex) {
-			throw new CommonServiceException(ex);
-		}
-		//
-		return result;
-	}
-
-	/**
-	 * 加到佇列儲存
-	 * 
-	 * @param entity
-	 */
-	public <T> boolean offerUpdate(T entity) {
-		boolean result = false;
-		//
-		try {
-			result = updateQueue.offer(entity);
-		} catch (Exception ex) {
-			throw new CommonServiceException(ex);
-		}
-		//
-		return result;
-	}
-
-	/**
-	 * 加到佇列刪除
-	 * 
-	 * @param entity
-	 */
-	public <T> boolean offerDelete(T entity) {
-		boolean result = false;
-		//
-		try {
-			result = deleteQueue.offer(entity);
-		} catch (Exception ex) {
-			throw new CommonServiceException(ex);
-		}
-		//
-		return result;
-	}
-
-	/**
-	 * 加到佇列刪除,會先用find找entity
-	 * 
-	 * @param entityClass
-	 * @param seq
-	 * @return
-	 */
-	public boolean offerDelete(Class<?> entityClass, Serializable seq) {
-		boolean result = false;
-		//
-		try {
-			// 搜尋entity
-			Object entity = commonDao.find(entityClass, seq);
-			if (entity != null) {
-				result = offerDelete(entity);
-			}
-		} catch (Exception ex) {
-			throw new CommonServiceException(ex);
-		}
-		//
-		return result;
-	}
-
-	/**
-	 * 多筆加到佇列刪除,會先用find找entity
-	 * 
-	 * @param entityClass
-	 * @param seqs
-	 * @return
-	 */
-	public List<Boolean> offerDelete(Class<?> entityClass, Collection<Serializable> seqs) {
-		List<Boolean> result = new LinkedList<Boolean>();
-		//
-		if (CollectionHelper.notEmpty(seqs)) {
-			for (Serializable seq : seqs) {
-				if (seq == null) {
-					continue;
-				}
-				//
-				boolean offerDelete = offerDelete(entityClass, seq);
-				result.add(offerDelete);
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * 新增佇列
-	 */
-	protected class InsertQueue<E> extends TriggerQueueSupporter<E> {
-
-		public InsertQueue(ThreadService threadService) {
-			super(threadService);
-		}
-
-		protected void doExecute(E e) throws Exception {
-			insert(e);
-		}
-	}
-
-	/**
-	 * 修改佇列
-	 */
-	protected class UpdateQueue<E> extends TriggerQueueSupporter<E> {
-
-		public UpdateQueue(ThreadService threadService) {
-			super(threadService);
-		}
-
-		protected void doExecute(E e) throws Exception {
-			update(e);
-		}
-	}
-
-	/**
-	 * 刪除佇列
-	 */
-	protected class DeleteQueue<E> extends TriggerQueueSupporter<E> {
-		public DeleteQueue(ThreadService threadService) {
-
-			super(threadService);
-		}
-
-		protected void doExecute(E e) throws Exception {
-			delete(e);
-		}
-	}
 }
