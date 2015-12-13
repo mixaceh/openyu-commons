@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
-public class ApplicationContextScheduleTest extends BaseTestSupporter
+public class ApplicationContextSchedulerTest extends BaseTestSupporter
 {
 
 	private static ApplicationContext applicationContext;
@@ -17,7 +17,7 @@ public class ApplicationContextScheduleTest extends BaseTestSupporter
 	{
 		applicationContext = new ClassPathXmlApplicationContext(new String[] {
 				"applicationContext-init.xml",// 
-				"applicationContext-schedule.xml",//
+				"applicationContext-scheduler.xml",//
 		});
 	}
 
