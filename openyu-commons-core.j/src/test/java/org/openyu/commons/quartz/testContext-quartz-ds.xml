@@ -13,6 +13,34 @@
              http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
 	<bean
+		id="baseJobImplJobDetail"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property
+			name="jobClass"
+			value="org.openyu.commons.quartz.supporter.BaseJobImpl" />
+		<property
+			name="durability"
+			value="true" />
+	</bean>
+
+	<bean
+		id="baseJobImplTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property
+			name="jobDetail"
+			ref="baseJobImplJobDetail" />
+		<property
+			name="cronExpression"
+			value="0/5 * * * * ? *" />
+	</bean>
+	<!-- 每5秒 
+	"0/5 * * * * ? *" -->
+	
+	<!-- 每天 0時0分0秒 執行
+	"0 0 0 * * ? *" -->
+
+
+	<bean
 		id="scheduler"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property
@@ -20,7 +48,13 @@
 			value="scheduler" />
 		<property
 			name="configLocation"
-			value="file:src/test/config/etc/quartz.properties" />
+			value="file:src/test/java/org/openyu/commons/quartz/quartz-ds.properties" />
+		<property
+			name="dataSource"
+			ref="dataSource" />
+		<property
+			name="transactionManager"
+			ref="commonTx" />
 		<property
 			name="autoStartup"
 			value="true" />
@@ -36,10 +70,12 @@
 		<!-- NOTE: Must add both the jobDetail and trigger to the scheduler! -->
 		<property name="jobDetails">
 			<list>
+				<ref bean="baseJobImplJobDetail" />
 			</list>
 		</property>
 		<property name="triggers">
 			<list>
+				<ref bean="baseJobImplTrigger" />
 			</list>
 		</property>
 	</bean>
