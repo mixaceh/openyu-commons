@@ -13,7 +13,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
-public class BaseJobSupporterTest extends BaseTestSupporter {
+public class BaseJobSupporterClusterTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
@@ -26,7 +26,7 @@ public class BaseJobSupporterTest extends BaseTestSupporter {
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/quartz/testContext-quartz.xml",//
+				"org/openyu/commons/quartz/testContext-quartz-cluster.xml",//
 
 		});
 		scheduler = applicationContext.getBean("scheduler", Scheduler.class);

@@ -25,7 +25,7 @@
 
 	<bean
 		id="baseJobImplTrigger"
-		class="org.openyu.commons.quartz.PersistableCronTriggerFactoryBean">
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property
 			name="jobDetail"
 			ref="baseJobImplJobDetail" />
@@ -39,6 +39,7 @@
 	<!-- 每天 0時0分0秒 執行
 	"0 0 0 * * ? *" -->
 
+
 	<bean
 		id="scheduler"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -47,7 +48,7 @@
 			value="scheduler" />
 		<property
 			name="configLocation"
-			value="file:src/test/java/org/openyu/commons/quartz/quartz.properties" />
+			value="file:src/test/java/org/openyu/commons/quartz/quartz-cluster.properties" />
 		<property
 			name="autoStartup"
 			value="true" />

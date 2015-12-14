@@ -7,20 +7,17 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
-public class ApplicationContextSchedulerTest extends BaseTestSupporter
-{
+public class ApplicationContextQuartzTest extends BaseTestSupporter {
 
 	private static ApplicationContext applicationContext;
 
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception
-	{
-		applicationContext = new ClassPathXmlApplicationContext(new String[] {
-				"applicationContext-init.xml",// 
-				"applicationContext-scheduler.xml",//
+	public static void setUpBeforeClass() throws Exception {
+		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
+				"applicationContext-init.xml", //
+				"applicationContext-quartz.xml",//
 		});
 	}
-
 
 	@Test
 	public void scheduler() {

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <beans
 	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -13,22 +12,36 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
              http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
-	<!-- init by project -->
-	<import resource="classpath:applicationContext-init.xml" />
-
-	<!-- bean -->
-	<import resource="classpath:applicationContext-bean.xml" />
-	<!-- i18n -->
-	<import resource="classpath:applicationContext-i18n.xml" />
-	<!-- database -->
-	<import resource="classpath:applicationContext-database.xml" />
-	<import resource="classpath:applicationContext-database-log.xml" />
-
-	<!-- cxf 
-	<import resource="classpath:applicationContext-cxf.xml" /> 
-	-->
-
-	<!-- quartz -->
-	<import resource="classpath:applicationContext-quartz.xml" />
+	<bean
+		id="scheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property
+			name="schedulerName"
+			value="scheduler" />
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/quartz.properties" />
+		<property
+			name="autoStartup"
+			value="true" />
+		<property
+			name="applicationContextSchedulerContextKey"
+			value="applicationContext" />
+		<property name="jobFactory">
+			<bean class="org.openyu.commons.quartz.AutowiringSpringBeanJobFactory" />
+		</property>
+		<!-- NOTE: Must add both the jobDetail and trigger to the scheduler! -->
+		<property name="jobDetails">
+			<list>
+			</list>
+		</property>
+		<property
+			name="overwriteExistingJobs"
+			value="true" />
+		<property name="triggers">
+			<list>
+			</list>
+		</property>
+	</bean>
 
 </beans>
