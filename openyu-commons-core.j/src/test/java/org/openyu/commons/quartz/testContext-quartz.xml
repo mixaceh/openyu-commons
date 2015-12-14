@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+             http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<bean
+		id="baseJobImplJobDetail"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property
+			name="jobClass"
+			value="org.openyu.commons.quartz.supporter.BaseJobImpl" />
+		<property
+			name="durability"
+			value="true" />
+	</bean>
+
+	<bean
+		id="baseJobImplTrigger"
+		class="org.openyu.commons.quartz.PersistableCronTriggerFactoryBean">
+		<property
+			name="jobDetail"
+			ref="baseJobImplJobDetail" />
+		<property
+			name="cronExpression"
+			value="0/1 * * * * ? *" />
+	</bean>
+	<!-- 每5秒 
+	"0/5 * * * * ? *" -->
+	
+	<!-- 每天 0時0分0秒 執行
+	"0 0 0 * * ? *" -->
+
+
+	<bean
+		id="defaultScheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property
+			name="schedulerName"
+			value="defaultScheduler" />
+		<property
+			name="configLocation"
+			value="file:src/test/java/org/openyu/commons/quartz/quartz.properties" />
+		<property
+			name="autoStartup"
+			value="true" />
+		<property
+			name="applicationContextSchedulerContextKey"
+			value="applicationContext" />
+		<property name="jobFactory">
+			<bean class="org.openyu.commons.quartz.AutowiringSpringBeanJobFactory" />
+		</property>
+		<property
+			name="overwriteExistingJobs"
+			value="true" />
+		<!-- NOTE: Must add both the jobDetail and trigger to the scheduler! -->
+		<property name="jobDetails">
+			<list>
+				<ref bean="baseJobImplJobDetail" />
+			</list>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="baseJobImplTrigger" />
+			</list>
+		</property>
+	</bean>
+
+</beans>

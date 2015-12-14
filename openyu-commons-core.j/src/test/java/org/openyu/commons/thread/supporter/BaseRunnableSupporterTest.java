@@ -21,25 +21,25 @@ public class BaseRunnableSupporterTest extends BaseTestSupporter {
 
 	private static ExecutorService executorService;
 
-	private static TestRunner runner;
+	private static TestRunner testRunner;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		executorService = Executors.newFixedThreadPool(10);
-		runner = new TestRunner(executorService);
+		testRunner = new TestRunner(executorService);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void runner() {
-		System.out.println(runner);
-		assertNotNull(runner);
+	public void testRunner() {
+		System.out.println(testRunner);
+		assertNotNull(testRunner);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void start() throws Exception {
-		runner.start();
+		testRunner.start();
 		ThreadHelper.sleep(3000L);
 	}
 
@@ -47,46 +47,46 @@ public class BaseRunnableSupporterTest extends BaseTestSupporter {
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void startWithException() throws Exception {
 		// 多次,會中斷
-		runner.start();
+		testRunner.start();
 		ThreadHelper.sleep(3000L);
 		//
-		runner.start();
+		testRunner.start();
 		ThreadHelper.sleep(3000L);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void shutdown() throws Exception {
-		runner.start();
+		testRunner.start();
 		ThreadHelper.sleep(3000L);
 		//
-		runner.shutdown();
+		testRunner.shutdown();
 		ThreadHelper.sleep(3000L);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void shutdownWithException() throws Exception {
-		runner.start();
+		testRunner.start();
 		ThreadHelper.sleep(3000L);
 		// 多次,會中斷
-		runner.shutdown();
+		testRunner.shutdown();
 		ThreadHelper.sleep(3000L);
 		//
-		runner.shutdown();
+		testRunner.shutdown();
 		ThreadHelper.sleep(3000L);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void restart() throws Exception {
-		runner.start();
+		testRunner.start();
 		ThreadHelper.sleep(3000L);
 		//
-		runner.shutdown();
+		testRunner.shutdown();
 		ThreadHelper.sleep(3000L);
 		//
-		runner.start();
+		testRunner.start();
 		ThreadHelper.sleep(3000L);
 	}
 
