@@ -1,8 +1,9 @@
+package org.openyu.commons.quartz.sample;
+
 import static org.junit.Assert.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openyu.commons.thread.ThreadHelper;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -16,36 +17,34 @@ public class RunMeTaskQuartzJobBeanTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(
-				new String[] { "applicationContext-schedule-runmetask.xml",//
-				});
+				new String[] { "org/openyu/commons/quartz/sample/testContext-quartz-sample.xml",//
+		});
 	}
 
 	@Test
-	public void runMeTaskQuartzJobn() {
-		JobDetail bean = (JobDetail) applicationContext.getBean("runMeTaskQuartzJob");
+	public void runMeTaskQuartzJobDetail() {
+		JobDetail bean = (JobDetail) applicationContext.getBean("runMeTaskQuartzJobDetail");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}
 
 	@Test
 	public void runMeTaskQuartzJobTrigger() {
-		CronTrigger bean = (CronTrigger) applicationContext
-				.getBean("runMeTaskQuartzJobTrigger");
+		CronTrigger bean = (CronTrigger) applicationContext.getBean("runMeTaskQuartzJobTrigger");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}
-	
+
 	@Test
-	public void runMeTaskMethodInvokingJob() {
-		JobDetail bean = (JobDetail) applicationContext.getBean("runMeTaskMethodInvokingJob");
+	public void runMeTaskMethodInvokingJobDetail() {
+		JobDetail bean = (JobDetail) applicationContext.getBean("runMeTaskMethodInvokingJobDetail");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}
 
 	@Test
 	public void runMeTaskMethodInvokingJobTrigger() {
-		CronTrigger bean = (CronTrigger) applicationContext
-				.getBean("runMeTaskMethodInvokingJobTrigger");
+		CronTrigger bean = (CronTrigger) applicationContext.getBean("runMeTaskMethodInvokingJobTrigger");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}

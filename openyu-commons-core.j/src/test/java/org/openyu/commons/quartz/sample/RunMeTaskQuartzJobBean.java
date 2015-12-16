@@ -1,3 +1,4 @@
+package org.openyu.commons.quartz.sample;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;

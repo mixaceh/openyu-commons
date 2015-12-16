@@ -1,3 +1,4 @@
+package org.openyu.commons.quartz.sample;
 public class RunMeTaskMethodInvoking {
 	
 	public void printMe() {
