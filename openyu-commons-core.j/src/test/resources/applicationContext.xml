@@ -28,7 +28,7 @@
 	<import resource="classpath:applicationContext-cxf.xml" /> 
 	-->
 
-	<!-- quartz -->
+	<!-- scheduler -->
 	<import resource="classpath:applicationContext-scheduler.xml" />
 
 </beans>
