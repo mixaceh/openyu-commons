@@ -42,6 +42,10 @@
 	<import
 		resource="classpath:org/openyu/commons/freemarker/applicationContext-freemarker.xml" />
 
+	<!-- quartz -->
+	<import
+		resource="classpath:org/openyu/commons/quartz/applicationContext-quartz.xml" />
+
 	<!-- configHelper -->
 	<bean
 		id="configHelper"

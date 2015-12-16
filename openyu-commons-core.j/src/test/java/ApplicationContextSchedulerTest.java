@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
-public class ApplicationContextQuartzTest extends BaseTestSupporter {
+public class ApplicationContextSchedulerTest extends BaseTestSupporter {
 
 	private static ApplicationContext applicationContext;
 
@@ -15,7 +15,7 @@ public class ApplicationContextQuartzTest extends BaseTestSupporter {
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"applicationContext-quartz.xml",//
+				"applicationContext-scheduler.xml",//
 		});
 	}
 

@@ -29,6 +29,6 @@
 	-->
 
 	<!-- quartz -->
-	<import resource="classpath:applicationContext-quartz.xml" />
+	<import resource="classpath:applicationContext-scheduler.xml" />
 
 </beans>
