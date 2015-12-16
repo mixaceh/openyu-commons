@@ -38,38 +38,6 @@ public class ArrayHelperTest extends BaseTestSupporter {
 	}
 
 	/**
-	 * Instance holder.
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	public void InstanceHolder() throws Exception {
-		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.lang.ArrayHelper$InstanceHolder");
-		//
-		Object result = null;
-		//
-		result = constructor.newInstance();
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
-	/**
-	 * Gets the single instance of ArrayHelperTest.
-	 *
-	 * @return single instance of ArrayHelperTest
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void getInstance() {
-		ArrayHelper result = null;
-		//
-		result = ArrayHelper.getInstance();
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
-	/**
 	 * Adds the unique.
 	 */
 	@Test
@@ -98,8 +66,8 @@ public class ArrayHelperTest extends BaseTestSupporter {
 		result = ArrayHelper.addUnique(x, null, Class[].class);
 		assertEquals(1, result.length);
 		//
-		String[] stringResult = ArrayHelper.addUnique(new String[] { "a", "b",
-				null }, new String[] { "c", null }, String[].class);
+		String[] stringResult = ArrayHelper.addUnique(new String[] { "a", "b", null }, new String[] { "c", null },
+				String[].class);
 		SystemHelper.println(stringResult);
 		assertEquals(4, stringResult.length);
 	}

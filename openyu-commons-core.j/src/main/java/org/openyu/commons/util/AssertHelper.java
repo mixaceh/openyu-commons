@@ -3,6 +3,7 @@ package org.openyu.commons.util;
 import java.util.Collection;
 import java.util.Map;
 
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.lang.StringHelper;
 import org.openyu.commons.lang.ObjectHelper;
@@ -12,36 +13,13 @@ import org.slf4j.LoggerFactory;
 /**
  * 檢核
  */
-public class AssertHelper extends BaseHelperSupporter {
+public final class AssertHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(AssertHelper.class);
 
-	/**
-	 * Instantiates a new AssertHelper.
-	 */
 	private AssertHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final AssertHelper INSTANCE = new AssertHelper();
-	}
-
-	/**
-	 * Gets the single instance of AssertHelper.
-	 *
-	 * @return single instance of AssertHelper
-	 */
-	public static AssertHelper getInstance() {
-		return InstanceHolder.INSTANCE;
+		throw new HelperException(
+				new StringBuilder().append(AssertHelper.class.getSimpleName()).append(" can not construct").toString());
 	}
 
 	public static void isTrue(boolean expression, String message) {
@@ -196,7 +174,7 @@ public class AssertHelper extends BaseHelperSupporter {
 		if (!(value >= min && value <= max))
 			throw new IllegalArgumentException(message);
 	}
-	
+
 	public static void isBetween(long value, long min, long max, String message) {
 		if (!(value >= min && value <= max))
 			throw new IllegalArgumentException(message);

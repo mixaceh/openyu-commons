@@ -7,7 +7,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openyu.commons.helper.ex.HelperException;
-//import org.apache.commons.lang.xwork.ArrayUtils;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 
 /**
@@ -19,7 +18,6 @@ import org.openyu.commons.helper.supporter.BaseHelperSupporter;
  */
 public final class ArrayHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(ArrayHelper.class);
 
 	/** The Constant EMPTY_BYTE. */
@@ -82,44 +80,10 @@ public final class ArrayHelper extends BaseHelperSupporter {
 	/** The Constant EMPTY_CLASS. */
 	public static final Class<?>[] EMPTY_CLASS = new Class[0];
 
-	/**
-	 * Instantiates a new helper.
-	 */
-	public ArrayHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new HelperException(
-					new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
+	private ArrayHelper() {
+		throw new HelperException(
+				new StringBuilder().append(ArrayHelper.class.getSimpleName()).append(" can not construct").toString());
 	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private static final ArrayHelper INSTANCE = new ArrayHelper();
-		private static ArrayHelper INSTANCE = new ArrayHelper();
-	}
-
-	/**
-	 * Gets the single instance of ArrayHelper.
-	 *
-	 * @return single instance of ArrayHelper
-	 */
-	public synchronized static ArrayHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new ArrayHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
-	}
-
 	// --------------------------------------------------
 
 	/**

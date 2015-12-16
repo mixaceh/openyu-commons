@@ -27,100 +27,14 @@ import org.openyu.commons.util.SerializeHelper;
 /**
  * Collector輔助類
  */
-public class CollectorHelper extends BaseHelperSupporter {
+public final class CollectorHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(CollectorHelper.class);
 
-	/**
-	 * Instantiates a new helper.
-	 */
-	// private CollectorHelper() {
-	public CollectorHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new HelperException(
-					new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
+	private CollectorHelper() {
+		throw new HelperException(
+				new StringBuilder().append(CollectorHelper.class.getSimpleName()).append(" can not construct").toString());
 	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private final static CollectorHelper INSTANCE = new
-		// CollectorHelper();
-		private static CollectorHelper INSTANCE = new CollectorHelper();
-	}
-
-	/**
-	 * Gets the single instance of CollectorHelper.
-	 *
-	 * @return single instance of CollectorHelper
-	 */
-	// public static CollectorHelper getInstance() {
-	// return InstanceHolder.INSTANCE;
-	// }
-	public synchronized static CollectorHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new CollectorHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
-	}
-
-	/**
-	 * 單例關閉
-	 * 
-	 * @return
-	 */
-	public synchronized static CollectorHelper shutdownInstance() {
-		if (InstanceHolder.INSTANCE != null) {
-			CollectorHelper oldInstance = InstanceHolder.INSTANCE;
-			InstanceHolder.INSTANCE = null;
-			//
-			if (oldInstance != null) {
-				oldInstance.shutdown();
-			}
-		}
-		return InstanceHolder.INSTANCE;
-	}
-
-	/**
-	 * 單例刷新
-	 * 
-	 * @return
-	 */
-	public synchronized static CollectorHelper restartInstance() {
-		if (InstanceHolder.INSTANCE != null) {
-			InstanceHolder.INSTANCE.restart();
-		}
-		return InstanceHolder.INSTANCE;
-	}
-
-	/**
-	 * 內部啟動
-	 */
-	@Override
-	protected void doStart() throws Exception {
-
-	}
-
-	/**
-	 * 內部關閉
-	 */
-	@Override
-	protected void doShutdown() throws Exception {
-
-	}
-
-	// --------------------------------------------------
 	/*
 	 * 轉換步驟 object -> xml -> serial
 	 */
