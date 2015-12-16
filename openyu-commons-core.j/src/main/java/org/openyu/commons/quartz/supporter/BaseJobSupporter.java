@@ -11,10 +11,16 @@ import org.openyu.commons.quartz.BaseJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 排程job
+ */
 public abstract class BaseJobSupporter extends QuartzJobBean implements BaseJob, Supporter {
 
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(BaseJobSupporter.class);
 
+	/**
+	 * 顯示名稱
+	 */
 	private transient String displayName;
 
 	public BaseJobSupporter() {
