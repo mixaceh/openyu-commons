@@ -136,9 +136,9 @@ import org.slf4j.LoggerFactory;
 // SHA256withRSA
 
 /**
- * 安全性 The Class SecurityHelper.
+ * 安全性輔助類
  */
-public class SecurityHelper extends BaseHelperSupporter {
+public final class SecurityHelper extends BaseHelperSupporter {
 
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(SecurityHelper.class);
 
@@ -167,7 +167,7 @@ public class SecurityHelper extends BaseHelperSupporter {
 	// "securityHelper.randomAuthKey";
 	//
 	// private static String randomAuthKey;
-	
+
 	/**
 	 * 安全性處理器工廠
 	 */
@@ -189,44 +189,6 @@ public class SecurityHelper extends BaseHelperSupporter {
 				secureRandom = SecureRandom.getInstance("SHA1PRNG");
 				secureRandom.setSeed(System.nanoTime());
 				//
-				// assignKey = ConfigHelper.getString(ASSIGN_KEY, "assignKey");
-				// algorithm = ConfigHelper.getString(ALGORITHM, "HmacMD5");
-				// randomAuthKey = ConfigHelper.getString(RANDOM_AUTH_KEY,
-				// "MD5");
-
-				// securityProcessor
-				// securityProcessorCacheFactory = SoftReferenceCacheFactoryImpl
-				// .createInstance(new
-				// CacheableObjectFactorySupporter<SecurityProcessor>() {
-				//
-				// private static final long serialVersionUID =
-				// 466475419232947467L;
-				//
-				// public SecurityProcessor makeObject() throws Exception {
-				// SecurityProcessor obj = new SecurityProcessorImpl();
-				// obj.setSecurity(ConfigHelper.isSecurity());
-				// obj.setSecurityKey(ConfigHelper.getSecurityKey());
-				// obj.setSecurityType(ConfigHelper.getSecurityType());
-				// return obj;
-				// }
-				//
-				// public boolean validateObject(SecurityProcessor obj) {
-				// return true;
-				// }
-				//
-				// public void activateObject(SecurityProcessor obj) throws
-				// Exception {
-				// obj.setSecurity(ConfigHelper.isSecurity());
-				// obj.setSecurityKey(ConfigHelper.getSecurityKey());
-				// obj.setSecurityType(ConfigHelper.getSecurityType());
-				// }
-				//
-				// public void passivateObject(SecurityProcessor obj) throws
-				// Exception {
-				// obj.reset();
-				// }
-				// });
-
 				securityProcessorCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<SecurityProcessor, SoftReferenceCacheFactory<SecurityProcessor>>();
 				securityProcessorCacheFactoryFactoryBean
 						.setCacheableObjectFactory(new CacheableObjectFactorySupporter<SecurityProcessor>() {
@@ -266,57 +228,10 @@ public class SecurityHelper extends BaseHelperSupporter {
 
 	}
 
-	/**
-	 * Instantiates a new blank helper.
-	 */
 	private SecurityHelper() {
-		super();
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
+		throw new HelperException(
+				new StringBuilder().append(SecurityHelper.class.getName()).append(" can not construct").toString());
 	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final SecurityHelper INSTANCE = new SecurityHelper();
-	}
-
-	/**
-	 * Gets the single instance of SecurityHelper.
-	 *
-	 * @return single instance of SecurityHelper
-	 */
-	public static SecurityHelper getInstance() {
-		return InstanceHolder.INSTANCE;
-	}
-
-	// public static String getAssignKey() {
-	// return assignKey;
-	// }
-	//
-	// public static void setAssignKey(String assignKey) {
-	// SecurityHelper.assignKey = assignKey;
-	// }
-	//
-	// public static String getAlgorithm() {
-	// return algorithm;
-	// }
-	//
-	// public static void setAlgorithm(String algorithm) {
-	// SecurityHelper.algorithm = algorithm;
-	// }
-	//
-	// public static String getRandomAuthKey() {
-	// return randomAuthKey;
-	// }
-	//
-	// public static void setRandomAuthKey(String randomAuthKey) {
-	// SecurityHelper.randomAuthKey = randomAuthKey;
-	// }
 
 	/**
 	 * 

@@ -5,50 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 
-/**
- * The Class SearchHelper.
- */
-public class SearchHelper extends BaseHelperSupporter {
+public final class SearchHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(SearchHelper.class);
 
-	/**
-	 * Instantiates a new blank helper.
-	 */
-	public SearchHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new HelperException(
-					new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private static final SearchHelper INSTANCE = new SearchHelper();
-		private static SearchHelper INSTANCE = new SearchHelper();
-	}
-
-	/**
-	 * Gets the single instance of SearchHelper.
-	 *
-	 * @return single instance of SearchHelper
-	 */
-	public synchronized static SearchHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new SearchHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
+	private SearchHelper() {
+		throw new HelperException(
+				new StringBuilder().append(SearchHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	/**

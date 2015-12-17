@@ -7,7 +7,6 @@ import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 
 public final class RuntimeHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(RuntimeHelper.class);
 
 	private RuntimeHelper() {

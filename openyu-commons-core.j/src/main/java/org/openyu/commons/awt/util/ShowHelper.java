@@ -19,17 +19,20 @@ import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
 
 import org.openyu.commons.awt.icon.IconHelper;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.lang.StringHelper;
+import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ShowHelper extends BaseHelperSupporter {
+public final class ShowHelper extends BaseHelperSupporter {
 
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(ShowHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(ShowHelper.class);
 
-	public ShowHelper() {
+	private ShowHelper() {
+		throw new HelperException(
+				new StringBuilder().append(AssertHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	public static void showIcon(File file) {
@@ -81,8 +84,7 @@ public class ShowHelper extends BaseHelperSupporter {
 				JLabel iconLabel = new JLabel(icon);
 				iconPanel.add(iconLabel);
 				statusTextArea.append(icon + StringHelper.LF);
-				statusTextArea.setCaretPosition(statusTextArea.getText()
-						.length());
+				statusTextArea.setCaretPosition(statusTextArea.getText().length());
 			}
 		}
 		//
@@ -141,10 +143,8 @@ public class ShowHelper extends BaseHelperSupporter {
 				desktopPane.add(internalFrame);
 				internalFrame.setVisible(true);
 				//
-				statusTextArea.append(internalFrame.getTitle()
-						+ StringHelper.LF);
-				statusTextArea.setCaretPosition(statusTextArea.getText()
-						.length());
+				statusTextArea.append(internalFrame.getTitle() + StringHelper.LF);
+				statusTextArea.setCaretPosition(statusTextArea.getText().length());
 			}
 		}
 		//
@@ -207,10 +207,8 @@ public class ShowHelper extends BaseHelperSupporter {
 				if (component != null) {
 					componentPanel.add(component);
 					//
-					statusTextArea.append(component.getClass().getName()
-							+ StringHelper.LF);
-					statusTextArea.setCaretPosition(statusTextArea.getText()
-							.length());
+					statusTextArea.append(component.getClass().getName() + StringHelper.LF);
+					statusTextArea.setCaretPosition(statusTextArea.getText().length());
 				}
 			}
 			//

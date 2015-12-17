@@ -38,13 +38,12 @@ import com.fasterxml.jackson.jaxrs.smile.JacksonSmileProvider;
 import org.openyu.commons.util.impl.SerializeProcessorImpl;
 
 /**
- * 序列化 The Class SerializeHelper.
+ * 序列化輔助類
  * 
  * @see SerializeType
  */
-public class SerializeHelper extends BaseHelperSupporter {
+public final class SerializeHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(SerializeHelper.class);
 
 	private static FSTConfiguration fstConfiguration = FSTConfiguration.createDefaultConfiguration();
@@ -67,39 +66,6 @@ public class SerializeHelper extends BaseHelperSupporter {
 		@SuppressWarnings("unchecked")
 		public Static() {
 			try {
-
-				// serializeProcessor
-				// serializeProcessorCacheFactory =
-				// SoftReferenceCacheFactoryImpl
-				// .createInstance(new
-				// CacheableObjectFactorySupporter<SerializeProcessor>() {
-				//
-				// private static final long serialVersionUID =
-				// -7294494524764181899L;
-				//
-				// public SerializeProcessor makeObject() throws Exception {
-				// SerializeProcessor obj = new SerializeProcessorImpl();
-				// obj.setSerialize(ConfigHelper.isSerialize());
-				// obj.setSerializeType(ConfigHelper.getSerializeType());
-				// return obj;
-				// }
-				//
-				// public boolean validateObject(SerializeProcessor obj) {
-				// return true;
-				// }
-				//
-				// public void activateObject(SerializeProcessor obj) throws
-				// Exception {
-				// obj.setSerialize(ConfigHelper.isSerialize());
-				// obj.setSerializeType(ConfigHelper.getSerializeType());
-				// }
-				//
-				// public void passivateObject(SerializeProcessor obj) throws
-				// Exception {
-				// obj.reset();
-				// }
-				// });
-
 				serializeProcessorCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<SerializeProcessor, SoftReferenceCacheFactory<SerializeProcessor>>();
 				serializeProcessorCacheFactoryFactoryBean
 						.setCacheableObjectFactory(new CacheableObjectFactorySupporter<SerializeProcessor>() {
@@ -136,31 +102,10 @@ public class SerializeHelper extends BaseHelperSupporter {
 		}
 	}
 
-	/**
-	 * Instantiates a new blank helper.
-	 */
 	private SerializeHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
-	}
+		throw new HelperException(
+				new StringBuilder().append(SerializeHelper.class.getName()).append(" can not construct").toString());
 
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final SerializeHelper INSTANCE = new SerializeHelper();
-	}
-
-	/**
-	 * Gets the single instance of SerializeHelper.
-	 *
-	 * @return single instance of SerializeHelper
-	 */
-	public static SerializeHelper getInstance() {
-		return InstanceHolder.INSTANCE;
 	}
 
 	public static byte[] serialize(Object value) {

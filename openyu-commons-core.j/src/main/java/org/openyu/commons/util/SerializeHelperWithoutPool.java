@@ -15,14 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.jgroups.util.Util;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
-//import org.openyu.commons.commons.pool.CacheCallback;
-//import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
-//import org.openyu.commons.commons.pool.ex.CacheException;
-//import org.openyu.commons.commons.pool.impl.SoftReferenceCacheFactoryImpl;
-//import org.openyu.commons.commons.pool.supporter.CacheableObjectFactorySupporter;
 import org.openyu.commons.io.IoHelper;
 import org.openyu.commons.lang.ByteHelper;
-//import org.openyu.commons.lang.BooleanHelper;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -39,39 +33,15 @@ import com.fasterxml.jackson.jaxrs.smile.JacksonSmileProvider;
 import org.openyu.commons.util.impl.SerializeProcessorImpl;
 
 /**
- * 序列化 The Class SerializeHelper.
+ * 序列化輔助類
  * 
  * @see SerializeType
  */
-public class SerializeHelperWithoutPool extends BaseHelperSupporter {
+public final class SerializeHelperWithoutPool extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(SerializeHelperWithoutPool.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(SerializeHelperWithoutPool.class);
 
-	private static FSTConfiguration fstConfiguration = FSTConfiguration
-			.createDefaultConfiguration();
-
-	// 2014/11/24, 會很耗mem, 先不使用
-	// private static SoftReferenceCacheFactory<FSTObjectOutput>
-	// fstObjectOutputCacheFactory;
-	//
-	// private static SoftReferenceCacheFactory<FSTObjectInput>
-	// fstObjectInputCacheFactory;
-	//
-	// private static SoftReferenceCacheFactory<Kryo> kryoCacheFactory;
-	//
-	// private static SoftReferenceCacheFactory<ObjectMapper>
-	// jacksonCacheFactory;
-	//
-	// private static SoftReferenceCacheFactory<ObjectMapper> smileCacheFactory;
-	//
-	// private static SoftReferenceCacheFactory<JacksonSmileProvider>
-	// smileJaxrsCacheFactory;
-	//
-	// /** 序列化處理器 */
-	// private static SoftReferenceCacheFactory<SerializeProcessor>
-	// serializeProcessorCacheFactory;
+	private static FSTConfiguration fstConfiguration = FSTConfiguration.createDefaultConfiguration();
 
 	static {
 		new Static();
@@ -80,187 +50,15 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	protected static class Static {
 		public Static() {
 			try {
-
-				// // FSTObjectOutput
-				// fstObjectOutputCacheFactory = new
-				// SoftReferenceCacheFactoryImpl<FSTObjectOutput>(
-				// FSTObjectOutput.class.getSimpleName(),
-				// new CacheableObjectFactorySupporter<FSTObjectOutput>() {
-				//
-				// private static final long serialVersionUID =
-				// -7462758716430774639L;
-				//
-				// public FSTObjectOutput makeObject()
-				// throws Exception {
-				// return new FSTObjectOutput();
-				// }
-				//
-				// public boolean validateObject(FSTObjectOutput obj) {
-				// return true;
-				// }
-				// });
-				//
-				// // FSTObjectInput
-				// fstObjectInputCacheFactory = new
-				// SoftReferenceCacheFactoryImpl<FSTObjectInput>(
-				// FSTObjectInput.class.getSimpleName(),
-				// new CacheableObjectFactorySupporter<FSTObjectInput>() {
-				//
-				// private static final long serialVersionUID =
-				// 1860762668217964912L;
-				//
-				// public FSTObjectInput makeObject() throws Exception {
-				// return new FSTObjectInput();
-				// }
-				//
-				// public boolean validateObject(FSTObjectInput obj) {
-				// return true;
-				// }
-				// });
-				//
-				// // kryo
-				// kryoCacheFactory = new SoftReferenceCacheFactoryImpl<Kryo>(
-				// Kryo.class.getSimpleName(),
-				// new CacheableObjectFactorySupporter<Kryo>() {
-				//
-				// private static final long serialVersionUID =
-				// -9123962698682864084L;
-				//
-				// public Kryo makeObject() throws Exception {
-				// Kryo obj = new Kryo();
-				// // obj.register(List.class);
-				// // obj.register(ArrayList.class);
-				// // obj.register(LinkedList.class);
-				// return obj;
-				// }
-				//
-				// public boolean validateObject(Kryo obj) {
-				// return true;
-				// }
-				// });
-				//
-				// // jackson
-				// jacksonCacheFactory = new
-				// SoftReferenceCacheFactoryImpl<ObjectMapper>(
-				// ObjectMapper.class.getSimpleName(),
-				// new CacheableObjectFactorySupporter<ObjectMapper>() {
-				//
-				// private static final long serialVersionUID =
-				// 6880124212137012746L;
-				//
-				// public ObjectMapper makeObject() throws Exception {
-				// return new ObjectMapper();
-				// }
-				//
-				// public boolean validateObject(ObjectMapper obj) {
-				// return true;
-				// }
-				// });
-				//
-				// // smile
-				// smileCacheFactory = new
-				// SoftReferenceCacheFactoryImpl<ObjectMapper>(
-				// SmileFactory.class.getSimpleName(),
-				// new CacheableObjectFactorySupporter<ObjectMapper>() {
-				//
-				// private static final long serialVersionUID =
-				// -7780789651449541685L;
-				//
-				// public ObjectMapper makeObject() throws Exception {
-				// return new ObjectMapper(new SmileFactory());
-				// }
-				//
-				// public boolean validateObject(ObjectMapper obj) {
-				// return true;
-				// }
-				// });
-				//
-				// // smileJaxrs
-				// smileJaxrsCacheFactory = new
-				// SoftReferenceCacheFactoryImpl<JacksonSmileProvider>(
-				// JacksonSmileProvider.class.getSimpleName(),
-				// new CacheableObjectFactorySupporter<JacksonSmileProvider>() {
-				//
-				// private static final long serialVersionUID =
-				// 4074975001368215557L;
-				//
-				// public JacksonSmileProvider makeObject()
-				// throws Exception {
-				// return new JacksonSmileProvider();
-				// }
-				//
-				// public boolean validateObject(
-				// JacksonSmileProvider obj) {
-				// return true;
-				// }
-				// });
-				//
-				// // serializeProcessor
-				// serializeProcessorCacheFactory = new
-				// SoftReferenceCacheFactoryImpl<SerializeProcessor>(
-				// SerializeProcessor.class.getSimpleName(),
-				// new CacheableObjectFactorySupporter<SerializeProcessor>() {
-				//
-				// private static final long serialVersionUID =
-				// -7294494524764181899L;
-				//
-				// public SerializeProcessor makeObject()
-				// throws Exception {
-				// SerializeProcessor obj = new SerializeProcessorImpl();
-				// obj.setSerialize(ConfigHelper.isSerialize());
-				// obj.setSerializeType(ConfigHelper
-				// .getSerializeType());
-				// return obj;
-				// }
-				//
-				// public boolean validateObject(SerializeProcessor obj) {
-				// return true;
-				// }
-				//
-				// public void activateObject(SerializeProcessor obj)
-				// throws Exception {
-				// obj.setSerialize(ConfigHelper.isSerialize());
-				// obj.setSerializeType(ConfigHelper
-				// .getSerializeType());
-				// }
-				//
-				// public void passivateObject(SerializeProcessor obj)
-				// throws Exception {
-				// obj.reset();
-				// }
-				// });
 			} catch (Exception ex) {
-				throw new HelperException("new Static() Initializing failed",
-						ex);
+				throw new HelperException("new Static() Initializing failed", ex);
 			}
 		}
 	}
 
-	/**
-	 * Instantiates a new blank helper.
-	 */
 	private SerializeHelperWithoutPool() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final SerializeHelperWithoutPool INSTANCE = new SerializeHelperWithoutPool();
-	}
-
-	/**
-	 * Gets the single instance of SerializeHelper.
-	 *
-	 * @return single instance of SerializeHelper
-	 */
-	public static SerializeHelperWithoutPool getInstance() {
-		return InstanceHolder.INSTANCE;
+		throw new HelperException(new StringBuilder().append(SerializeHelperWithoutPool.class.getName())
+				.append(" can not construct").toString());
 	}
 
 	public static byte[] serialize(Object value) {
@@ -308,8 +106,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean serialize(Serializable value,
-			OutputStream outputStream) {
+	public static boolean serialize(Serializable value, OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -647,8 +444,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean ___fst2(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean ___fst2(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -817,8 +613,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean kryo(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean kryo(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -885,8 +680,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean ___kryo(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean ___kryo(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -948,8 +742,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param clazz
 	 * @return
 	 */
-	public static <T> T dekryo(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T dekryo(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -1006,8 +799,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T ___dekryo(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T ___dekryo(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -1068,8 +860,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean jackson(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean jackson(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -1125,8 +916,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param clazz
 	 * @return
 	 */
-	public static <T> T dejackson(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T dejackson(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -1181,8 +971,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean ___jackson(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean ___jackson(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -1247,8 +1036,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T ___dejackson(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T ___dejackson(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -1309,8 +1097,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean jacksonToString(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean jacksonToString(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -1380,8 +1167,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T dejacksonFromString(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T dejacksonFromString(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -1450,8 +1236,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean smile(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean smile(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -1507,8 +1292,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param clazz
 	 * @return
 	 */
-	public static <T> T desmile(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T desmile(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -1563,8 +1347,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean ___smile(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean ___smile(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -1626,8 +1409,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T ___desmile(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T ___desmile(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -1687,8 +1469,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean smileJaxrs(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean smileJaxrs(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -1697,8 +1478,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 		JacksonSmileProvider provider = null;
 		try {
 			provider = new JacksonSmileProvider();
-			provider.writeTo(value, value.getClass(), null, null, null, null,
-					outputStream);
+			provider.writeTo(value, value.getClass(), null, null, null, null, outputStream);
 			result = true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -1745,8 +1525,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T desmileJaxrs(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T desmileJaxrs(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -1755,8 +1534,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 		JacksonSmileProvider provider = null;
 		try {
 			provider = new JacksonSmileProvider();
-			result = (T) provider.readFrom(Object.class, clazz, null, null,
-					null, inputStream);
+			result = (T) provider.readFrom(Object.class, clazz, null, null, null, inputStream);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -1802,8 +1580,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean ___smileJaxrs(final Serializable value,
-			final OutputStream outputStream) {
+	public static boolean ___smileJaxrs(final Serializable value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -1865,8 +1642,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T ___desmileJaxrs(final InputStream inputStream,
-			final Class<T> clazz) {
+	public static <T> T ___desmileJaxrs(final InputStream inputStream, final Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -1909,8 +1685,7 @@ public class SerializeHelperWithoutPool extends BaseHelperSupporter {
 		return result;
 	}
 
-	public static <T> T deserializeWithProcessor(final byte[] value,
-			final Class<?> clazz) {
+	public static <T> T deserializeWithProcessor(final byte[] value, final Class<?> clazz) {
 		T result = null;
 		//
 		// Object retObj = serializeProcessorCacheFactory
