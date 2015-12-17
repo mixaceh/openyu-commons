@@ -10,22 +10,19 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.util.LocaleHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //parseXxx(String) ->Number -> toXxx
 //parseXxxs(array) -> array -> toXxxs
 //format(Number) -> String ->toString
-public class NumberHelper extends BaseHelperSupporter {
+public final class NumberHelper extends BaseHelperSupporter {
 
-	private static transient final Logger log = LogManager
-			.getLogger(NumberHelper.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(NumberHelper.class);
 
-	private static NumberHelper instance;
-
-	//
 	public static final byte DEFAULT_BYTE = 0;
 
 	public static final short DEFAULT_SHORT = 0;
@@ -125,17 +122,10 @@ public class NumberHelper extends BaseHelperSupporter {
 		}
 	}
 
-	public NumberHelper() {
+	private NumberHelper() {
+		throw new HelperException(
+				new StringBuilder().append(NumberHelper.class.getName()).append(" can not construct").toString());
 	}
-
-	public static synchronized NumberHelper getInstance() {
-		if (instance == null) {
-			instance = new NumberHelper();
-		}
-		return instance;
-	}
-
-	// --------------------------------------------------------
 
 	/**
 	 * 處理基本型別轉換: byte,short,int,long,double,float
@@ -155,8 +145,7 @@ public class NumberHelper extends BaseHelperSupporter {
 		return createBigDecimal(value, defaultValue, null, null);
 	}
 
-	public static BigDecimal createBigDecimal(Object value,
-			double defaultValue, String pattern) {
+	public static BigDecimal createBigDecimal(Object value, double defaultValue, String pattern) {
 		return createBigDecimal(value, defaultValue, pattern, null);
 	}
 
@@ -170,23 +159,19 @@ public class NumberHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static BigDecimal createBigDecimal(Object value,
-			double defaultValue, String pattern, Locale locale) {
+	public static BigDecimal createBigDecimal(Object value, double defaultValue, String pattern, Locale locale) {
 		BigDecimal result = BigDecimal.ZERO;
 		try {
 
-			if (value instanceof Double && !Double.isNaN((Double) value)
-					&& !Double.isInfinite((Double) value)) {
+			if (value instanceof Double && !Double.isNaN((Double) value) && !Double.isInfinite((Double) value)) {
 				result = new BigDecimal(value.toString());
-			} else if (value instanceof Float && !Float.isNaN((Float) value)
-					&& !Float.isInfinite((Float) value)) {
+			} else if (value instanceof Float && !Float.isNaN((Float) value) && !Float.isInfinite((Float) value)) {
 				result = new BigDecimal(value.toString());
 			} else if (value instanceof String) {
-				double doubleValue = toDouble(value, defaultValue, pattern,
-						locale);
+				double doubleValue = toDouble(value, defaultValue, pattern, locale);
 				result = new BigDecimal(Double.toString(doubleValue));
-			} else if (value instanceof Byte || value instanceof Short
-					|| value instanceof Integer || value instanceof Long) {
+			} else if (value instanceof Byte || value instanceof Short || value instanceof Integer
+					|| value instanceof Long) {
 				result = new BigDecimal(value.toString());
 			}
 		} catch (Exception ex) {
@@ -218,8 +203,7 @@ public class NumberHelper extends BaseHelperSupporter {
 	 * @param locale
 	 * @return
 	 */
-	public static byte toByte(Object value, int defaultValue, String pattern,
-			Locale locale) {
+	public static byte toByte(Object value, int defaultValue, String pattern, Locale locale) {
 		byte result = (byte) defaultValue;
 		try {
 			StringBuilder sb = new StringBuilder();
@@ -252,8 +236,7 @@ public class NumberHelper extends BaseHelperSupporter {
 			for (int i = 0; i < results.length; i++) {
 				Byte element = values[i];
 				try {
-					results[i] = (element != null ? element.byteValue()
-							: (byte) defaultValue);
+					results[i] = (element != null ? element.byteValue() : (byte) defaultValue);
 				} catch (Exception ex) {
 					// ex.printStackTrace();
 				}
@@ -296,8 +279,7 @@ public class NumberHelper extends BaseHelperSupporter {
 		return toShort(value, defaultValue, pattern, null);
 	}
 
-	public static short toShort(Object value, int defaultValue, String pattern,
-			Locale locale) {
+	public static short toShort(Object value, int defaultValue, String pattern, Locale locale) {
 		short result = (short) defaultValue;
 		try {
 			StringBuilder sb = new StringBuilder();
@@ -330,8 +312,7 @@ public class NumberHelper extends BaseHelperSupporter {
 			for (int i = 0; i < results.length; i++) {
 				Short element = values[i];
 				try {
-					results[i] = (element != null ? element.shortValue()
-							: (short) defaultValue);
+					results[i] = (element != null ? element.shortValue() : (short) defaultValue);
 				} catch (Exception ex) {
 					// ex.printStackTrace();
 				}
@@ -383,8 +364,7 @@ public class NumberHelper extends BaseHelperSupporter {
 	 * @param locale
 	 * @return
 	 */
-	public static int toInt(Object value, int defaultValue, String pattern,
-			Locale locale) {
+	public static int toInt(Object value, int defaultValue, String pattern, Locale locale) {
 		int result = defaultValue;
 		try {
 			StringBuilder sb = new StringBuilder();
@@ -416,8 +396,7 @@ public class NumberHelper extends BaseHelperSupporter {
 			for (int i = 0; i < results.length; i++) {
 				Integer element = values[i];
 				try {
-					results[i] = (element != null ? element.intValue()
-							: defaultValue);
+					results[i] = (element != null ? element.intValue() : defaultValue);
 				} catch (Exception ex) {
 					// ex.printStackTrace();
 				}
@@ -470,8 +449,7 @@ public class NumberHelper extends BaseHelperSupporter {
 	 * @param locale
 	 * @return
 	 */
-	public static long toLong(Object value, long defaultValue, String pattern,
-			Locale locale) {
+	public static long toLong(Object value, long defaultValue, String pattern, Locale locale) {
 		long result = defaultValue;
 		try {
 			StringBuilder sb = new StringBuilder();
@@ -504,8 +482,7 @@ public class NumberHelper extends BaseHelperSupporter {
 			for (int i = 0; i < results.length; i++) {
 				Long element = values[i];
 				try {
-					results[i] = (element != null ? element.longValue()
-							: defaultValue);
+					results[i] = (element != null ? element.longValue() : defaultValue);
 				} catch (Exception ex) {
 					// ex.printStackTrace();
 				}
@@ -557,8 +534,7 @@ public class NumberHelper extends BaseHelperSupporter {
 	 * @param locale
 	 * @return
 	 */
-	public static float toFloat(Object value, float defaultValue,
-			String pattern, Locale locale) {
+	public static float toFloat(Object value, float defaultValue, String pattern, Locale locale) {
 		float result = defaultValue;
 		try {
 			StringBuilder sb = new StringBuilder();
@@ -591,8 +567,7 @@ public class NumberHelper extends BaseHelperSupporter {
 			for (int i = 0; i < results.length; i++) {
 				Float element = values[i];
 				try {
-					results[i] = (element != null ? element.floatValue()
-							: defaultValue);
+					results[i] = (element != null ? element.floatValue() : defaultValue);
 				} catch (Exception ex) {
 					// ex.printStackTrace();
 				}
@@ -632,8 +607,7 @@ public class NumberHelper extends BaseHelperSupporter {
 		return toDouble(value, defaultValue, null);
 	}
 
-	public static double toDouble(Object value, double defaultValue,
-			String pattern) {
+	public static double toDouble(Object value, double defaultValue, String pattern) {
 		return toDouble(value, defaultValue, pattern, null);
 	}
 
@@ -646,8 +620,7 @@ public class NumberHelper extends BaseHelperSupporter {
 	 * @param locale
 	 * @return
 	 */
-	public static double toDouble(Object value, double defaultValue,
-			String pattern, Locale locale) {
+	public static double toDouble(Object value, double defaultValue, String pattern, Locale locale) {
 		double result = defaultValue;
 		try {
 			StringBuilder sb = new StringBuilder();
@@ -679,8 +652,7 @@ public class NumberHelper extends BaseHelperSupporter {
 			for (int i = 0; i < results.length; i++) {
 				Double element = values[i];
 				try {
-					results[i] = (element != null ? element.doubleValue()
-							: defaultValue);
+					results[i] = (element != null ? element.doubleValue() : defaultValue);
 				} catch (Exception ex) {
 					// ex.printStackTrace();
 				}
@@ -744,14 +716,12 @@ public class NumberHelper extends BaseHelperSupporter {
 		return createDecimalFormat(pattern, null);
 	}
 
-	public static DecimalFormat createDecimalFormat(String pattern,
-			Locale locale) {
+	public static DecimalFormat createDecimalFormat(String pattern, Locale locale) {
 		DecimalFormat result = null;
 		//
 		try {
 			String newPattern = (pattern != null ? pattern : DEFAULT_PATTERN);
-			Locale newLocale = (locale != null ? locale : LocaleHelper
-					.getLocale());
+			Locale newLocale = (locale != null ? locale : LocaleHelper.getLocale());
 			DecimalFormatSymbols symbols = new DecimalFormatSymbols(newLocale);
 			result = new DecimalFormat(newPattern, symbols);
 		} catch (Exception ex) {
@@ -777,18 +747,14 @@ public class NumberHelper extends BaseHelperSupporter {
 		return add(value1, value2, DEFAULT_DOUBLE, DEFAULT_DOUBLE);
 	}
 
-	public static double add(Object value1, Object value2,
-			double defaultValue1, double defaultValue2) {
+	public static double add(Object value1, Object value2, double defaultValue1, double defaultValue2) {
 		return add(value1, value2, defaultValue1, defaultValue2, null, null);
 	}
 
-	public static double add(Object value1, Object value2,
-			double defaultValue1, double defaultValue2, String pattern,
+	public static double add(Object value1, Object value2, double defaultValue1, double defaultValue2, String pattern,
 			Locale locale) {
-		BigDecimal big1 = createBigDecimal(value1, defaultValue1, pattern,
-				locale);
-		BigDecimal big2 = createBigDecimal(value2, defaultValue2, pattern,
-				locale);
+		BigDecimal big1 = createBigDecimal(value1, defaultValue1, pattern, locale);
+		BigDecimal big2 = createBigDecimal(value2, defaultValue2, pattern, locale);
 		return big1.add(big2).doubleValue();
 	}
 
@@ -812,19 +778,14 @@ public class NumberHelper extends BaseHelperSupporter {
 		return subtract(value1, value2, DEFAULT_DOUBLE, DEFAULT_DOUBLE);
 	}
 
-	public static double subtract(Object value1, Object value2,
-			double defaultValue1, double defaultValue2) {
-		return subtract(value1, value2, defaultValue1, defaultValue2, null,
-				null);
+	public static double subtract(Object value1, Object value2, double defaultValue1, double defaultValue2) {
+		return subtract(value1, value2, defaultValue1, defaultValue2, null, null);
 	}
 
-	public static double subtract(Object value1, Object value2,
-			double defaultValue1, double defaultValue2, String pattern,
-			Locale locale) {
-		BigDecimal big1 = createBigDecimal(value1, defaultValue1, pattern,
-				locale);
-		BigDecimal big2 = createBigDecimal(value2, defaultValue2, pattern,
-				locale);
+	public static double subtract(Object value1, Object value2, double defaultValue1, double defaultValue2,
+			String pattern, Locale locale) {
+		BigDecimal big1 = createBigDecimal(value1, defaultValue1, pattern, locale);
+		BigDecimal big2 = createBigDecimal(value2, defaultValue2, pattern, locale);
 		return big1.subtract(big2).doubleValue();
 	}
 
@@ -849,10 +810,8 @@ public class NumberHelper extends BaseHelperSupporter {
 		return multiply(value1, value2, scale, 0d, 0d);
 	}
 
-	public static double multiply(Object value1, Object value2, int scale,
-			double defaultValue1, double defaultValue2) {
-		return multiply(value1, value2, scale, defaultValue1, defaultValue2,
-				null, null);
+	public static double multiply(Object value1, Object value2, int scale, double defaultValue1, double defaultValue2) {
+		return multiply(value1, value2, scale, defaultValue1, defaultValue2, null, null);
 
 	}
 
@@ -868,13 +827,10 @@ public class NumberHelper extends BaseHelperSupporter {
 	 * @param locale
 	 * @return
 	 */
-	public static double multiply(Object value1, Object value2, int scale,
-			double defaultValue1, double defaultValue2, String pattern,
-			Locale locale) {
-		BigDecimal big1 = createBigDecimal(value1, defaultValue1, pattern,
-				locale);
-		BigDecimal big2 = createBigDecimal(value2, defaultValue2, pattern,
-				locale);
+	public static double multiply(Object value1, Object value2, int scale, double defaultValue1, double defaultValue2,
+			String pattern, Locale locale) {
+		BigDecimal big1 = createBigDecimal(value1, defaultValue1, pattern, locale);
+		BigDecimal big2 = createBigDecimal(value2, defaultValue2, pattern, locale);
 		return round(big1.multiply(big2).doubleValue(), scale);
 	}
 
@@ -899,10 +855,8 @@ public class NumberHelper extends BaseHelperSupporter {
 		return divide(value1, value2, scale, 0d, 0d);
 	}
 
-	public static double divide(Object value1, Object value2, int scale,
-			double defaultValue1, double defaultValue2) {
-		return divide(value1, value2, scale, defaultValue1, defaultValue2,
-				null, null);
+	public static double divide(Object value1, Object value2, int scale, double defaultValue1, double defaultValue2) {
+		return divide(value1, value2, scale, defaultValue1, defaultValue2, null, null);
 	}
 
 	/**
@@ -912,16 +866,12 @@ public class NumberHelper extends BaseHelperSupporter {
 	 *            Object
 	 * @return double
 	 */
-	public static double divide(Object value1, Object value2, int scale,
-			double defaultValue1, double defaultValue2, String pattern,
-			Locale locale) {
-		BigDecimal big1 = createBigDecimal(value1, defaultValue1, pattern,
-				locale);
-		BigDecimal big2 = createBigDecimal(value2, defaultValue2, pattern,
-				locale);
+	public static double divide(Object value1, Object value2, int scale, double defaultValue1, double defaultValue2,
+			String pattern, Locale locale) {
+		BigDecimal big1 = createBigDecimal(value1, defaultValue1, pattern, locale);
+		BigDecimal big2 = createBigDecimal(value2, defaultValue2, pattern, locale);
 		// System.out.println(big1+" "+big2);
-		return (big2.doubleValue() == 0) ? 0 : big1.divide(big2, scale,
-				BigDecimal.ROUND_HALF_UP).doubleValue();
+		return (big2.doubleValue() == 0) ? 0 : big1.divide(big2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 
 	// --------------------------------------------------------
@@ -948,8 +898,7 @@ public class NumberHelper extends BaseHelperSupporter {
 		return round(value, scale, defaultValue, null);
 	}
 
-	public static double round(Object value, int scale, double defaultValue,
-			String pattern) {
+	public static double round(Object value, int scale, double defaultValue, String pattern) {
 		return round(value, scale, defaultValue, pattern, null);
 	}
 
@@ -964,8 +913,7 @@ public class NumberHelper extends BaseHelperSupporter {
 	 * @param locale
 	 * @return
 	 */
-	public static double round(Object value, int scale, double defaultValue,
-			String pattern, Locale locale) {
+	public static double round(Object value, int scale, double defaultValue, String pattern, Locale locale) {
 		BigDecimal big1 = createBigDecimal(value, defaultValue, pattern, locale);
 		BigDecimal big2 = createBigDecimal("1");
 		return big1.divide(big2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -988,8 +936,7 @@ public class NumberHelper extends BaseHelperSupporter {
 		return up(value, scale, defaultValue, null);
 	}
 
-	public static double up(Object value, int scale, double defaultValue,
-			String pattern) {
+	public static double up(Object value, int scale, double defaultValue, String pattern) {
 		return up(value, scale, defaultValue, pattern, null);
 	}
 
@@ -1004,8 +951,7 @@ public class NumberHelper extends BaseHelperSupporter {
 	 * @param locale
 	 * @return
 	 */
-	public static double up(Object value, int scale, double defaultValue,
-			String pattern, Locale locale) {
+	public static double up(Object value, int scale, double defaultValue, String pattern, Locale locale) {
 		BigDecimal big1 = createBigDecimal(value, defaultValue, pattern, locale);
 		BigDecimal big2 = createBigDecimal("1");
 		return big1.divide(big2, scale, BigDecimal.ROUND_UP).doubleValue();
@@ -1035,8 +981,7 @@ public class NumberHelper extends BaseHelperSupporter {
 		return down(value, scale, defaultValue, null);
 	}
 
-	public static double down(Object value, int scale, double defaultValue,
-			String pattern) {
+	public static double down(Object value, int scale, double defaultValue, String pattern) {
 		return down(value, scale, defaultValue, pattern, null);
 	}
 
@@ -1051,8 +996,7 @@ public class NumberHelper extends BaseHelperSupporter {
 	 * @param locale
 	 * @return
 	 */
-	public static double down(Object value, int scale, double defaultValue,
-			String pattern, Locale locale) {
+	public static double down(Object value, int scale, double defaultValue, String pattern, Locale locale) {
 		BigDecimal big1 = createBigDecimal(value, defaultValue, pattern, locale);
 		BigDecimal big2 = createBigDecimal("1");
 		return big1.divide(big2, scale, BigDecimal.ROUND_DOWN).doubleValue();

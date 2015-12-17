@@ -7,6 +7,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.misc.UnsafeHelper;
 import org.openyu.commons.thread.ThreadHelper;
@@ -14,13 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class NioHelper.
+ * Nio輔助類
  */
-public class NioHelper extends BaseHelperSupporter {
+public final class NioHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(NioHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(NioHelper.class);
 
 	/**
 	 * 預設接收緩衝區大小
@@ -56,28 +55,8 @@ public class NioHelper extends BaseHelperSupporter {
 	 * Instantiates a new blank helper.
 	 */
 	private NioHelper() {
-		super();
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final NioHelper INSTANCE = new NioHelper();
-	}
-
-	/**
-	 * Gets the single instance of BlankHelper.
-	 *
-	 * @return single instance of BlankHelper
-	 */
-	public static NioHelper getInstance() {
-		return InstanceHolder.INSTANCE;
+		throw new HelperException(
+				new StringBuilder().append(NioHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	public static InetSocketAddress createInetSocketAddress(String ip, int port) {
@@ -94,7 +73,7 @@ public class NioHelper extends BaseHelperSupporter {
 		if (key != null) {
 			try {
 				key.cancel();
-				//key.channel().close();
+				// key.channel().close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -160,8 +139,7 @@ public class NioHelper extends BaseHelperSupporter {
 	public static byte[] read(SocketChannel socketChannel, ByteBuffer byteBuffer) {
 		byte[] result = null;
 		try {
-			if (socketChannel != null && socketChannel.isConnected()
-					&& byteBuffer != null) {
+			if (socketChannel != null && socketChannel.isConnected() && byteBuffer != null) {
 				// int totalRead = 0;
 				int read = 0;
 				// #fix 改用loop處理
@@ -176,8 +154,7 @@ public class NioHelper extends BaseHelperSupporter {
 					byteBuffer.clear();
 					//
 					// result = ArrayHelper.add(result, buf);
-					result = UnsafeHelper.putByteArray(result, result.length,
-							buff);
+					result = UnsafeHelper.putByteArray(result, result.length, buff);
 					// totalRead += read;
 				}
 				//
@@ -197,12 +174,10 @@ public class NioHelper extends BaseHelperSupporter {
 	 * @param values
 	 * @return
 	 */
-	public static int write(SocketChannel socketChannel, ByteBuffer byteBuffer,
-			byte[]... values) {
+	public static int write(SocketChannel socketChannel, ByteBuffer byteBuffer, byte[]... values) {
 		int result = 0;
 		try {
-			if (socketChannel != null && socketChannel.isConnected()
-					&& byteBuffer != null) {
+			if (socketChannel != null && socketChannel.isConnected() && byteBuffer != null) {
 
 				// 把要寫出的bytes放到buffer
 				for (byte[] buff : values) {
@@ -262,8 +237,7 @@ public class NioHelper extends BaseHelperSupporter {
 	 * @param waitMillis
 	 * @return
 	 */
-	public static boolean waitConnect(SocketChannel socketChannel,
-			long waitMillis) {
+	public static boolean waitConnect(SocketChannel socketChannel, long waitMillis) {
 		boolean result = false;
 		long beg = System.currentTimeMillis();
 		long end = 0;

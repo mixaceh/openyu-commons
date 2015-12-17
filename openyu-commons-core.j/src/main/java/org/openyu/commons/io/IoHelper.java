@@ -20,12 +20,12 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.jar.JarFile;
 
-
 //#issue: 不支援中文檔名
 //import java.util.zip.ZipOutputStream;
 //#fix 改apache zip
 import org.apache.tools.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.lang.ByteHelper;
 import org.openyu.commons.lang.EncodingHelper;
@@ -40,11 +40,9 @@ import org.slf4j.LoggerFactory;
 /**
  * 將save/load -> 改成read/write
  */
-public class IoHelper extends BaseHelperSupporter implements Supporter {
+public final class IoHelper extends BaseHelperSupporter implements Supporter {
 
-	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(IoHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(IoHelper.class);
 
 	/**
 	 * 預設讀取重試次數
@@ -59,40 +57,16 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 	/**
 	 * 讀取重試補償
 	 */
-	public static final int[] READ_RETRY_BACK_OFF = { 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 2, 2, 2, 2, 2 };
+	public static final int[] READ_RETRY_BACK_OFF = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2 };
 
 	/**
 	 * 預試讀取區塊長度
 	 */
 	public static final int DEFALUT_READ_BLOCK_LENGTH = 1024;// k
 
-	/**
-	 * Instantiates a new blank helper.
-	 */
 	private IoHelper() {
-		super();
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final IoHelper INSTANCE = new IoHelper();
-	}
-
-	/**
-	 * Gets the single instance of IoHelper.
-	 *
-	 * @return single instance of IoHelper
-	 */
-	public static IoHelper getInstance() {
-		return InstanceHolder.INSTANCE;
+		throw new HelperException(
+				new StringBuilder().append(IoHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	/**
@@ -242,8 +216,7 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 			// 建目錄
 			FileHelper.md(value.getPath(), true);
 			try {
-				result = new PrintWriter(new BufferedOutputStream(
-						new FileOutputStream(value)));
+				result = new PrintWriter(new BufferedOutputStream(new FileOutputStream(value)));
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -363,8 +336,7 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 		ByteArrayInputStream result = null;
 		if (out instanceof ByteArrayOutputStream) {
 			try {
-				result = new ByteArrayInputStream(
-						((ByteArrayOutputStream) out).toByteArray());
+				result = new ByteArrayInputStream(((ByteArrayOutputStream) out).toByteArray());
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -430,8 +402,7 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 	// }
 
 	public static int available(InputStream in) {
-		return available(in, DEFAULT_READ_RETRY_NUMBER,
-				DEFAULT_READ_RETRY_PAUSE_MILLS);
+		return available(in, DEFAULT_READ_RETRY_NUMBER, DEFAULT_READ_RETRY_PAUSE_MILLS);
 	}
 
 	/**
@@ -442,8 +413,7 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 	 * @param retryPauseMills
 	 * @return
 	 */
-	public static int available(InputStream inputStream, int retryNumber,
-			long retryPauseMills) {
+	public static int available(InputStream inputStream, int retryNumber, long retryPauseMills) {
 		int result = 0;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -598,8 +568,8 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 	// }
 
 	public static byte[] read(InputStream inputStream) {
-		return read(inputStream, DEFALUT_READ_BLOCK_LENGTH,
-				DEFAULT_READ_RETRY_NUMBER, DEFAULT_READ_RETRY_PAUSE_MILLS, null);
+		return read(inputStream, DEFALUT_READ_BLOCK_LENGTH, DEFAULT_READ_RETRY_NUMBER, DEFAULT_READ_RETRY_PAUSE_MILLS,
+				null);
 	}
 
 	/**
@@ -610,8 +580,7 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 	 * @return
 	 */
 	public static byte[] read(InputStream inputStream, int blockLength) {
-		return read(inputStream, blockLength, DEFAULT_READ_RETRY_NUMBER,
-				DEFAULT_READ_RETRY_PAUSE_MILLS, null);
+		return read(inputStream, blockLength, DEFAULT_READ_RETRY_NUMBER, DEFAULT_READ_RETRY_PAUSE_MILLS, null);
 	}
 
 	/**
@@ -623,11 +592,9 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 	 *            外接處理邏輯
 	 * @return
 	 */
-	public static byte[] read(InputStream inputStream, int blockLength,
-			InputStreamCallback action) {
+	public static byte[] read(InputStream inputStream, int blockLength, InputStreamCallback action) {
 
-		return read(inputStream, blockLength, DEFAULT_READ_RETRY_NUMBER,
-				DEFAULT_READ_RETRY_PAUSE_MILLS, action);
+		return read(inputStream, blockLength, DEFAULT_READ_RETRY_NUMBER, DEFAULT_READ_RETRY_PAUSE_MILLS, action);
 	}
 
 	/**
@@ -649,8 +616,8 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 	 *            外接處理邏輯
 	 * @return
 	 */
-	public static byte[] read(InputStream inputStream, int blockLength,
-			int retryNumber, long retryPauseMills, InputStreamCallback action) {
+	public static byte[] read(InputStream inputStream, int blockLength, int retryNumber, long retryPauseMills,
+			InputStreamCallback action) {
 		byte[] result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -755,8 +722,7 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 	 * @param charsetName
 	 * @return
 	 */
-	public static boolean write(OutputStream outputStream, String value,
-			String charsetName) {
+	public static boolean write(OutputStream outputStream, String value, String charsetName) {
 		return write(outputStream, ByteHelper.toByteArray(value, charsetName));
 	}
 
@@ -788,8 +754,7 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 	}
 
 	public static String writeToJson(Class<?> classFile, Object value) {
-		String fileName = (classFile != null ? classFile.getSimpleName()
-				: value.getClass().getSimpleName());
+		String fileName = (classFile != null ? classFile.getSimpleName() : value.getClass().getSimpleName());
 		return writeToJson(fileName, value);
 	}
 
@@ -847,8 +812,7 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 	}
 
 	public static <T> T readFromJson(Class<?> classFile, Class<?> clazz) {
-		String fileName = (classFile != null ? classFile.getSimpleName()
-				: clazz.getSimpleName());
+		String fileName = (classFile != null ? classFile.getSimpleName() : clazz.getSimpleName());
 		return readFromJson(fileName, clazz);
 	}
 
@@ -1038,8 +1002,7 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 	 * @param encoding
 	 * @return
 	 */
-	public static boolean writeToString(String fileName, String value,
-			String encoding) {
+	public static boolean writeToString(String fileName, String value, String encoding) {
 		if (fileName == null) {
 			return false;
 		}
@@ -1065,8 +1028,7 @@ public class IoHelper extends BaseHelperSupporter implements Supporter {
 	 * @param encoding
 	 * @return
 	 */
-	public static boolean writeToString(File file, String content,
-			String encoding) {
+	public static boolean writeToString(File file, String content, String encoding) {
 		boolean result = false;
 		//
 		try {

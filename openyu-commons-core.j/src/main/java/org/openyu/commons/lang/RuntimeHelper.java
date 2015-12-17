@@ -5,50 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 
-/**
- * The Class RuntimeHelper.
- */
-public class RuntimeHelper extends BaseHelperSupporter {
+public final class RuntimeHelper extends BaseHelperSupporter {
 
 	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(RuntimeHelper.class);
 
-	/**
-	 * Instantiates a new helper.
-	 */
-	public RuntimeHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-				throw new HelperException(
-						new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private static final RuntimeHelper INSTANCE = new RuntimeHelper();
-		private static RuntimeHelper INSTANCE = new RuntimeHelper();
-	}
-
-	/**
-	 * Gets the single instance of BlankHelper.
-	 *
-	 * @return single instance of BlankHelper
-	 */
-	public synchronized static RuntimeHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new RuntimeHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
+	private RuntimeHelper() {
+		throw new HelperException(
+				new StringBuilder().append(RuntimeHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	/**

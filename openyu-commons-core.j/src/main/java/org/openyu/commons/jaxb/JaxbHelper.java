@@ -9,49 +9,25 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.io.IoHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class JaxbHelper.
+ * Jaxb輔助類
  */
-public class JaxbHelper extends BaseHelperSupporter {
+public final class JaxbHelper extends BaseHelperSupporter {
 
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(JaxbHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(JaxbHelper.class);
 
-	/**
-	 * Instantiates a new blank helper.
-	 */
 	private JaxbHelper() {
-		super();
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
+		throw new HelperException(
+				new StringBuilder().append(JaxbHelper.class.getName()).append(" can not construct").toString());
 	}
 
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final JaxbHelper INSTANCE = new JaxbHelper();
-	}
-
-	/**
-	 * Gets the single instance of BlankHelper.
-	 *
-	 * @return single instance of BlankHelper
-	 */
-	public static JaxbHelper getInstance() {
-		return InstanceHolder.INSTANCE;
-	}
-
-	public static boolean marshal(Object value, OutputStream outputStream,
-			Class<?> clazz) {
+	public static boolean marshal(Object value, OutputStream outputStream, Class<?> clazz) {
 		return marshal(value, outputStream, new Class[] { clazz });
 	}
 
@@ -63,13 +39,11 @@ public class JaxbHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static boolean marshal(Object value, OutputStream outputStream,
-			Class<?>[] clazz) {
+	public static boolean marshal(Object value, OutputStream outputStream, Class<?>[] clazz) {
 		boolean result = false;
 		//
 		if (outputStream == null) {
-			throw new IllegalArgumentException(
-					"The OutputStream must not be null");
+			throw new IllegalArgumentException("The OutputStream must not be null");
 		}
 		//
 		OutputStream out = null;

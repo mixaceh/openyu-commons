@@ -7,58 +7,19 @@ import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ObjectHelper extends BaseHelperSupporter {
+public final class ObjectHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(ObjectHelper.class);
-
-	// 因為型別不適用,已宣告的
-	// public static final Null NULL = new Null();
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(ObjectHelper.class);
 
 	public static final Object EMPTY_OBJECT = new Object();
 
-	/**
-	 * Instantiates a new helper.
-	 */
-	public ObjectHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new HelperException(
-					new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private static final ObjectHelper INSTANCE = new ObjectHelper();
-		private static ObjectHelper INSTANCE = new ObjectHelper();
-	}
-
-	/**
-	 * Gets the single instance of ObjectHelper.
-	 *
-	 * @return single instance of ObjectHelper
-	 */
-	public static ObjectHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new ObjectHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
+	private ObjectHelper() {
+		throw new HelperException(
+				new StringBuilder().append(ObjectHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	public static Object createObject(InvocationHandler handler) {
-		return ClassHelper.newProxyInstance(new Class[] { Object.class },
-				handler);
+		return ClassHelper.newProxyInstance(new Class[] { Object.class }, handler);
 	}
 
 	public static boolean contains(Object[] array, Object value) {
@@ -72,23 +33,6 @@ public class ObjectHelper extends BaseHelperSupporter {
 	public static Object toObject(Object value, Object defaultValue) {
 		return (value != null) ? value : defaultValue;
 	}
-
-	// public static Object wrap(Object value)
-	// {
-	// return wrap(value, null);
-	// }
-
-	// public static Object wrap(Object value, Object defaultValue)
-	// {
-	// Object result = null;
-	// if (value instanceof Object)
-	// {
-	// result = parse(value, defaultValue);
-	// }
-	// else
-	// {}
-	// return result;
-	// }
 
 	/**
 	 * <p>
@@ -167,8 +111,7 @@ public class ObjectHelper extends BaseHelperSupporter {
 		return appendIdentityToString(null, object).toString();
 	}
 
-	public static StringBuffer appendIdentityToString(StringBuffer buffer,
-			Object object) {
+	public static StringBuffer appendIdentityToString(StringBuffer buffer, Object object) {
 		if (object == null) {
 			return null;
 		}
@@ -190,8 +133,7 @@ public class ObjectHelper extends BaseHelperSupporter {
 		if (ArrayHelper.isArray(value))// 基本型別array
 		{
 			// Class<?> clazz = value.getClass().getComponentType();
-			StringBuilder className = new StringBuilder(value.getClass()
-					.getName());
+			StringBuilder className = new StringBuilder(value.getClass().getName());
 			char type = className.charAt(1);
 			if (type != '[' && type != 'L') {
 				switch (type) {

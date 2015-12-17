@@ -6,17 +6,21 @@ import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.io.FileHelper;
+import org.openyu.commons.lang.ArrayHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IconHelper extends BaseHelperSupporter {
+public final class IconHelper extends BaseHelperSupporter {
 
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(IconHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(IconHelper.class);
 
-	public IconHelper() {
+	private IconHelper() {
+		throw new HelperException(
+				new StringBuilder().append(IconHelper.class.getName()).append(" can not construct").toString());
+
 	}
 
 	public static Icon createIcon(String fileName) {
