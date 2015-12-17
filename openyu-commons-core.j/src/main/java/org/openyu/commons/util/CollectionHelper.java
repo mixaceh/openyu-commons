@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.lang.ClassHelper;
 import org.openyu.commons.lang.NumberHelper;
@@ -20,43 +21,16 @@ import org.openyu.commons.lang.StringHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CollectionHelper extends BaseHelperSupporter {
+/**
+ * Collection輔助類
+ */
+public final class CollectionHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(CollectionHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(CollectionHelper.class);
 
-	public static final Set EMPTY_SET = Collections.EMPTY_SET;
-
-	public static final List EMPTY_LIST = Collections.EMPTY_LIST;
-
-	public static final Map EMPTY_MAP = Collections.EMPTY_MAP;
-
-	/**
-	 * Instantiates a new CollectionHelper.
-	 */
 	private CollectionHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final CollectionHelper INSTANCE = new CollectionHelper();
-	}
-
-	/**
-	 * Gets the single instance of CollectionHelper.
-	 *
-	 * @return single instance of CollectionHelper
-	 */
-	public static CollectionHelper getInstance() {
-		return InstanceHolder.INSTANCE;
+		throw new HelperException(
+				new StringBuilder().append(CollectionHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	/**
@@ -79,8 +53,7 @@ public class CollectionHelper extends BaseHelperSupporter {
 	 * @param clazz
 	 * @return
 	 */
-	public static <K, V, T extends Map<K, V>> Map<K, V> toMap(K[] keys,
-			V[] values, Class<T> clazz) {
+	public static <K, V, T extends Map<K, V>> Map<K, V> toMap(K[] keys, V[] values, Class<T> clazz) {
 		Map<K, V> result = ClassHelper.newInstance(clazz);
 		//
 		if (keys != null) {
@@ -98,8 +71,7 @@ public class CollectionHelper extends BaseHelperSupporter {
 	 * @param values
 	 * @return
 	 */
-	public static <K, V> ConcurrentMap<K, V> toConcurrentMap(K[] keys,
-			V[] values) {
+	public static <K, V> ConcurrentMap<K, V> toConcurrentMap(K[] keys, V[] values) {
 		ConcurrentMap<K, V> result = new ConcurrentHashMap<K, V>();
 		if (keys != null) {
 			for (int i = 0; i < keys.length; i++) {
@@ -132,8 +104,7 @@ public class CollectionHelper extends BaseHelperSupporter {
 	 * @param clazz
 	 * @return
 	 */
-	public static <E, T extends List<E>> List<E> toList(E[] values,
-			Class<T> clazz) {
+	public static <E, T extends List<E>> List<E> toList(E[] values, Class<T> clazz) {
 		List<E> result = ClassHelper.newInstance(clazz);
 		//
 		if (values != null) {
@@ -204,8 +175,7 @@ public class CollectionHelper extends BaseHelperSupporter {
 		List<K> result = new LinkedList<K>();
 		if (notEmpty(values)) {
 			for (Map.Entry<K, V> entry : values.entrySet()) {
-				if (value != null && entry.getValue() != null
-						&& entry.getValue().equals(value)) {
+				if (value != null && entry.getValue() != null && entry.getValue().equals(value)) {
 					result.add(entry.getKey());
 				} else if (value == null && entry.getValue() == null) {
 					result.add(entry.getKey());
@@ -464,8 +434,7 @@ public class CollectionHelper extends BaseHelperSupporter {
 	 * @param values
 	 * @return
 	 */
-	public static <K> boolean accuValue(Map<K, Integer> values,
-			Map<K, Integer> destValues) {
+	public static <K> boolean accuValue(Map<K, Integer> values, Map<K, Integer> destValues) {
 		boolean result = false;
 		// 原始道具
 		Map<K, Integer> origValues = new LinkedHashMap<K, Integer>(values);

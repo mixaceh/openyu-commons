@@ -8,12 +8,12 @@ import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 /**
  * Blank輔助類
  */
-public class BlankHelper extends BaseHelperSupporter {
+public final class BlankHelper extends BaseHelperSupporter {
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(BlankHelper.class);
 
 	private BlankHelper() {
 		throw new HelperException(
-				new StringBuilder().append(BlankHelper.class.getSimpleName()).append(" can not construct").toString());
+				new StringBuilder().append(BlankHelper.class.getName()).append(" can not construct").toString());
 	}
 }

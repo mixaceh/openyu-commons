@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.openyu.commons.bean.BaseBean;
 import org.openyu.commons.entity.BaseEntity;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.util.ConfigHelper;
 import org.openyu.commons.util.AssertHelper;
@@ -30,13 +31,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Class輔助類
+ * 
  * 1.使用cache主要是為了減少反射時大量的消耗資源, 執行效率與原本無cache其實是差不多的
  */
-public class ClassHelper extends BaseHelperSupporter {
+public final class ClassHelper extends BaseHelperSupporter {
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(ClassHelper.class);
-
-	private static ClassHelper instance;
 
 	public static final Class<?>[] EMPTY_CLASSES = new Class<?>[0];
 
@@ -144,14 +145,9 @@ public class ClassHelper extends BaseHelperSupporter {
 		}
 	}
 
-	public ClassHelper() {
-	}
-
-	public static synchronized ClassHelper getInstance() {
-		if (instance == null) {
-			instance = new ClassHelper();
-		}
-		return instance;
+	private ClassHelper() {
+		throw new HelperException(
+				new StringBuilder().append(ClassHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	public static ClassLoader getClassLoader() {
@@ -1136,7 +1132,7 @@ public class ClassHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static Field[] getDeclaredFieldsAndCache(Class<?> clazz) {
-		//AssertHelper.notNull(clazz, "The Class must not be null");
+		// AssertHelper.notNull(clazz, "The Class must not be null");
 		//
 		Field[] fields = new Field[0];
 		if (clazz != null) {

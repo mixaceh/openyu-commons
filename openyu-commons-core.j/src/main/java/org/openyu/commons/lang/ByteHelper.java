@@ -20,46 +20,16 @@ import org.openyu.commons.util.SerializeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ByteHelper extends BaseHelperSupporter {
+/**
+ * Byte輔助類
+ */
+public final class ByteHelper extends BaseHelperSupporter {
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(ByteHelper.class);
 
-	/**
-	 * Instantiates a new helper.
-	 */
-	public ByteHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new HelperException(
-					new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private static final ByteHelper INSTANCE = new ByteHelper();
-		private static ByteHelper INSTANCE = new ByteHelper();
-	}
-
-	/**
-	 * Gets the single instance of ByteHelper.
-	 *
-	 * @return single instance of ByteHelper
-	 */
-	public synchronized static ByteHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new ByteHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
+	private ByteHelper() {
+		throw new HelperException(
+				new StringBuilder().append(ByteHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	// --------------------------------------------------

@@ -5,9 +5,6 @@ import java.util.zip.Adler32;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
-
-
-import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 //import org.openyu.commons.commons.pool.CacheCallback;
 //import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
@@ -33,134 +30,12 @@ import org.slf4j.LoggerFactory;
  * 
  *      2.ADLER32
  */
-public class ChecksumHelperWithoutPool extends BaseHelperSupporter {
+public final class ChecksumHelperWithoutPool extends BaseHelperSupporter {
 
 	/** The Constant LOGGER. */
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(ChecksumHelperWithoutPool.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(ChecksumHelperWithoutPool.class);
 
 	public static final int BUFFER_LENGTH = 1024;
-
-	// 2014/11/24, 會很耗mem, 先不使用
-	// private static SoftReferenceCacheFactory<CRC32> crc32CacheFactory;
-	//
-	// private static SoftReferenceCacheFactory<Adler32> adler32CacheFactory;
-
-	// /** 檢查碼處理器 */
-	// private static SoftReferenceCacheFactory<ChecksumProcessor>
-	// checksumProcessorCacheFactory;
-
-	static {
-		new Static();
-	}
-
-	protected static class Static {
-		public Static() {
-			try {
-				// crc32
-				// crc32CacheFactory = new SoftReferenceCacheFactoryImpl<CRC32>(
-				// CRC32.class.getSimpleName(),
-				// new CacheableObjectFactorySupporter<CRC32>() {
-				//
-				// private static final long serialVersionUID =
-				// -7510715895070674434L;
-				//
-				// public CRC32 makeObject() throws Exception {
-				// return new CRC32();
-				// }
-				//
-				// public void passivateObject(CRC32 obj)
-				// throws Exception {
-				// obj.reset();
-				// }
-				// });
-				//
-				// // adler32
-				// adler32CacheFactory = new
-				// SoftReferenceCacheFactoryImpl<Adler32>(
-				// Adler32.class.getSimpleName(),
-				// new CacheableObjectFactorySupporter<Adler32>() {
-				//
-				// private static final long serialVersionUID =
-				// -1974263719398091583L;
-				//
-				// public Adler32 makeObject() throws Exception {
-				// return new Adler32();
-				// }
-				//
-				// public void passivateObject(Adler32 obj)
-				// throws Exception {
-				// obj.reset();
-				// }
-				// });
-				//
-				// // checksumProcessor
-				// checksumProcessorCacheFactory = new
-				// SoftReferenceCacheFactoryImpl<ChecksumProcessor>(
-				// ChecksumProcessor.class.getSimpleName(),
-				// new CacheableObjectFactorySupporter<ChecksumProcessor>() {
-				//
-				// private static final long serialVersionUID =
-				// -2745795176962911555L;
-				//
-				// public ChecksumProcessor makeObject()
-				// throws Exception {
-				// ChecksumProcessor obj = new ChecksumProcessorImpl();
-				// obj.setChecksum(ConfigHelper.isChecksum());
-				// obj.setChecksumType(ConfigHelper
-				// .getChecksumType());
-				// return obj;
-				// }
-				//
-				// public boolean validateObject(ChecksumProcessor obj) {
-				// return true;
-				// }
-				//
-				// public void activateObject(ChecksumProcessor obj)
-				// throws Exception {
-				// obj.setChecksum(ConfigHelper.isChecksum());
-				// obj.setChecksumType(ConfigHelper
-				// .getChecksumType());
-				// }
-				//
-				// public void passivateObject(ChecksumProcessor obj)
-				// throws Exception {
-				// obj.reset();
-				// }
-				// });
-			} catch (Exception ex) {
-				throw new HelperException("new Static() Initializing failed",
-						ex);
-			}
-		}
-	}
-
-	/**
-	 * Instantiates a new ChecksumHelper.
-	 */
-	private ChecksumHelperWithoutPool() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final ChecksumHelperWithoutPool INSTANCE = new ChecksumHelperWithoutPool();
-	}
-
-	/**
-	 * Gets the single instance of ChecksumHelper.
-	 *
-	 * @return single instance of ChecksumHelper
-	 */
-	public static ChecksumHelperWithoutPool getInstance() {
-		return InstanceHolder.INSTANCE;
-	}
 
 	/**
 	 * crc32
@@ -320,8 +195,7 @@ public class ChecksumHelperWithoutPool extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static String crc32AsHex(String value, String charsetName) {
-		return EncodingHelper.encodeHex(ByteHelper.toByteArray(crc32(value,
-				charsetName)));
+		return EncodingHelper.encodeHex(ByteHelper.toByteArray(crc32(value, charsetName)));
 	}
 
 	/**
@@ -510,8 +384,7 @@ public class ChecksumHelperWithoutPool extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static String adler32AsHex(String value, String charsetName) {
-		return EncodingHelper.encodeHex(ByteHelper.toByteArray(adler32(value,
-				charsetName)));
+		return EncodingHelper.encodeHex(ByteHelper.toByteArray(adler32(value, charsetName)));
 	}
 
 	/**
@@ -521,8 +394,7 @@ public class ChecksumHelperWithoutPool extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static String adler32AsHex(byte[] values) {
-		return EncodingHelper
-				.encodeHex(ByteHelper.toByteArray(adler32(values)));
+		return EncodingHelper.encodeHex(ByteHelper.toByteArray(adler32(values)));
 	}
 
 	/**

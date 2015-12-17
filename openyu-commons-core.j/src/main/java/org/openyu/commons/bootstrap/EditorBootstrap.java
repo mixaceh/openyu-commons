@@ -15,6 +15,7 @@ import org.openyu.commons.editor.BaseEditor;
 import org.openyu.commons.editor.EditorStarter;
 import org.openyu.commons.lang.ClassHelper;
 import org.openyu.commons.lang.StringHelper;
+import org.openyu.commons.util.AssertHelper;
 import org.openyu.commons.util.CollectionHelper;
 
 /**
@@ -31,8 +32,7 @@ import org.openyu.commons.util.CollectionHelper;
 public final class EditorBootstrap extends BootstrapSupporter {
 
 	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(EditorBootstrap.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(EditorBootstrap.class);
 
 	/**
 	 * 所有editor啟動器
@@ -46,12 +46,18 @@ public final class EditorBootstrap extends BootstrapSupporter {
 	 *            the arguments
 	 */
 	public static void main(String args[]) {
-		// 建構applicationContext
-		buildApplicationContext(args);
-		// 建構editor啟動器
-		buildEditorStarters();
-		//
-		doInStart();
+		try {
+			// 建構applicationContext
+			buildApplicationContext(args);
+			// 建構editor啟動器
+			buildEditorStarters();
+			//
+			doStart();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during main()").toString(), e);
+			// 結束
+			System.exit(0);
+		}
 	}
 
 	/**
@@ -61,10 +67,9 @@ public final class EditorBootstrap extends BootstrapSupporter {
 	 */
 	protected static void buildApplicationContext(String[] configLocations) {
 		applicationContext = new ClassPathXmlApplicationContext(configLocations);
-		if (applicationContext == null) {
-			throw new IllegalArgumentException(
-					"The ApplicationContext must not be null");
-		}
+		//
+		AssertHelper.notNull(applicationContext,
+				new StringBuilder().append("The ApplicationContext must not be null").toString());
 	}
 
 	/**
@@ -73,10 +78,7 @@ public final class EditorBootstrap extends BootstrapSupporter {
 	protected static void buildEditorStarters() {
 		editorStarters = applicationContext.getBeansOfType(EditorStarter.class);
 		//
-		if (CollectionHelper.isEmpty(editorStarters)) {
-			throw new IllegalArgumentException(
-					"The EditorStarters must not be null or empty");
-		}
+		AssertHelper.notEmpty(editorStarters, "The EditorStarters must not be null or empty");
 	}
 
 	/**
@@ -86,22 +88,31 @@ public final class EditorBootstrap extends BootstrapSupporter {
 	 *            the application context
 	 */
 	public static void start(ApplicationContext applicationContext) {
-		EditorBootstrap.applicationContext = applicationContext;
-		doInStart();
+		AssertHelper.notNull(applicationContext, "The ApplicationContext must not be null");
+		//
+		try {
+			EditorBootstrap.applicationContext = applicationContext;
+			// 建構editor啟動器
+			buildEditorStarters();
+			//
+			doStart();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during start()").toString(), e);
+		}
 	}
 
 	/**
 	 * 內部用啟動.
 	 */
-	protected static void doInStart() {
+	protected static void doStart() throws Exception {
 		// 總數
 		int count = 0;
 		// 執行數
 		int runCount = 0;
 		// 執行數花費的時間總計
-		long sumDur = 0L;
+		long sumTime = 0L;
 		// 平均時間
-		long avgDur = 0L;
+		long avgTime = 0L;
 		// 最佳時間
 		long bestTime = Long.MAX_VALUE;
 		//
@@ -115,7 +126,7 @@ public final class EditorBootstrap extends BootstrapSupporter {
 				// excel -> xml
 				String result = null;
 				try {
-					long start = System.nanoTime();
+					long begTime = System.currentTimeMillis();
 					BaseEditor editor = checkBaseEditor(editorName);
 					if (editor == null) {
 						continue;
@@ -123,38 +134,33 @@ public final class EditorBootstrap extends BootstrapSupporter {
 					//
 					result = editor.writeToXml();
 					if (result == null) {
-						throw new NullPointerException(editorName
-								+ " Not write to xml");
+						throw new NullPointerException(editorName + " Not write to xml");
 					}
-					long dur = System.nanoTime() - start;
-					dur = TimeUnit.NANOSECONDS.toMillis(dur);
+					long endTime = System.currentTimeMillis();
+					long durTime = endTime - begTime;
 					//
 					runCount++;
-					sumDur += dur;
-					bestTime = Math.min(bestTime, dur);
-					LOGGER.info("[" + count + "] Write to " + result
-							+ " success in " + dur + " ms");
-					
+					sumTime += durTime;
+					bestTime = Math.min(bestTime, durTime);
+					LOGGER.info("[" + count + "] Write to " + result + " success in " + durTime + " ms");
+
 				} catch (NullPointerException ex) {
 					LOGGER.info("[" + count + "] " + ex.getMessage());
 				} catch (Exception ex) {
-					LOGGER.info(
-							"[" + count + "] Write " + editorName + " failed", ex);
+					LOGGER.info("[" + count + "] Write " + editorName + " failed", ex);
 				}
 				count++;
 			}
 		}
-		avgDur = (runCount == 0 ? 0 : sumDur / runCount);
+		avgTime = (runCount == 0 ? 0 : sumTime / runCount);
 		bestTime = (bestTime == Long.MAX_VALUE ? 0 : bestTime);
 		//
 		String msgPattern = "Total files is [{0}], [{1}] files had been successfully writed to xml file in {2} ms";
-		StringBuilder msg = new StringBuilder(MessageFormat.format(msgPattern,
-				count, runCount, sumDur));
+		StringBuilder msg = new StringBuilder(MessageFormat.format(msgPattern, count, runCount, sumTime));
 		LOGGER.info(msg.toString());
 		//
 		msgPattern = "Best time: {0} ms, average time: {1} ms";
-		msg = new StringBuilder(MessageFormat.format(msgPattern, bestTime,
-				avgDur));
+		msg = new StringBuilder(MessageFormat.format(msgPattern, bestTime, avgTime));
 		LOGGER.info(msg.toString());
 	}
 
@@ -172,13 +178,12 @@ public final class EditorBootstrap extends BootstrapSupporter {
 		}
 		Class<?> clazz = ClassHelper.forName(editorName);
 		if (clazz == null) {
-			LOGGER.error("Can't forName [" + editorName + "]");
+			LOGGER.error("Can not forName(" + editorName + ")");
 			return result;
 		}
 		Object object = ClassHelper.newInstance(clazz);
 		if (!(object instanceof BaseEditor)) {
-			LOGGER.error("Can't newInstance [" + editorName
-					+ "]. It is not instance of BaseEditor");
+			LOGGER.error("Can not newInstance(" + editorName + "). It is not instance of BaseEditor");
 			return result;
 		}
 		//

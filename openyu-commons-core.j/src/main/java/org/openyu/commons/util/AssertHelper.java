@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 檢核
+ * 檢核輔助類
  */
 public final class AssertHelper extends BaseHelperSupporter {
 

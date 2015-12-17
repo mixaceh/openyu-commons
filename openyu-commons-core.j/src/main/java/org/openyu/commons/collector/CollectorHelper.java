@@ -33,7 +33,7 @@ public final class CollectorHelper extends BaseHelperSupporter {
 
 	private CollectorHelper() {
 		throw new HelperException(
-				new StringBuilder().append(CollectorHelper.class.getSimpleName()).append(" can not construct").toString());
+				new StringBuilder().append(CollectorHelper.class.getName()).append(" can not construct").toString());
 	}
 	/*
 	 * 轉換步驟 object -> xml -> serial

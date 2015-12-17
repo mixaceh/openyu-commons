@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.web.context.support.ServletContextResource;
 import org.openyu.commons.enumz.EnumHelper;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.io.FileHelper;
 import org.openyu.commons.security.SecurityType;
@@ -38,7 +39,7 @@ import org.openyu.commons.security.SecurityType;
  * 
  * 3.可利用spring重新給設定檔路徑configLocation
  */
-public class ConfigHelper extends BaseHelperSupporter {
+public final class ConfigHelper extends BaseHelperSupporter {
 
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(ConfigHelper.class);
 
@@ -333,6 +334,8 @@ public class ConfigHelper extends BaseHelperSupporter {
 	}
 
 	public ConfigHelper() {
+//		throw new HelperException(
+//				new StringBuilder().append(ConfigHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	/**

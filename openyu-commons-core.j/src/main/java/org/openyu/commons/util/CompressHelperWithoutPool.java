@@ -9,11 +9,7 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
-import org.openyu.commons.commons.pool.CacheCallback;
-import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
-import org.openyu.commons.commons.pool.ex.CacheException;
-import org.openyu.commons.commons.pool.impl.SoftReferenceCacheFactoryImpl;
-import org.openyu.commons.commons.pool.supporter.CacheableObjectFactorySupporter;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.io.IoHelper;
 import org.openyu.commons.util.impl.CompressProcessorImpl;
@@ -52,11 +48,9 @@ import net.jpountz.lz4.LZ4FastDecompressor;
  * 
  *      7.LZ4
  */
-public class CompressHelperWithoutPool extends BaseHelperSupporter {
+public final class CompressHelperWithoutPool extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(CompressHelperWithoutPool.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(CompressHelperWithoutPool.class);
 
 	private static final int BUFFER_LENGTH = 1024;
 
@@ -69,11 +63,6 @@ public class CompressHelperWithoutPool extends BaseHelperSupporter {
 	 * lzma use
 	 */
 	private static final byte[] props = new byte[propSize];
-
-	// 2014/11/24, 會很耗mem, 先不使用
-	// /** 壓縮處理器 */
-	// private static SoftReferenceCacheFactory<CompressProcessor>
-	// compressProcessorCacheFactory;
 
 	static {
 		new Static();
@@ -88,72 +77,16 @@ public class CompressHelperWithoutPool extends BaseHelperSupporter {
 			props[4] = 0x00;
 			//
 			try {
-
-				// compressProcessor
-				// compressProcessorCacheFactory = new
-				// SoftReferenceCacheFactoryImpl<CompressProcessor>(
-				// CompressProcessor.class.getSimpleName(),
-				// new CacheableObjectFactorySupporter<CompressProcessor>() {
-				//
-				// private static final long serialVersionUID =
-				// -2745795176962911555L;
-				//
-				// public CompressProcessor makeObject()
-				// throws Exception {
-				// CompressProcessor obj = new CompressProcessorImpl();
-				// obj.setCompress(ConfigHelper.isCompress());
-				// obj.setCompressType(ConfigHelper
-				// .getCompressType());
-				// return obj;
-				// }
-				//
-				// public boolean validateObject(CompressProcessor obj) {
-				// return true;
-				// }
-				//
-				// public void activateObject(CompressProcessor obj)
-				// throws Exception {
-				// obj.setCompress(ConfigHelper.isCompress());
-				// obj.setCompressType(ConfigHelper
-				// .getCompressType());
-				// }
-				//
-				// public void passivateObject(CompressProcessor obj)
-				// throws Exception {
-				// obj.reset();
-				// }
-				// });
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
 	}
 
-	/**
-	 * Instantiates a new blank helper.
-	 */
 	private CompressHelperWithoutPool() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
-	}
+		throw new HelperException(new StringBuilder().append(CompressHelperWithoutPool.class.getName())
+				.append(" can not construct").toString());
 
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final CompressHelperWithoutPool INSTANCE = new CompressHelperWithoutPool();
-	}
-
-	/**
-	 * Gets the single instance of BlankHelper.
-	 *
-	 * @return single instance of BlankHelper
-	 */
-	public static CompressHelperWithoutPool getInstance() {
-		return InstanceHolder.INSTANCE;
 	}
 
 	/**
@@ -179,8 +112,7 @@ public class CompressHelperWithoutPool extends BaseHelperSupporter {
 			buff[3] = (byte) (length);
 
 			// 壓縮後長度
-			int written = compressor.compress(value, 0, length, buff,
-					INTEGER_BYTES, maxCompressedLength);
+			int written = compressor.compress(value, 0, length, buff, INTEGER_BYTES, maxCompressedLength);
 			// 新長度=4+壓縮後長度
 			int newLength = INTEGER_BYTES + written;
 			result = new byte[newLength];
@@ -205,12 +137,10 @@ public class CompressHelperWithoutPool extends BaseHelperSupporter {
 			//
 			final int INTEGER_BYTES = 4;
 			// 取原始長度
-			int uncompressedLength = ((value[0] & 0xFF) << 24)
-					| ((value[1] & 0xFF) << 16) | ((value[2] & 0xFF) << 8)
+			int uncompressedLength = ((value[0] & 0xFF) << 24) | ((value[1] & 0xFF) << 16) | ((value[2] & 0xFF) << 8)
 					| ((value[3] & 0xFF));
 			result = new byte[uncompressedLength];
-			int read = decompressor.decompress(value, INTEGER_BYTES, result, 0,
-					uncompressedLength);
+			int read = decompressor.decompress(value, INTEGER_BYTES, result, 0, uncompressedLength);
 			if (read != (value.length - INTEGER_BYTES)) {
 				result = new byte[0];
 			}

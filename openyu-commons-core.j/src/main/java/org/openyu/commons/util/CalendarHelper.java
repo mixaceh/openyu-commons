@@ -5,16 +5,18 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.lang.NumberHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CalendarHelper extends BaseHelperSupporter {
+/**
+ * 萬年曆輔助類
+ */
+public final class CalendarHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(CalendarHelper.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(CalendarHelper.class);
 
 	public final static int MILLIS_IN_SECOND = 1000;
 
@@ -58,31 +60,9 @@ public class CalendarHelper extends BaseHelperSupporter {
 	//
 	public static final int INTERVAL_SCALE = 10;
 
-	/**
-	 * Instantiates a new blank helper.
-	 */
 	private CalendarHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final CalendarHelper INSTANCE = new CalendarHelper();
-	}
-
-	/**
-	 * Gets the single instance of CalendarHelper.
-	 *
-	 * @return single instance of CalendarHelper
-	 */
-	public static CalendarHelper getInstance() {
-		return InstanceHolder.INSTANCE;
+		throw new HelperException(
+				new StringBuilder().append(CalendarHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	public static Calendar createCalendar() {
@@ -95,8 +75,7 @@ public class CalendarHelper extends BaseHelperSupporter {
 
 	public static Calendar createCalendar(TimeZone timeZone, Locale locale) {
 		Calendar calendar = null;
-		TimeZone newTimeZone = (timeZone != null ? timeZone : TimeZone
-				.getDefault());
+		TimeZone newTimeZone = (timeZone != null ? timeZone : TimeZone.getDefault());
 		Locale newLocale = (locale != null ? locale : LocaleHelper.getLocale());
 		calendar = Calendar.getInstance(newTimeZone, newLocale);
 		return calendar;
@@ -111,8 +90,7 @@ public class CalendarHelper extends BaseHelperSupporter {
 		return toCalendar(date, timeZone, null);
 	}
 
-	public static Calendar toCalendar(Date date, TimeZone timeZone,
-			Locale locale) {
+	public static Calendar toCalendar(Date date, TimeZone timeZone, Locale locale) {
 		Calendar calendar = createCalendar(timeZone, locale);
 		calendar.setTime(date);
 		return calendar;
@@ -126,13 +104,11 @@ public class CalendarHelper extends BaseHelperSupporter {
 		return toCalendar(value, pattern, null, null);
 	}
 
-	public static Calendar toCalendar(String value, String pattern,
-			TimeZone timeZone) {
+	public static Calendar toCalendar(String value, String pattern, TimeZone timeZone) {
 		return toCalendar(value, pattern, timeZone, null);
 	}
 
-	public static Calendar toCalendar(String value, String pattern,
-			TimeZone timeZone, Locale locale) {
+	public static Calendar toCalendar(String value, String pattern, TimeZone timeZone, Locale locale) {
 		Date date = DateHelper.toDate(value, pattern, timeZone, locale);
 		return toCalendar(date, timeZone, locale);
 	}
@@ -146,13 +122,11 @@ public class CalendarHelper extends BaseHelperSupporter {
 		return toString(value, pattern, null, null);
 	}
 
-	public static String toString(Calendar value, String pattern,
-			TimeZone timeZone) {
+	public static String toString(Calendar value, String pattern, TimeZone timeZone) {
 		return toString(value, pattern, timeZone, null);
 	}
 
-	public static String toString(Calendar value, String pattern,
-			TimeZone timeZone, Locale locale) {
+	public static String toString(Calendar value, String pattern, TimeZone timeZone, Locale locale) {
 		return DateHelper.toString(value.getTime(), pattern, timeZone, locale);
 	}
 
@@ -177,13 +151,10 @@ public class CalendarHelper extends BaseHelperSupporter {
 		return result;
 	}
 
-	public static long diff(Calendar value1, Calendar value2,
-			int millisInCondition) {
+	public static long diff(Calendar value1, Calendar value2, int millisInCondition) {
 		long result = 0;
-		long v1 = (value1.getTimeInMillis() + value1.get(Calendar.ZONE_OFFSET))
-				/ millisInCondition;
-		long v2 = (value2.getTimeInMillis() + value2.get(Calendar.ZONE_OFFSET))
-				/ millisInCondition;
+		long v1 = (value1.getTimeInMillis() + value1.get(Calendar.ZONE_OFFSET)) / millisInCondition;
+		long v2 = (value2.getTimeInMillis() + value2.get(Calendar.ZONE_OFFSET)) / millisInCondition;
 		result = v2 - v1;
 		return result;
 	}
@@ -391,8 +362,7 @@ public class CalendarHelper extends BaseHelperSupporter {
 
 	public static Calendar randomCalendar() {
 		Calendar result = Calendar.getInstance();
-		result.setTimeInMillis(today().getTimeInMillis()
-				+ NumberHelper.randomInt());
+		result.setTimeInMillis(today().getTimeInMillis() + NumberHelper.randomInt());
 		return result;
 	}
 

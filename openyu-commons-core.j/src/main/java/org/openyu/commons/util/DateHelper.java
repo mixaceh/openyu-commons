@@ -13,11 +13,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.lang.StringHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //兩者區別:yyyy-MM-dd HH:mm:ss ;  yyyy-MM-dd hh:mm:ss
 //如下:
@@ -42,14 +43,10 @@ import org.openyu.commons.lang.StringHelper;
 //z	時區	General time zone	Pacific Standard Time; PST; GMT-08:00
 //Z	時區	RFC 822 time zone	-0800
 
-public class DateHelper extends BaseHelperSupporter {
+public final class DateHelper extends BaseHelperSupporter {
 
-	private static transient final Logger log = LogManager
-			.getLogger(DateHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(DateHelper.class);
 
-	private static DateHelper instance;
-
-	//
 	public static final String ORIGINAL_PATTERN = "yyyy/M/d a h:mm";
 
 	// 24時制,精確到秒
@@ -197,23 +194,9 @@ public class DateHelper extends BaseHelperSupporter {
 	 */
 	public static final String AROUND_ONE_YEAR = "around_one_year";
 
-	static {
-		new Static();
-	}
-
-	protected static class Static {
-		public Static() {
-		}
-	}
-
-	public DateHelper() {
-	}
-
-	public static synchronized DateHelper getInstance() {
-		if (instance == null) {
-			instance = new DateHelper();
-		}
-		return instance;
+	private DateHelper() {
+		throw new HelperException(
+				new StringBuilder().append(DateHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	public static Date today() {
@@ -277,13 +260,11 @@ public class DateHelper extends BaseHelperSupporter {
 	 * @param locale
 	 * @return
 	 */
-	public static Date toDate(String value, String pattern, TimeZone timeZone,
-			Locale locale) {
+	public static Date toDate(String value, String pattern, TimeZone timeZone, Locale locale) {
 		Date result = null;
 		try {
 			if (value != null) {
-				SimpleDateFormat sdf = createSimpleDateFormat(pattern,
-						timeZone, locale);
+				SimpleDateFormat sdf = createSimpleDateFormat(pattern, timeZone, locale);
 				result = sdf.parse(value);
 			}
 		} catch (Exception ex) {
@@ -317,13 +298,11 @@ public class DateHelper extends BaseHelperSupporter {
 	 * @param locale
 	 * @return
 	 */
-	public static String toString(Date value, String pattern,
-			TimeZone timeZone, Locale locale) {
+	public static String toString(Date value, String pattern, TimeZone timeZone, Locale locale) {
 		String result = null;
 		try {
 			if (value != null) {
-				SimpleDateFormat sdf = createSimpleDateFormat(pattern,
-						timeZone, locale);
+				SimpleDateFormat sdf = createSimpleDateFormat(pattern, timeZone, locale);
 				result = sdf.format(value);
 			}
 		} catch (Exception ex) {
@@ -338,12 +317,10 @@ public class DateHelper extends BaseHelperSupporter {
 		return toString(value, null, null, null);
 	}
 
-	public static String toString(long value, String pattern,
-			TimeZone timeZone, Locale locale) {
+	public static String toString(long value, String pattern, TimeZone timeZone, Locale locale) {
 		String result = null;
 		try {
-			SimpleDateFormat sdf = createSimpleDateFormat(pattern, timeZone,
-					locale);
+			SimpleDateFormat sdf = createSimpleDateFormat(pattern, timeZone, locale);
 			result = sdf.format(value);
 		} catch (Exception ex) {
 			// ex.printStackTrace();
@@ -371,15 +348,12 @@ public class DateHelper extends BaseHelperSupporter {
 	 * @param locale
 	 * @return
 	 */
-	public static DateFormat createDateFormat(int dateStyle, int timeStyle,
-			Locale locale) {
+	public static DateFormat createDateFormat(int dateStyle, int timeStyle, Locale locale) {
 		DateFormat result = null;
 		//
 		try {
-			Locale newLocale = (locale != null ? locale : LocaleHelper
-					.getLocale());
-			result = DateFormat.getDateTimeInstance(dateStyle, timeStyle,
-					newLocale);
+			Locale newLocale = (locale != null ? locale : LocaleHelper.getLocale());
+			result = DateFormat.getDateTimeInstance(dateStyle, timeStyle, newLocale);
 		} catch (Exception ex) {
 			// ex.printStackTrace();
 		}
@@ -396,21 +370,17 @@ public class DateHelper extends BaseHelperSupporter {
 		return createSimpleDateFormat(pattern, null, null);
 	}
 
-	public static SimpleDateFormat createSimpleDateFormat(String pattern,
-			TimeZone timeZone) {
+	public static SimpleDateFormat createSimpleDateFormat(String pattern, TimeZone timeZone) {
 		return createSimpleDateFormat(pattern, timeZone, null);
 	}
 
-	public static SimpleDateFormat createSimpleDateFormat(String pattern,
-			TimeZone timeZone, Locale locale) {
+	public static SimpleDateFormat createSimpleDateFormat(String pattern, TimeZone timeZone, Locale locale) {
 		SimpleDateFormat result = null;
 		//
 		try {
 			String newPattern = (pattern != null ? pattern : DEFAULT_PATTERN);
-			TimeZone newTimeZone = (timeZone != null ? timeZone : TimeZone
-					.getDefault());
-			Locale newLocale = (locale != null ? locale : LocaleHelper
-					.getLocale());
+			TimeZone newTimeZone = (timeZone != null ? timeZone : TimeZone.getDefault());
+			Locale newLocale = (locale != null ? locale : LocaleHelper.getLocale());
 			result = new SimpleDateFormat(newPattern, newLocale);
 			result.setTimeZone(newTimeZone);
 		} catch (Exception ex) {
@@ -536,8 +506,7 @@ public class DateHelper extends BaseHelperSupporter {
 		Calendar dateCalendar = CalendarHelper.toCalendar(date);
 		Calendar timeCalendar = CalendarHelper.toCalendar(time);
 
-		Calendar calendar = CalendarHelper.mergeDateTime(dateCalendar,
-				timeCalendar);
+		Calendar calendar = CalendarHelper.mergeDateTime(dateCalendar, timeCalendar);
 		return calendar.getTime();
 	}
 
@@ -765,25 +734,19 @@ public class DateHelper extends BaseHelperSupporter {
 		Calendar cal = new GregorianCalendar();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month - 1);
-		cal.set(Calendar.DAY_OF_MONTH,
-				cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-		cal.set(Calendar.HOUR_OF_DAY,
-				cal.getActualMinimum(Calendar.HOUR_OF_DAY));
+		cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
 		cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
-		cal.set(Calendar.MILLISECOND,
-				cal.getActualMinimum(Calendar.MILLISECOND));
+		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		date[0] = cal.getTime();
 
 		cal.set(Calendar.MONTH, cal.getActualMaximum(Calendar.MONTH));
-		cal.set(Calendar.DAY_OF_MONTH,
-				cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-		cal.set(Calendar.HOUR_OF_DAY,
-				cal.getActualMaximum(Calendar.HOUR_OF_DAY));
+		cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMaximum(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, cal.getActualMaximum(Calendar.MINUTE));
 		cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
-		cal.set(Calendar.MILLISECOND,
-				cal.getActualMaximum(Calendar.MILLISECOND));
+		cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
 		date[1] = cal.getTime();
 
 		return date;
@@ -812,8 +775,7 @@ public class DateHelper extends BaseHelperSupporter {
 	 * 
 	 * @return Date
 	 */
-	public static Date getDateByRelativeDayNumber(Date dateTime,
-			int relativeDayNumber) {
+	public static Date getDateByRelativeDayNumber(Date dateTime, int relativeDayNumber) {
 		if (relativeDayNumber == 0)
 			return dateTime;
 		Long oldDate = dateTime.getTime();
@@ -830,21 +792,17 @@ public class DateHelper extends BaseHelperSupporter {
 		Calendar cal = new GregorianCalendar();
 
 		cal.setTime(endDate);
-		cal.set(Calendar.HOUR_OF_DAY,
-				cal.getActualMinimum(Calendar.HOUR_OF_DAY));
+		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
 		cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
-		cal.set(Calendar.MILLISECOND,
-				cal.getActualMinimum(Calendar.MILLISECOND));
+		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		Long date1 = cal.getTimeInMillis();
 
 		cal.setTime(startDate);
-		cal.set(Calendar.HOUR_OF_DAY,
-				cal.getActualMinimum(Calendar.HOUR_OF_DAY));
+		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
 		cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
-		cal.set(Calendar.MILLISECOND,
-				cal.getActualMinimum(Calendar.MILLISECOND));
+		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		Long date2 = cal.getTimeInMillis();
 
 		return (int) Math.floor((date1 - date2) / (24 * 3600 * 1000));
@@ -889,8 +847,7 @@ public class DateHelper extends BaseHelperSupporter {
 
 		return (sCal1.get(Calendar.YEAR) == sCal2.get(Calendar.YEAR))
 				&& (sCal1.get(Calendar.MONTH) == sCal2.get(Calendar.MONTH))
-				&& (sCal1.get(Calendar.DAY_OF_MONTH) == sCal2
-						.get(Calendar.DAY_OF_MONTH));
+				&& (sCal1.get(Calendar.DAY_OF_MONTH) == sCal2.get(Calendar.DAY_OF_MONTH));
 	}
 
 	/**
@@ -900,8 +857,7 @@ public class DateHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static Date begTimeOfDate(Date value) {
-		return CalendarHelper.toDate(CalendarHelper
-				.begTimeOfDate(toCalendar(value)));
+		return CalendarHelper.toDate(CalendarHelper.begTimeOfDate(toCalendar(value)));
 	}
 
 	/**
@@ -911,8 +867,7 @@ public class DateHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static Date endTimeOfDate(Date value) {
-		return CalendarHelper.toDate(CalendarHelper
-				.endTimeOfDate(toCalendar(value)));
+		return CalendarHelper.toDate(CalendarHelper.endTimeOfDate(toCalendar(value)));
 	}
 
 	/**
@@ -1206,8 +1161,7 @@ public class DateHelper extends BaseHelperSupporter {
 		Calendar cal = Calendar.getInstance();
 		if (pattern.equalsIgnoreCase(REC_DAYS_STRING)) {
 			dateArray[0] = cal.getTime();
-			dateArray[1] = getRecDay(cal.getTime(),
-					new Integer(dateRange).intValue());
+			dateArray[1] = getRecDay(cal.getTime(), new Integer(dateRange).intValue());
 		}
 		return dateArray;
 	}
@@ -1239,40 +1193,30 @@ public class DateHelper extends BaseHelperSupporter {
 			dateArray[0] = getFirstDayOfWeek(nweek.getTime());
 			dateArray[1] = getLastDayOfWeek(nweek.getTime());
 		} else if (pattern.endsWith(PRE_MONTH_STRING)) {
-			dateArray[0] = getFirstDayOfMonth(cal.get(Calendar.YEAR),
-					cal.get(Calendar.MONTH));
-			dateArray[1] = getLastDayOfMonth(cal.get(Calendar.YEAR),
-					cal.get(Calendar.MONTH));
+			dateArray[0] = getFirstDayOfMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH));
+			dateArray[1] = getLastDayOfMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH));
 		} else if (pattern.equals(THIS_MONTH_STRING)) {
-			dateArray[0] = getFirstDayOfMonth(cal.get(Calendar.YEAR),
-					cal.get(Calendar.MONTH) + 1);
-			dateArray[1] = getLastDayOfMonth(cal.get(Calendar.YEAR),
-					cal.get(Calendar.MONTH) + 1);
+			dateArray[0] = getFirstDayOfMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1);
+			dateArray[1] = getLastDayOfMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1);
 		} else if (pattern.equals(NEXT_MONTH_STRING)) {
-			dateArray[0] = getFirstDayOfMonth(cal.get(Calendar.YEAR),
-					cal.get(Calendar.MONTH) + 2);
-			dateArray[1] = getLastDayOfMonth(cal.get(Calendar.YEAR),
-					cal.get(Calendar.MONTH) + 2);
+			dateArray[0] = getFirstDayOfMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 2);
+			dateArray[1] = getLastDayOfMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 2);
 		}
 
 		else if (pattern.equals(PRE_SEASON_STRING)) {
 			int nquarter = getQuarter(cal.getTime()) - 1;
 			if (nquarter < 1)
 				nquarter = nquarter + 1;
-			dateArray[0] = getFirstDayOfQuarter(cal.get(Calendar.YEAR),
-					nquarter);
+			dateArray[0] = getFirstDayOfQuarter(cal.get(Calendar.YEAR), nquarter);
 			dateArray[1] = getLastDayOfQuarter(cal.get(Calendar.YEAR), nquarter);
 		} else if (pattern.equals(THIS_SEASON_STRING)) {
-			dateArray[0] = getFirstDayOfQuarter(cal.get(Calendar.YEAR),
-					getQuarter(cal.getTime()));
-			dateArray[1] = getLastDayOfQuarter(cal.get(Calendar.YEAR),
-					getQuarter(cal.getTime()));
+			dateArray[0] = getFirstDayOfQuarter(cal.get(Calendar.YEAR), getQuarter(cal.getTime()));
+			dateArray[1] = getLastDayOfQuarter(cal.get(Calendar.YEAR), getQuarter(cal.getTime()));
 		} else if (pattern.equals(NEXT_SEASON_STRING)) {
 			int nquarter = getQuarter(cal.getTime()) + 1;
 			if (nquarter > 4)
 				nquarter = nquarter - 4;
-			dateArray[0] = getFirstDayOfQuarter(cal.get(Calendar.YEAR),
-					nquarter);
+			dateArray[0] = getFirstDayOfQuarter(cal.get(Calendar.YEAR), nquarter);
 			dateArray[1] = getLastDayOfQuarter(cal.get(Calendar.YEAR), nquarter);
 		} else if (pattern.equals(START_HALF_YEAR_STRING)) {
 			dateArray[0] = getFirstDayOfMonth(cal.get(Calendar.YEAR), 1);
@@ -1321,8 +1265,7 @@ public class DateHelper extends BaseHelperSupporter {
 	public static Integer getYearMonthInt(Date date) {
 		Calendar cal = new GregorianCalendar();
 		cal.setTime(date);
-		return getYearMonthInt(String.valueOf(cal.get(Calendar.YEAR)),
-				String.valueOf(cal.get(Calendar.MONTH) + 1));
+		return getYearMonthInt(String.valueOf(cal.get(Calendar.YEAR)), String.valueOf(cal.get(Calendar.MONTH) + 1));
 	}
 
 	/**
@@ -1385,25 +1328,19 @@ public class DateHelper extends BaseHelperSupporter {
 		Date[] ret = new Date[2];
 
 		cal.set(Calendar.MONTH, cal.getActualMinimum(Calendar.MONTH));
-		cal.set(Calendar.DAY_OF_MONTH,
-				cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-		cal.set(Calendar.HOUR_OF_DAY,
-				cal.getActualMinimum(Calendar.HOUR_OF_DAY));
+		cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
 		cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
-		cal.set(Calendar.MILLISECOND,
-				cal.getActualMinimum(Calendar.MILLISECOND));
+		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		ret[0] = new Date(cal.getTimeInMillis());
 
 		cal.set(Calendar.MONTH, cal.getActualMaximum(Calendar.MONTH));
-		cal.set(Calendar.DAY_OF_MONTH,
-				cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-		cal.set(Calendar.HOUR_OF_DAY,
-				cal.getActualMaximum(Calendar.HOUR_OF_DAY));
+		cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMaximum(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, cal.getActualMaximum(Calendar.MINUTE));
 		cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
-		cal.set(Calendar.MILLISECOND,
-				cal.getActualMaximum(Calendar.MILLISECOND));
+		cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
 		ret[1] = new Date(cal.getTimeInMillis());
 
 		return ret;
@@ -1451,16 +1388,14 @@ public class DateHelper extends BaseHelperSupporter {
 	 *            星期*的數組，由1--7分別代表週日，週一....週六 其順序為：1,2,3,4,5,6,7
 	 * @return
 	 */
-	public static Date[] getDateOfWeekByTime(Date startDate, Date endDate,
-			String[] weekDays) {
+	public static Date[] getDateOfWeekByTime(Date startDate, Date endDate, String[] weekDays) {
 		List<Date> dates = new ArrayList<Date>();
 		Date[] rv = new Date[0];
 
 		/* 順序找出第一組滿足條件的日期 */
 		getFirstTeamWeekDays(startDate, endDate, weekDays, dates);
 
-		int plusDates = getAfterDayNumber(begTimeOfDate(endDate),
-				begTimeOfDate(startDate)) + 1;
+		int plusDates = getAfterDayNumber(begTimeOfDate(endDate), begTimeOfDate(startDate)) + 1;
 		int weeks = (int) Math.ceil(plusDates / 7.0) - 2;
 
 		/* 加上中間的幾個星期 */
@@ -1494,16 +1429,14 @@ public class DateHelper extends BaseHelperSupporter {
 	 *            星期*的數組，由1--7分別代表週日，週一....週六 其順序為：1,2,3,4,5,6,7
 	 * @return
 	 */
-	public static int getDateSumOfWeekByTime(Date startDate, Date endDate,
-			String[] weekDays) {
+	public static int getDateSumOfWeekByTime(Date startDate, Date endDate, String[] weekDays) {
 		int datesTotal = 0;
 
 		/* 順序找出第一組滿足條件的日期 */
 		List<Date> dates = new ArrayList<Date>();
 		getFirstTeamWeekDays(startDate, endDate, weekDays, dates);
 
-		int plusDates = getAfterDayNumber(begTimeOfDate(endDate),
-				begTimeOfDate(startDate)) + 1;
+		int plusDates = getAfterDayNumber(begTimeOfDate(endDate), begTimeOfDate(startDate)) + 1;
 		int weeks = (int) Math.ceil(plusDates / 7.0) - 2;
 
 		/* 加上中間的幾個星期 */
@@ -1542,8 +1475,7 @@ public class DateHelper extends BaseHelperSupporter {
 	 *            eg2:startDate=2007/12/04 endDate=2007/12/09
 	 *            若:weekDays={"1","2"}, 則dates將放入如下數據:2007/12/09
 	 */
-	private static void getFirstTeamWeekDays(Date startDate, Date endDate,
-			String[] weekDays, List<Date> dates) {
+	private static void getFirstTeamWeekDays(Date startDate, Date endDate, String[] weekDays, List<Date> dates) {
 		Calendar calStart = new GregorianCalendar();
 		calStart.setTime(startDate);
 		Calendar calEnd = new GregorianCalendar();
@@ -1556,8 +1488,7 @@ public class DateHelper extends BaseHelperSupporter {
 				continue;
 			afterStart = i;
 			Calendar cal = new GregorianCalendar();
-			cal = getRecDayCal(startDate, new Integer(weekDays[i]).intValue()
-					- startDayNum);
+			cal = getRecDayCal(startDate, new Integer(weekDays[i]).intValue() - startDayNum);
 			if (cal.getTimeInMillis() > calEnd.getTimeInMillis()) {
 				return;
 			}
@@ -1570,8 +1501,7 @@ public class DateHelper extends BaseHelperSupporter {
 			if (new Integer(weekDays[i]).intValue() >= startDayNum)
 				continue;
 			Calendar cal = new GregorianCalendar();
-			cal = getRecDayCal(startDate, 7 - (startDayNum - new Integer(
-					weekDays[i]).intValue()));
+			cal = getRecDayCal(startDate, 7 - (startDayNum - new Integer(weekDays[i]).intValue()));
 			if (cal.getTimeInMillis() > calEnd.getTimeInMillis()) {
 				return;
 			}
@@ -1599,8 +1529,7 @@ public class DateHelper extends BaseHelperSupporter {
 	 * 在給定的年月裡返回指定的第weekNum(從1開始)周的第一天和最後一天(只考慮本月).
 	 * 第一周的第一天為本月第一天,最後一周的最後一天為本月的最後一天
 	 */
-	public static Date[] getFirstAndLastDateOfWeek(String year, String month,
-			String weekNum) {
+	public static Date[] getFirstAndLastDateOfWeek(String year, String month, String weekNum) {
 		int maxWeek = getMaxWeekOfMonth(year, month, Calendar.MONDAY);
 
 		// 如果指定周超過最大周數或小於1則返回null
@@ -1608,10 +1537,8 @@ public class DateHelper extends BaseHelperSupporter {
 			return null;
 
 		// 取得當月第一天及最後一天
-		Date firstDayOfFirstWeek = getFirstDayOfMonth(Integer.valueOf(year),
-				Integer.valueOf(month));
-		Date lastDayOfMonth = getLastDayOfMonth(Integer.valueOf(year),
-				Integer.valueOf(month));
+		Date firstDayOfFirstWeek = getFirstDayOfMonth(Integer.valueOf(year), Integer.valueOf(month));
+		Date lastDayOfMonth = getLastDayOfMonth(Integer.valueOf(year), Integer.valueOf(month));
 
 		// 取得本月第一個星期的最後一天
 		Date lastDayOfFirstWeek = getLastDayOfWeek(firstDayOfFirstWeek);
@@ -1620,12 +1547,9 @@ public class DateHelper extends BaseHelperSupporter {
 		 * 得出指定周的第一天及最後一天 表達式:第一天 =本月開始日期向後延長[(7-本月第一天的星期)+1+(7*(指定周數-2))]天
 		 * 最後一天=第一周的最後一天往後延長[7*(指定周數-1)]
 		 */
-		Date firstDayOfNowWeek = getRecDay(
-				firstDayOfFirstWeek,
-				(7 - getDayOfWeek(firstDayOfFirstWeek) + 1)
-						+ (7 * (Integer.valueOf(weekNum) - 2)));
-		Date lastDayOfNowWeek = getRecDay(lastDayOfFirstWeek,
-				7 * (Integer.valueOf(weekNum) - 1));
+		Date firstDayOfNowWeek = getRecDay(firstDayOfFirstWeek,
+				(7 - getDayOfWeek(firstDayOfFirstWeek) + 1) + (7 * (Integer.valueOf(weekNum) - 2)));
+		Date lastDayOfNowWeek = getRecDay(lastDayOfFirstWeek, 7 * (Integer.valueOf(weekNum) - 1));
 
 		/*
 		 * 如果指定周的最後一天大於本月最後一天,則本月最後一天為該周在本月的最後一天
@@ -1644,13 +1568,13 @@ public class DateHelper extends BaseHelperSupporter {
 	 */
 	public static String getWeekOfMonthByDate(Date date) {
 		int dateWeekDay = getDayOfWeek(date);
-		Date firstDayOfFirstWeek = getFirstDayOfWeek(getFirstDayOfMonth(
-				getYear(date).intValue(), getMonth(date).intValue()));
+		Date firstDayOfFirstWeek = getFirstDayOfWeek(
+				getFirstDayOfMonth(getYear(date).intValue(), getMonth(date).intValue()));
 		/*
 		 * 取得日期所在的周 表達式:[(指定日期與本月第一周星期一相差的時間+1)+(7-給定日期的星期數)]/7
 		 */
-		int weekNum = (getAfterDayNumber(endTimeOfDate(date),
-				endTimeOfDate(firstDayOfFirstWeek)) + 1 + (7 - dateWeekDay)) / 7;
+		int weekNum = (getAfterDayNumber(endTimeOfDate(date), endTimeOfDate(firstDayOfFirstWeek)) + 1
+				+ (7 - dateWeekDay)) / 7;
 		return String.valueOf(weekNum);
 	}
 
@@ -1661,12 +1585,10 @@ public class DateHelper extends BaseHelperSupporter {
 	 * @param month
 	 * @return 以第幾為key,周開始和結束日期為一個Date[]的Map集合
 	 */
-	public static Map<Integer, Date[]> getDateFromMonthByWeek(String year,
-			String month) {
+	public static Map<Integer, Date[]> getDateFromMonthByWeek(String year, String month) {
 		// 生成Calendar並設置當前日期時間
 		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(getFirstDayOfMonth(Integer.valueOf(year),
-				Integer.valueOf(month)));
+		calendar.setTime(getFirstDayOfMonth(Integer.valueOf(year), Integer.valueOf(month)));
 		// 取得當前月份的總周數
 		int maxWeek = getMaxWeekOfMonth(year, month, Calendar.MONDAY);
 		// 設置變量周從第一周開始
@@ -1687,8 +1609,7 @@ public class DateHelper extends BaseHelperSupporter {
 
 			// 如果目前周是最後一周那麼月的最後一天就是該周的最後一天,避免剩餘這周不夠7天而延伸到下月
 			if (weekNow == maxWeek) {
-				nowLastDate = getLastDayOfMonth(Integer.valueOf(year),
-						Integer.valueOf(month));
+				nowLastDate = getLastDayOfMonth(Integer.valueOf(year), Integer.valueOf(month));
 			} else {
 				/*
 				 * 根據當前的nowFristDate是星期幾的不同來增加不同的天數到週日,從而把calendar調整到本周最後一天
@@ -1719,11 +1640,9 @@ public class DateHelper extends BaseHelperSupporter {
 	 * @param fristDayOfWeek
 	 *            :設定每週從周幾開始.1-->週日，2-->週一....7--->週六
 	 */
-	public static int getMaxWeekOfMonth(String year, String month,
-			int fristDayOfWeek) {
+	public static int getMaxWeekOfMonth(String year, String month, int fristDayOfWeek) {
 		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(getLastDayOfMonth(Integer.valueOf(year),
-				Integer.valueOf(month)));
+		calendar.setTime(getLastDayOfMonth(Integer.valueOf(year), Integer.valueOf(month)));
 		calendar.setFirstDayOfWeek(fristDayOfWeek);
 		return calendar.get(Calendar.WEEK_OF_MONTH);
 	}
@@ -1743,17 +1662,13 @@ public class DateHelper extends BaseHelperSupporter {
 	 *            當前周的第一天
 	 * @return 適用於工時卡：如果當前周跨月，則跳轉時返回的日期為不同的但同一周的日期（我的工時卡界面中的前後一周）
 	 */
-	public static Date getDayOfWeekAdjust(String adjust, String year,
-			String month, int startDate, int endDate) {
-		Date oldStartDate = begTimeOfDate(toDate(year + "/" + month + "/"
-				+ startDate));
-		Date oldEndDate = endTimeOfDate(toDate(year + "/" + month + "/"
-				+ endDate));
+	public static Date getDayOfWeekAdjust(String adjust, String year, String month, int startDate, int endDate) {
+		Date oldStartDate = begTimeOfDate(toDate(year + "/" + month + "/" + startDate));
+		Date oldEndDate = endTimeOfDate(toDate(year + "/" + month + "/" + endDate));
 		Date newDate = null;
 		if (adjust.equalsIgnoreCase("1")) { // 下一周
 											// 是本月最後一天,則往後加一天；否則加七天
-			Date lastDate = getLastDayOfMonth(new Integer(year), new Integer(
-					month));
+			Date lastDate = getLastDayOfMonth(new Integer(year), new Integer(month));
 			if (getAfterDayNumber(lastDate, oldEndDate) == 0)
 				newDate = getRecDay(oldEndDate, 1);
 			else if (getAfterDayNumber(lastDate, oldEndDate) >= 7)
@@ -1762,8 +1677,7 @@ public class DateHelper extends BaseHelperSupporter {
 				newDate = lastDate;
 		} else if (adjust.equalsIgnoreCase("-1")) { // 上一周
 													// 是本月第一天,則往前減一天；否則減七天
-			Date firstDate = getFirstDayOfMonth(new Integer(year), new Integer(
-					month));
+			Date firstDate = getFirstDayOfMonth(new Integer(year), new Integer(month));
 			if (getAfterDayNumber(oldStartDate, firstDate) == 0)
 				newDate = getBeforeDate(oldStartDate, 1);
 			else if (getAfterDayNumber(oldStartDate, firstDate) >= 7)
@@ -1779,8 +1693,7 @@ public class DateHelper extends BaseHelperSupporter {
 	 * 在給定的年月裡返回指定的第xunNum(從1開始,其最大值為3)旬的第一天和最後一天(只考慮本月). 第一旬為:本月1日至10日
 	 * 第二旬為:本月11日至20日 第三旬為:本月21日至本月最後一天
 	 */
-	public static Date[] getFirstAndLastDateOfXun(String year, String month,
-			String xunNum) {
+	public static Date[] getFirstAndLastDateOfXun(String year, String month, String xunNum) {
 		if (StringHelper.isEmpty(xunNum))
 			return null;
 		int index = Integer.parseInt(xunNum);
@@ -1811,8 +1724,7 @@ public class DateHelper extends BaseHelperSupporter {
 	 * 查看某日處於其所在月的第幾旬
 	 */
 	public static String getXunOfMonthByDate(Date date) {
-		int daysAfterFirstDayOfMonthInt = getAfterDayNumber(
-				begTimeOfDate(date),
+		int daysAfterFirstDayOfMonthInt = getAfterDayNumber(begTimeOfDate(date),
 				getFirstDayOfMonth(getYear(date), getMonth(date))) + 1;
 
 		/* 取得日期所在的旬 */
@@ -1834,8 +1746,7 @@ public class DateHelper extends BaseHelperSupporter {
 	 * @param xunIndex
 	 *            當前旬
 	 */
-	public static Date getDayOfXunAdjust(String adjust, String year,
-			String month, String xunIndex) {
+	public static Date getDayOfXunAdjust(String adjust, String year, String month, String xunIndex) {
 		int xunNum = Integer.parseInt(xunIndex);
 		int yearInt = Integer.parseInt(year);
 		int monthInt = Integer.parseInt(month);
@@ -1880,20 +1791,15 @@ public class DateHelper extends BaseHelperSupporter {
 		Calendar eCal = new GregorianCalendar();
 		eCal.setTime(eDate);
 
-		return (sCal.getTimeInMillis() == eCal.getTimeInMillis() || before(
-				sDate, eDate));
+		return (sCal.getTimeInMillis() == eCal.getTimeInMillis() || before(sDate, eDate));
 	}
 
-	public static boolean isOverTime(Date lastTime, Date currentTime,
-			Date begTime, Date endTime) {
-		return isOverTime(lastTime.getTime(), currentTime.getTime(),
-				begTime.getTime(), endTime.getTime());
+	public static boolean isOverTime(Date lastTime, Date currentTime, Date begTime, Date endTime) {
+		return isOverTime(lastTime.getTime(), currentTime.getTime(), begTime.getTime(), endTime.getTime());
 	}
 
-	public static boolean isOverTime(Calendar lastTime, Calendar currentTime,
-			Calendar begTime, Calendar endTime) {
-		return isOverTime(lastTime.getTimeInMillis(),
-				currentTime.getTimeInMillis(), begTime.getTimeInMillis(),
+	public static boolean isOverTime(Calendar lastTime, Calendar currentTime, Calendar begTime, Calendar endTime) {
+		return isOverTime(lastTime.getTimeInMillis(), currentTime.getTimeInMillis(), begTime.getTimeInMillis(),
 				endTime.getTimeInMillis());
 	}
 
@@ -1920,8 +1826,7 @@ public class DateHelper extends BaseHelperSupporter {
 	 *            截止時間
 	 * @return
 	 */
-	public static boolean isOverTime(long lastTime, long currentTime,
-			long begTime, long endTime) {
+	public static boolean isOverTime(long lastTime, long currentTime, long begTime, long endTime) {
 		boolean result = false;
 		if ((lastTime != 0 && lastTime < begTime && currentTime >= begTime)
 				|| (lastTime >= begTime && currentTime >= endTime)) {
@@ -1937,8 +1842,7 @@ public class DateHelper extends BaseHelperSupporter {
 	 */
 	public static Date randomDate() {
 		Date result = new Date();
-		result.setTime(today().getTime()
-				+ NumberHelper.randomInt(24 * 60 * 60 * 1 * 1000));
+		result.setTime(today().getTime() + NumberHelper.randomInt(24 * 60 * 60 * 1 * 1000));
 		return result;
 	}
 
@@ -1964,10 +1868,8 @@ public class DateHelper extends BaseHelperSupporter {
 		if (cal1 == null || cal2 == null) {
 			return false;
 		}
-		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA)
-				&& cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1
-					.get(Calendar.DAY_OF_YEAR) == cal2
-				.get(Calendar.DAY_OF_YEAR));
+		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
+				&& cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
 	}
 
 }

@@ -8,30 +8,25 @@ import java.nio.charset.CharsetEncoder;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.lang.EncodingHelper;
 
 /**
+ * ByteBuffer輔助類
+ * 
  * 1.也可利用ByteBuffer 轉byte[],如:byteBuffer.array() -> byte[]
  * 
  * 2.或利用ByteHelper 轉byte[]
  * 
  */
-public class ByteBufferHelper extends BaseHelperSupporter {
+public final class ByteBufferHelper extends BaseHelperSupporter {
 
-	private static transient final Logger log = LogManager
-			.getLogger(ByteBufferHelper.class);
+	private static transient final Logger log = LogManager.getLogger(ByteBufferHelper.class);
 
-	private static ByteBufferHelper instance;
-
-	public ByteBufferHelper() {
-	}
-
-	public static synchronized ByteBufferHelper getInstance() {
-		if (instance == null) {
-			instance = new ByteBufferHelper();
-		}
-		return instance;
+	private ByteBufferHelper() {
+		throw new HelperException(
+				new StringBuilder().append(ByteBufferHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	// --------------------------------------------------

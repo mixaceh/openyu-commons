@@ -8,15 +8,11 @@ import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 
 /**
- * The Class BooleanHelper.
+ * Boolean輔助類
  */
 public final class BooleanHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(BooleanHelper.class);
-
-	// private static BooleanHelper instance;
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(BooleanHelper.class);
 
 	/** The Constant DEFAULT_VALUE. */
 	public static final boolean DEFAULT_VALUE = false;
@@ -40,52 +36,10 @@ public final class BooleanHelper extends BaseHelperSupporter {
 	 */
 	public static final Random RANDOM = new Random(System.nanoTime());
 
-	/**
-	 * Instantiates a new helper.
-	 */
-	public BooleanHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new HelperException(
-					new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
+	private BooleanHelper() {
+		throw new HelperException(
+				new StringBuilder().append(BooleanHelper.class.getName()).append(" can not construct").toString());
 	}
-
-	// public static synchronized BooleanHelper getInstance() {
-	// if (instance == null) {
-	// instance = new BooleanHelper();
-	// }
-	// return instance;
-	// }
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private static final BooleanHelper INSTANCE = new BooleanHelper();
-		private static BooleanHelper INSTANCE = new BooleanHelper();
-	}
-
-	/**
-	 * Gets the single instance of BooleanHelper.
-	 *
-	 * @return single instance of BooleanHelper
-	 */
-	public synchronized static BooleanHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new BooleanHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
-	}
-
-	// --------------------------------------------------
 
 	/**
 	 * Creates the boolean.
@@ -140,8 +94,7 @@ public final class BooleanHelper extends BaseHelperSupporter {
 	 *            the default value
 	 * @return true, if successful
 	 */
-	public static boolean toBoolean(final String value,
-			final boolean defaultValue) {
+	public static boolean toBoolean(final String value, final boolean defaultValue) {
 		if (value == null || value.length() == 0) {
 			return defaultValue;
 		} else {

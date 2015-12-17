@@ -11,25 +11,19 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.SerializationUtils;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class CloneHelper extends BaseHelperSupporter {
+public final class CloneHelper extends BaseHelperSupporter {
 
-	private static transient final Logger log = LogManager
-			.getLogger(CloneHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(CloneHelper.class);
 
-	private static CloneHelper instance;
+	private CloneHelper() {
+		throw new HelperException(
+				new StringBuilder().append(CloneHelper.class.getName()).append(" can not construct").toString());
 
-	public CloneHelper() {
-	}
-
-	public static synchronized CloneHelper getInstance() {
-		if (instance == null) {
-			instance = new CloneHelper();
-		}
-		return instance;
 	}
 
 	/**
@@ -55,8 +49,7 @@ public class CloneHelper extends BaseHelperSupporter {
 		Object object = null;
 		if (value != null) {
 			try {
-				StringBuilder className = new StringBuilder(value.getClass()
-						.getName());
+				StringBuilder className = new StringBuilder(value.getClass().getName());
 				// check if it's an array
 				// if ('[' == className.charAt(0))
 
@@ -123,8 +116,7 @@ public class CloneHelper extends BaseHelperSupporter {
 					Collection<?> collection = (Collection<?>) value;
 					// Collection<T> copy = genericClone(collection); //慢
 					// copy.clear();
-					Collection<T> copy = ClassHelper.newInstance(value
-							.getClass());// 快
+					Collection<T> copy = ClassHelper.newInstance(value.getClass());// 快
 
 					// 有些原本的list會無法建構,如:com.opensymphony.xwork2.util.XWorkList
 					// 就用LinkedList,LinkedHashSet做為預設
@@ -150,8 +142,7 @@ public class CloneHelper extends BaseHelperSupporter {
 					Map<T, T> copy = ClassHelper.newInstance(value.getClass());// 快
 					// now clone all the keys and values of the entries
 					for (Map.Entry entry : map.entrySet()) {
-						copy.put((T) deepClone(entry.getKey()),
-								(T) deepClone(entry.getValue()));
+						copy.put((T) deepClone(entry.getKey()), (T) deepClone(entry.getValue()));
 					}
 					object = copy;
 				}
@@ -216,8 +207,7 @@ public class CloneHelper extends BaseHelperSupporter {
 				try {
 					// Method method = value.getClass().getMethod("clone",
 					// (Class[]) null);
-					Method method = ClassHelper.getMethod(value.getClass(),
-							"clone");
+					Method method = ClassHelper.getMethod(value.getClass(), "clone");
 					method.setAccessible(true);
 					// System.out.println(method);
 					object = method.invoke(value, (Object[]) null);

@@ -17,57 +17,20 @@ import org.openyu.commons.helper.supporter.BaseHelperSupporter;
  a.charAt(0); -> 97
  */
 /**
- * The Class CharHelper.
+ * Char輔助類
  */
-public class CharHelper extends BaseHelperSupporter {
+public final class CharHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(CharHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(CharHelper.class);
 	//
 	// public static final char DEFAULT_VALUE = '\u0000';
 	/** The Constant DEFAULT_VALUE. */
 	public static final char DEFAULT_VALUE = 0;
 
-	/**
-	 * Instantiates a new helper.
-	 */
-	public CharHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new HelperException(
-					new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
+	private CharHelper() {
+		throw new HelperException(
+				new StringBuilder().append(CharHelper.class.getName()).append(" can not construct").toString());
 	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private static final CharHelper INSTANCE = new CharHelper();
-		private static CharHelper INSTANCE = new CharHelper();
-	}
-
-	/**
-	 * Gets the single instance of CharHelper.
-	 *
-	 * @return single instance of CharHelper
-	 */
-	public synchronized static CharHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new CharHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
-	}
-
-	// -----------------------------------------------------------------------
 
 	/**
 	 * To char.

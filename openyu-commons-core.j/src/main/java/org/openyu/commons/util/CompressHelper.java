@@ -53,9 +53,8 @@ import net.jpountz.lz4.LZ4FastDecompressor;
  * 
  *      7.LZ4
  */
-public class CompressHelper extends BaseHelperSupporter {
+public final class CompressHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(CompressHelper.class);
 
 	private static final int BUFFER_LENGTH = 1024;
@@ -93,38 +92,6 @@ public class CompressHelper extends BaseHelperSupporter {
 			props[4] = 0x00;
 			//
 			try {
-
-				// compressProcessor
-				// compressProcessorCacheFactory = SoftReferenceCacheFactoryImpl
-				// .createInstance(new
-				// CacheableObjectFactorySupporter<CompressProcessor>() {
-				//
-				// private static final long serialVersionUID =
-				// -2745795176962911555L;
-				//
-				// public CompressProcessor makeObject() throws Exception {
-				// CompressProcessor obj = new CompressProcessorImpl();
-				// obj.setCompress(ConfigHelper.isCompress());
-				// obj.setCompressType(ConfigHelper.getCompressType());
-				// return obj;
-				// }
-				//
-				// public boolean validateObject(CompressProcessor obj) {
-				// return true;
-				// }
-				//
-				// public void activateObject(CompressProcessor obj) throws
-				// Exception {
-				// obj.setCompress(ConfigHelper.isCompress());
-				// obj.setCompressType(ConfigHelper.getCompressType());
-				// }
-				//
-				// public void passivateObject(CompressProcessor obj) throws
-				// Exception {
-				// obj.reset();
-				// }
-				// });
-
 				compressProcessorCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<CompressProcessor, SoftReferenceCacheFactory<CompressProcessor>>();
 				compressProcessorCacheFactoryFactoryBean
 						.setCacheableObjectFactory(new CacheableObjectFactorySupporter<CompressProcessor>() {
@@ -161,31 +128,9 @@ public class CompressHelper extends BaseHelperSupporter {
 		}
 	}
 
-	/**
-	 * Instantiates a new blank helper.
-	 */
 	private CompressHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final CompressHelper INSTANCE = new CompressHelper();
-	}
-
-	/**
-	 * Gets the single instance of BlankHelper.
-	 *
-	 * @return single instance of BlankHelper
-	 */
-	public static CompressHelper getInstance() {
-		return InstanceHolder.INSTANCE;
+		throw new HelperException(
+				new StringBuilder().append(CompressHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	/**

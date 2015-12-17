@@ -1,26 +1,17 @@
 package org.openyu.commons.security;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class DigestHelper extends BaseHelperSupporter
-{
+public final class DigestHelper extends BaseHelperSupporter {
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(DigestHelper.class);
 
-	private static transient final Logger log = LogManager.getLogger(DigestHelper.class);
+	private DigestHelper() {
+		throw new HelperException(
+				new StringBuilder().append(DigestHelper.class.getName()).append(" can not construct").toString());
 
-	private static DigestHelper instance;
-
-	private DigestHelper()
-	{}
-
-	public static synchronized DigestHelper getInstance()
-	{
-		if (instance == null)
-		{
-			instance = new DigestHelper();
-		}
-		return instance;
 	}
 
 }

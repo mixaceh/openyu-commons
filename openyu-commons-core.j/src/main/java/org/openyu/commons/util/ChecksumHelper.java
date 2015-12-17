@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 檢查碼 The Class ChecksumHelper.
+ * 檢查碼輔助類
  * 
  * 為了確保資料的正確性
  * 
@@ -31,9 +31,8 @@ import org.slf4j.LoggerFactory;
  * 
  *      2.ADLER32
  */
-public class ChecksumHelper extends BaseHelperSupporter {
+public final class ChecksumHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(ChecksumHelper.class);
 
 	public static final int BUFFER_LENGTH = 1024;
@@ -56,37 +55,6 @@ public class ChecksumHelper extends BaseHelperSupporter {
 		@SuppressWarnings("unchecked")
 		public Static() {
 			try {
-
-				// checksumProcessor
-				// checksumProcessorCacheFactory = SoftReferenceCacheFactoryImpl
-				// .createInstance(new
-				// CacheableObjectFactorySupporter<ChecksumProcessor>() {
-				//
-				// private static final long serialVersionUID =
-				// -2745795176962911555L;
-				//
-				// public ChecksumProcessor makeObject() throws Exception {
-				// ChecksumProcessor obj = new ChecksumProcessorImpl();
-				// obj.setChecksum(ConfigHelper.isChecksum());
-				// obj.setChecksumType(ConfigHelper.getChecksumType());
-				// return obj;
-				// }
-				//
-				// public boolean validateObject(ChecksumProcessor obj) {
-				// return true;
-				// }
-				//
-				// public void activateObject(ChecksumProcessor obj) throws
-				// Exception {
-				// obj.setChecksum(ConfigHelper.isChecksum());
-				// obj.setChecksumType(ConfigHelper.getChecksumType());
-				// }
-				//
-				// public void passivateObject(ChecksumProcessor obj) throws
-				// Exception {
-				// obj.reset();
-				// }
-				// });
 				checksumProcessorCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<ChecksumProcessor, SoftReferenceCacheFactory<ChecksumProcessor>>();
 				checksumProcessorCacheFactoryFactoryBean
 						.setCacheableObjectFactory(new CacheableObjectFactorySupporter<ChecksumProcessor>() {
@@ -122,31 +90,9 @@ public class ChecksumHelper extends BaseHelperSupporter {
 		}
 	}
 
-	/**
-	 * Instantiates a new ChecksumHelper.
-	 */
 	private ChecksumHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final ChecksumHelper INSTANCE = new ChecksumHelper();
-	}
-
-	/**
-	 * Gets the single instance of ChecksumHelper.
-	 *
-	 * @return single instance of ChecksumHelper
-	 */
-	public static ChecksumHelper getInstance() {
-		return InstanceHolder.INSTANCE;
+		throw new HelperException(
+				new StringBuilder().append(ChecksumHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	/**

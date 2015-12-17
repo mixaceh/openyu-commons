@@ -14,7 +14,6 @@ import java.util.Properties;
 //import java.util.concurrent.ConcurrentMap;
 //import java.util.concurrent.locks.ReentrantLock;
 
-
 import org.apache.commons.configuration.CombinedConfiguration;
 //import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.DefaultConfigurationBuilder;
@@ -27,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.web.context.support.ServletContextResource;
 import org.openyu.commons.enumz.EnumHelper;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.io.FileHelper;
 import org.openyu.commons.security.SecurityType;
@@ -38,10 +38,9 @@ import org.openyu.commons.security.SecurityType;
  * 
  * 3.可利用spring重新給設定檔路徑configLocation
  */
-public class ConfigHelper2 extends BaseHelperSupporter {
+public final class ConfigHelper2 extends BaseHelperSupporter {
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(ConfigHelper2.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(ConfigHelper2.class);
 
 	/**
 	 * 是否由Static()建構
@@ -52,8 +51,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	 * 
 	 * src/test/config
 	 */
-	private final static String DEFAULT_CONFIG_DIR = "src" + File.separator
-			+ "test" + File.separator + "config";
+	private final static String DEFAULT_CONFIG_DIR = "src" + File.separator + "test" + File.separator + "config";
 
 	/**
 	 * 預設設定檔檔名
@@ -67,8 +65,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	 * 
 	 * src/test/config/etc/config.xml
 	 */
-	private final static String DEFAULT_CONFIG_FILE = DEFAULT_CONFIG_DIR
-			+ File.separator + "etc" + File.separator
+	private final static String DEFAULT_CONFIG_FILE = DEFAULT_CONFIG_DIR + File.separator + "etc" + File.separator
 			+ DEFAULT_CONFIG_FILE_NAME;
 
 	/**
@@ -95,8 +92,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	 * 
 	 * src/test/config/json
 	 */
-	private final static String DEFAULT_JSON_DIR = DEFAULT_CONFIG_DIR
-			+ File.separator + "json";
+	private final static String DEFAULT_JSON_DIR = DEFAULT_CONFIG_DIR + File.separator + "json";
 
 	/**
 	 * json目錄
@@ -114,8 +110,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	 * 
 	 * src/test/config/key
 	 */
-	private final static String DEFAULT_KEY_DIR = DEFAULT_CONFIG_DIR
-			+ File.separator + "key";
+	private final static String DEFAULT_KEY_DIR = DEFAULT_CONFIG_DIR + File.separator + "key";
 
 	/**
 	 * key目錄
@@ -133,8 +128,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	 * 
 	 * src/test/config/ser
 	 */
-	private final static String DEFAULT_SER_DIR = DEFAULT_CONFIG_DIR
-			+ File.separator + "ser";
+	private final static String DEFAULT_SER_DIR = DEFAULT_CONFIG_DIR + File.separator + "ser";
 
 	/**
 	 * ser目錄
@@ -152,8 +146,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	 * 
 	 * src/test/config/xml
 	 */
-	private final static String DEFAULT_XML_DIR = DEFAULT_CONFIG_DIR
-			+ File.separator + "xml";
+	private final static String DEFAULT_XML_DIR = DEFAULT_CONFIG_DIR + File.separator + "xml";
 
 	/**
 	 * xml目錄
@@ -171,8 +164,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	 * 
 	 * src/test/config/excel
 	 */
-	private final static String DEFAULT_EXCEL_DIR = DEFAULT_CONFIG_DIR
-			+ File.separator + "excel";
+	private final static String DEFAULT_EXCEL_DIR = DEFAULT_CONFIG_DIR + File.separator + "excel";
 
 	/**
 	 * excel目錄
@@ -190,8 +182,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	 * 
 	 * src/test/config/log
 	 */
-	private final static String DEFAULT_LOG_DIR = DEFAULT_CONFIG_DIR
-			+ File.separator + "log";
+	private final static String DEFAULT_LOG_DIR = DEFAULT_CONFIG_DIR + File.separator + "log";
 
 	/**
 	 * log目錄
@@ -217,8 +208,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	 * 
 	 * custom/output
 	 */
-	private final static String DEFAULT_OUTPUT_DIR = DEFAULT_CUSTOM_DIR
-			+ File.separator + "output";
+	private final static String DEFAULT_OUTPUT_DIR = DEFAULT_CUSTOM_DIR + File.separator + "output";
 
 	/**
 	 * output目錄
@@ -234,8 +224,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	/**
 	 * 預設download目錄
 	 */
-	private final static String DEFAULT_DOWNLOAD_DIR = DEFAULT_CUSTOM_DIR
-			+ File.separator + "download";
+	private final static String DEFAULT_DOWNLOAD_DIR = DEFAULT_CUSTOM_DIR + File.separator + "download";
 
 	/**
 	 * download目錄
@@ -251,8 +240,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	/**
 	 * 預設upload目錄
 	 */
-	private final static String DEFAULT_UPLOAD_DIR = DEFAULT_CUSTOM_DIR
-			+ File.separator + "upload";
+	private final static String DEFAULT_UPLOAD_DIR = DEFAULT_CUSTOM_DIR + File.separator + "upload";
 
 	/**
 	 * upload目錄
@@ -374,6 +362,8 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	}
 
 	public ConfigHelper2() {
+		throw new HelperException(
+				new StringBuilder().append(ConfigHelper2.class.getName()).append(" can not construct").toString());
 	}
 
 	protected void closeInternal() throws Exception {
@@ -651,8 +641,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 				if (staticBuild) {
 					return;
 				} else {
-					LOGGER.error("Can not find configLocation: "
-							+ (assignFile != null ? assignFile : configLocation));
+					LOGGER.error("Can not find configLocation: " + (assignFile != null ? assignFile : configLocation));
 					return;
 				}
 			}
@@ -702,8 +691,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 		try {
 			// 當沒使用spring注入時,或指定設定檔
 			if (configLocation == null || assignFile != null) {
-				String fileName = (assignFile != null ? assignFile
-						: DEFAULT_CONFIG_FILE);
+				String fileName = (assignFile != null ? assignFile : DEFAULT_CONFIG_FILE);
 				File file = new File(fileName);
 				if (file.exists()) {
 					factory = new DefaultConfigurationBuilder(file);
@@ -712,8 +700,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 					if (staticBuild) {
 						LOGGER.info("Initialization of file [" + fileName + "]");
 					} else {
-						LOGGER.info("Reinitialization of file [" + fileName
-								+ "]");
+						LOGGER.info("Reinitialization of file [" + fileName + "]");
 					}
 				} else {
 					// 當在web下,會出現src\test\config\data\conf\config.xml File does
@@ -734,8 +721,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 				// file:src/test/config/data/conf/config.xml
 				// src/test/config/data/conf/config.xml
 				URL url = configLocation.getURL();
-				LOGGER.info("Reinitialization with Spring ["
-						+ (url != null ? url.getFile() : null) + "]");
+				LOGGER.info("Reinitialization with Spring [" + (url != null ? url.getFile() : null) + "]");
 
 				if (url != null) {
 					factory = new DefaultConfigurationBuilder(url);
@@ -754,8 +740,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	 * @param defaultDir
 	 * @param resource
 	 */
-	protected static void buildDir(String defaultDir, Resource resource,
-			String assignDir) {
+	protected static void buildDir(String defaultDir, Resource resource, String assignDir) {
 		try {
 			// 當沒使用spring注入時,或指定目錄
 			if (resource == null || assignDir != null) {
@@ -1219,8 +1204,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 		return result;
 	}
 
-	public static Map<String, String> getMap(String key,
-			Map<String, String> defaultValue) {
+	public static Map<String, String> getMap(String key, Map<String, String> defaultValue) {
 		Map<String, String> result = getMap(key);
 		if (result == null || result.isEmpty()) {
 			result = defaultValue;
@@ -1282,8 +1266,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 		// return configurationsAtAndCache(key);
 
 		try {
-			return ((CombinedConfiguration) factory.getConfiguration())
-					.configurationsAt(key);
+			return ((CombinedConfiguration) factory.getConfiguration()).configurationsAt(key);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -1326,14 +1309,12 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	}
 
 	// 先從cache取,若無,再取設定檔
-	public static SubnodeConfiguration configurationAt(String key,
-			boolean supportUpdates) {
+	public static SubnodeConfiguration configurationAt(String key, boolean supportUpdates) {
 		// return configuration.configurationAt(key, supportUpdates);
 		// return configurationAtAndCache(key);
 
 		try {
-			return ((CombinedConfiguration) factory.getConfiguration())
-					.configurationAt(key, supportUpdates);
+			return ((CombinedConfiguration) factory.getConfiguration()).configurationAt(key, supportUpdates);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -1390,8 +1371,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	// }
 
 	public static ChecksumType getChecksumType() {
-		return EnumHelper.valueOf(ChecksumType.class,
-				getString(CHECKSUM_TYPE, null));
+		return EnumHelper.valueOf(ChecksumType.class, getString(CHECKSUM_TYPE, null));
 	}
 
 	// public static void setChecksumType(ChecksumType checksumType) {
@@ -1415,8 +1395,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	// }
 
 	public static SerializeType getSerializeType() {
-		return EnumHelper.valueOf(SerializeType.class,
-				getString(SERIALIZE_TYPE, null));
+		return EnumHelper.valueOf(SerializeType.class, getString(SERIALIZE_TYPE, null));
 	}
 
 	// public static void setSerializeType(SerializeType serializeType) {
@@ -1432,8 +1411,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	// }
 
 	public static SecurityType getSecurityType() {
-		return EnumHelper.valueOf(SecurityType.class,
-				getString(SECURITY_TYPE, null));
+		return EnumHelper.valueOf(SecurityType.class, getString(SECURITY_TYPE, null));
 	}
 
 	// public static void setSecurityType(SecurityType securityType) {
@@ -1457,8 +1435,7 @@ public class ConfigHelper2 extends BaseHelperSupporter {
 	// }
 
 	public static CompressType getCompressType() {
-		return EnumHelper.valueOf(CompressType.class,
-				getString(COMPRESS_TYPE, null));
+		return EnumHelper.valueOf(CompressType.class, getString(COMPRESS_TYPE, null));
 	}
 
 	// public static void setCompressType(CompressType compressType) {
