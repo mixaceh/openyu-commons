@@ -19,7 +19,7 @@ public final class AssertHelper extends BaseHelperSupporter {
 
 	private AssertHelper() {
 		throw new HelperException(
-				new StringBuilder().append(AssertHelper.class.getSimpleName()).append(" can not construct").toString());
+				new StringBuilder().append(AssertHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	public static void isTrue(boolean expression, String message) {

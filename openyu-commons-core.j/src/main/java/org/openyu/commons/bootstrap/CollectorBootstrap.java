@@ -18,6 +18,7 @@ import org.openyu.commons.collector.CollectorStarter;
 import org.openyu.commons.collector.ex.CollectorException;
 import org.openyu.commons.lang.ClassHelper;
 import org.openyu.commons.lang.StringHelper;
+import org.openyu.commons.util.AssertHelper;
 import org.openyu.commons.util.CollectionHelper;
 
 /**
@@ -34,8 +35,7 @@ import org.openyu.commons.util.CollectionHelper;
 public final class CollectorBootstrap extends BootstrapSupporter {
 
 	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(CollectorBootstrap.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(CollectorBootstrap.class);
 
 	/**
 	 * 所有collector啟動器
@@ -49,12 +49,18 @@ public final class CollectorBootstrap extends BootstrapSupporter {
 	 *            the arguments
 	 */
 	public static void main(String args[]) {
-		// 建構applicationContext
-		buildApplicationContext(args);
-		// 建構collector啟動器
-		buildCollectorStarters();
-		//
-		doStart();
+		try {
+			// 建構applicationContext
+			buildApplicationContext(args);
+			// 建構collector啟動器
+			buildCollectorStarters();
+			//
+			doStart();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during main()").toString(), e);
+			//結束
+			System.exit(0);
+		}
 	}
 
 	/**
@@ -64,23 +70,18 @@ public final class CollectorBootstrap extends BootstrapSupporter {
 	 */
 	protected static void buildApplicationContext(String[] configLocations) {
 		applicationContext = new ClassPathXmlApplicationContext(configLocations);
-		if (applicationContext == null) {
-			throw new IllegalArgumentException(
-					"The ApplicationContext must not be null");
-		}
+		//
+		AssertHelper.notNull(applicationContext,
+				new StringBuilder().append("The ApplicationContext must not be null").toString());
 	}
 
 	/**
 	 * 建構collector啟動器
 	 */
 	protected static void buildCollectorStarters() {
-		collectorStarters = applicationContext
-				.getBeansOfType(CollectorStarter.class);
+		collectorStarters = applicationContext.getBeansOfType(CollectorStarter.class);
 		//
-		if (CollectionHelper.isEmpty(collectorStarters)) {
-			throw new IllegalArgumentException(
-					"The CollectorStarters must not be null or empty");
-		}
+		AssertHelper.notEmpty(collectorStarters, "The CollectorStarters must not be null or empty");
 	}
 
 	/**
@@ -90,24 +91,33 @@ public final class CollectorBootstrap extends BootstrapSupporter {
 	 *            the application context
 	 */
 	public static void start(ApplicationContext applicationContext) {
-		CollectorBootstrap.applicationContext = applicationContext;
-		buildCollectorStarters();
+		AssertHelper.notNull(applicationContext, "The ApplicationContext must not be null");
 		//
-		doStart();
+		try {
+			CollectorBootstrap.applicationContext = applicationContext;
+			// 建構collector啟動器
+			buildCollectorStarters();
+			//
+			doStart();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during start()").toString(), e);
+		}
 	}
 
 	/**
-	 * 內部用啟動.
+	 * 內部用啟動
+	 * 
+	 * @throws Exception
 	 */
-	protected static void doStart() {
+	protected static void doStart() throws Exception {
 		// 總數
 		int count = 0;
 		// 執行數
 		int runCount = 0;
 		// 執行數花費的時間總計
-		long sumDur = 0L;
+		long sumTime = 0L;
 		// 平均時間
-		long avgDur = 0L;
+		long avgTime = 0L;
 		// 最佳時間
 		long bestTime = Long.MAX_VALUE;
 		//
@@ -121,47 +131,41 @@ public final class CollectorBootstrap extends BootstrapSupporter {
 				// xml -> serial
 				String result = null;
 				try {
-					long start = System.nanoTime();
+					long begTime = System.currentTimeMillis();
 					BaseCollector collector = checkBaseCollector(collectorName);
 					if (collector == null) {
 						continue;
 					}
 					//
-					result = CollectorHelper.writeToSerFromXml(collector
-							.getClass());
+					result = CollectorHelper.writeToSerFromXml(collector.getClass());
 					if (result == null) {
-						throw new CollectorException(collectorName
-								+ " Not write to ser");
+						throw new CollectorException(collectorName + " Not write to ser");
 					}
-					long dur = System.nanoTime() - start;
-					dur = TimeUnit.NANOSECONDS.toMillis(dur);
+					long endTime = System.currentTimeMillis();
+					long durTime = endTime - begTime;
 					//
 					runCount++;
-					sumDur += dur;
-					bestTime = Math.min(bestTime, dur);
-					LOGGER.info("#." + (count+1)  + " Write to " + result
-							+ " success in " + dur + " ms");
+					sumTime += durTime;
+					bestTime = Math.min(bestTime, durTime);
+					LOGGER.info("#." + (count + 1) + " Write to " + result + " success in " + durTime + " ms");
 
 				} catch (NullPointerException ex) {
-					LOGGER.info("#." + (count+1)  + " " + ex.getMessage());
+					LOGGER.info("#." + (count + 1) + " " + ex.getMessage());
 				} catch (Exception ex) {
-					LOGGER.info("#." + (count+1)  + " Write " + collectorName
-							+ " failed", ex);
+					LOGGER.info("#." + (count + 1) + " Write " + collectorName + " failed", ex);
 				}
 				count++;
 			}
 		}
-		avgDur = (runCount == 0 ? 0 : sumDur / runCount);
+		avgTime = (runCount == 0 ? 0 : sumTime / runCount);
 		bestTime = (bestTime == Long.MAX_VALUE ? 0 : bestTime);
 		//
 		String msgPattern = "Total files is [{0}], [{1}] xml files had been successfully writed to ser file in {2} ms";
-		StringBuilder msg = new StringBuilder(MessageFormat.format(msgPattern,
-				count, runCount, sumDur));
+		StringBuilder msg = new StringBuilder(MessageFormat.format(msgPattern, count, runCount, sumTime));
 		LOGGER.info(msg.toString());
 		//
 		msgPattern = "Best time: {0} ms, average time: {1} ms";
-		msg = new StringBuilder(MessageFormat.format(msgPattern, bestTime,
-				avgDur));
+		msg = new StringBuilder(MessageFormat.format(msgPattern, bestTime, avgTime));
 		LOGGER.info(msg.toString());
 	}
 
@@ -179,13 +183,12 @@ public final class CollectorBootstrap extends BootstrapSupporter {
 		}
 		Class<?> clazz = ClassHelper.forName(collectorName);
 		if (clazz == null) {
-			LOGGER.error("Can't forName [" + collectorName + "]");
+			LOGGER.error("Can not forName(" + collectorName + ")");
 			return result;
 		}
 		Object object = ClassHelper.newInstance(clazz);
 		if (!(object instanceof BaseCollector)) {
-			LOGGER.error("Can't newInstance [" + collectorName
-					+ "]. It is not instance of BaseCollector");
+			LOGGER.error("Can not newInstance(" + collectorName + "). It is not instance of BaseCollector");
 			return result;
 		}
 		//
@@ -211,9 +214,9 @@ public final class CollectorBootstrap extends BootstrapSupporter {
 		// 執行數
 		int runCount = 0;
 		// 執行數花費的時間總計
-		long sumDur = 0L;
+		long sumTime = 0L;
 		// 平均時間
-		long avgDur = 0L;
+		long avgTime = 0L;
 		// 最佳時間
 		long bestTime = Long.MAX_VALUE;
 		//
@@ -225,50 +228,43 @@ public final class CollectorBootstrap extends BootstrapSupporter {
 			//
 			for (String collectorName : collectorNames) {
 				try {
-
-					long start = System.nanoTime();
+					long begTime = System.currentTimeMillis();
 					BaseCollector collector = checkBaseCollector(collectorName);
 					if (collector == null) {
 						continue;
 					}
 					// serial -> object
-					collector = CollectorHelper.readFromSer(collector
-							.getClass());
+					collector = CollectorHelper.readFromSer(collector.getClass());
 					if (collector == null) {
-						throw new CollectorException(collectorName
-								+ " Not read from ser");
+						throw new CollectorException(collectorName + " Not read from ser");
 					}
-					long dur = System.nanoTime() - start;
-					dur = TimeUnit.NANOSECONDS.toMillis(dur);
+					long endTime = System.currentTimeMillis();
+					long durTime = endTime - begTime;
 					//
 					runCount++;
-					sumDur += dur;
-					bestTime = Math.min(bestTime, dur);
+					sumTime += durTime;
+					bestTime = Math.min(bestTime, durTime);
 					result.add(collector);
-					LOGGER.info("#." + (count + 1) + " Create "
-							+ collector.getClass().getSimpleName()
-							+ " success in " + dur + " ms");
+					LOGGER.info("#." + (count + 1) + " Create " + collector.getClass().getSimpleName() + " success in "
+							+ durTime + " ms");
 				} catch (NullPointerException ex) {
 					LOGGER.info("#." + (count + 1) + " " + ex.getMessage());
 				} catch (Exception ex) {
-					LOGGER.info("#." + (count + 1) + " Create "
-							+ collectorName + " failed", ex);
+					LOGGER.info("#." + (count + 1) + " Create " + collectorName + " failed", ex);
 				}
 				//
 				count++;
 			}
 		}
-		avgDur = (runCount == 0 ? 0 : sumDur / runCount);
+		avgTime = (runCount == 0 ? 0 : sumTime / runCount);
 		bestTime = (bestTime == Long.MAX_VALUE ? 0 : bestTime);
 		//
 		String msgPattern = "Total files is [{0}], [{1}] ser files had been successfully read to object in {2} ms";
-		StringBuilder msg = new StringBuilder(MessageFormat.format(msgPattern,
-				count, runCount, sumDur));
+		StringBuilder msg = new StringBuilder(MessageFormat.format(msgPattern, count, runCount, sumTime));
 		LOGGER.info(msg.toString());
 		//
 		msgPattern = "Best time: {0} ms, average time: {1} ms";
-		msg = new StringBuilder(MessageFormat.format(msgPattern, bestTime,
-				avgDur));
+		msg = new StringBuilder(MessageFormat.format(msgPattern, bestTime, avgTime));
 		LOGGER.info(msg.toString());
 		//
 		return result;

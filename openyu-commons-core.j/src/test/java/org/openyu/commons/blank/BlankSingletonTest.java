@@ -13,36 +13,30 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
-/**
- * The Class BlankGetInstanceTest.
- */
-public class BlankGetInstanceTest extends BaseTestSupporter {
+public class BlankSingletonTest extends BaseTestSupporter {
 
-	/** The benchmark rule. */
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	public void BlankGetInstance() throws Exception {
-		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.blank.BlankGetInstance");
+	public void BlankSingleton() throws Exception {
+		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.blank.BlankSingleton");
 		//
 		Object result = null;
-		//Caused by: java.lang.SecurityException: BlankGetInstance can not construct
+		// Caused by: java.lang.SecurityException: BlankGetInstance can not
+		// construct
 		result = constructor.newInstance();
 		assertNull(result);
 	}
 
-	/**
-	 * Instance holder.
-	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 0, concurrency = 1)
 	// round: 0.07 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.07, time.warmup: 0.00,
 	// time.bench: 0.07
 	public void InstanceHolder() throws Exception {
-		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.blank.BlankGetInstance$InstanceHolder");
+		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.blank.BlankSingleton$InstanceHolder");
 		//
 		Object result = null;
 		//
@@ -58,11 +52,11 @@ public class BlankGetInstanceTest extends BaseTestSupporter {
 	 * @return single instance of BlankGetInstanceTest
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 0, concurrency = 1)
 	public void getInstance() {
-		BlankGetInstance result = null;
+		BlankSingleton result = null;
 		//
-		result = BlankGetInstance.getInstance();
+		result = BlankSingleton.getInstance();
 		//
 		System.out.println(result);
 		assertNotNull(result);
@@ -71,15 +65,15 @@ public class BlankGetInstanceTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void shutdownInstance() {
-		BlankGetInstance instance = BlankGetInstance.getInstance();
+		BlankSingleton instance = BlankSingleton.getInstance();
 		System.out.println(instance);
 		assertNotNull(instance);
 		//
-		instance = BlankGetInstance.shutdownInstance();
+		instance = BlankSingleton.shutdownInstance();
 		System.out.println(instance);
 		assertNull(instance);
 		// 多次,不會丟出ex
-		instance = BlankGetInstance.shutdownInstance();
+		instance = BlankSingleton.shutdownInstance();
 		System.out.println(instance);
 		assertNull(instance);
 	}
@@ -87,15 +81,15 @@ public class BlankGetInstanceTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void restartInstance() {
-		BlankGetInstance instance = BlankGetInstance.getInstance();
+		BlankSingleton instance = BlankSingleton.getInstance();
 		System.out.println(instance);
 		assertNotNull(instance);
 		//
-		instance = BlankGetInstance.restartInstance();
+		instance = BlankSingleton.restartInstance();
 		System.out.println(instance);
 		assertNotNull(instance);
 		// 多次,不會丟出ex
-		instance = BlankGetInstance.restartInstance();
+		instance = BlankSingleton.restartInstance();
 		System.out.println(instance);
 		assertNotNull(instance);
 	}

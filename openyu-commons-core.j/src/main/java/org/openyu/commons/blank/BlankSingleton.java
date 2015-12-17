@@ -6,18 +6,13 @@ import org.slf4j.LoggerFactory;
 /**
  * Blank單例, 如:service不使用spring建構時, 自行建構單例
  */
-public class BlankGetInstance {
+public class BlankSingleton {
 
-	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory.getLogger(BlankGetInstance.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(BlankSingleton.class);
 
-	/**
-	 * Instantiates a new helper.
-	 */
-	// private BlankGetInstance() {
-	public BlankGetInstance() {
+	private BlankSingleton() {
 		if (InstanceHolder.INSTANCE != null) {
-			throw new SecurityException(new StringBuilder().append(BlankGetInstance.class.getSimpleName())
+			throw new SecurityException(new StringBuilder().append(BlankSingleton.class.getName())
 					.append(" can not construct").toString());
 		}
 	}
@@ -30,20 +25,20 @@ public class BlankGetInstance {
 		/** The Constant INSTANCE. */
 		// private final static BlankGetInstance INSTANCE = new
 		// BlankGetInstance();
-		private static BlankGetInstance INSTANCE = new BlankGetInstance();
+		private static BlankSingleton INSTANCE = new BlankSingleton();
 	}
 
 	/**
-	 * Gets the single instance of BlankGetInstance.
+	 * Gets the single instance
 	 *
-	 * @return single instance of BlankGetInstance
+	 * @return
 	 */
 	// public static BlankGetInstance getInstance() {
 	// return InstanceHolder.INSTANCE;
 	// }
-	public synchronized static BlankGetInstance getInstance() {
+	public synchronized static BlankSingleton getInstance() {
 		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new BlankGetInstance();
+			InstanceHolder.INSTANCE = new BlankSingleton();
 		}
 		return InstanceHolder.INSTANCE;
 	}
@@ -53,14 +48,14 @@ public class BlankGetInstance {
 	 * 
 	 * @return
 	 */
-	public synchronized static BlankGetInstance shutdownInstance() {
+	public synchronized static BlankSingleton shutdownInstance() {
 		if (InstanceHolder.INSTANCE != null) {
 			InstanceHolder.INSTANCE = null;
 		}
 		return InstanceHolder.INSTANCE;
 	}
 
-	public synchronized static BlankGetInstance restartInstance() {
+	public synchronized static BlankSingleton restartInstance() {
 		shutdownInstance();
 		getInstance();
 		return InstanceHolder.INSTANCE;

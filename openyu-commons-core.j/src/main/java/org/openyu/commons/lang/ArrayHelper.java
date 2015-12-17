@@ -82,7 +82,7 @@ public final class ArrayHelper extends BaseHelperSupporter {
 
 	private ArrayHelper() {
 		throw new HelperException(
-				new StringBuilder().append(ArrayHelper.class.getSimpleName()).append(" can not construct").toString());
+				new StringBuilder().append(ArrayHelper.class.getName()).append(" can not construct").toString());
 	}
 	// --------------------------------------------------
 
