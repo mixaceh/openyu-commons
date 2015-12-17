@@ -1,24 +1,20 @@
 package org.openyu.commons.gson;
 
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GsonHelper extends BaseHelperSupporter {
-	
+public final class GsonHelper extends BaseHelperSupporter {
+	xxx
 	private static transient final Logger LOGGER = LoggerFactory
 			.getLogger(GsonHelper.class);
 
-	private static GsonHelper instance;
 
 	private GsonHelper() {
+		throw new HelperException(
+				new StringBuilder().append(GsonHelper.class.getName()).append(" can not construct").toString());
 	}
 
-	public static synchronized GsonHelper getInstance() {
-		if (instance == null) {
-			instance = new GsonHelper();
-		}
-		return instance;
-	}
 
 }

@@ -18,81 +18,17 @@ import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.lang.StringHelper;
 
 /**
- * The Class EnumHelper.
+ * Enum輔助類
  */
-public class EnumHelper extends BaseHelperSupporter {
+public final class EnumHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(EnumHelper.class);
 
-	/**
-	 * Instantiates a new helper.
-	 */
-	public EnumHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new HelperException(
-					new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
+	private EnumHelper() {
+		throw new HelperException(
+				new StringBuilder().append(EnumHelper.class.getName()).append(" can not construct").toString());
 	}
 
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private static EnumHelper INSTANCE = new EnumHelper();
-		private static EnumHelper INSTANCE = new EnumHelper();
-	}
-
-	/**
-	 * Gets the single instance of EnumHelper.
-	 *
-	 * @return single instance of EnumHelper
-	 */
-	public synchronized static EnumHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new EnumHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
-	}
-
-	/**
-	 * 單例關閉
-	 * 
-	 * @return
-	 */
-	public synchronized static EnumHelper shutdownInstance() {
-		if (InstanceHolder.INSTANCE != null) {
-			EnumHelper oldInstance = InstanceHolder.INSTANCE;
-			InstanceHolder.INSTANCE = null;
-			//
-			if (oldInstance != null) {
-				oldInstance.shutdown();
-			}
-		}
-		return InstanceHolder.INSTANCE;
-	}
-
-	/**
-	 * 單例刷新
-	 * 
-	 * @return
-	 */
-	public synchronized static EnumHelper restartInstance() {
-		if (InstanceHolder.INSTANCE != null) {
-			InstanceHolder.INSTANCE.restart();
-		}
-		return InstanceHolder.INSTANCE;
-	}
-
-	// -------------------------------------------------
 	/**
 	 * 依boolean取得enum.
 	 *

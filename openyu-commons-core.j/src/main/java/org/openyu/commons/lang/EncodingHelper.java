@@ -10,11 +10,15 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * The Class EncodingHelper.
+ * 編碼輔助類
  */
-public class EncodingHelper extends BaseHelperSupporter {
+public final class EncodingHelper extends BaseHelperSupporter {
+
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(EncodingHelper.class);
 
 	/** The Constant BIG5. */
 	public static final String BIG5 = "BIG5";
@@ -31,45 +35,10 @@ public class EncodingHelper extends BaseHelperSupporter {
 	/** The Constant ISO_8859_1. */
 	public static final String ISO_8859_1 = "ISO-8859-1";
 
-	/**
-	 * Instantiates a new helper.
-	 */
 	private EncodingHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new HelperException(
-					new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
+		throw new HelperException(
+				new StringBuilder().append(EncodingHelper.class.getName()).append(" can not construct").toString());
 	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private static final EncodingHelper INSTANCE = new EncodingHelper();
-		private static EncodingHelper INSTANCE = new EncodingHelper();
-	}
-
-	/**
-	 * Gets the single instance of EncodingHelper.
-	 *
-	 * @return single instance of EncodingHelper
-	 */
-	public synchronized static EncodingHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new EncodingHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
-	}
-
-	// --------------------------------------------------
 
 	/**
 	 * 字串編碼
