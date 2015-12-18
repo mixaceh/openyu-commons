@@ -5,31 +5,25 @@ import java.io.Writer;
 import java.net.URL;
 import java.util.Properties;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class VelocityHelper extends BaseHelperSupporter {
+public final class VelocityHelper extends BaseHelperSupporter {
 
-	private static transient final Logger log = LogManager.getLogger(VelocityHelper.class);
-
-	private static VelocityHelper instance;
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(VelocityHelper.class);
 
 	// velocity 設定檔
 	public static final String DEFAULT_CONFIG_FILE_NAME = "velocity.properties";
 
-	public VelocityHelper() {
-	}
-
-	public static synchronized VelocityHelper getInstance() {
-		if (instance == null) {
-			instance = new VelocityHelper();
-		}
-		return instance;
+	private VelocityHelper() {
+		throw new HelperException(
+				new StringBuilder().append(VelocityHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	public static boolean configure() {

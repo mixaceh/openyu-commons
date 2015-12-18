@@ -13,13 +13,11 @@ import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
- * char a='a' ; String a1=String.valueOf(a); // String b="b"; char
- * b1=b.charAt(0);
+/**
+ * 字串輔助類
  */
-public class StringHelper extends BaseHelperSupporter {
+public final class StringHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(StringHelper.class);
 
 	public static final String DEFAULT_VALUE = "";
@@ -298,42 +296,9 @@ public class StringHelper extends BaseHelperSupporter {
 
 	public static final String CLUB = String.valueOf(CLUB_CHAR);// \u2663
 
-	/**
-	 * Instantiates a new helper.
-	 */
-	public StringHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new HelperException(
-					new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private static final StringHelper INSTANCE = new StringHelper();
-		private static StringHelper INSTANCE = new StringHelper();
-	}
-
-	/**
-	 * Gets the single instance of StringHelper.
-	 *
-	 * @return single instance of StringHelper
-	 */
-	public synchronized static StringHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new StringHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
+	private StringHelper() {
+		throw new HelperException(
+				new StringBuilder().append(StringHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	public static boolean equals(String x, String y) {

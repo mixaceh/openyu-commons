@@ -33,38 +33,6 @@ public class RuntimeHelperTest extends BaseTestSupporter {
 		assertNull(result);
 	}
 
-	/**
-	 * Instance holder.
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	public void InstanceHolder() throws Exception {
-		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.lang.RuntimeHelper$InstanceHolder");
-		//
-		Object result = null;
-		//
-		result = constructor.newInstance();
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
-	/**
-	 * Gets the single instance of RuntimeHelperTest.
-	 *
-	 * @return single instance of RuntimeHelperTest
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void getInstance() {
-		RuntimeHelper result = null;
-		//
-		result = RuntimeHelper.getInstance();
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 0, concurrency = 100)
 	public void usedMemory() {

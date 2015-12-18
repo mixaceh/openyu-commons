@@ -38,38 +38,6 @@ public class SortHelperTest extends BaseTestSupporter {
 	}
 
 	/**
-	 * Instance holder.
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	public void InstanceHolder() throws Exception {
-		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.util.SortHelper$InstanceHolder");
-		//
-		Object result = null;
-		//
-		result = constructor.newInstance();
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
-	/**
-	 * Gets the single instance of SortHelperTest.
-	 *
-	 * @return single instance of SortHelperTest
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void getInstance() {
-		SortHelper result = null;
-		//
-		result = SortHelper.getInstance();
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
-	/**
 	 * Selection.
 	 */
 	@Test

@@ -6,7 +6,7 @@ import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 
 /**
- * The Class SystemHelper.
+ * 系統輔助類
  */
 public final class SystemHelper extends BaseHelperSupporter {
 
@@ -116,45 +116,10 @@ public final class SystemHelper extends BaseHelperSupporter {
 	/** The Constant USER_NAME. */
 	public static final String USER_NAME = getProperty("user.name");
 
-	/**
-	 * Instantiates a new helper.
-	 */
-	public SystemHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new HelperException(
-					new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
+	private SystemHelper() {
+		throw new HelperException(
+				new StringBuilder().append(SystemHelper.class.getName()).append(" can not construct").toString());
 	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private static final SystemHelper INSTANCE = new SystemHelper();
-		private static SystemHelper INSTANCE = new SystemHelper();
-	}
-
-	/**
-	 * Gets the single instance of SystemHelper.
-	 *
-	 * @return single instance of SystemHelper
-	 */
-	public synchronized static SystemHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new SystemHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
-	}
-
-	// -----------------------------------------------------------------------
 
 	// Java version
 	// 1.2f for JDK 1.2

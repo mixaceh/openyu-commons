@@ -34,41 +34,6 @@ public class EncodingHelperTest extends BaseTestSupporter {
 		assertNull(result);
 	}
 
-	/**
-	 * Instance holder.
-	 *
-	 * @throws Exception
-	 *             the exception
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	public void InstanceHolder() throws Exception {
-		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.lang.EncodingHelper$InstanceHolder");
-		//
-		Object result = null;
-		//
-		result = constructor.newInstance();
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
-	/**
-	 * Gets the single instance of EncodingHelperTest.
-	 *
-	 * @return single instance of EncodingHelperTest
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void getInstance() {
-		EncodingHelper result = null;
-		//
-		result = EncodingHelper.getInstance();
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
 	// round: 0.15

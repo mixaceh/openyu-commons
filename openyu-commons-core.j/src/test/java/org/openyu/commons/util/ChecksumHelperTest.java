@@ -20,20 +20,6 @@ public class ChecksumHelperTest extends BaseTestSupporter {
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	public void getInstance() {
-		ChecksumHelper result = null;
-		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			result = ChecksumHelper.getInstance();
-		}
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
 	// round: 6.50
 	public void crc32() {
 		byte[] value = new byte[307200];// 300k

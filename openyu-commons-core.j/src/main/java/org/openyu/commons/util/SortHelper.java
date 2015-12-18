@@ -6,49 +6,15 @@ import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 
 /**
- * The Class SortHelper.
+ * 排序輔助類
  */
-public class SortHelper extends BaseHelperSupporter {
+public final class SortHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(SortHelper.class);
 
-	/**
-	 * Instantiates a new blank helper.
-	 */
-	public SortHelper() {
-		if (InstanceHolder.INSTANCE != null) {
-			throw new HelperException(
-					new StringBuilder().append(getDisplayName()).append(" can not construct").toString());
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		// private static final SortHelper INSTANCE = new SortHelper();
-		private static SortHelper INSTANCE = new SortHelper();
-	}
-
-	/**
-	 * Gets the single instance of SortHelper.
-	 *
-	 * @return single instance of SortHelper
-	 */
-	public synchronized static SortHelper getInstance() {
-		if (InstanceHolder.INSTANCE == null) {
-			InstanceHolder.INSTANCE = new SortHelper();
-		}
-		//
-		if (!InstanceHolder.INSTANCE.isStarted()) {
-			InstanceHolder.INSTANCE.setGetInstance(true);
-			// 啟動
-			InstanceHolder.INSTANCE.start();
-		}
-		return InstanceHolder.INSTANCE;
+	private SortHelper() {
+		throw new HelperException(
+				new StringBuilder().append(SortHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	// --------------------------------------------------

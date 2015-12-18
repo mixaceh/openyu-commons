@@ -10,18 +10,24 @@ import java.util.MissingResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 
-// TODO
-// 不支持Locale,因此另外时区的人使用会有问题
-public class TaiwanDateHelper extends BaseHelperSupporter {
+/**
+ * 僅限台灣使用
+ */
+public final class TaiwanDateHelper extends BaseHelperSupporter {
 
-	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(TaiwanDateHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(TaiwanDateHelper.class);
 
 	private static String defaultDatePattern = null;
+
 	private static String timePattern = "HH:mm";
+
+	private TaiwanDateHelper() {
+		throw new HelperException(
+				new StringBuilder().append(TaiwanDateHelper.class.getName()).append(" can not construct").toString());
+	}
 
 	/**
 	 * Return default datePattern (yyy/MM/dd)
@@ -43,8 +49,7 @@ public class TaiwanDateHelper extends BaseHelperSupporter {
 		return getDatePattern() + " " + timePattern;
 	}
 
-	public static Date convertStringToDate(String aMask, String strDate)
-			throws ParseException {
+	public static Date convertStringToDate(String aMask, String strDate) throws ParseException {
 		SimpleDateFormat df = null;
 		Date date = null;
 
@@ -64,18 +69,15 @@ public class TaiwanDateHelper extends BaseHelperSupporter {
 		return (date);
 	}
 
-	public static Date convertStringToYearMonth(String strDate)
-			throws ParseException {
+	public static Date convertStringToYearMonth(String strDate) throws ParseException {
 		return convertStringToDate("yyy/MM", strDate);
 	}
 
-	public static Date convertStringToDate(String strDate)
-			throws ParseException {
+	public static Date convertStringToDate(String strDate) throws ParseException {
 		return convertStringToDate(getDatePattern(), strDate);
 	}
 
-	public static Date convertStringToDateTime(String strDate)
-			throws ParseException {
+	public static Date convertStringToDateTime(String strDate) throws ParseException {
 		return convertStringToDate(getDateTimePattern(), strDate);
 	}
 
@@ -87,9 +89,8 @@ public class TaiwanDateHelper extends BaseHelperSupporter {
 		} else {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(aDate);
-			// TODO 先凑合着用:)
-			String rcyear = Integer
-					.toString(calendar.get(Calendar.YEAR) - 1911);
+			// TODO 先凑合着用
+			String rcyear = Integer.toString(calendar.get(Calendar.YEAR) - 1911);
 			if (rcyear.length() == 2)
 				rcyear = "0".concat(rcyear);
 			else if (rcyear.length() == 1)

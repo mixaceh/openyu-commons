@@ -38,39 +38,6 @@ public class EnumHelperTest extends BaseTestSupporter {
 	}
 
 	/**
-	 * Instance holder.
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	// round: 0.00
-	public void InstanceHolder() throws Exception {
-		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.enumz.EnumHelper$InstanceHolder");
-		//
-		Object result = null;
-		//
-		result = constructor.newInstance();
-		assertNotNull(result);
-	}
-
-	/**
-	 * Gets the single instance of EnumHelperTest.
-	 *
-	 * @return single instance of EnumHelperTest
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	// round: 0.09, old
-	// round: 0.00, new
-	public void getInstance() {
-		EnumHelper result = null;
-		//
-		result = EnumHelper.getInstance();
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
-	/**
 	 * Value of.
 	 */
 	@Test
@@ -462,7 +429,7 @@ public class EnumHelperTest extends BaseTestSupporter {
 		GRAY(3d),
 
 		/** The red. */
-		RED(3d), ;
+		RED(3d),;
 
 		/** The value. */
 		private double value;
@@ -499,7 +466,7 @@ public class EnumHelperTest extends BaseTestSupporter {
 		C("c"),
 
 		/** The d. */
-		D("d"), ;
+		D("d"),;
 
 		/** The value. */
 		private String value;

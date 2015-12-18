@@ -2,23 +2,19 @@ package org.openyu.commons.thread;
 
 import java.util.concurrent.TimeUnit;
 
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 
-public class ThreadHelper extends BaseHelperSupporter {
+/**
+ * 線程輔助類
+ */
+public final class ThreadHelper extends BaseHelperSupporter {
 
-	private static ThreadHelper instance;
-
-	public ThreadHelper() {
+	private ThreadHelper() {
+		throw new HelperException(
+				new StringBuilder().append(ThreadHelper.class.getName()).append(" can not construct").toString());
 	}
 
-	public static synchronized ThreadHelper getInstance() {
-		if (instance == null) {
-			instance = new ThreadHelper();
-		}
-		return instance;
-	}
-
-	// ---------------------------------------------------
 	public static void sleep(long millis) {
 		try {
 			// 0表無限

@@ -7,21 +7,20 @@ import java.util.HashSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.lang.ClassHelper;
 
 import sun.misc.Unsafe;
 
 /**
- * The Class UnsafeHelper.
+ * Unsafe輔助類
  */
-public class UnsafeHelper extends BaseHelperSupporter {
+public final class UnsafeHelper extends BaseHelperSupporter {
 
 	private static Unsafe unsafe;
 
-	/** The Constant LOGGER. */
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(UnsafeHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(UnsafeHelper.class);
 
 	/** Bytes used in a boolean */
 	public static final int SIZE_OF_BOOLEAN = 1;
@@ -73,8 +72,12 @@ public class UnsafeHelper extends BaseHelperSupporter {
 	protected static class Static {
 		public Static() {
 			buildUnsafe();
-			// newUnsafe() ;
 		}
+	}
+
+	private UnsafeHelper() {
+		throw new HelperException(
+				new StringBuilder().append(UnsafeHelper.class.getName()).append(" can not construct").toString());
 	}
 
 	/**
@@ -86,8 +89,7 @@ public class UnsafeHelper extends BaseHelperSupporter {
 			// Field field = Unsafe.class.getDeclaredField("theUnsafe");
 
 			// #fix
-			Field field = ClassHelper.getDeclaredField(Unsafe.class,
-					"theUnsafe");
+			Field field = ClassHelper.getDeclaredField(Unsafe.class, "theUnsafe");
 			field.setAccessible(true);
 			unsafe = (Unsafe) field.get(null);
 
@@ -101,8 +103,7 @@ public class UnsafeHelper extends BaseHelperSupporter {
 			DOUBLE_ARRAY_OFFSET = unsafe.arrayBaseOffset(double[].class);
 			OBJECT_ARRAY_OFFSET = unsafe.arrayBaseOffset(Object[].class);
 		} catch (Exception ex) {
-			throw new RuntimeException(
-					"UnsafeHelper Failed to " + "get unsafe", ex);
+			throw new RuntimeException("UnsafeHelper Failed to " + "get unsafe", ex);
 		}
 	}
 
@@ -111,8 +112,7 @@ public class UnsafeHelper extends BaseHelperSupporter {
 	 */
 	protected static void newUnsafe() {
 		try {
-			Constructor<Unsafe> constructor = Unsafe.class
-					.getDeclaredConstructor();
+			Constructor<Unsafe> constructor = Unsafe.class.getDeclaredConstructor();
 			constructor.setAccessible(true);
 			unsafe = constructor.newInstance();
 			//
@@ -121,38 +121,9 @@ public class UnsafeHelper extends BaseHelperSupporter {
 			DOUBLE_ARRAY_OFFSET = unsafe.arrayBaseOffset(double[].class);
 			OBJECT_ARRAY_OFFSET = unsafe.arrayBaseOffset(Object[].class);
 		} catch (Exception ex) {
-			throw new RuntimeException(
-					"UnsafeHelper Failed to " + "new unsafe", ex);
+			throw new RuntimeException("UnsafeHelper Failed to " + "new unsafe", ex);
 
 		}
-	}
-
-	/**
-	 * Instantiates a new UnsafeHelper.
-	 */
-	private UnsafeHelper() {
-		super();
-		if (InstanceHolder.INSTANCE != null) {
-			throw new UnsupportedOperationException("Can not construct.");
-		}
-	}
-
-	/**
-	 * The Class InstanceHolder.
-	 */
-	private static class InstanceHolder {
-
-		/** The Constant INSTANCE. */
-		private static final UnsafeHelper INSTANCE = new UnsafeHelper();
-	}
-
-	/**
-	 * Gets the single instance of UnsafeHelper.
-	 *
-	 * @return single instance of UnsafeHelper
-	 */
-	public static UnsafeHelper getInstance() {
-		return InstanceHolder.INSTANCE;
 	}
 
 	// 1.use Unsafe 加入參數 java -Xbootclasspath:/usr/jdk1.7.0/jre/lib/rt.jar:.
@@ -320,15 +291,13 @@ public class UnsafeHelper extends BaseHelperSupporter {
 	 * @param destPos
 	 * @param length
 	 */
-	public static void byteArraycopy(byte[] src, int srcPos, byte[] dest,
-			int destPos, int length) {
+	public static void byteArraycopy(byte[] src, int srcPos, byte[] dest, int destPos, int length) {
 		assert srcPos >= 0 : srcPos;
 		assert srcPos <= src.length - length : srcPos;
 		assert destPos >= 0 : destPos;
 		assert destPos <= dest.length - length : destPos;
 
-		unsafe.copyMemory(src, BYTE_ARRAY_OFFSET + srcPos, dest,
-				BYTE_ARRAY_OFFSET + destPos, length);
+		unsafe.copyMemory(src, BYTE_ARRAY_OFFSET + srcPos, dest, BYTE_ARRAY_OFFSET + destPos, length);
 	}
 
 	/**
@@ -345,8 +314,7 @@ public class UnsafeHelper extends BaseHelperSupporter {
 		for (Field field : fields) {
 			if (!Modifier.isStatic(field.getModifiers())) {
 				// int=12, long=16
-				maximumOffset = Math.max(maximumOffset,
-						unsafe.objectFieldOffset(field));
+				maximumOffset = Math.max(maximumOffset, unsafe.objectFieldOffset(field));
 			}
 		}
 		// } while ((clazz = clazz.getSuperclass()) != null);
@@ -425,8 +393,7 @@ public class UnsafeHelper extends BaseHelperSupporter {
 		return unsafe.allocateMemory(size);
 	}
 
-	public static void copyMemory(Object srcBase, long srcOffset,
-			Object destBase, long destOffset, long bytes) {
+	public static void copyMemory(Object srcBase, long srcOffset, Object destBase, long destOffset, long bytes) {
 		unsafe.copyMemory(srcBase, srcOffset, destBase, destOffset, bytes);
 	}
 }

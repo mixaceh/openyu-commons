@@ -1,43 +1,26 @@
 package org.openyu.commons.util;
 
-import java.sql.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import java.sql.Time;
+
+import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 
-public class TimeHelper extends BaseHelperSupporter {
+public final class TimeHelper extends BaseHelperSupporter {
 
-	private static transient final Logger log = LogManager
-			.getLogger(TimeHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(TimeHelper.class);
 
-	private static TimeHelper instance;
-
-	public TimeHelper() {
+	private TimeHelper() {
+		throw new HelperException(
+				new StringBuilder().append(TimeHelper.class.getName()).append(" can not construct").toString());
 	}
 
-	public static synchronized TimeHelper getInstance() {
-		if (instance == null) {
-			instance = new TimeHelper();
-		}
-		return instance;
-	}
-
-	public static Time parse(String value) {
+	public static Time toTime(String value) {
 		if (value != null) {
 			return Time.valueOf(value);
 		}
 		return null;
 	}
-
-	public static Time wrap(Object value) {
-		Time result = null;
-		if (value instanceof Time) {
-			result = (Time) value;
-		} else if (value instanceof String) {
-			result = parse((String) value);
-		}
-		return result;
-	}
-
 }

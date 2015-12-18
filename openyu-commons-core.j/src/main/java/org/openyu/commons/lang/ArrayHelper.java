@@ -10,7 +10,7 @@ import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 
 /**
- * The Class ArrayHelper.
+ * Array輔助類
  *
  * 1.array to list
  *

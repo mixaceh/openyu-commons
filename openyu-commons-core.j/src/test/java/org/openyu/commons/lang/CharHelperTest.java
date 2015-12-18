@@ -34,38 +34,6 @@ public class CharHelperTest extends BaseTestSupporter {
 		assertNull(result);
 	}
 
-	/**
-	 * Instance holder.
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	public void InstanceHolder() throws Exception {
-		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.lang.CharHelper$InstanceHolder");
-		//
-		Object result = null;
-		//
-		result = constructor.newInstance();
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
-	/**
-	 * Gets the single instance of CharHelperTest.
-	 *
-	 * @return single instance of CharHelperTest
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void getInstance() {
-		CharHelper result = null;
-		//
-		result = CharHelper.getInstance();
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
 	// round: 0.00

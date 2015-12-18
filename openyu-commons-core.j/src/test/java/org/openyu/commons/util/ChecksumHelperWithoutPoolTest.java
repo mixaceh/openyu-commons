@@ -20,20 +20,6 @@ public class ChecksumHelperWithoutPoolTest extends BaseTestSupporter {
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	public void getInstance() {
-		ChecksumHelperWithoutPool result = null;
-		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			result = ChecksumHelperWithoutPool.getInstance();
-		}
-		//
-		System.out.println(result);
-		assertNotNull(result);
-	}
-
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
 	// round: 6.44
 	public void ___crc32() {
 		byte[] value = new byte[307200];// 300k

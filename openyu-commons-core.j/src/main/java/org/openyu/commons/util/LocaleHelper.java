@@ -3,14 +3,15 @@ package org.openyu.commons.util;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
+import org.openyu.commons.lang.ArrayHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class LocaleHelper extends BaseHelperSupporter {
 
-	private static transient final Logger log = LogManager.getLogger(LocaleHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(LocaleHelper.class);
 
 	public final static String LOCALE = "localeHelper.locale";
 
