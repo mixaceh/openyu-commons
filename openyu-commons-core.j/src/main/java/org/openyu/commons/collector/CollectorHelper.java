@@ -584,7 +584,8 @@ public final class CollectorHelper extends BaseHelperSupporter {
 		 * 
 		 * long -> int
 		 */
-		SER(3155475134L) {
+		//14BCBABE
+		SER(347912894L) {
 			public byte[] toByteArray() {
 				if (byteArray == null) {
 					byteArray = ByteHelper.toIntByteArray(getValue());
