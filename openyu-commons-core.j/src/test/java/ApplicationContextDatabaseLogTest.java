@@ -19,7 +19,7 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.service.AsyncService;
-import org.openyu.commons.service.BaseLogService;
+import org.openyu.commons.service.LogService;
 import org.openyu.commons.thread.ThreadHelper;
 
 public class ApplicationContextDatabaseLogTest extends BaseTestSupporter {
@@ -70,16 +70,16 @@ public class ApplicationContextDatabaseLogTest extends BaseTestSupporter {
 		assertNotNull(bean);
 	}
 
-	@Test
-	public void logTxAdvice() {
-		TransactionInterceptor bean = (TransactionInterceptor) applicationContext.getBean("logTxAdvice");
-		System.out.println(bean);
-		assertNotNull(bean);
-	}
+//	@Test
+//	public void logTxAdvice() {
+//		TransactionInterceptor bean = (TransactionInterceptor) applicationContext.getBean("logTxAdvice");
+//		System.out.println(bean);
+//		assertNotNull(bean);
+//	}
 
 	@Test
-	public void logTxManager() {
-		HibernateTransactionManager bean = (HibernateTransactionManager) applicationContext.getBean("logTxManager");
+	public void logTx() {
+		HibernateTransactionManager bean = (HibernateTransactionManager) applicationContext.getBean("logTx");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}
@@ -92,8 +92,8 @@ public class ApplicationContextDatabaseLogTest extends BaseTestSupporter {
 	}
 
 	@Test
-	public void baseLogServiceSupporter() {
-		BaseLogService bean = (BaseLogService) applicationContext.getBean("baseLogServiceSupporter");
+	public void logServiceSupporter() {
+		LogService bean = (LogService) applicationContext.getBean("logServiceSupporter");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}

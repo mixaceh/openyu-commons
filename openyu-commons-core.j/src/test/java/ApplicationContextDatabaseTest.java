@@ -33,8 +33,8 @@ public class ApplicationContextDatabaseTest extends BaseTestSupporter {
 	}
 
 	@Test
-	public void dataSource() throws Exception {
-		DataSource bean = (DataSource) applicationContext.getBean("dataSource");
+	public void commonDataSource() throws Exception {
+		DataSource bean = (DataSource) applicationContext.getBean("commonDataSource");
 		System.out.println(bean);
 		assertNotNull(bean);
 		//
@@ -44,8 +44,8 @@ public class ApplicationContextDatabaseTest extends BaseTestSupporter {
 	}
 
 	@Test
-	public void sessionFactory() throws Exception {
-		SessionFactory bean = (SessionFactory) applicationContext.getBean("sessionFactory");
+	public void commonSessionFactory() throws Exception {
+		SessionFactory bean = (SessionFactory) applicationContext.getBean("commonSessionFactory");
 		System.out.println(bean);
 		assertNotNull(bean);
 		//
@@ -60,22 +60,22 @@ public class ApplicationContextDatabaseTest extends BaseTestSupporter {
 	}
 
 	@Test
-	public void hibernateTemplate() {
-		HibernateTemplate bean = (HibernateTemplate) applicationContext.getBean("hibernateTemplate");
+	public void commonHibernateTemplate() {
+		HibernateTemplate bean = (HibernateTemplate) applicationContext.getBean("commonHibernateTemplate");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}
 
-	@Test
-	public void txAdvice() {
-		TransactionInterceptor bean = (TransactionInterceptor) applicationContext.getBean("txAdvice");
-		System.out.println(bean);
-		assertNotNull(bean);
-	}
+//	@Test
+//	public void commonTxAdvice() {
+//		TransactionInterceptor bean = (TransactionInterceptor) applicationContext.getBean("commonTxAdvice");
+//		System.out.println(bean);
+//		assertNotNull(bean);
+//	}
 
 	@Test
-	public void txManager() {
-		HibernateTransactionManager bean = (HibernateTransactionManager) applicationContext.getBean("txManager");
+	public void commonTx() {
+		HibernateTransactionManager bean = (HibernateTransactionManager) applicationContext.getBean("commonTx");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}

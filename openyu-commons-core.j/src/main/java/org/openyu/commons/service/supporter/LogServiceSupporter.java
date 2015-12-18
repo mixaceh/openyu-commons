@@ -9,16 +9,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.openyu.commons.service.AsyncService;
-import org.openyu.commons.service.BaseLogService;
+import org.openyu.commons.service.LogService;
 
 /**
  * 日誌服務
  */
-public class BaseLogServiceSupporter extends BaseServiceSupporter implements BaseLogService {
+public class LogServiceSupporter extends BaseServiceSupporter implements LogService {
 
 	private static final long serialVersionUID = -730966546995347276L;
 
-	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseLogServiceSupporter.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(LogServiceSupporter.class);
 
 	/**
 	 * 異步服務
@@ -27,7 +27,7 @@ public class BaseLogServiceSupporter extends BaseServiceSupporter implements Bas
 	@Qualifier("logAsyncService")
 	protected transient AsyncService asyncService;
 
-	public BaseLogServiceSupporter() {
+	public LogServiceSupporter() {
 	}
 
 	/**

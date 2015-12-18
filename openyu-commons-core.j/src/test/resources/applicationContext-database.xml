@@ -11,7 +11,7 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
 	<bean
-		id="dataSourceTarget"
+		id="commonDataSourceTarget"
 		class="org.openyu.commons.commons.dbcp.BasicDataSourceFactoryBean"
 		parent="baseFactorySupporter">
 		<property
@@ -20,16 +20,16 @@
 	</bean>
 
 	<bean
-		id="dataSource"
+		id="commonDataSource"
 		class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy"
-		p:targetDataSource-ref="dataSourceTarget" />
+		p:targetDataSource-ref="commonDataSourceTarget" />
 
 	<bean
-		id="sessionFactory"
+		id="commonSessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property
 			name="dataSource"
-			ref="dataSource" />
+			ref="commonDataSource" />
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/hibernate.cfg.xml" />
@@ -41,9 +41,9 @@
 	</bean>
 
 	<bean
-		id="hibernateTemplate"
+		id="commonHibernateTemplate"
 		class="org.springframework.orm.hibernate4.HibernateTemplate"
-		p:sessionFactory-ref="sessionFactory" />
+		p:sessionFactory-ref="commonSessionFactory" />
 
 	<!--  
 	<bean id="hibernateInterceptor" class="org.springframework.orm.hibernate3.HibernateInterceptor">
@@ -57,9 +57,10 @@
 	<bean
 		id="commonTx"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
-		p:sessionFactory-ref="sessionFactory">
+		p:sessionFactory-ref="commonSessionFactory">
 	</bean>
 
+	<!-- use @CommonTx insteadof commonTxAdvice
 	<tx:advice
 		id="commonTxAdvice"
 		transaction-manager="commonTx">
@@ -101,6 +102,7 @@
 				read-only="false" />
 		</tx:attributes>
 	</tx:advice>
+	-->
 
 	<tx:annotation-driven transaction-manager="commonTx" />
 
@@ -114,7 +116,7 @@
 	<bean
 		id="commonDaoSupporter"
 		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
-		p:hibernateTemplate-ref="hibernateTemplate" />
+		p:hibernateTemplate-ref="commonHibernateTemplate" />
 
 	<!-- service supporter -->
 	<bean
@@ -129,7 +131,7 @@
 		parent="baseServiceSupporter"
 		p:commonDao-ref="commonDaoSupporter" />
 		
-	<!--  async service advisor -->
+	<!--  async service advisor 
 	<aop:config>
 		<aop:pointcut
 			id="asyncServiceTxPointcut"
@@ -139,5 +141,6 @@
 			advice-ref="commonTxAdvice"
 			pointcut-ref="asyncServiceTxPointcut" />
 	</aop:config>
+	-->
 
 </beans>

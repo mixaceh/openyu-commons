@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 日誌服務
  */
-public interface BaseLogService extends BaseService {
+public interface LogService extends BaseService {
 
 	// ------------------------------------
 	// 異步操作

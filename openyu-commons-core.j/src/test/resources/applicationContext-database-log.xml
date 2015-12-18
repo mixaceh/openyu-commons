@@ -57,7 +57,7 @@
 		id="logTx"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
 		p:sessionFactory-ref="logSessionFactory" />
-
+	<!-- use @LogTx insteadof logTxAdvice
 	<tx:advice
 		id="logTxAdvice"
 		transaction-manager="logTx">
@@ -99,13 +99,9 @@
 				read-only="false" />
 		</tx:attributes>
 	</tx:advice>
+	-->
 
 	<tx:annotation-driven transaction-manager="logTx" />
-
-	<!-- log dao supporter 
-	<bean id="logOjDaoSupporter" class="org.openyu.commons.dao.supporter.OjDaoSupporter"
-		p:sessionFactory-ref="logSessionFactory" />
-	-->
 
 	<bean
 		id="logCommonDaoSupporter"
@@ -119,7 +115,7 @@
 		parent="baseServiceSupporter"
 		p:commonDao-ref="logCommonDaoSupporter" />
 		
-	<!-- log async service advisor -->
+	<!-- log async service advisor
 	<aop:config>
 		<aop:pointcut
 			id="logAsyncServiceTxPointcut"
@@ -128,11 +124,12 @@
 			id="logAsyncServiceTxAdvisor"
 			advice-ref="logTxAdvice"
 			pointcut-ref="logAsyncServiceTxPointcut" />
-	</aop:config>		
+	</aop:config>
+	 -->		
 
 	<!-- log service supporter -->
 	<bean
-		id="baseLogServiceSupporter"
-		class="org.openyu.commons.service.supporter.BaseLogServiceSupporter"
+		id="logServiceSupporter"
+		class="org.openyu.commons.service.supporter.LogServiceSupporter"
 		parent="baseServiceSupporter" />
 </beans>
