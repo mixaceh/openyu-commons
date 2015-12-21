@@ -10,6 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openyu.commons.dao.CommonDao;
+import org.openyu.commons.dao.anno.CommonTx;
 import org.openyu.commons.dao.aware.CommonDaoAware;
 import org.openyu.commons.entity.SeqEntity;
 import org.openyu.commons.lang.ClassHelper;
@@ -87,29 +88,6 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 
 	public MapCache<String, Object> getBeans() {
 		return beans;
-	}
-
-	/**
-	 * 清除
-	 */
-	public void clear() {
-		// 清除beanCache
-		beans.clear();
-	}
-
-	/**
-	 * 重置
-	 */
-	public synchronized void reset() {
-		try {
-			// 清除
-			clear();
-
-			// 初始化
-			start();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
 	}
 
 	// ------------------------------------------------------------
@@ -375,12 +353,14 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 		return dest;
 	}
 
+	@CommonTx
 	public <T> Serializable insert(T entity) {
 		return insert(entity, null);
 	}
 
 	// 1.可傳入 vo class
 	// 2.可傳入 po class
+	@CommonTx
 	@SuppressWarnings("unchecked")
 	public <T> Serializable insert(T entity, String modifiedUser) {
 		Serializable result = null;
@@ -432,6 +412,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 		return result;
 	}
 
+	@CommonTx
 	public <T> int update(T entity) {
 		return update(entity, null);
 	}
@@ -439,6 +420,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	// 1.可傳入 vo class
 	// 2.可傳入 po class
 	@SuppressWarnings("unchecked")
+	@CommonTx
 	public <T> int update(T entity, String modifiedUser) {
 		int ret = 0;
 		try {
@@ -505,6 +487,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 		return ret;
 	}
 
+	@CommonTx
 	public <T> int delete(T entity) {
 		return delete(entity, null);
 	}
@@ -512,6 +495,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	/**
 	 * 會觸發事件
 	 */
+	@CommonTx
 	@SuppressWarnings("unchecked")
 	public <T> int delete(T entity, String modifiedUser) {
 		int ret = 0;
@@ -563,10 +547,12 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 		return ret;
 	}
 
+	@CommonTx
 	public <T> T delete(Class<?> entityClass, Serializable seq) {
 		return delete(entityClass, seq, null);
 	}
 
+	@CommonTx
 	@SuppressWarnings("unchecked")
 	public <T> T delete(Class<?> entityClass, Serializable seq, String modifiedUser) {
 		T result = null;
@@ -585,10 +571,12 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 		return result;
 	}
 
+	@CommonTx
 	public <E> List<E> delete(Class<?> entityClass, Collection<Serializable> seqs) {
 		return delete(entityClass, seqs, null);
 	}
 
+	@CommonTx
 	public <E> List<E> delete(Class<?> entityClass, Collection<Serializable> seqs, String modifiedUser) {
 		List<E> result = new LinkedList<E>();
 		if (CollectionHelper.notEmpty(seqs)) {
@@ -641,10 +629,12 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	// ------------------------------------
 	// sql insert
 	// ------------------------------------
+	@CommonTx
 	public int insert(String sqlString, String[] paramNames, Object[] values) {
 		return insert(sqlString, paramNames, values, null);
 	}
 
+	@CommonTx
 	public int insert(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
 		int result = 0;
 		try {
@@ -660,10 +650,12 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 		return result;
 	}
 
+	@CommonTx
 	public int insert(String sqlString, Map<String, Object> params) {
 		return insert(sqlString, params, null);
 	}
 
+	@CommonTx
 	public int insert(String sqlString, Map<String, Object> params, String modifiedUser) {
 		int result = 0;
 		try {
@@ -681,10 +673,12 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	// ------------------------------------
 	// sql update
 	// ------------------------------------
+	@CommonTx
 	public int update(String sqlString, String[] paramNames, Object[] values) {
 		return update(sqlString, paramNames, values, null);
 	}
 
+	@CommonTx
 	public int update(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
 		int result = 0;
 		try {
@@ -700,10 +694,12 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 		return result;
 	}
 
+	@CommonTx
 	public int update(String sqlString, Map<String, Object> params) {
 		return update(sqlString, params, null);
 	}
 
+	@CommonTx
 	public int update(String sqlString, Map<String, Object> params, String modifiedUser) {
 		int result = 0;
 		try {
@@ -721,10 +717,12 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	// ------------------------------------
 	// sql delete
 	// ------------------------------------
+	@CommonTx
 	public int delete(String sqlString, String[] paramNames, Object[] values) {
 		return delete(sqlString, paramNames, values, null);
 	}
 
+	@CommonTx
 	public int delete(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
 		int result = 0;
 		try {
@@ -740,10 +738,12 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 		return result;
 	}
 
+	@CommonTx
 	public int delete(String sqlString, Map<String, Object> params) {
 		return delete(sqlString, params, null);
 	}
 
+	@CommonTx
 	public int delete(String sqlString, Map<String, Object> params, String modifiedUser) {
 		int result = 0;
 		try {
@@ -775,69 +775,4 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	public <T> boolean reindex(T entity) {
 		return commonDao.reindex(entity);
 	}
-
-	// ------------------------------------------------------------
-	// /**
-	// * reindex job
-	// *
-	// * 重建所有mapped class的索引,丟給排程去執行
-	// */
-	// public static class ReindexJob extends BaseJobSupporter {
-	//
-	// private CommonService commonService;
-	//
-	// private AnnotationSessionFactoryBean annotationSessionFactoryBean;
-	//
-	// public ReindexJob() {
-	// }
-	//
-	// public CommonService getCommonService() {
-	// return commonService;
-	// }
-	//
-	// public void setCommonService(CommonService commonService) {
-	// this.commonService = commonService;
-	// }
-	//
-	// public AnnotationSessionFactoryBean getAnnotationSessionFactoryBean() {
-	// return annotationSessionFactoryBean;
-	// }
-	//
-	// public void setAnnotationSessionFactoryBean(
-	// AnnotationSessionFactoryBean annotationSessionFactoryBean) {
-	// this.annotationSessionFactoryBean = annotationSessionFactoryBean;
-	// }
-	//
-	// public void execute() {
-	// if (isCancel()) {
-	// return;
-	// }
-	// //
-	// int result = 0;
-	// StopWatch stopWatch = new StopWatch();
-	// stopWatch.start();
-	// // --------------------------------------------------
-	// // PersistentClass
-	// // +-RootClass
-	// Iterator<PersistentClass> iterator = annotationSessionFactoryBean
-	// .getConfiguration().getClassMappings();
-	// while (iterator.hasNext()) {
-	// PersistentClass persistentClass = iterator.next();
-	// // System.out.println("getMappedClass: " +
-	// // persistentClass.getMappedClass());
-	// try {
-	// result += (commonService.reindex(persistentClass
-	// .getMappedClass()) ? 1 : 0);
-	//
-	// } catch (Exception ex) {
-	// ex.printStackTrace();
-	// }
-	// }
-	// // --------------------------------------------------
-	// if (result > 0) {
-	// log(LOGGER, CommonServiceSupporter.class, "execute", stopWatch);
-	// }
-	// }
-	// }
-
 }
