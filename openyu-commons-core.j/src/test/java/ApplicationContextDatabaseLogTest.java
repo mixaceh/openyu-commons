@@ -15,7 +15,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.service.AsyncService;

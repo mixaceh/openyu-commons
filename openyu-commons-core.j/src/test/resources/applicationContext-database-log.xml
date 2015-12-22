@@ -57,6 +57,7 @@
 		id="logTx"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
 		p:sessionFactory-ref="logSessionFactory" />
+		
 	<!-- use @LogTx insteadof logTxAdvice
 	<tx:advice
 		id="logTxAdvice"
@@ -93,6 +94,11 @@
 				propagation="REQUIRED"
 				read-only="false" />
 			<tx:method
+				name="record*"
+				rollback-for="java.lang.Exception"
+				propagation="REQUIRED"
+				read-only="false" />
+			<tx:method
 				name="offer*"
 				rollback-for="java.lang.Exception"
 				propagation="REQUIRED"
@@ -104,7 +110,7 @@
 	<tx:annotation-driven transaction-manager="logTx" />
 
 	<bean
-		id="logCommonDaoSupporter"
+		id="logDaoSupporter"
 		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
 		p:hibernateTemplate-ref="logHibernateTemplate" />
 
@@ -113,7 +119,7 @@
 		id="logAsyncService"
 		class="org.openyu.commons.service.impl.AsyncServiceImpl"
 		parent="baseServiceSupporter"
-		p:commonDao-ref="logCommonDaoSupporter" />
+		p:commonDao-ref="logDaoSupporter" />
 		
 	<!-- log async service advisor
 	<aop:config>

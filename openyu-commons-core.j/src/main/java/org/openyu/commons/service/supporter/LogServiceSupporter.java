@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.openyu.commons.dao.anno.LogTx;
 import org.openyu.commons.service.AsyncService;
 import org.openyu.commons.service.LogService;
 
@@ -46,22 +47,27 @@ public class LogServiceSupporter extends BaseServiceSupporter implements LogServ
 
 	}
 
+	@LogTx
 	public <T> boolean offerInsert(T entity) {
 		return asyncService.offerInsert(entity);
 	}
 
+	@LogTx
 	public <T> boolean offerUpdate(T entity) {
 		return asyncService.offerUpdate(entity);
 	}
 
+	@LogTx
 	public <T> boolean offerDelete(T entity) {
 		return asyncService.offerDelete(entity);
 	}
 
+	@LogTx
 	public boolean offerDelete(Class<?> entityClass, Serializable seq) {
 		return asyncService.offerDelete(entityClass, seq);
 	}
 
+	@LogTx
 	public List<Boolean> offerDelete(Class<?> entityClass, Collection<Serializable> seqs) {
 		return asyncService.offerDelete(entityClass, seqs);
 	}

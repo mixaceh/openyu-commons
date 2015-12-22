@@ -14,7 +14,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.service.AsyncService;
@@ -100,10 +99,11 @@ public class ApplicationContextDatabaseTest extends BaseTestSupporter {
 		System.out.println(bean);
 		assertNotNull(bean);
 		//
-		ThreadHelper.sleep(3 * 1000);
-		BeanDefinitionRegistry factory = (BeanDefinitionRegistry) applicationContext.getAutowireCapableBeanFactory();
-		factory.removeBeanDefinition("asyncService");
-		ThreadHelper.sleep(3 * 1000);
+		// ThreadHelper.sleep(3 * 1000);
+		// BeanDefinitionRegistry factory = (BeanDefinitionRegistry)
+		// applicationContext.getAutowireCapableBeanFactory();
+		// factory.removeBeanDefinition("asyncService");
+		// ThreadHelper.sleep(3 * 1000);
 	}
 
 }

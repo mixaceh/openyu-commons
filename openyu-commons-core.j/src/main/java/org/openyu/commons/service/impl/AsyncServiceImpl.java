@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.openyu.commons.dao.CommonDao;
-import org.openyu.commons.dao.anno.CommonTx;
 import org.openyu.commons.dao.aware.CommonDaoAware;
 import org.openyu.commons.dao.supporter.BaseDaoSupporter;
 import org.openyu.commons.service.AsyncService;
@@ -310,7 +309,6 @@ public class AsyncServiceImpl extends BaseDaoSupporter implements AsyncService, 
 	 * 
 	 * @param entity
 	 */
-	@CommonTx
 	public <T> boolean offerInsert(T entity) {
 		boolean result = false;
 		//
@@ -331,7 +329,6 @@ public class AsyncServiceImpl extends BaseDaoSupporter implements AsyncService, 
 	 * 
 	 * @param entity
 	 */
-	@CommonTx
 	public <T> boolean offerUpdate(T entity) {
 		boolean result = false;
 		//
@@ -352,7 +349,6 @@ public class AsyncServiceImpl extends BaseDaoSupporter implements AsyncService, 
 	 * 
 	 * @param entity
 	 */
-	@CommonTx
 	public <T> boolean offerDelete(T entity) {
 		boolean result = false;
 		//
@@ -375,7 +371,6 @@ public class AsyncServiceImpl extends BaseDaoSupporter implements AsyncService, 
 	 * @param seq
 	 * @return
 	 */
-	@CommonTx
 	public boolean offerDelete(Class<?> entityClass, Serializable seq) {
 		boolean result = false;
 		//
@@ -395,7 +390,6 @@ public class AsyncServiceImpl extends BaseDaoSupporter implements AsyncService, 
 	 * @param seqs
 	 * @return
 	 */
-	@CommonTx
 	public List<Boolean> offerDelete(Class<?> entityClass, Collection<Serializable> seqs) {
 		List<Boolean> result = new LinkedList<Boolean>();
 		//
@@ -439,7 +433,6 @@ public class AsyncServiceImpl extends BaseDaoSupporter implements AsyncService, 
 	 * 
 	 * @param e
 	 */
-	@CommonTx
 	public <E> void insert(E e) {
 		commonDao.insert(e);
 	}
@@ -463,7 +456,6 @@ public class AsyncServiceImpl extends BaseDaoSupporter implements AsyncService, 
 	 * 
 	 * @param e
 	 */
-	@CommonTx
 	public <E> void update(E e) {
 		commonDao.update(e);
 	}
@@ -487,7 +479,6 @@ public class AsyncServiceImpl extends BaseDaoSupporter implements AsyncService, 
 	 * 
 	 * @param e
 	 */
-	@CommonTx
 	public <E> void delete(E e) {
 		commonDao.delete(e);
 	}
