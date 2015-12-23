@@ -34,7 +34,7 @@ public class CatDaoImplTest extends CatTestSupporter {
 	}
 
 	/**
-	 * 檢核帳號資料
+	 * 檢核貓資料
 	 * 
 	 * @param expected
 	 * @param actual
@@ -48,17 +48,22 @@ public class CatDaoImplTest extends CatTestSupporter {
 		assertCollectionEquals(expected.getNames(), actual.getNames());
 	}
 
-	// insert -> find -> delete
-	// 當dao沒有tx,會回傳正確的值,但是
-	//
-	// insert有時會寫,有時不會真正寫入db
-	// update不會真正寫入db
-	// delete不會真正寫入db
+	/**
+	 * insert -> find -> delete
+	 * 
+	 * 當dao沒有tx,會回傳正確的值,但是
+	 * 
+	 * insert有時會寫,有時不會真正寫入db
+	 * 
+	 * update不會真正寫入db
+	 * 
+	 * delete不會真正寫入db
+	 */
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 0, concurrency = 1)
-	// round: 0.05 [+- 0.12], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
-	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.49, time.warmup: 0.00,
-	// time.bench: 0.49
+	// round: 0.03 [+- 0.04], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.25, time.warmup: 0.00,
+	// time.bench: 0.25
 	public void crud() {
 		// 隨機
 		CatPoImpl catPo = randomCatPo();
@@ -86,6 +91,9 @@ public class CatDaoImplTest extends CatTestSupporter {
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 0, concurrency = 1)
+	// round: 0.02 [+- 0.04], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.23, time.warmup: 0.00,
+	// time.bench: 0.22
 	public void insert() {
 		// 隨機
 		CatPoImpl catPo = randomCatPo();

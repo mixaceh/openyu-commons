@@ -1,6 +1,8 @@
 package org.openyu.commons.service.impl;
 
 import org.openyu.commons.service.supporter.CommonServiceSupporter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 public class CatServiceImpl extends CommonServiceSupporter implements CatService {
 
@@ -8,5 +10,11 @@ public class CatServiceImpl extends CommonServiceSupporter implements CatService
 
 	public CatServiceImpl() {
 
+	}
+
+	@Autowired
+	@Qualifier("catDao")
+	public void setCatDao(CatDao catDao) {
+		setCommonDao(catDao);
 	}
 }
