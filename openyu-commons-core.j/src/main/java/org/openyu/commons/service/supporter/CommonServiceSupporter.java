@@ -25,19 +25,24 @@ import org.openyu.commons.util.CollectionHelper;
 import org.openyu.commons.util.concurrent.MapCache;
 import org.openyu.commons.util.concurrent.impl.MapCacheImpl;
 
-//listener,event
-/*
- insert(): db->memory->message
- find()  : db->memory->message
- update(): memory->db->message
- delete(): memory->db->message
-
- initialize():loadAll form db->sync to memory
-
- fireServiceBeanAdding, 表新增前/查詢前/修改前/刪除前,可用於:
-
- fireServiceBeanAdded, 表新增後/修改後/刪除後,可用於:
- 1.發送訊息通知 
+/**
+ * 使用@CommnoTx
+ * 
+ * listener,event
+ * 
+ * insert(): db->memory->message
+ *
+ * find() : db->memory->message
+ *
+ * update(): memory->db->message
+ *
+ * delete(): memory->db->message
+ *
+ * initialize():loadAll form db->sync to memory
+ * 
+ * fireServiceBeanAdding, 表新增前/查詢前/修改前/刪除前,可用於:
+ * 
+ * fireServiceBeanAdded, 表新增後/修改後/刪除後,可用於: 1.發送訊息通知
  */
 public class CommonServiceSupporter extends BaseServiceSupporter implements CommonService, CommonDaoAware {
 

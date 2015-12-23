@@ -29,6 +29,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 
+import org.openyu.commons.entity.SeqEntity;
 import org.openyu.commons.enumz.EnumHelper;
 import org.openyu.commons.junit.BaseTest;
 import org.openyu.commons.lang.BooleanHelper;
@@ -311,6 +312,10 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	// }
 	// }
 
+	protected static void printInsert(Serializable value) {
+		printInsert(-1, value);
+	}
+
 	/**
 	 * Prints the insert.
 	 *
@@ -320,7 +325,15 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 *            the value
 	 */
 	protected static void printInsert(int idx, Serializable value) {
-		System.out.println("[" + idx + "] insert: " + (value != null ? "ok" : "fail"));
+		if (idx > -1) {
+			System.out.println("[" + idx + "] insert: " + value);
+		} else {
+			System.out.println("insert: " + value);
+		}
+	}
+
+	protected static void printFind(Object value) {
+		printFind(-1, value);
 	}
 
 	/**
@@ -332,7 +345,20 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 *            the value
 	 */
 	protected static void printFind(int idx, Object value) {
-		System.out.println("[" + idx + "] find  : " + (value != null ? "ok" : "fail"));
+		SeqEntity entity = null;
+		if (value instanceof SeqEntity) {
+			entity = (SeqEntity) value;
+		}
+		//
+		if (idx > -1) {
+			System.out.println("[" + idx + "] find  : " + (entity != null ? entity.getSeq() : value));
+		} else {
+			System.out.println("find  : " + (entity != null ? entity.getSeq() : value));
+		}
+	}
+
+	protected static void printUpdate(int value) {
+		printUpdate(-1, value);
 	}
 
 	/**
@@ -344,11 +370,19 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 *            the value
 	 */
 	protected static void printUpdate(int idx, int value) {
-		System.out.println("[" + idx + "] update: " + (value > 0 ? "ok" : "fail"));
+		if (idx > -1) {
+			System.out.println("[" + idx + "] update: " + value);
+		} else {
+			System.out.println("update: " + value);
+		}
 	}
 
 	protected static void printUpdate(int idx, boolean value) {
 		printUpdate(idx, (value ? 1 : 0));
+	}
+
+	protected static void printDelete(int value) {
+		printDelete(-1, value);
 	}
 
 	/**
@@ -360,7 +394,15 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 *            the value
 	 */
 	protected static void printDelete(int idx, int value) {
-		System.out.println("[" + idx + "] delete: " + (value > 0 ? "ok" : "fail"));
+		if (idx > -1) {
+			System.out.println("[" + idx + "] delete: " + (value > 0 ? "ok" : "fail"));
+		} else {
+			System.out.println("delete: " + (value > 0 ? "ok" : "fail"));
+		}
+	}
+
+	protected static void printDelete(Object value) {
+		printDelete(-1, value);
 	}
 
 	/**
@@ -372,7 +414,16 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 *            the value
 	 */
 	protected static void printDelete(int idx, Object value) {
-		System.out.println("[" + idx + "] delete: " + (value != null ? "ok" : "fail"));
+		SeqEntity entity = null;
+		if (value instanceof SeqEntity) {
+			entity = (SeqEntity) value;
+		}
+		//
+		if (idx > -1) {
+			System.out.println("[" + idx + "] delete: " + (entity != null ? entity.getSeq() : value));
+		} else {
+			System.out.println("delete: " + (entity != null ? entity.getSeq() : value));
+		}
 	}
 
 	/**

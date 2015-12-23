@@ -21,5 +21,16 @@
 		p:deleteQueueEnabled="true"
 		p:deleteQueueSize="1"
 		p:commonDao-ref="commonDaoSupporter" />
+		
+	<!-- cat -->
+	<bean
+		id="catDao"
+		class="org.openyu.commons.service.impl.CatDaoImpl"
+		parent="commonDaoSupporter" />
+
+	<bean
+		id="catService"
+		class="org.openyu.commons.service.impl.CatServiceImpl"
+		parent="commonServiceSupporter" />
 
 </beans>

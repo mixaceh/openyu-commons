@@ -12,9 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Proxy;
@@ -31,11 +29,11 @@ import org.openyu.commons.entity.NamesEntity;
 import org.openyu.commons.entity.bridge.AuditEntityBridge;
 import org.openyu.commons.entity.bridge.NamesEntityBridge;
 import org.openyu.commons.entity.supporter.AuditEntitySupporter;
-import org.openyu.commons.entity.supporter.BaseEntitySupporter;
 import org.openyu.commons.entity.supporter.NamesEntitySupporter;
+import org.openyu.commons.entity.supporter.SeqEntitySupporter;
 
 /**
- * HibernateDaoSupporterTest 測試,此物件
+ * 測試物件
  */
 //--------------------------------------------------
 //hibernate
@@ -53,13 +51,11 @@ import org.openyu.commons.entity.supporter.NamesEntitySupporter;
 // hibernate search
 // --------------------------------------------------
 @Indexed
-public class CatPoImpl extends BaseEntitySupporter implements NamesEntity
+public class CatPoImpl extends SeqEntitySupporter implements NamesEntity
 {
 	private static final long serialVersionUID = -724313847576583704L;
 
 	private Long seq;
-
-	private Integer version;
 
 	private String id;
 
@@ -89,19 +85,6 @@ public class CatPoImpl extends BaseEntitySupporter implements NamesEntity
 	public void setSeq(Long seq)
 	{
 		this.seq = seq;
-	}
-
-	@Version
-	@Column(name = "version")
-	@Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
-	public Integer getVersion()
-	{
-		return version;
-	}
-
-	public void setVersion(Integer version)
-	{
-		this.version = version;
 	}
 
 	@Column(name = "id", length = 30, unique = true)
@@ -194,6 +177,6 @@ public class CatPoImpl extends BaseEntitySupporter implements NamesEntity
 
 	public String toString()
 	{
-		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+		return ToStringBuilder.reflectionToString(this);
 	}
 }
