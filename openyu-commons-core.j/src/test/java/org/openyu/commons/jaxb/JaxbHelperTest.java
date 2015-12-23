@@ -11,9 +11,9 @@ import javax.xml.bind.JAXBContext;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.openyu.commons.dog.vo.DogCollector;
 import org.openyu.commons.io.IoHelper;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
-import org.openyu.commons.vo.DogCollector;
 import org.openyu.commons.vo.impl.DogImpl;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;

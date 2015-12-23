@@ -1,4 +1,4 @@
-package org.openyu.commons.vo;
+package org.openyu.commons.cat.vo;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -34,11 +34,11 @@ public class CatCollector {
 	}
 
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.MULTI_LINE_STYLE);
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 	public static class Cat extends BaseModelSupporter {
+
 		private String code;
 
 		private String name;

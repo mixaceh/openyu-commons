@@ -1,4 +1,4 @@
-package org.openyu.commons.vo;
+package org.openyu.commons.dog.vo;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
