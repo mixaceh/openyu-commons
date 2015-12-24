@@ -17,22 +17,6 @@ public class CatChangeAdapterTest
 
 	private static ConcurrentMap<String, CatImpl> beans = new ConcurrentHashMap<String, CatImpl>();
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception
-	{}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception
-	{}
-
-	@Before
-	public void setUp() throws Exception
-	{}
-
-	@After
-	public void tearDown() throws Exception
-	{}
-
 	/**
 	 * 建構beans模擬資料
 	 * 
@@ -86,7 +70,7 @@ public class CatChangeAdapterTest
 		//
 		cat.setAge(1);
 		cat.setAge(2);
-		cat.setAge(null);
+		cat.setAge(3);
 		//
 		System.out.println(cat.getBeanChangeListeners().length);
 		assertEquals(2, cat.getBeanChangeListeners().length);

@@ -986,9 +986,9 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		if (CollectionHelper.notEmpty(seqs)) {
 			for (Serializable seq : seqs) {
 				if (seq != null) {
-					E ret = delete(entityClass, seq, modifiedUser);
-					if (ret != null) {
-						result.add(ret);
+					E entity = delete(entityClass, seq, modifiedUser);
+					if (entity != null) {
+						result.add(entity);
 					}
 				}
 			}
@@ -1008,9 +1008,9 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		if (entityClass != null) {
 			try {
 				final StringBuffer hql = new StringBuffer();
-				hql.append("select count(entity) from ");
+				hql.append("SELECT COUNT(1) FROM ");
 				hql.append(entityClass.getName());
-				hql.append(" entity");
+				hql.append(" ENTITY");
 				// System.out.println(hql);
 				Long buff = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Long>() {
 					public Long doInHibernate(Session session) throws HibernateException {

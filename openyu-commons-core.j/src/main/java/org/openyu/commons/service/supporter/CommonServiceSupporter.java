@@ -18,6 +18,8 @@ import org.openyu.commons.lang.event.EventAttach;
 import org.openyu.commons.lang.event.EventCaster;
 import org.openyu.commons.lang.event.EventHelper;
 import org.openyu.commons.service.CommonService;
+import org.openyu.commons.service.ShutdownCallback;
+import org.openyu.commons.service.StartCallback;
 import org.openyu.commons.service.event.BeanEvent;
 import org.openyu.commons.service.event.BeanListener;
 import org.openyu.commons.service.ex.CommonServiceException;
@@ -66,14 +68,38 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	protected MapCache<String, Object> beans = new MapCacheImpl<String, Object>();
 
 	public CommonServiceSupporter() {
+		addServiceCallback("StartCallbacker", new StartCallbacker());
+		addServiceCallback("ShutdownCallbacker", new ShutdownCallbacker());
 	}
+
+	/**
+	 * 內部啟動
+	 */
+	protected class StartCallbacker implements StartCallback {
+
+		@Override
+		public void doInAction() throws Exception {
+		}
+	}
+
+	/**
+	 * 內部關閉
+	 */
+	protected class ShutdownCallbacker implements ShutdownCallback {
+
+		@Override
+		public void doInAction() throws Exception {
+			beans.clear();
+		}
+	}
+	
 
 	/**
 	 * 內部啟動
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		
+		// move to StartCallbacker.doInAction()
 	}
 
 	/**
@@ -81,7 +107,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		beans.clear();
+		// move to ShutdownCallbacker.doInAction()
 	}
 
 	public CommonDao getCommonDao() {

@@ -13,8 +13,8 @@ import org.openyu.commons.bean.AuditBean;
 import org.openyu.commons.bean.LocaleNameBean;
 import org.openyu.commons.bean.NamesBean;
 import org.openyu.commons.bean.supporter.AuditBeanSupporter;
-import org.openyu.commons.bean.supporter.BaseBeanSupporter;
 import org.openyu.commons.bean.supporter.NamesBeanSupporter;
+import org.openyu.commons.bean.supporter.SeqBeanSupporter;
 import org.openyu.commons.lang.event.EventAttach;
 
 /**
@@ -24,41 +24,21 @@ import org.openyu.commons.lang.event.EventAttach;
  */
 @XmlRootElement(name = "catImpl")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class CatImpl extends BaseBeanSupporter implements NamesBean {
+public class CatImpl extends SeqBeanSupporter implements NamesBean {
 
 	private static final long serialVersionUID = -1693170176219907274L;
 
-	private Long seq;
-
-	private Integer version;
-
 	private String id;
 
-	private Boolean valid;
+	private boolean valid;
 
-	private Integer age;
+	private int age;
 
 	private NamesBean names = new NamesBeanSupporter();
 
 	private AuditBean audit = new AuditBeanSupporter();
 
 	public CatImpl() {
-	}
-
-	public Long getSeq() {
-		return seq;
-	}
-
-	public void setSeq(Long seq) {
-		this.seq = seq;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 	public String getId() {
@@ -80,15 +60,15 @@ public class CatImpl extends BaseBeanSupporter implements NamesBean {
 		fireBeanChanged(this, CatField.ID, eventAttach);
 	}
 
-	public Boolean getValid() {
+	public boolean getValid() {
 		return valid;
 	}
 
-	public void setValid(Boolean valid) {
+	public void setValid(boolean valid) {
 		this.valid = valid;
 	}
 
-	public Integer getAge() {
+	public int getAge() {
 		return age;
 	}
 
@@ -97,7 +77,7 @@ public class CatImpl extends BaseBeanSupporter implements NamesBean {
 	 * 
 	 * @param age
 	 */
-	public void setAge(Integer age) {
+	public void setAge(int age) {
 		EventAttach<Integer, Integer> eventAttach = eventAttach(this.age, age);
 		//
 		fireBeanChanging(this, "age", eventAttach);
@@ -156,8 +136,7 @@ public class CatImpl extends BaseBeanSupporter implements NamesBean {
 	}
 
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.MULTI_LINE_STYLE);
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 }

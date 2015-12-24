@@ -44,8 +44,10 @@ public class CatServiceImplTest extends CatTestSupporter {
 		assertNotNull(expected);
 		assertNotNull(actual);
 		//
+		assertEquals(expected.getSeq(), actual.getSeq());
 		assertEquals(expected.getId(), actual.getId());
 		assertEquals(expected.getValid(), actual.getValid());
+		assertEquals(expected.getAge(), actual.getAge());
 		assertCollectionEquals(expected.getNames(), actual.getNames());
 	}
 
@@ -57,7 +59,7 @@ public class CatServiceImplTest extends CatTestSupporter {
 	 * insert會真正寫入db
 	 * 
 	 * update會真正寫入db
-	 * 
+[	 * 
 	 * delete會真正寫入db
 	 * 
 	 * 效率會比dao慢
@@ -106,8 +108,7 @@ public class CatServiceImplTest extends CatTestSupporter {
 		assertNotNull(pk);
 
 		CatImpl foundEntity = catService.find(CatImpl.class, cat.getSeq());
+		printFind(foundEntity);
 		assertCat(cat, foundEntity);
-
-		System.out.println(cat);
 	}
 }

@@ -29,6 +29,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 
+import org.openyu.commons.bean.SeqBean;
 import org.openyu.commons.entity.SeqEntity;
 import org.openyu.commons.enumz.EnumHelper;
 import org.openyu.commons.junit.BaseTest;
@@ -325,11 +326,12 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 *            the value
 	 */
 	protected static void printInsert(int idx, Serializable value) {
+		StringBuffer buff = new StringBuffer();
 		if (idx > -1) {
-			System.out.println("[" + idx + "] insert: " + value);
-		} else {
-			System.out.println("insert: " + value);
+			buff.append("#." + idx + " ");
 		}
+		buff.append("Insert PK[" + value + "]");
+		System.out.println(buff);
 	}
 
 	protected static void printFind(Object value) {
@@ -345,16 +347,28 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 *            the value
 	 */
 	protected static void printFind(int idx, Object value) {
-		SeqEntity entity = null;
+		long seq = 0;
+		//
 		if (value instanceof SeqEntity) {
-			entity = (SeqEntity) value;
+			SeqEntity entity = (SeqEntity) value;
+			seq = entity.getSeq();
+		} else if (value instanceof SeqBean) {
+			SeqBean entity = (SeqBean) value;
+			seq = entity.getSeq();
 		}
 		//
+		StringBuffer buff = new StringBuffer();
 		if (idx > -1) {
-			System.out.println("[" + idx + "] find  : " + (entity != null ? entity.getSeq() : value));
-		} else {
-			System.out.println("find  : " + (entity != null ? entity.getSeq() : value));
+			buff.append("#." + idx + " ");
 		}
+		//
+		buff.append("Find ");
+		if (seq > 0) {
+			buff.append("PK[" + seq + "]");
+		} else {
+			buff.append(value);
+		}
+		System.out.println(buff);
 	}
 
 	protected static void printUpdate(int value) {
@@ -370,11 +384,17 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 *            the value
 	 */
 	protected static void printUpdate(int idx, int value) {
+		StringBuffer buff = new StringBuffer();
 		if (idx > -1) {
-			System.out.println("[" + idx + "] update: " + value);
-		} else {
-			System.out.println("update: " + value);
+			buff.append("#." + idx + " ");
 		}
+		buff.append("Update ");
+		if (value > 0) {
+			buff.append("success");
+		} else {
+			buff.append("failed");
+		}
+		System.out.println(buff);
 	}
 
 	protected static void printUpdate(int idx, boolean value) {
@@ -394,11 +414,17 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 *            the value
 	 */
 	protected static void printDelete(int idx, int value) {
+		StringBuffer buff = new StringBuffer();
 		if (idx > -1) {
-			System.out.println("[" + idx + "] delete: " + (value > 0 ? "ok" : "fail"));
-		} else {
-			System.out.println("delete: " + (value > 0 ? "ok" : "fail"));
+			buff.append("#." + idx + " ");
 		}
+		buff.append("Delete ");
+		if (value > 0) {
+			buff.append("success");
+		} else {
+			buff.append("failed");
+		}
+		System.out.println(buff);
 	}
 
 	protected static void printDelete(Object value) {
@@ -414,16 +440,28 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	 *            the value
 	 */
 	protected static void printDelete(int idx, Object value) {
-		SeqEntity entity = null;
+		long seq = 0;
+		//
 		if (value instanceof SeqEntity) {
-			entity = (SeqEntity) value;
+			SeqEntity entity = (SeqEntity) value;
+			seq = entity.getSeq();
+		} else if (value instanceof SeqBean) {
+			SeqBean entity = (SeqBean) value;
+			seq = entity.getSeq();
 		}
 		//
+		StringBuffer buff = new StringBuffer();
 		if (idx > -1) {
-			System.out.println("[" + idx + "] delete: " + (entity != null ? entity.getSeq() : value));
-		} else {
-			System.out.println("delete: " + (entity != null ? entity.getSeq() : value));
+			buff.append("#." + idx + " ");
 		}
+		//
+		buff.append("Delete ");
+		if (seq > 0) {
+			buff.append("PK[" + seq + "]");
+		} else {
+			buff.append(value);
+		}
+		System.out.println(buff);
 	}
 
 	/**

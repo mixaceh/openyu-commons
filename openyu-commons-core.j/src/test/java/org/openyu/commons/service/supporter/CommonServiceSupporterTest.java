@@ -210,7 +210,7 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 	public void findCat() {
 		createCommonServiceSupporter();
 		//
-		final Long SEQ = 1L;
+		final long SEQ = 1L;
 		CatImpl result = null;
 
 		int count = 10;
