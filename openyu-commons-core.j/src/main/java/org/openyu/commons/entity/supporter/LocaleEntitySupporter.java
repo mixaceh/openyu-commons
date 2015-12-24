@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
@@ -16,39 +17,34 @@ import org.openyu.commons.hibernate.search.bridge.LocaleStringBridge;
 import org.openyu.commons.mark.Supporter;
 
 @MappedSuperclass
-public class LocaleEntitySupporter extends BaseEntitySupporter implements LocaleEntity, Supporter
-{
+public class LocaleEntitySupporter extends BaseEntitySupporter implements LocaleEntity, Supporter {
 
 	private static final long serialVersionUID = -4988143993915077794L;
 
 	private Locale locale;
 
-	public LocaleEntitySupporter()
-	{}
+	public LocaleEntitySupporter() {
+	}
 
 	@Column(name = "locale", length = 20)
 	@Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
 	@FieldBridge(impl = LocaleStringBridge.class)
-	public Locale getLocale()
-	{
+	public Locale getLocale() {
 		return locale;
 	}
 
-	public void setLocale(Locale locale)
-	{
+	public void setLocale(Locale locale) {
 		this.locale = locale;
 	}
 
-	public String toString()
-	{
-		ToStringBuilder builder = new ToStringBuilder(this);
+	public String toString() {
+		ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE);
 		builder.appendSuper(super.toString());
 		builder.append("locale", locale);
 		return builder.toString();
 	}
 
-	public Object clone()
-	{
+	public Object clone() {
 		LocaleEntitySupporter copy = null;
 		copy = (LocaleEntitySupporter) super.clone();
 		copy.locale = clone(locale);

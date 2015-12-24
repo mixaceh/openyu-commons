@@ -6,66 +6,57 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.openyu.commons.bean.IdBean;
 import org.openyu.commons.bean.SeqIdBean;
 import org.openyu.commons.bean.adapter.IdBeanXmlAdapter;
 
 @XmlRootElement(name = "seqIdBean")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SeqIdBeanSupporter extends SeqBeanSupporter implements SeqIdBean
-{
+public class SeqIdBeanSupporter extends SeqBeanSupporter implements SeqIdBean {
 
 	private static final long serialVersionUID = -7961050697548764075L;
 
-	//@XmlElement(type = IdBeanSupporter.class) //<id><id>WPvQ</id></id>
+	// @XmlElement(type = IdBeanSupporter.class) //<id><id>WPvQ</id></id>
 	@XmlJavaTypeAdapter(IdBeanXmlAdapter.class)
-	//<id>WPvQ</id>
+	// <id>WPvQ</id>
 	private IdBean id = new IdBeanSupporter();
 
-	public SeqIdBeanSupporter()
-	{}
+	public SeqIdBeanSupporter() {
+	}
 
-	public String getId()
-	{
+	public String getId() {
 		return id.getId();
 	}
 
-	public void setId(String id)
-	{
+	public void setId(String id) {
 		this.id.setId(id);
 	}
 
-	public String getDataId()
-	{
+	public String getDataId() {
 		return id.getDataId();
 	}
 
-	public void setDataId(String dataId)
-	{
+	public void setDataId(String dataId) {
 		this.id.setDataId(dataId);
 	}
 
-	public boolean isOnly()
-	{
+	public boolean isOnly() {
 		return id.isOnly();
 	}
 
-	public void setOnly(boolean only)
-	{
+	public void setOnly(boolean only) {
 		this.id.setOnly(only);
 	}
 
-	public String toString()
-	{
-		ToStringBuilder builder = new ToStringBuilder(this);
+	public String toString() {
+		ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE);
 		builder.appendSuper(super.toString());
-		builder.append("id", getId());
+		builder.append("id", (id != null ? getId() : null));
 		return builder.toString();
 	}
 
-	public Object clone()
-	{
+	public Object clone() {
 		SeqIdBeanSupporter copy = null;
 		copy = (SeqIdBeanSupporter) super.clone();
 		copy.id = clone(id);

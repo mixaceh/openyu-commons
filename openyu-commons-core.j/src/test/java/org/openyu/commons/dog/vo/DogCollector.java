@@ -12,8 +12,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-
-import org.openyu.commons.vo.impl.DogImpl;
+import org.openyu.commons.dog.vo.impl.DogImpl;
 
 @XmlRootElement(name = "dogCollector")
 @XmlType(name = "")

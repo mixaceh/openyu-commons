@@ -14,8 +14,8 @@ import org.junit.Test;
 import org.openyu.commons.bean.supporter.BaseBeanSupporter;
 import org.openyu.commons.bean.supporter.LocaleNameBeanSupporter;
 import org.openyu.commons.bean.supporter.NamesBeanSupporter;
+import org.openyu.commons.dog.vo.impl.DogImpl;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
-import org.openyu.commons.vo.impl.DogImpl;
 
 public class BeanHelperTest extends BaseTestSupporter {
 

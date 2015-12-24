@@ -9,6 +9,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.annotations.Type;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
@@ -26,27 +27,24 @@ import org.openyu.commons.util.CollectionHelper;
 import org.openyu.commons.util.LocaleHelper;
 
 @MappedSuperclass
-public class NamesEntitySupporter extends BaseEntitySupporter implements NamesEntity, Supporter
-{
+public class NamesEntitySupporter extends BaseEntitySupporter implements NamesEntity, Supporter {
 
 	private static final long serialVersionUID = -5132648217140984849L;
 
 	private Set<LocaleNameEntity> names = new LinkedHashSet<LocaleNameEntity>();
 
-	public NamesEntitySupporter()
-	{}
+	public NamesEntitySupporter() {
+	}
 
 	@Type(type = "org.openyu.commons.entity.userType.NamesEntityUserType")
 	@Column(name = "names", length = 2048)
 	@Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
 	@FieldBridge(impl = NamesEntityBridge.class)
-	public Set<LocaleNameEntity> getNames()
-	{
+	public Set<LocaleNameEntity> getNames() {
 		return names;
 	}
 
-	public void setNames(Set<LocaleNameEntity> names)
-	{
+	public void setNames(Set<LocaleNameEntity> names) {
 		this.names = names;
 	}
 
@@ -58,11 +56,9 @@ public class NamesEntitySupporter extends BaseEntitySupporter implements NamesEn
 	 * @param name
 	 * @return
 	 */
-	public boolean addName(Locale locale, String name)
-	{
+	public boolean addName(Locale locale, String name) {
 		boolean result = false;
-		if (names != null)
-		{
+		if (names != null) {
 			LocaleNameEntity localeNameEntity = new LocaleNameEntitySupporter();
 			localeNameEntity.setLocale(locale);
 			localeNameEntity.setName(name);
@@ -71,15 +67,11 @@ public class NamesEntitySupporter extends BaseEntitySupporter implements NamesEn
 		return result;
 	}
 
-	public LocaleNameEntity getNameEntry(Locale locale)
-	{
+	public LocaleNameEntity getNameEntry(Locale locale) {
 		LocaleNameEntity result = null;
-		if (names != null)
-		{
-			for (LocaleNameEntity localeNameEntity : names)
-			{
-				if (localeNameEntity.getLocale().equals(locale))
-				{
+		if (names != null) {
+			for (LocaleNameEntity localeNameEntity : names) {
+				if (localeNameEntity.getLocale().equals(locale)) {
 					result = localeNameEntity;
 					break;
 				}
@@ -88,38 +80,29 @@ public class NamesEntitySupporter extends BaseEntitySupporter implements NamesEn
 		return result;
 	}
 
-	public String getName(Locale locale)
-	{
+	public String getName(Locale locale) {
 		String result = null;
 		LocaleNameEntity localeNameEntity = getNameEntry(locale);
-		if (localeNameEntity != null)
-		{
+		if (localeNameEntity != null) {
 			result = localeNameEntity.getName();
 		}
 		return result;
 	}
 
-	public void setName(Locale locale, String name)
-	{
+	public void setName(Locale locale, String name) {
 		LocaleNameEntity localeNameEntity = getNameEntry(locale);
-		if (localeNameEntity != null)
-		{
+		if (localeNameEntity != null) {
 			localeNameEntity.setName(name);
-		}
-		else
-		{
+		} else {
 			addName(locale, name);
 		}
 	}
 
-	public boolean removeName(Locale locale)
-	{
+	public boolean removeName(Locale locale) {
 		boolean result = false;
-		if (names != null)
-		{
+		if (names != null) {
 			LocaleNameEntity localeNameEntity = getNameEntry(locale);
-			if (localeNameEntity != null)
-			{
+			if (localeNameEntity != null) {
 				result = names.remove(localeNameEntity);
 			}
 		}
@@ -127,18 +110,14 @@ public class NamesEntitySupporter extends BaseEntitySupporter implements NamesEn
 	}
 
 	@Transient
-	public String getName()
-	{
-		//return getName(LocaleHelper.getLocale());
+	public String getName() {
+		// return getName(LocaleHelper.getLocale());
 		//
 		String result = getName(LocaleHelper.getLocale());
-		if (result == null)
-		{
-			if (CollectionHelper.notEmpty(names))
-			{
-				for (LocaleNameEntity entry : names)
-				{
-					//取第一個
+		if (result == null) {
+			if (CollectionHelper.notEmpty(names)) {
+				for (LocaleNameEntity entry : names) {
+					// 取第一個
 					result = entry.getName();
 					break;
 				}
@@ -147,21 +126,18 @@ public class NamesEntitySupporter extends BaseEntitySupporter implements NamesEn
 		return result;
 	}
 
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		setName(LocaleHelper.getLocale(), name);
 	}
 
-	public String toString()
-	{
-		ToStringBuilder builder = new ToStringBuilder(this);
+	public String toString() {
+		ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE);
 		builder.appendSuper(super.toString());
 		append(builder, "names", names);
 		return builder.toString();
 	}
 
-	public Object clone()
-	{
+	public Object clone() {
 		NamesEntitySupporter copy = null;
 		copy = (NamesEntitySupporter) super.clone();
 		copy.names = clone(names);

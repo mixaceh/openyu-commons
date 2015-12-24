@@ -1,5 +1,7 @@
-package org.openyu.commons.service.impl;
+package org.openyu.commons.cat.service.impl;
 
+import org.openyu.commons.cat.dao.CatDao;
+import org.openyu.commons.cat.service.CatService;
 import org.openyu.commons.service.supporter.CommonServiceSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

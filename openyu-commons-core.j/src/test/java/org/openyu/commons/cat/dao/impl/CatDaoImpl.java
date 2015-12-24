@@ -1,5 +1,6 @@
-package org.openyu.commons.service.impl;
+package org.openyu.commons.cat.dao.impl;
 
+import org.openyu.commons.cat.dao.CatDao;
 import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 
 public class CatDaoImpl extends CommonDaoSupporter implements CatDao {

@@ -73,6 +73,7 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	 */
 	@Override
 	protected void doStart() throws Exception {
+		
 	}
 
 	/**

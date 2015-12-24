@@ -1,4 +1,4 @@
-package org.openyu.commons.vo.impl;
+package org.openyu.commons.cat.vo.impl;
 
 import java.util.Locale;
 import java.util.Set;

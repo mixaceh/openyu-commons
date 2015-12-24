@@ -33,7 +33,10 @@ import org.junit.Test;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.openyu.commons.bean.NamesBean;
 import org.openyu.commons.bean.supporter.NamesBeanSupporter;
+import org.openyu.commons.cat.po.impl.CatPoImpl;
+import org.openyu.commons.cat.vo.impl.CatImpl;
 import org.openyu.commons.dao.supporter.CommonDaoSupporter;
+import org.openyu.commons.dog.po.impl.DogPoImpl;
 import org.openyu.commons.entity.LocaleNameEntity;
 import org.openyu.commons.entity.NamesEntity;
 import org.openyu.commons.entity.supporter.LocaleNameEntitySupporter;
@@ -41,9 +44,6 @@ import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.ClassHelper;
 import org.openyu.commons.lang.CloneHelper;
 import org.openyu.commons.lang.NumberHelper;
-import org.openyu.commons.po.impl.CatPoImpl;
-import org.openyu.commons.po.impl.DogPoImpl;
-import org.openyu.commons.vo.impl.CatImpl;
 
 /**
  * 1.不使用spring ioc測試,直接以建構方式, new HibernateDaoSupporter()測試

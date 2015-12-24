@@ -1,4 +1,4 @@
-package org.openyu.commons.service.impl;
+package org.openyu.commons.cat;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -6,6 +6,8 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.openyu.commons.cat.dao.CatDao;
+import org.openyu.commons.cat.service.CatService;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
@@ -27,7 +29,7 @@ public class CatTestSupporter extends BaseTestSupporter {
 				"applicationContext-bean.xml", //
 				"applicationContext-i18n.xml", //
 				"applicationContext-database.xml", //
-				"org/openyu/commons/service/testContext-service.xml", //
+				"org/openyu/commons/cat/testContext-cat.xml", //
 
 		});
 		// ---------------------------------------------------

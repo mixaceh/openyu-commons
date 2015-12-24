@@ -5,13 +5,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.openyu.commons.bean.ProbabilityBean;
 
 @XmlRootElement(name = "probabilityBean")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ProbabilityBeanSupporter extends BaseBeanSupporter implements ProbabilityBean
-{
+public class ProbabilityBeanSupporter extends BaseBeanSupporter implements ProbabilityBean {
 
 	private static final long serialVersionUID = -7135920877023111808L;
 
@@ -20,29 +19,25 @@ public class ProbabilityBeanSupporter extends BaseBeanSupporter implements Proba
 	 */
 	private double probability;
 
-	public ProbabilityBeanSupporter()
-	{}
+	public ProbabilityBeanSupporter() {
+	}
 
-	public double getProbability()
-	{
+	public double getProbability() {
 		return probability;
 	}
 
-	public void setProbability(double probability)
-	{
+	public void setProbability(double probability) {
 		this.probability = probability;
 	}
 
-	public String toString()
-	{
-		ToStringBuilder builder = new ToStringBuilder(this);
+	public String toString() {
+		ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE);
 		builder.appendSuper(super.toString());
 		builder.append("probability", probability);
 		return builder.toString();
 	}
 
-	public Object clone()
-	{
+	public Object clone() {
 		ProbabilityBeanSupporter copy = null;
 		copy = (ProbabilityBeanSupporter) super.clone();
 		return copy;

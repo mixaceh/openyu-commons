@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.openyu.commons.bean.LocaleNameBean;
 import org.openyu.commons.bean.NamesBean;
 import org.openyu.commons.bean.adapter.LocaleNameBeanSetXmlAdapter;
@@ -19,24 +20,21 @@ import org.openyu.commons.util.LocaleHelper;
 
 @XmlRootElement(name = "namesBean")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class NamesBeanSupporter extends BaseBeanSupporter implements NamesBean
-{
+public class NamesBeanSupporter extends BaseBeanSupporter implements NamesBean {
 
 	private static final long serialVersionUID = 6621024789861415524L;
 
 	@XmlJavaTypeAdapter(LocaleNameBeanSetXmlAdapter.class)
 	private Set<LocaleNameBean> names = new LinkedHashSet<LocaleNameBean>();
 
-	public NamesBeanSupporter()
-	{}
+	public NamesBeanSupporter() {
+	}
 
-	public Set<LocaleNameBean> getNames()
-	{
+	public Set<LocaleNameBean> getNames() {
 		return names;
 	}
 
-	public void setNames(Set<LocaleNameBean> names)
-	{
+	public void setNames(Set<LocaleNameBean> names) {
 		this.names = names;
 	}
 
@@ -48,11 +46,9 @@ public class NamesBeanSupporter extends BaseBeanSupporter implements NamesBean
 	 * @param name
 	 * @return
 	 */
-	public boolean addName(Locale locale, String name)
-	{
+	public boolean addName(Locale locale, String name) {
 		boolean result = false;
-		if (names != null)
-		{
+		if (names != null) {
 			LocaleNameBean localeNameBean = new LocaleNameBeanSupporter();
 			localeNameBean.setLocale(locale);
 			localeNameBean.setName(name);
@@ -61,15 +57,11 @@ public class NamesBeanSupporter extends BaseBeanSupporter implements NamesBean
 		return result;
 	}
 
-	public LocaleNameBean getNameEntry(Locale locale)
-	{
+	public LocaleNameBean getNameEntry(Locale locale) {
 		LocaleNameBean result = null;
-		if (CollectionHelper.notEmpty(names))
-		{
-			for (LocaleNameBean localeNameBean : names)
-			{
-				if (localeNameBean.getLocale().equals(locale))
-				{
+		if (CollectionHelper.notEmpty(names)) {
+			for (LocaleNameBean localeNameBean : names) {
+				if (localeNameBean.getLocale().equals(locale)) {
 					result = localeNameBean;
 					break;
 				}
@@ -78,53 +70,41 @@ public class NamesBeanSupporter extends BaseBeanSupporter implements NamesBean
 		return result;
 	}
 
-	public String getName(Locale locale)
-	{
+	public String getName(Locale locale) {
 		String result = null;
 		LocaleNameBean localeNameBean = getNameEntry(locale);
-		if (localeNameBean != null)
-		{
+		if (localeNameBean != null) {
 			result = localeNameBean.getName();
 		}
 		return result;
 	}
 
-	public void setName(Locale locale, String name)
-	{
+	public void setName(Locale locale, String name) {
 		LocaleNameBean localeNameBean = getNameEntry(locale);
-		if (localeNameBean != null)
-		{
+		if (localeNameBean != null) {
 			localeNameBean.setName(name);
-		}
-		else
-		{
+		} else {
 			addName(locale, name);
 		}
 	}
 
-	public boolean removeName(Locale locale)
-	{
+	public boolean removeName(Locale locale) {
 		boolean result = false;
 		LocaleNameBean localeNameBean = getNameEntry(locale);
-		if (localeNameBean != null)
-		{
+		if (localeNameBean != null) {
 			result = names.remove(localeNameBean);
 		}
 		return result;
 	}
 
-	public String getName()
-	{
-		//return getName(LocaleHelper.getLocale());
+	public String getName() {
+		// return getName(LocaleHelper.getLocale());
 		//
 		String result = getName(LocaleHelper.getLocale());
-		if (result == null)
-		{
-			if (CollectionHelper.notEmpty(names))
-			{
-				for (LocaleNameBean entry : names)
-				{
-					//取第一個
+		if (result == null) {
+			if (CollectionHelper.notEmpty(names)) {
+				for (LocaleNameBean entry : names) {
+					// 取第一個
 					result = entry.getName();
 					break;
 				}
@@ -133,21 +113,18 @@ public class NamesBeanSupporter extends BaseBeanSupporter implements NamesBean
 		return result;
 	}
 
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		setName(LocaleHelper.getLocale(), name);
 	}
 
-	public String toString()
-	{
-		ToStringBuilder builder = new ToStringBuilder(this);
+	public String toString() {
+		ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE);
 		builder.appendSuper(super.toString());
 		append(builder, "names", names);
 		return builder.toString();
 	}
 
-	public Object clone()
-	{
+	public Object clone() {
 		NamesBeanSupporter copy = null;
 		copy = (NamesBeanSupporter) super.clone();
 		copy.names = clone(names);

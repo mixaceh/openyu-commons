@@ -1,4 +1,4 @@
-package org.openyu.commons.service.impl;
+package org.openyu.commons.cat.dao;
 
 import org.openyu.commons.dao.CommonDao;
 

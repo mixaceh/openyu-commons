@@ -1,4 +1,4 @@
-package org.openyu.commons.po.impl;
+package org.openyu.commons.cat.po.impl;
 
 import java.util.Locale;
 
@@ -43,7 +43,7 @@ import org.openyu.commons.entity.supporter.SeqEntitySupporter;
 @Table(name = "test_cat")
 @SequenceGenerator(name = "test_cat_g", sequenceName = "test_cat_s", allocationSize = 1)
 // when use ehcache, config in ehcache.xml
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "org.openyu.commons.po.impl.CatPoImpl")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "org.openyu.commons.cat.po.impl.CatPoImpl")
 @Proxy(lazy = false)
 @org.hibernate.annotations.Table(appliesTo = "test_cat", indexes = { @org.hibernate.annotations.Index(name = "idx_test_cat_valid_id", columnNames = {
 		"valid", "id" }) })

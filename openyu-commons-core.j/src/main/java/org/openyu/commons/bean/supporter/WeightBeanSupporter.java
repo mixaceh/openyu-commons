@@ -5,13 +5,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.openyu.commons.bean.WeightBean;
 
 @XmlRootElement(name = "weightBean")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class WeightBeanSupporter extends ProbabilityBeanSupporter implements WeightBean
-{
+public class WeightBeanSupporter extends ProbabilityBeanSupporter implements WeightBean {
 
 	private static final long serialVersionUID = 6273277090254322472L;
 
@@ -20,29 +19,25 @@ public class WeightBeanSupporter extends ProbabilityBeanSupporter implements Wei
 	 */
 	private int weight;
 
-	public WeightBeanSupporter()
-	{}
+	public WeightBeanSupporter() {
+	}
 
-	public int getWeight()
-	{
+	public int getWeight() {
 		return weight;
 	}
 
-	public void setWeight(int weight)
-	{
+	public void setWeight(int weight) {
 		this.weight = weight;
 	}
 
-	public String toString()
-	{
-		ToStringBuilder builder = new ToStringBuilder(this);
+	public String toString() {
+		ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE);
 		builder.appendSuper(super.toString());
 		builder.append("weight", weight);
 		return builder.toString();
 	}
 
-	public Object clone()
-	{
+	public Object clone() {
 		WeightBeanSupporter copy = null;
 		copy = (WeightBeanSupporter) super.clone();
 		return copy;

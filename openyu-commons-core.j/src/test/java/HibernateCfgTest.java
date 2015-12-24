@@ -13,9 +13,9 @@ import org.hibernate.jdbc.Work;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.Test;
+import org.openyu.commons.dog.po.impl.DogPoImpl;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.NumberHelper;
-import org.openyu.commons.po.impl.DogPoImpl;
 
 public class HibernateCfgTest extends BaseTestSupporter {
 

@@ -1,6 +1,6 @@
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
-	updateCheck="false" name="cacheManager">
+	updateCheck="false" name="commonCacheManager">
 
 	<!-- Sets the path to the directory where cache .data files are created. 
 		If the path is a Java System Property it is replaced by its value in the 
@@ -49,11 +49,11 @@
 		timeToLiveSeconds="3600" overflowToDisk="true" />
 
 	<!-- test -->
-	<cache name="org.openyu.commons.po.impl.CatPoImpl"
+	<cache name="org.openyu.commons.cat.po.impl.CatPoImpl"
 		maxElementsInMemory="1000" eternal="false" timeToIdleSeconds="180"
 		timeToLiveSeconds="600" overflowToDisk="true" diskPersistent="false" />
 
-	<cache name="org.openyu.commons.po.impl.DogPoImpl"
+	<cache name="org.openyu.commons.dog.po.impl.DogPoImpl"
 		maxElementsInMemory="1000" eternal="false" timeToIdleSeconds="180"
 		timeToLiveSeconds="600" overflowToDisk="true" diskPersistent="false" />
 </ehcache>

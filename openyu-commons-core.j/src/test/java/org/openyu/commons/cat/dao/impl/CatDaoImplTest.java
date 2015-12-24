@@ -1,4 +1,4 @@
-package org.openyu.commons.service.impl;
+package org.openyu.commons.cat.dao.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -8,25 +8,25 @@ import java.io.Serializable;
 import java.util.Locale;
 
 import org.junit.Test;
-import org.openyu.commons.po.impl.CatPoImpl;
-import org.openyu.commons.vo.impl.CatImpl;
+import org.openyu.commons.cat.CatTestSupporter;
+import org.openyu.commons.cat.po.impl.CatPoImpl;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 
-public class CatServiceImplTest extends CatTestSupporter {
+public class CatDaoImplTest extends CatTestSupporter {
 
 	/**
 	 * 隨機產生貓資料
 	 * 
 	 * @return
 	 */
-	public static CatImpl randomCat() {
+	public static CatPoImpl randomCatPo() {
 		final String UNIQUE = randomUnique();
 		final String ID = "TEST_CAT" + UNIQUE;
 		final String ZH_TW_NAME = "測試貓" + UNIQUE;
 		final String EN_US_NAME = "Test Cat" + UNIQUE;
 		//
-		CatImpl result = new CatImpl();
+		CatPoImpl result = new CatPoImpl();
 		result.setId(ID);
 		result.setValid(randomBoolean());
 		result.addName(Locale.TRADITIONAL_CHINESE, ZH_TW_NAME);
@@ -40,7 +40,7 @@ public class CatServiceImplTest extends CatTestSupporter {
 	 * @param expected
 	 * @param actual
 	 */
-	public static void assertCat(CatImpl expected, CatImpl actual) {
+	public static void assertCatPo(CatPoImpl expected, CatPoImpl actual) {
 		assertNotNull(expected);
 		assertNotNull(actual);
 		//
@@ -52,62 +52,60 @@ public class CatServiceImplTest extends CatTestSupporter {
 	/**
 	 * insert -> find -> delete
 	 * 
-	 * 當service有@CommonTx,會回傳正確的值
+	 * 當dao沒有tx,會回傳正確的值,但是
 	 * 
-	 * insert會真正寫入db
+	 * insert有時會寫,有時不會真正寫入db
 	 * 
-	 * update會真正寫入db
+	 * update不會真正寫入db
 	 * 
-	 * delete會真正寫入db
-	 * 
-	 * 效率會比dao慢
+	 * delete不會真正寫入db
 	 */
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 0, concurrency = 1)
-	// round: 0.26 [+- 0.09], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
-	// 0.00], GC.calls: 1, GC.time: 0.01, time.total: 2.62, time.warmup: 0.00,
-	// time.bench: 2.62
+	// round: 0.03 [+- 0.04], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.25, time.warmup: 0.00,
+	// time.bench: 0.25
 	public void crud() {
 		// 隨機
-		CatImpl cat = randomCat();
+		CatPoImpl catPo = randomCatPo();
 		// create
-		Serializable pk = catService.insert(cat);
+		Serializable pk = catDao.insert(catPo);
 		printInsert(pk);
 		assertNotNull(pk);
 
 		// retrieve
-		CatImpl foundEntity = catService.find(CatImpl.class, cat.getSeq());
+		CatPoImpl foundEntity = catDao.find(CatPoImpl.class, catPo.getSeq());
 		printFind(foundEntity);
-		assertCat(cat, foundEntity);
+		assertCatPo(catPo, foundEntity);
 
 		// update
-		cat.setValid(true);
-		int updated = catService.update(cat);
+		catPo.setValid(true);
+		int updated = catDao.update(catPo);
 		printUpdate(updated);
 		assertTrue(updated > 0);
 
 		// delete
-		CatImpl deletedEntity = catService.delete(CatImpl.class, cat.getSeq());
+		CatPoImpl deletedEntity = catDao.delete(CatPoImpl.class, catPo.getSeq());
 		printDelete(deletedEntity);
 		assertNotNull(deletedEntity);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 0, concurrency = 1)
-	// round: 0.09 [+- 0.09], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
-	// 0.00], GC.calls: 1, GC.time: 0.01, time.total: 0.88, time.warmup: 0.00,
-	// time.bench: 0.88
+	// round: 0.02 [+- 0.04], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.23, time.warmup: 0.00,
+	// time.bench: 0.22
 	public void insert() {
 		// 隨機
-		CatImpl cat = randomCat();
+		CatPoImpl catPo = randomCatPo();
 		//
-		Serializable pk = catService.insert(cat);
+		Serializable pk = catDao.insert(catPo);
 		printInsert(pk);
 		assertNotNull(pk);
 
-		CatImpl foundEntity = catService.find(CatImpl.class, cat.getSeq());
-		assertCat(cat, foundEntity);
+		CatPoImpl foundEntity = catDao.find(CatPoImpl.class, catPo.getSeq());
+		assertCatPo(catPo, foundEntity);
 
-		System.out.println(cat);
+		System.out.println(catPo);
 	}
 }

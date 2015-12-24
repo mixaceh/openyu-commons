@@ -1,4 +1,4 @@
-package org.openyu.commons.po.impl;
+package org.openyu.commons.dog.po.impl;
 
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -35,7 +35,6 @@ import org.openyu.commons.entity.bridge.NamesEntityBridge;
 import org.openyu.commons.entity.supporter.AuditEntitySupporter;
 import org.openyu.commons.entity.supporter.BaseEntitySupporter;
 import org.openyu.commons.entity.supporter.LocaleNameEntitySupporter;
-import org.openyu.commons.entity.supporter.SeqEntitySupporter;
 
 /**
  * 測試物件
@@ -48,7 +47,7 @@ import org.openyu.commons.entity.supporter.SeqEntitySupporter;
 @Table(name = "test_dog")
 @SequenceGenerator(name = "test_dog_g", sequenceName = "test_dog_s", allocationSize = 1)
 // when use ehcache, config in ehcache.xml
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "org.openyu.commons.po.impl.DogPoImpl")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "org.openyu.commons.dog.po.impl.DogPoImpl")
 @Proxy(lazy = false)
 @org.hibernate.annotations.Table(appliesTo = "test_dog", indexes = {
 		@org.hibernate.annotations.Index(name = "idx_test_dog_valid_id", columnNames = { "valid", "id" }) })

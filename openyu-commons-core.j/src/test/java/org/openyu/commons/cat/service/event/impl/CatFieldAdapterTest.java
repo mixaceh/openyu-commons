@@ -1,4 +1,4 @@
-package org.openyu.commons.service.event.impl;
+package org.openyu.commons.cat.service.event.impl;
 
 import static org.junit.Assert.*;
 
@@ -10,9 +10,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openyu.commons.vo.impl.CatImpl;
+import org.openyu.commons.cat.vo.impl.CatImpl;
 
-public class CatChangeAdapterTest
+public class CatFieldAdapterTest
 {
 
 	private static ConcurrentMap<String, CatImpl> beans = new ConcurrentHashMap<String, CatImpl>();
@@ -56,54 +56,13 @@ public class CatChangeAdapterTest
 		return cats;
 	}
 
-	private void connect(String code)
-	{
-		CatImpl cat = beans.get(code);
-		cat.addBeanChangeListener(CatChangeAdapter.getInstance());
-	}
-
-	private void disconnect(String code)
-	{
-		CatImpl cat = beans.get(code);
-		cat.removeBeanChangeListener(CatChangeAdapter.getInstance());
-	}
-
-	@Test
-	/**
-	 * 多個非單例
-	 */
-	public void beanChanged()
-	{
-		CatChangeAdapter catBeanChangeAdapter = new CatChangeAdapter();
-		CatChangeAdapter catBeanChangeAdapter2 = new CatChangeAdapter();
-		//
-		CatImpl cat = new CatImpl();
-		cat.addBeanChangeListener(catBeanChangeAdapter);
-		cat.addBeanChangeListener(catBeanChangeAdapter2);
-		//
-		cat.setId("aaa");
-		cat.setId("bbb");
-		//
-		cat.setAge(1);
-		cat.setAge(2);
-		cat.setAge(null);
-		//
-		System.out.println(cat.getBeanChangeListeners().length);
-		assertEquals(2, cat.getBeanChangeListeners().length);
-
-		//只移除1個
-		cat.removeBeanChangeListener(catBeanChangeAdapter);
-		System.out.println(cat.getBeanChangeListeners().length);
-		assertEquals(1, cat.getBeanChangeListeners().length);
-	}
-
 	@Test
 	/**
 	 * 單例
 	 */
-	//1000000 times: 327 mills. 
-	//1000000 times: 343 mills. 
-	//1000000 times: 344 mills. 
+	//1000000 times: 1065 mills. 
+	//1000000 times: 973 mills. 
+	//1000000 times: 968 mills. 
 	public void beanChangedSingleton()
 	{
 		final String CODE = "aaa";
@@ -113,11 +72,12 @@ public class CatChangeAdapterTest
 		CatImpl cat = beans.get(CODE);
 
 		//連線時,addBeanChangeListener
-		connect(CODE);
+		//connect(CODE);
+		cat.addBeanChangeListener(CatFieldAdapter.getInstance());
 
 		//多加2次單例
-		cat.addBeanChangeListener(CatChangeAdapter.getInstance());
-		cat.addBeanChangeListener(CatChangeAdapter.getInstance());
+		cat.addBeanChangeListener(CatFieldAdapter.getInstance());
+		cat.addBeanChangeListener(CatFieldAdapter.getInstance());
 		//
 		System.out.println(cat.getBeanChangeListeners().length);
 		assertEquals(1, cat.getBeanChangeListeners().length);
@@ -138,7 +98,8 @@ public class CatChangeAdapterTest
 		//------------------------------------------
 
 		//斷線時,removeBeanChangeListener
-		disconnect(CODE);
+		//disconnect(CODE);
+		cat.removeBeanChangeListener(CatFieldAdapter.getInstance());
 
 		System.out.println(cat.getBeanChangeListeners());
 		assertNull(cat.getBeanChangeListeners());
@@ -146,6 +107,6 @@ public class CatChangeAdapterTest
 		cat = beans.get("bbb");
 		cat.setAge(10);
 		//
-	}
 
+	}
 }

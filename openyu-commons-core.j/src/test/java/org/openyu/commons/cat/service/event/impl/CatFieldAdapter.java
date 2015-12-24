@@ -1,39 +1,39 @@
-package org.openyu.commons.service.event.impl;
+package org.openyu.commons.cat.service.event.impl;
 
+import org.openyu.commons.cat.vo.impl.CatField;
+import org.openyu.commons.cat.vo.impl.CatImpl;
 import org.openyu.commons.lang.event.EventAttach;
 import org.openyu.commons.service.event.BeanChangeEvent;
 import org.openyu.commons.service.event.supporter.BeanChangeAdapter;
-import org.openyu.commons.vo.impl.CatImpl;
 
 /**
  * 1.設計成singleton, 使用getInstance
  * 
  * 2.若用spring,不需使用getInstance,直接在xml上設定即可,但要怎註冊到bean上?
  */
-public class CatChangeAdapter extends BeanChangeAdapter
+public class CatFieldAdapter extends BeanChangeAdapter
 {
-	private static CatChangeAdapter instance;
+	private static CatFieldAdapter instance;
 
-	public CatChangeAdapter()
+	public CatFieldAdapter()
 	{}
 
-	public static synchronized CatChangeAdapter getInstance()
+	public static synchronized CatFieldAdapter getInstance()
 	{
 		if (instance == null)
 		{
-			instance = new CatChangeAdapter();
+			instance = new CatFieldAdapter();
 		}
 		return instance;
 	}
 
-	@Override
 	public void beanChanged(BeanChangeEvent beanChangeEvent)
 	{
 		CatImpl cat = (CatImpl) beanChangeEvent.getSource();
 		if (cat != null)
 		{
-			String fieldName = beanChangeEvent.getFieldName();
-			if ("code".equals(fieldName))
+			Enum<?> fieldEnum = beanChangeEvent.getFieldEnum();
+			if (fieldEnum == CatField.ID)
 			{
 				@SuppressWarnings("unchecked")
 				EventAttach<String, String> eventAttach = ((EventAttach<String, String>) beanChangeEvent
@@ -44,9 +44,10 @@ public class CatChangeAdapter extends BeanChangeAdapter
 				Double diffValue = eventAttach.getDiffValue();
 				//
 				//System.out.println(eventAttach);
-				System.out.println("code: " + oldValue + ", " + newValue + ", " + diffValue);
+				System.out
+						.println(fieldEnum + ", " + oldValue + ", " + newValue + ", " + diffValue);
 			}
-			else if ("age".equals(fieldName))
+			else if (fieldEnum == CatField.AGE)
 			{
 				@SuppressWarnings("unchecked")
 				EventAttach<Integer, Integer> eventAttach = ((EventAttach<Integer, Integer>) beanChangeEvent
@@ -57,7 +58,8 @@ public class CatChangeAdapter extends BeanChangeAdapter
 				Double diffValue = eventAttach.getDiffValue();
 				//
 				//System.out.println(eventAttach);
-				System.out.println("age: " + oldValue + ", " + newValue + ", " + diffValue);
+				System.out
+						.println(fieldEnum + ", " + oldValue + ", " + newValue + ", " + diffValue);
 			}
 			else
 			{

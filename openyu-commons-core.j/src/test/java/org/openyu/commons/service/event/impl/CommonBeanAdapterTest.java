@@ -15,11 +15,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.openyu.commons.dao.supporter.CommonDaoSupporter;
+import org.openyu.commons.dog.po.impl.DogPoImpl;
+import org.openyu.commons.dog.vo.impl.DogImpl;
 import org.openyu.commons.lang.NumberHelper;
-import org.openyu.commons.po.impl.DogPoImpl;
 import org.openyu.commons.service.event.impl.CommonBeanAdapter;
 import org.openyu.commons.service.supporter.CommonServiceSupporter;
-import org.openyu.commons.vo.impl.DogImpl;
 
 public class CommonBeanAdapterTest {
 	private static CommonServiceSupporter commonServiceSupporter;

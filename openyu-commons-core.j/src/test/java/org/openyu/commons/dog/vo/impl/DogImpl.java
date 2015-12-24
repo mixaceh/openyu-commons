@@ -1,7 +1,6 @@
-package org.openyu.commons.vo.impl;
+package org.openyu.commons.dog.vo.impl;
 
 import java.io.Serializable;
-import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
@@ -16,10 +15,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.openyu.commons.bean.AuditBean;
 import org.openyu.commons.bean.LocaleNameBean;
 import org.openyu.commons.bean.NamesBean;
-import org.openyu.commons.bean.adapter.LocaleNameBeanSetXmlAdapter;
 import org.openyu.commons.bean.adapter.NamesBeanXmlAdapter;
 import org.openyu.commons.bean.supporter.AuditBeanSupporter;
-import org.openyu.commons.bean.supporter.LocaleNameBeanSupporter;
 import org.openyu.commons.bean.supporter.NamesBeanSupporter;
 
 /**
@@ -231,7 +228,6 @@ public class DogImpl implements NamesBean, Serializable {
 	}
 
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.MULTI_LINE_STYLE);
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 }

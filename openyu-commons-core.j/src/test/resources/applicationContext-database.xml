@@ -35,7 +35,8 @@
 			value="file:src/test/config/etc/hibernate.cfg.xml" />
 		<property name="packagesToScan">
 			<list>
-				<value>org.openyu.commons.po.impl</value>
+				<value>org.openyu.commons.cat.po.impl</value>
+				<value>org.openyu.commons.dog.po.impl</value>
 			</list>
 		</property>
 	</bean>

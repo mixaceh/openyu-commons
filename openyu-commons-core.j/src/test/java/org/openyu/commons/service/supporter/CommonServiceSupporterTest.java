@@ -16,12 +16,12 @@ import org.springframework.orm.hibernate4.HibernateTemplate;
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
+import org.openyu.commons.cat.po.impl.CatPoImpl;
+import org.openyu.commons.cat.vo.impl.CatImpl;
 import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.CloneHelper;
 import org.openyu.commons.lang.NumberHelper;
-import org.openyu.commons.vo.impl.CatImpl;
-import org.openyu.commons.po.impl.CatPoImpl;
 import org.openyu.commons.service.event.BeanListener;
 import org.openyu.commons.service.event.impl.CommonBeanAdapter;
 
