@@ -26,14 +26,13 @@ import org.openyu.commons.entity.supporter.SeqLogEntitySupporter;
 //--------------------------------------------------
 @Entity
 @org.hibernate.annotations.Entity(dynamicInsert = true, dynamicUpdate = true)
-@Table(name = "commons_cat_insert_log")
-@SequenceGenerator(name = "commons_cat_insert_log_g", sequenceName = "commons_cat_insert_log_s", allocationSize = 1)
+@Table(name = "cat_insert_log")
+@SequenceGenerator(name = "cat_insert_log_g", sequenceName = "cat_insert_log_s", allocationSize = 1)
 // when use ehcache, config in ehcache.xml
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "org.openyu.commons.cat.log.impl.CatInsertLogImpl")
 @Proxy(lazy = false)
-@org.hibernate.annotations.Table(appliesTo = "commons_cat_insert_log", indexes = {
-		@org.hibernate.annotations.Index(name = "idx_commons_cat_insert_log_1", columnNames = { "cat_id",
-				"log_date" }) })
+@org.hibernate.annotations.Table(appliesTo = "cat_insert_log", indexes = {
+		@org.hibernate.annotations.Index(name = "idx_cat_insert_log_1", columnNames = { "cat_id", "log_date" }) })
 // --------------------------------------------------
 // search
 // --------------------------------------------------
@@ -44,18 +43,33 @@ public class CatInsertLogImpl extends SeqLogEntitySupporter implements CatInsert
 
 	private Long seq;
 
+	/**
+	 * 貓id
+	 */
+	private String catId;
+
 	public CatInsertLogImpl() {
 	}
 
 	@Id
 	@Column(name = "seq")
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "commons_cat_insert_log_g")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "cat_insert_log_g")
 	public Long getSeq() {
 		return seq;
 	}
 
 	public void setSeq(Long seq) {
 		this.seq = seq;
+	}
+
+	@Column(name = "cat_id", length = 30)
+	@Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
+	public String getCatId() {
+		return catId;
+	}
+
+	public void setCatId(String catId) {
+		this.catId = catId;
 	}
 
 	public String toString() {

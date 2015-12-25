@@ -8,4 +8,8 @@ import org.openyu.commons.entity.SeqLogEntity;
 public interface CatInsertLog extends SeqLogEntity {
 
 	String KEY = CatInsertLog.class.getName();
+
+	String getCatId();
+
+	void setCatId(String catId);
 }

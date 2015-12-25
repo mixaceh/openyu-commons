@@ -18,5 +18,16 @@
 		id="catService"
 		class="org.openyu.commons.cat.service.impl.CatServiceImpl"
 		parent="commonServiceSupporter" />
+		
+	<!-- cat log -->
+	<bean
+		id="catLogDao"
+		class="org.openyu.commons.cat.dao.impl.CatLogDaoImpl"
+		parent="logDaoSupporter" />
+
+	<bean
+		id="catLogService"
+		class="org.openyu.commons.cat.service.impl.CatLogServiceImpl"
+		parent="logServiceSupporter" />
 
 </beans>

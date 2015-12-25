@@ -84,8 +84,8 @@ public class ApplicationContextDatabaseLogTest extends BaseTestSupporter {
 	}
 
 	@Test
-	public void logCommonDaoSupporter() {
-		CommonDaoSupporter bean = (CommonDaoSupporter) applicationContext.getBean("logCommonDaoSupporter");
+	public void logDaoSupporter() {
+		CommonDaoSupporter bean = (CommonDaoSupporter) applicationContext.getBean("logDaoSupporter");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}
