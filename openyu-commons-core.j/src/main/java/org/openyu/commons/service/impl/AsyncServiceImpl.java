@@ -73,12 +73,12 @@ public class AsyncServiceImpl extends BaseDaoSupporter implements AsyncService, 
 	/**
 	 * 修改佇列是否開啟
 	 */
-	private boolean updateQueueEnabled;
+	private boolean updateQueueEnabled=true;
 
 	/**
 	 * 修改佇列個數
 	 */
-	private int updateQueueSize;
+	private int updateQueueSize=1;
 
 	/**
 	 * 修改佇列

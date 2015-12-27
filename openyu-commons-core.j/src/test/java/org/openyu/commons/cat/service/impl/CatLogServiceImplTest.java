@@ -8,12 +8,12 @@ import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 
 public class CatLogServiceImplTest extends CatTestSupporter {
 
+	
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 0, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void recordInsert() {
-		final String CAT_ID = "TEST_CAT" + randomUnique();
+		final String CAT_ID = "TEST_CAT";
 		catLogService.recordInsert(CAT_ID);
-		//
-		ThreadHelper.sleep(3 * 1000);
+		ThreadHelper.sleep(3*1000);
 	}
 }

@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.util.Date;
+
 import org.openyu.commons.cat.dao.CatLogDao;
 import org.openyu.commons.cat.log.CatInsertLog;
 import org.openyu.commons.cat.log.impl.CatInsertLogImpl;
@@ -50,8 +53,11 @@ public class CatLogServiceImpl extends LogServiceSupporter implements CatLogServ
 	@LogTx
 	public void recordInsert(String catId) {
 		CatInsertLog log = new CatInsertLogImpl();
+		log.setSeq(71L);
 		log.setCatId(catId);
+		log.setLogDate(new Date());
+		log.setVersion(1);
 		//
-		offerInsert(log);
+		offerUpdate(log);
 	}
 }
