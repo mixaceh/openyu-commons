@@ -21,13 +21,6 @@ public class LogServiceSupporter extends BaseServiceSupporter implements LogServ
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(LogServiceSupporter.class);
 
-	/**
-	 * 異步服務
-	 */
-	@Autowired
-	@Qualifier("logAsyncService")
-	protected transient AsyncService asyncService;
-
 	public LogServiceSupporter() {
 	}
 

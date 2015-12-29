@@ -53,11 +53,9 @@ public class CatLogServiceImpl extends LogServiceSupporter implements CatLogServ
 	@LogTx
 	public void recordInsert(String catId) {
 		CatInsertLog log = new CatInsertLogImpl();
-		log.setSeq(71L);
 		log.setCatId(catId);
 		log.setLogDate(new Date());
-		log.setVersion(1);
 		//
-		offerUpdate(log);
+		offerInsert(log);
 	}
 }

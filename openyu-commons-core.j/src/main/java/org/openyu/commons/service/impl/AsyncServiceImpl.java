@@ -73,12 +73,12 @@ public class AsyncServiceImpl extends BaseDaoSupporter implements AsyncService, 
 	/**
 	 * 修改佇列是否開啟
 	 */
-	private boolean updateQueueEnabled=true;
+	private boolean updateQueueEnabled;
 
 	/**
 	 * 修改佇列個數
 	 */
-	private int updateQueueSize=1;
+	private int updateQueueSize;
 
 	/**
 	 * 修改佇列
@@ -309,6 +309,7 @@ public class AsyncServiceImpl extends BaseDaoSupporter implements AsyncService, 
 	 * 
 	 * @param entity
 	 */
+	//@LogTx
 	public <T> boolean offerInsert(T entity) {
 		boolean result = false;
 		//

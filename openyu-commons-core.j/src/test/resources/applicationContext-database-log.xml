@@ -115,25 +115,6 @@
 		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
 		p:hibernateTemplate-ref="logHibernateTemplate" />
 
-	<!-- log async service -->
-	<bean
-		id="logAsyncService"
-		class="org.openyu.commons.service.impl.AsyncServiceImpl"
-		parent="baseServiceSupporter"
-		p:commonDao-ref="logDaoSupporter" />
-		
-	<!-- log async service advisor
-	<aop:config>
-		<aop:pointcut
-			id="logAsyncServiceTxPointcut"
-			expression="bean(logAsyncService)" />
-		<aop:advisor
-			id="logAsyncServiceTxAdvisor"
-			advice-ref="logTxAdvice"
-			pointcut-ref="logAsyncServiceTxPointcut" />
-	</aop:config>
-	 -->		
-
 	<!-- log service supporter -->
 	<bean
 		id="logServiceSupporter"
