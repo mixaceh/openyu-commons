@@ -52,6 +52,9 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(CommonServiceSupporter.class);
 
+	/**
+	 * 通用Dao
+	 */
 	protected transient CommonDao commonDao;
 
 	// service建構除構用
@@ -70,6 +73,14 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	public CommonServiceSupporter() {
 		addServiceCallback("StartCallbacker", new StartCallbacker());
 		addServiceCallback("ShutdownCallbacker", new ShutdownCallbacker());
+	}
+
+	public CommonDao getCommonDao() {
+		return commonDao;
+	}
+
+	public void setCommonDao(CommonDao commonDao) {
+		this.commonDao = commonDao;
 	}
 
 	/**
@@ -92,7 +103,6 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 			beans.clear();
 		}
 	}
-	
 
 	/**
 	 * 內部啟動
@@ -108,14 +118,6 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 	@Override
 	protected void doShutdown() throws Exception {
 		// move to ShutdownCallbacker.doInAction()
-	}
-
-	public CommonDao getCommonDao() {
-		return commonDao;
-	}
-
-	public void setCommonDao(CommonDao commonDao) {
-		this.commonDao = commonDao;
 	}
 
 	public MapCache<String, Object> getBeans() {

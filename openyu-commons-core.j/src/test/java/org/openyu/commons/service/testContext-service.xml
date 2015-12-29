@@ -8,18 +8,5 @@
              http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
-	<bean
-		id="asyncService"
-		class="org.openyu.commons.service.impl.AsyncServiceImpl"
-		p:insertQueueListenMills="10"
-		p:insertQueueEnabled="true"
-		p:insertQueueSize="1"
-		p:updateQueueListenMills="10"
-		p:updateQueueEnabled="true"
-		p:updateQueueSize="3"
-		p:deleteQueueListenMills="10"
-		p:deleteQueueEnabled="true"
-		p:deleteQueueSize="1"
-		p:commonDao-ref="commonDaoSupporter" />
 		
 </beans>

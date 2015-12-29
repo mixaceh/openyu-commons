@@ -23,13 +23,18 @@ public class CatLogServiceImpl extends LogServiceSupporter implements CatLogServ
 
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(CatLogServiceImpl.class);
 
-	@Autowired
-	@Qualifier("catLogDao")
-	private transient CatLogDao catLogDao;
-
 	public CatLogServiceImpl() {
 	}
 
+	public CatLogDao getCatLogDao() {
+		return (CatLogDao) getCommonDao();
+	}
+
+	@Autowired
+	@Qualifier("catLogDao")
+	public void setCatLogDao(CatLogDao catLogDao) {
+		setCommonDao(catLogDao);
+	}
 	// --------------------------------------------------
 	// db
 	// --------------------------------------------------
@@ -39,7 +44,7 @@ public class CatLogServiceImpl extends LogServiceSupporter implements CatLogServ
 	// --------------------------------------------------
 	@LogTx
 	public int deleteCatInsertLog(String catId) {
-		return catLogDao.deleteCatInsertLog(catId);
+		return getCatLogDao().deleteCatInsertLog(catId);
 	}
 
 	// --------------------------------------------------

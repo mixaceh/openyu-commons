@@ -16,7 +16,6 @@ import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
-import org.openyu.commons.service.AsyncService;
 import org.openyu.commons.service.CommonService;
 import org.openyu.commons.thread.ThreadHelper;
 
@@ -65,12 +64,13 @@ public class ApplicationContextDatabaseTest extends BaseTestSupporter {
 		assertNotNull(bean);
 	}
 
-//	@Test
-//	public void commonTxAdvice() {
-//		TransactionInterceptor bean = (TransactionInterceptor) applicationContext.getBean("commonTxAdvice");
-//		System.out.println(bean);
-//		assertNotNull(bean);
-//	}
+	// @Test
+	// public void commonTxAdvice() {
+	// TransactionInterceptor bean = (TransactionInterceptor)
+	// applicationContext.getBean("commonTxAdvice");
+	// System.out.println(bean);
+	// assertNotNull(bean);
+	// }
 
 	@Test
 	public void commonTx() {
@@ -92,18 +92,4 @@ public class ApplicationContextDatabaseTest extends BaseTestSupporter {
 		System.out.println(bean);
 		assertNotNull(bean);
 	}
-
-	@Test
-	public void asyncService() {
-		AsyncService bean = (AsyncService) applicationContext.getBean("asyncService");
-		System.out.println(bean);
-		assertNotNull(bean);
-		//
-		// ThreadHelper.sleep(3 * 1000);
-		// BeanDefinitionRegistry factory = (BeanDefinitionRegistry)
-		// applicationContext.getAutowireCapableBeanFactory();
-		// factory.removeBeanDefinition("asyncService");
-		// ThreadHelper.sleep(3 * 1000);
-	}
-
 }
