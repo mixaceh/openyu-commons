@@ -1,4 +1,4 @@
-package org.openyu.commons.service.supporter;
+package org.openyu.commons.service.impl;
 
 import static org.junit.Assert.*;
 
@@ -18,32 +18,31 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 import org.openyu.commons.cat.po.impl.CatPoImpl;
 import org.openyu.commons.cat.vo.impl.CatImpl;
-import org.openyu.commons.dao.supporter.CommonDaoSupporter;
+import org.openyu.commons.dao.impl.CommonDaoImpl;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.CloneHelper;
 import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.service.event.BeanListener;
 import org.openyu.commons.service.event.impl.CommonBeanAdapter;
 
-public class CommonServiceSupporterTest extends BaseTestSupporter {
+public class CommonServiceImplTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static CommonServiceSupporter commonServiceSupporter;
+	private static CommonServiceImpl commonServiceImpl;
 
 	private static BeanListener serviceBeanListener;
 
 	/**
 	 * 直接使用hibernate.cfg.xml, s並非由spring注入
 	 */
-	public static void createCommonServiceSupporter() {
+	public static void createCommonServiceImpl() {
 		try {
 			// service
-			commonServiceSupporter = new CommonServiceSupporter();
-
+			commonServiceImpl = new CommonServiceImpl();
 			// dao
-			CommonDaoSupporter commonDaoSupporter = new CommonDaoSupporter();
+			CommonDaoImpl commonDaoImpl = new CommonDaoImpl();
 
 			// 建構HibernateTemplate,因HibernateDaoSupporter需要
 			HibernateTemplate hibernateTemplate = new HibernateTemplate();
@@ -55,34 +54,34 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 			// System.out.println("sessionFactory: " + sessionFactory);
 			//
 			hibernateTemplate.setSessionFactory(sessionFactory);
-			commonDaoSupporter.setHibernateTemplate(hibernateTemplate);
+			commonDaoImpl.setHibernateTemplate(hibernateTemplate);
 			//
-			commonServiceSupporter.setCommonDao(commonDaoSupporter);
+			commonServiceImpl.setCommonDao(commonDaoImpl);
 
 			// listener
 			serviceBeanListener = new CommonBeanAdapter();
-			commonServiceSupporter.addBeanListener(serviceBeanListener);
-			assertNotNull(commonServiceSupporter);
+			commonServiceImpl.addBeanListener(serviceBeanListener);
+			assertNotNull(commonServiceImpl);
 
-			commonServiceSupporter.start();
+			commonServiceImpl.start();
 
 			System.out.println("---------------------------");
-			System.out.println("createCommonServiceSupporter [success]");
+			System.out.println("createCommonServiceImpl [success]");
 			System.out.println("---------------------------");
 		} catch (Exception ex) {
 			System.out.println("---------------------------");
-			System.out.println("createCommonServiceSupporter [fail]");
+			System.out.println("createCommonServiceImpl [fail]");
 			System.out.println("---------------------------");
 			ex.printStackTrace();
 		}
 	}
 
 	@Test
-	public void commonServiceSupporter() {
-		createCommonServiceSupporter();
+	public void commonServiceImpl() {
+		createCommonServiceImpl();
 		//
-		System.out.println(commonServiceSupporter);
-		assertNotNull(commonServiceSupporter);
+		System.out.println(commonServiceImpl);
+		assertNotNull(commonServiceImpl);
 	}
 
 	@Test
@@ -93,7 +92,7 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 	// 0.00], GC.calls: 3, GC.time: 0.02, time.total: 3.30, time.warmup: 0.00,
 	// time.bench: 3.30
 	public void crud() {
-		createCommonServiceSupporter();
+		createCommonServiceImpl();
 		//
 		final String ID = "TEST_CAT";
 		// final String NAME = "TEST_NAME";
@@ -113,23 +112,23 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 			cat.addName(Locale.US, "Gin Gi La");
 
 			// create
-			Serializable pk = commonServiceSupporter.insert(cat);
+			Serializable pk = commonServiceImpl.insert(cat);
 			printInsert(i, pk);
 			assertNotNull(pk);
 
 			// retrieve
-			CatImpl foundEntity = commonServiceSupporter.find(CatImpl.class, cat.getSeq());
+			CatImpl foundEntity = commonServiceImpl.find(CatImpl.class, cat.getSeq());
 			printFind(i, foundEntity);
 			assertEquals(id, foundEntity.getId());
 
 			// update
 			cat.setValid(true);
-			int updated = commonServiceSupporter.update(cat);
+			int updated = commonServiceImpl.update(cat);
 			printUpdate(i, updated);
 			assertTrue(updated > 0);
 
 			// delete
-			CatImpl deleteEntity = commonServiceSupporter.delete(CatImpl.class, cat.getSeq());
+			CatImpl deleteEntity = commonServiceImpl.delete(CatImpl.class, cat.getSeq());
 			printDelete(i, deleteEntity);
 			assertNotNull(deleteEntity);
 		}
@@ -143,7 +142,7 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 	// 0.00], GC.calls: 3, GC.time: 0.02, time.total: 3.38, time.warmup: 0.00,
 	// time.bench: 3.38
 	public void insert() {
-		createCommonServiceSupporter();
+		createCommonServiceImpl();
 		//
 		final String ID = "TEST_CAT";
 		int count = 10;
@@ -160,11 +159,11 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 			cat.addName(Locale.TRADITIONAL_CHINESE, "金吉拉");
 			cat.addName(Locale.US, "Gin Gi La");
 
-			Serializable pk = commonServiceSupporter.insert(cat);
+			Serializable pk = commonServiceImpl.insert(cat);
 			printInsert(i, pk);
 			assertNotNull(pk);
 
-			CatImpl foundEntity = commonServiceSupporter.find(CatImpl.class, cat.getSeq());
+			CatImpl foundEntity = commonServiceImpl.find(CatImpl.class, cat.getSeq());
 			assertEquals(cat.getId(), foundEntity.getId());
 		}
 		long end = System.currentTimeMillis();
@@ -177,7 +176,7 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 	// 0.00], GC.calls: 3, GC.time: 0.02, time.total: 3.59, time.warmup: 0.00,
 	// time.bench: 3.59
 	public void insertByPo() {
-		createCommonServiceSupporter();
+		createCommonServiceImpl();
 		//
 		final String ID = "TEST_CAT";
 		int count = 10;
@@ -194,11 +193,11 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 			cat.addName(Locale.TRADITIONAL_CHINESE, "金吉拉");
 			cat.addName(Locale.US, "Gin Gi La");
 
-			Serializable pk = commonServiceSupporter.insert(cat);
+			Serializable pk = commonServiceImpl.insert(cat);
 			printInsert(i, pk);
 			assertNotNull(pk);
 
-			CatImpl foundEntity = commonServiceSupporter.find(CatImpl.class, cat.getSeq());
+			CatImpl foundEntity = commonServiceImpl.find(CatImpl.class, cat.getSeq());
 			assertEquals(cat.getId(), foundEntity.getId());
 		}
 		long end = System.currentTimeMillis();
@@ -208,7 +207,7 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void findCat() {
-		createCommonServiceSupporter();
+		createCommonServiceImpl();
 		//
 		final long SEQ = 1L;
 		CatImpl result = null;
@@ -233,14 +232,14 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 	 */
 	private CatImpl mockFindCat(Long seq) {
 		CatImpl result = null;
-		result = commonServiceSupporter.find(CatImpl.class, seq);
+		result = commonServiceImpl.find(CatImpl.class, seq);
 		return result;
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void update() {
-		createCommonServiceSupporter();
+		createCommonServiceImpl();
 		//
 		int result = 0;
 		CatImpl cat = mockFindCat(1L);
@@ -251,7 +250,7 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 			anotherCat.getNames().clear();
 			//
 			// org.hibernate.NonUniqueObjectException
-			result = commonServiceSupporter.update(anotherCat);
+			result = commonServiceImpl.update(anotherCat);
 			printUpdate(0, result);
 			assertTrue(result > 0);
 		} else {
@@ -262,7 +261,7 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void updateNonUniqueObjectException() {
-		createCommonServiceSupporter();
+		createCommonServiceImpl();
 		//
 		CatImpl cat = mockFindCat(3L);
 		CatImpl anotherCat = CloneHelper.clone(cat);
@@ -272,7 +271,7 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 			anotherCat.getNames().clear();
 			//
 			// org.hibernate.NonUniqueObjectException
-			int update = commonServiceSupporter.update(anotherCat);
+			int update = commonServiceImpl.update(anotherCat);
 			System.out.println("update: " + (update > 0 ? "[success]" : "[fail]"));
 			System.out.println(update);
 		} else {
@@ -283,9 +282,9 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void delete() {
-		createCommonServiceSupporter();
+		createCommonServiceImpl();
 		//
-		CatImpl result = commonServiceSupporter.delete(CatImpl.class, 1L);
+		CatImpl result = commonServiceImpl.delete(CatImpl.class, 1L);
 		printDelete(0, result);
 		System.out.println(result);
 	}
@@ -293,9 +292,9 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void deleteByPo() {
-		createCommonServiceSupporter();
+		createCommonServiceImpl();
 		//
-		CatPoImpl result = commonServiceSupporter.delete(CatPoImpl.class, 17L);
+		CatPoImpl result = commonServiceImpl.delete(CatPoImpl.class, 17L);
 		printDelete(0, result);
 		System.out.println(result);
 	}
@@ -303,7 +302,7 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void deleteNonUniqueObjectException() {
-		createCommonServiceSupporter();
+		createCommonServiceImpl();
 		//
 		CatImpl cat = mockFindCat(19L);
 		CatImpl anotherCat = CloneHelper.clone(cat);
@@ -312,7 +311,7 @@ public class CommonServiceSupporterTest extends BaseTestSupporter {
 			System.out.println("anotherCat seq: " + anotherCat.getSeq());
 			//
 			// org.hibernate.NonUniqueObjectException
-			int delete = commonServiceSupporter.delete(anotherCat);
+			int delete = commonServiceImpl.delete(anotherCat);
 			System.out.println("delete: " + (delete > 0 ? "[success]" : "[fail]"));
 			System.out.println(delete);
 		} else {

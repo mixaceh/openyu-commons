@@ -116,10 +116,6 @@ public class CommonDaoImplTest extends BaseTestSupporter {
 	}
 
 	protected static void createCommonDaoImpl() {
-		if (commonDaoImpl != null) {
-			return;
-		}
-		//
 		try {
 			createSessionFactory();
 			//
