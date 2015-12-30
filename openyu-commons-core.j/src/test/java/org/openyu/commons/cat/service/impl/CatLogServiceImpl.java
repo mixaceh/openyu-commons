@@ -13,6 +13,7 @@ import org.openyu.commons.cat.log.impl.CatInsertLogImpl;
 import org.openyu.commons.cat.service.CatLogService;
 import org.openyu.commons.dao.anno.LogTx;
 import org.openyu.commons.service.supporter.LogServiceSupporter;
+import org.openyu.commons.util.AssertHelper;
 
 /**
  * 貓日誌服務
@@ -35,6 +36,16 @@ public class CatLogServiceImpl extends LogServiceSupporter implements CatLogServ
 	public void setCatLogDao(CatLogDao catLogDao) {
 		setCommonDao(catLogDao);
 	}
+
+	/**
+	 * 檢查設置
+	 * 
+	 * @throws Exception
+	 */
+	protected final void checkConfig() throws Exception {
+		AssertHelper.notNull(this.commonDao, "The CommonDao is required");
+	}
+
 	// --------------------------------------------------
 	// db
 	// --------------------------------------------------

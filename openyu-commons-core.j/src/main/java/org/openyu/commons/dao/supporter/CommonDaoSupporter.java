@@ -51,7 +51,7 @@ import org.openyu.commons.util.CollectionHelper;
 // ApplicationContextAware, OjDao, Supporter {
 
 // 2014/10/09, 改為不繼承spring HibernateDaoSupport
-public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
+public abstract class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 
 	private static final long serialVersionUID = 565018661823278805L;
 
@@ -276,7 +276,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @param params
 	 * @return
 	 */
-	protected <T> T findUniqueByHql(final Locale locale, final String hqlString, final Map<String, Object> params) {
+	public <T> T findUniqueByHql(final Locale locale, final String hqlString, final Map<String, Object> params) {
 		T result = null;
 		try {
 			result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<T>() {
@@ -334,7 +334,7 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T> List<T> findByHql(final Inquiry inquiry, final Locale locale, final String hqlString,
+	public <T> List<T> findByHql(final Inquiry inquiry, final Locale locale, final String hqlString,
 			final Map<String, Object> params) {
 		List<T> result = new LinkedList<T>();
 		try {
@@ -1031,8 +1031,9 @@ public class CommonDaoSupporter extends BaseDaoSupporter implements CommonDao {
 		return executeByHql(hql.toString(), params);
 	}
 
-	// 2012/05/31
 	/**
+	 * 2012/05/31
+	 * 
 	 * 執行hql
 	 * 
 	 * @param hqlString

@@ -2,6 +2,7 @@ package org.openyu.commons.cat.service;
 
 import java.util.List;
 
+import org.openyu.commons.cat.log.CatInsertLog;
 import org.openyu.commons.dao.inquiry.Inquiry;
 import org.openyu.commons.service.LogService;
 
@@ -33,5 +34,4 @@ public interface CatLogService extends LogService {
 	 * @param catId
 	 */
 	void recordInsert(String catId);
-
 }

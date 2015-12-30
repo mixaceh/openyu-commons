@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.openyu.commons.dao.CommonDao;
 import org.openyu.commons.dao.anno.LogTx;
 import org.openyu.commons.service.LogService;
+import org.openyu.commons.service.ShutdownCallback;
+import org.openyu.commons.service.StartCallback;
 import org.openyu.commons.thread.RunnableQueueGroup;
 import org.openyu.commons.thread.ThreadService;
 import org.openyu.commons.thread.anno.DefaultThreadService;
@@ -21,7 +23,7 @@ import org.openyu.commons.util.CollectionHelper;
 /**
  * 日誌服務
  */
-public class LogServiceSupporter extends BaseServiceSupporter implements LogService {
+public abstract class LogServiceSupporter extends BaseServiceSupporter implements LogService {
 
 	private static final long serialVersionUID = -730966546995347276L;
 
@@ -108,7 +110,8 @@ public class LogServiceSupporter extends BaseServiceSupporter implements LogServ
 	private transient RunnableQueueGroup<Object> deleteQueueGroup;
 
 	public LogServiceSupporter() {
-
+		addServiceCallback("StartCallbacker", new StartCallbacker());
+		addServiceCallback("ShutdownCallbacker", new ShutdownCallbacker());
 	}
 
 	public CommonDao getCommonDao() {
@@ -117,6 +120,67 @@ public class LogServiceSupporter extends BaseServiceSupporter implements LogServ
 
 	public void setCommonDao(CommonDao commonDao) {
 		this.commonDao = commonDao;
+	}
+
+	/**
+	 * 內部啟動
+	 */
+	protected class StartCallbacker implements StartCallback {
+
+		@Override
+		public void doInAction() throws Exception {
+			//檢查設置
+			checkConfig();
+			//
+			// 建立新增佇列群
+			createInsertQueueGroup();
+			// 建立修改佇列群
+			createUpdateQueueGroup();
+			// 建立刪除佇列群
+			createDeleteQueueGroup();
+		}
+	}
+
+	/**
+	 * 內部關閉
+	 */
+	protected class ShutdownCallbacker implements ShutdownCallback {
+
+		@Override
+		public void doInAction() throws Exception {
+			if (insertQueueEnabled) {
+				insertQueueGroup.shutdown();
+			}
+			if (updateQueueEnabled) {
+				updateQueueGroup.shutdown();
+			}
+			if (deleteQueueEnabled) {
+				deleteQueueGroup.shutdown();
+			}
+		}
+	}
+
+	/**
+	 * 檢查設置
+	 * 
+	 * @throws Exception
+	 */
+	protected abstract void checkConfig() throws Exception;
+
+	/**
+	 * 內部啟動
+	 */
+	@Override
+	protected void doStart() throws Exception {
+		// move to StartCallbacker.doInAction()
+	}
+
+	/**
+	 * 內部關閉
+	 */
+	@Override
+	protected void doShutdown() throws Exception {
+		// move to ShutdownCallbacker.doInAction()
 	}
 
 	public long getInsertQueueListenMills() {
@@ -189,35 +253,6 @@ public class LogServiceSupporter extends BaseServiceSupporter implements LogServ
 
 	public void setDeleteQueueSize(int deleteQueueSize) {
 		this.deleteQueueSize = deleteQueueSize;
-	}
-
-	/**
-	 * 內部啟動
-	 */
-	@Override
-	protected void doStart() throws Exception {
-		// 建立新增佇列群
-		createInsertQueueGroup();
-		// 建立修改佇列群
-		createUpdateQueueGroup();
-		// 建立刪除佇列群
-		createDeleteQueueGroup();
-	}
-
-	/**
-	 * 內部關閉
-	 */
-	@Override
-	protected void doShutdown() throws Exception {
-		if (this.insertQueueEnabled) {
-			insertQueueGroup.shutdown();
-		}
-		if (this.updateQueueEnabled) {
-			updateQueueGroup.shutdown();
-		}
-		if (this.deleteQueueEnabled) {
-			deleteQueueGroup.shutdown();
-		}
 	}
 
 	/**

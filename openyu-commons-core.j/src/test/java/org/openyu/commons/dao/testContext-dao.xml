@@ -35,8 +35,6 @@
 			value="file:src/test/config/etc/hibernate.cfg.xml" />
 		<property name="packagesToScan">
 			<list>
-				<value>org.openyu.commons.cat.po.impl</value>
-				<value>org.openyu.commons.dog.po.impl</value>
 			</list>
 		</property>
 	</bean>
@@ -120,11 +118,9 @@
 		abstract="true"
 		p:hibernateTemplate-ref="commonHibernateTemplate" />
 
-	<!-- service supporter -->
 	<bean
-		id="commonServiceSupporter"
-		parent="baseServiceSupporter"
-		abstract="true"
-		class="org.openyu.commons.service.supporter.CommonServiceSupporter" />
+		id="commonDaoImpl"
+			class="org.openyu.commons.dao.impl.CommonDaoImpl"
+		parent="commonDaoSupporter" />
 
 </beans>

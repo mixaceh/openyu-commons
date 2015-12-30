@@ -1,4 +1,4 @@
-package org.openyu.commons.dao.supporter;
+package org.openyu.commons.dao.impl;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -26,22 +26,23 @@ import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BenchmarkCommonDaoSupporterTest extends BaseTestSupporter {
+public class BenchmarkCommonDaoImplTest extends BaseTestSupporter {
 
-	private static CommonDaoSupporter commonDaoSupporter;
+	private static CommonDaoImpl commonDaoImpl;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		applicationContext = new ClassPathXmlApplicationContext(new String[] { "applicationContext-init.xml", //
-				"applicationContext-database.xml",//
+		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
+				"applicationContext-init.xml", //
+				"org/openyu/commons/dao/testContext-dao.xml",//
 		});
-		commonDaoSupporter = (CommonDaoSupporter) applicationContext.getBean("commonDaoSupporter");
+		commonDaoImpl = (CommonDaoImpl) applicationContext.getBean("commonDaoImpl");
 	}
 
 	@Test
-	public void commonDaoSupporter() {
-		System.out.println(commonDaoSupporter);
-		assertNotNull(commonDaoSupporter);
+	public void commonDaoImpl() {
+		System.out.println(commonDaoImpl);
+		assertNotNull(commonDaoImpl);
 	}
 
 	// ---------------------------------------------------
@@ -133,7 +134,7 @@ public class BenchmarkCommonDaoSupporterTest extends BaseTestSupporter {
 	// ---------------------------------------------------
 	// native
 	// ---------------------------------------------------
-	public static class NativeTest extends BenchmarkCommonDaoSupporterTest {
+	public static class NativeTest extends BenchmarkCommonDaoImplTest {
 
 		@Test
 		// insert: 10000 rows, 102400000 bytes / 38545 ms. = 2656.64 BYTES/MS,
@@ -520,7 +521,7 @@ public class BenchmarkCommonDaoSupporterTest extends BaseTestSupporter {
 	// ---------------------------------------------------
 	// optimized
 	// ---------------------------------------------------
-	public static class OptimizedTest extends BenchmarkCommonDaoSupporterTest {
+	public static class OptimizedTest extends BenchmarkCommonDaoImplTest {
 
 		@Test
 		// insert: 10000 rows, 102400000 bytes / 29690 ms. = 3448.97 BYTES/MS,
@@ -560,7 +561,7 @@ public class BenchmarkCommonDaoSupporterTest extends BaseTestSupporter {
 									params.put("seq", seq);
 									params.put("id", newId);
 									params.put("info", new String(buff));
-									int inserted = commonDaoSupporter.insert(sql.toString(), params);
+									int inserted = commonDaoImpl.insert(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + inserted);
 									//
@@ -642,7 +643,7 @@ public class BenchmarkCommonDaoSupporterTest extends BaseTestSupporter {
 									scalars.put("id", StandardBasicTypes.STRING);
 									scalars.put("info", StandardBasicTypes.STRING);
 									//
-									List<Object[]> list = commonDaoSupporter.find(sql.toString(), params, scalars);
+									List<Object[]> list = commonDaoImpl.find(sql.toString(), params, scalars);
 									//
 									seq = 0;
 									String id = null;
@@ -731,7 +732,7 @@ public class BenchmarkCommonDaoSupporterTest extends BaseTestSupporter {
 									Map<String, Object> params = new LinkedHashMap<String, Object>();
 									params.put("seq", seq);
 									params.put("info", new String(buff));
-									int updated = commonDaoSupporter.update(sql.toString(), params);
+									int updated = commonDaoImpl.update(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + updated);
 									//
@@ -805,7 +806,7 @@ public class BenchmarkCommonDaoSupporterTest extends BaseTestSupporter {
 									// params
 									Map<String, Object> params = new LinkedHashMap<String, Object>();
 									params.put("seq", seq);
-									int deleted = commonDaoSupporter.delete(sql.toString(), params);
+									int deleted = commonDaoImpl.delete(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + deleted);
 									//

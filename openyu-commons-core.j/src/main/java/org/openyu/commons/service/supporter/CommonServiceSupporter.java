@@ -46,7 +46,7 @@ import org.openyu.commons.util.concurrent.impl.MapCacheImpl;
  * 
  * fireServiceBeanAdded, 表新增後/修改後/刪除後,可用於: 1.發送訊息通知
  */
-public class CommonServiceSupporter extends BaseServiceSupporter implements CommonService, CommonDaoAware {
+public abstract class CommonServiceSupporter extends BaseServiceSupporter implements CommonService, CommonDaoAware {
 
 	private static final long serialVersionUID = 1915658408145401655L;
 
@@ -90,6 +90,8 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 
 		@Override
 		public void doInAction() throws Exception {
+			//檢查設置
+			checkConfig();
 		}
 	}
 
@@ -103,6 +105,13 @@ public class CommonServiceSupporter extends BaseServiceSupporter implements Comm
 			beans.clear();
 		}
 	}
+
+	/**
+	 * 檢查設置
+	 * 
+	 * @throws Exception
+	 */
+	protected abstract void checkConfig() throws Exception;
 
 	/**
 	 * 內部啟動

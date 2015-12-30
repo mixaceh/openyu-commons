@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public abstract class BaseDaoSupporter extends BaseServiceSupporter implements BaseDao {
 
 	private static final long serialVersionUID = -7248126336974035005L;
-	
+
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(BaseDaoSupporter.class);
 
 	public BaseDaoSupporter() {
@@ -22,6 +22,7 @@ public abstract class BaseDaoSupporter extends BaseServiceSupporter implements B
 	 */
 	@Override
 	protected void doStart() throws Exception {
+		// 檢查設置
 		checkConfig();
 	}
 

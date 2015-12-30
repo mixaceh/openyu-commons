@@ -113,11 +113,13 @@
 	<bean
 		id="logDaoSupporter"
 		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
+		abstract="true"
 		p:hibernateTemplate-ref="logHibernateTemplate" />
 
 	<!-- log service supporter -->
 	<bean
 		id="logServiceSupporter"
 		class="org.openyu.commons.service.supporter.LogServiceSupporter"
+		abstract="true"
 		parent="baseServiceSupporter" />
 </beans>

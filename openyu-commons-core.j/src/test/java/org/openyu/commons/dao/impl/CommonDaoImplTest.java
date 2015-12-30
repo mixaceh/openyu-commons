@@ -1,4 +1,4 @@
-package org.openyu.commons.dao.supporter;
+package org.openyu.commons.dao.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -35,7 +35,6 @@ import org.openyu.commons.bean.NamesBean;
 import org.openyu.commons.bean.supporter.NamesBeanSupporter;
 import org.openyu.commons.cat.po.impl.CatPoImpl;
 import org.openyu.commons.cat.vo.impl.CatImpl;
-import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 import org.openyu.commons.dog.po.impl.DogPoImpl;
 import org.openyu.commons.entity.LocaleNameEntity;
 import org.openyu.commons.entity.NamesEntity;
@@ -53,13 +52,13 @@ import org.openyu.commons.lang.NumberHelper;
  * 3.測試物件,/test/org.openyu.commons.entity.Dog
  * 
  */
-public class CommonDaoSupporterTest extends BaseTestSupporter {
+public class CommonDaoImplTest extends BaseTestSupporter {
 
 	private static Configuration configuration;
 
 	private static SessionFactory sessionFactory;
 
-	private static CommonDaoSupporter commonDaoSupporter;
+	private static CommonDaoImpl commonDaoImpl;
 
 	protected static void createConfiguration() {
 		if (configuration != null) {
@@ -68,8 +67,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 		configuration = new Configuration().configure("hibernate.cfg.xml");
 
 		System.out.println("configuration: " + configuration);
-		System.out.println("configuration.getProperties(): "
-				+ configuration.getProperties());
+		System.out.println("configuration.getProperties(): " + configuration.getProperties());
 	}
 
 	@Test
@@ -86,8 +84,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 		}
 		createConfiguration();
 		//
-		ServiceRegistry serviceRegistry = new ServiceRegistryBuilder()
-				.applySettings(configuration.getProperties())
+		ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties())
 				.buildServiceRegistry();
 		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		System.out.println(sessionFactory);
@@ -110,8 +107,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 			public void execute(Connection connection) throws SQLException {
 				System.out.println("connection: " + connection);
 				System.out.println("autoCommit: " + connection.getAutoCommit());
-				System.out.println("transactionIsolation: "
-						+ connection.getTransactionIsolation());
+				System.out.println("transactionIsolation: " + connection.getTransactionIsolation());
 			}
 		});
 		System.out.println("flushMode: " + session.getFlushMode());
@@ -119,30 +115,35 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 		assertNotNull(session);
 	}
 
-	protected static void createCommonDaoSupporter() {
-		if (commonDaoSupporter != null) {
+	protected static void createCommonDaoImpl() {
+		if (commonDaoImpl != null) {
 			return;
 		}
 		//
-		createSessionFactory();
-		//
-		// dao
-		commonDaoSupporter = new CommonDaoSupporter();
+		try {
+			createSessionFactory();
+			//
+			// dao
+			commonDaoImpl = new CommonDaoImpl();
 
-		// 建構HibernateTemplate,因HibernateDaoSupporter需要
-		HibernateTemplate hibernateTemplate = new HibernateTemplate();
-		hibernateTemplate.setSessionFactory(sessionFactory);
-		//
-		commonDaoSupporter.setHibernateTemplate(hibernateTemplate);
-		System.out.println(commonDaoSupporter);
+			// 建構HibernateTemplate,因HibernateDaoSupporter需要
+			HibernateTemplate hibernateTemplate = new HibernateTemplate();
+			hibernateTemplate.setSessionFactory(sessionFactory);
+			//
+			commonDaoImpl.setHibernateTemplate(hibernateTemplate);
+			commonDaoImpl.start();
+			System.out.println(commonDaoImpl);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Test
-	public void commonDaoSupporter() {
-		createCommonDaoSupporter();
+	public void commonDaoImpl() {
+		createCommonDaoImpl();
 		//
-		System.out.println(commonDaoSupporter);
-		assertNotNull(commonDaoSupporter);
+		System.out.println(commonDaoImpl);
+		assertNotNull(commonDaoImpl);
 	}
 
 	@Test
@@ -154,7 +155,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 	//
 	// verified: ok
 	public void crud() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		final String ID = "TEST_DOG";
 		// final String NAME = "TEST_NAME";
@@ -185,30 +186,24 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 			dogPo.addName(Locale.US, "LaLa");
 
 			// create
-			Serializable pk = commonDaoSupporter.insert(dogPo);
-			System.out.println("#." + i + " insert: "
-					+ (pk != null ? "[success]" : "[fail]"));
+			Serializable pk = commonDaoImpl.insert(dogPo);
+			System.out.println("#." + i + " insert: " + (pk != null ? "[success]" : "[fail]"));
 			assertNotNull(pk);
 
 			// retrieve
-			DogPoImpl foundEntity = commonDaoSupporter.find(DogPoImpl.class,
-					dogPo.getSeq());
-			System.out.println("#." + i + " find: "
-					+ (foundEntity != null ? "[success]" : "[fail]"));
+			DogPoImpl foundEntity = commonDaoImpl.find(DogPoImpl.class, dogPo.getSeq());
+			System.out.println("#." + i + " find: " + (foundEntity != null ? "[success]" : "[fail]"));
 			assertEquals(id, foundEntity.getId());
 
 			// update
 			dogPo.setValid(true);
-			int updated = commonDaoSupporter.update(dogPo);
-			System.out.println("#." + i + " update: "
-					+ (updated > 0 ? "[success]" : "[fail]"));
+			int updated = commonDaoImpl.update(dogPo);
+			System.out.println("#." + i + " update: " + (updated > 0 ? "[success]" : "[fail]"));
 			assertTrue(updated > 0);
 
 			// delete
-			DogPoImpl deletedEntity = commonDaoSupporter.delete(
-					DogPoImpl.class, dogPo.getSeq());
-			System.out.println("#." + i + " delete: "
-					+ (deletedEntity != null ? "[success]" : "[fail]"));
+			DogPoImpl deletedEntity = commonDaoImpl.delete(DogPoImpl.class, dogPo.getSeq());
+			System.out.println("#." + i + " delete: " + (deletedEntity != null ? "[success]" : "[fail]"));
 			assertNotNull(deletedEntity);
 
 		}
@@ -219,7 +214,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 	@Test
 	// verified: ok
 	public void insert() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		final String ID = "TEST_DOG";
 
@@ -254,13 +249,11 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 			dogPo.addName(Locale.TRADITIONAL_CHINESE, "拉拉");
 			dogPo.addName(Locale.US, "LaLa");
 
-			Serializable pk = commonDaoSupporter.insert(dogPo);
-			System.out.println("insert: "
-					+ (pk != null ? "[success]" : "[fail]"));
+			Serializable pk = commonDaoImpl.insert(dogPo);
+			System.out.println("insert: " + (pk != null ? "[success]" : "[fail]"));
 			assertNotNull(pk);
 
-			DogPoImpl foundEntity = commonDaoSupporter.find(DogPoImpl.class,
-					dogPo.getSeq());
+			DogPoImpl foundEntity = commonDaoImpl.find(DogPoImpl.class, dogPo.getSeq());
 			assertEquals(dogPo.getId(), foundEntity.getId());
 		}
 		long end = System.currentTimeMillis();
@@ -272,7 +265,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 	// 1000 times: 977 mills.
 	// 1000 times: 978 mills.
 	public void find() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		final String ID = "TEST_DOG917751";
 		DogPoImpl result = null;
@@ -280,7 +273,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 		int count = 1;
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = commonDaoSupporter.find(DogPoImpl.class, 96L);
+			result = commonDaoImpl.find(DogPoImpl.class, 96L);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -295,14 +288,14 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 	// 1000 times: 1291 mills.
 	// verified: ok
 	public void findAll() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		List<DogPoImpl> result = null;
 		int count = 1;
 
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = commonDaoSupporter.find(DogPoImpl.class);
+			result = commonDaoImpl.find(DogPoImpl.class);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -317,7 +310,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 	// 1000 times: 977 mills.
 	// 1000 times: 978 mills.
 	public void findDog() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		final String ID = "TEST_DOG917751";
 		DogPoImpl result = null;
@@ -357,8 +350,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 		//
 		params.put("id", id);
 		//
-		result = commonDaoSupporter.findUniqueByHql(locale, hql.toString(),
-				params);
+		result = commonDaoImpl.findUniqueByHql(locale, hql.toString(), params);
 		//
 		return result;
 	}
@@ -366,7 +358,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 	@Test
 	// verified: ok
 	public void update() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		final String ID = "TEST_DOG889474";
 		//
@@ -382,9 +374,8 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 		int count = 1;
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = commonDaoSupporter.update(dogPo);
-			System.out.println("#" + i + " update: "
-					+ (result > 0 ? "[success]" : "[fail]"));
+			result = commonDaoImpl.update(dogPo);
+			System.out.println("#" + i + " update: " + (result > 0 ? "[success]" : "[fail]"));
 			System.out.println("version: " + dogPo.getVersion());
 			assertTrue(result > 0);
 		}
@@ -396,7 +387,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 
 	@Test
 	public void updateNonUniqueObjectException() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		final String ID = "TEST_DOG";
 
@@ -409,9 +400,8 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 			anotherDogPo.getNames().clear();
 			//
 			// org.hibernate.NonUniqueObjectException
-			int update = commonDaoSupporter.update(anotherDogPo);
-			System.out.println("update: "
-					+ (update > 0 ? "[success]" : "[fail]"));
+			int update = commonDaoImpl.update(anotherDogPo);
+			System.out.println("update: " + (update > 0 ? "[success]" : "[fail]"));
 			System.out.println(update);
 		} else {
 			System.out.println("nothing to update: " + anotherDogPo);
@@ -421,12 +411,12 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 	@Test
 	// verified: ok
 	public void delete() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		final String ID = "TEST_DOG917751";
 		//
 		DogPoImpl dogPo = mockFindDog(ID);
-		int result = commonDaoSupporter.delete(dogPo);
+		int result = commonDaoImpl.delete(dogPo);
 		System.out.println("delete: " + (result > 0 ? "[success]" : "[fail]"));
 		System.out.println(result);
 		assertTrue(result > 0);
@@ -434,23 +424,21 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 
 	@Test
 	public void deleteBySeqs() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		Collection<Serializable> values = new LinkedList<Serializable>();
 		values.add(1L);
 		values.add(3L);
 		values.add(5L);
-		List<DogPoImpl> result = commonDaoSupporter.delete(DogPoImpl.class,
-				values);
-		System.out.println("delete: "
-				+ (result.size() > 0 ? "[success]" : "[fail]"));
+		List<DogPoImpl> result = commonDaoImpl.delete(DogPoImpl.class, values);
+		System.out.println("delete: " + (result.size() > 0 ? "[success]" : "[fail]"));
 		System.out.println(result);
 		assertTrue(result.size() > 0);
 	}
 
 	@Test
 	public void deleteNonUniqueObjectException() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		final String ID = "TEST_DOG";
 		//
@@ -461,9 +449,8 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 			System.out.println("anotherDogPo seq: " + anotherDogPo.getSeq());
 			//
 			// org.hibernate.NonUniqueObjectException
-			int delete = commonDaoSupporter.delete(anotherDogPo);
-			System.out.println("delete: "
-					+ (delete > 0 ? "[success]" : "[fail]"));
+			int delete = commonDaoImpl.delete(anotherDogPo);
+			System.out.println("delete: " + (delete > 0 ? "[success]" : "[fail]"));
 			System.out.println(delete);
 		} else {
 			System.out.println("nothing to delete: " + anotherDogPo);
@@ -477,14 +464,14 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 	// 1000 times: 700 mills.
 	// verified: ok
 	public void rowCount() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		long result = 0;
 
 		int count = 1;
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = commonDaoSupporter.rowCount(DogPoImpl.class);
+			result = commonDaoImpl.rowCount(DogPoImpl.class);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -501,7 +488,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 	// 10000 times: 9076 mills.
 	// verified: ok
 	public void findByHql() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		final String ID = "TEST";
 
@@ -521,7 +508,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 		int count = 1000;
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = commonDaoSupporter.findByHql(hql, params);
+			result = commonDaoImpl.findByHql(null, null, hql.toString(), params);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -532,9 +519,9 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 
 	@Test
 	public void reindex() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
-		commonDaoSupporter.reindex(DogPoImpl.class);
+		commonDaoImpl.reindex(DogPoImpl.class);
 	}
 
 	@Test
@@ -545,10 +532,9 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 	// 10000 times: 21268 mills.
 	// verified: ok
 	public void search() throws Exception {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
-		FullTextSession fullTextSession = Search
-				.getFullTextSession(sessionFactory.openSession());
+		FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.openSession());
 
 		// StopAnalyzer 完全相同才能找到資料,同=,無法查中文
 		// StandardAnalyzer 能找到資料,同like
@@ -571,10 +557,8 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 		// lql.append("audit:*sys*");
 		lql.append("names:*a*");
 
-		org.apache.lucene.search.Query luceneQuery = parser.parse(lql
-				.toString());
-		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
-				luceneQuery, DogPoImpl.class);
+		org.apache.lucene.search.Query luceneQuery = parser.parse(lql.toString());
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(luceneQuery, DogPoImpl.class);
 
 		//
 		List result = null;
@@ -627,8 +611,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 		assertEquals(1, names.size());
 
 		// get
-		LocaleNameEntity localeNameEntity = dogPo
-				.getNameEntry(Locale.TRADITIONAL_CHINESE);
+		LocaleNameEntity localeNameEntity = dogPo.getNameEntry(Locale.TRADITIONAL_CHINESE);
 		assertNotNull(localeNameEntity);
 
 		// getName
@@ -674,7 +657,7 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 	@Test
 	// verified: ok
 	public void insertCat() {
-		createCommonDaoSupporter();
+		createCommonDaoImpl();
 		//
 		final String ID = "TEST_CAT";
 
@@ -692,13 +675,11 @@ public class CommonDaoSupporterTest extends BaseTestSupporter {
 			catPo.addName(Locale.TRADITIONAL_CHINESE, "金吉拉");
 			catPo.addName(Locale.US, "Gin Gi La");
 
-			Serializable pk = commonDaoSupporter.insert(catPo);
-			System.out.println("insert: "
-					+ (pk != null ? "[success]" : "[fail]"));
+			Serializable pk = commonDaoImpl.insert(catPo);
+			System.out.println("insert: " + (pk != null ? "[success]" : "[fail]"));
 			assertNotNull(pk);
 
-			CatPoImpl existCat = commonDaoSupporter.find(CatPoImpl.class,
-					catPo.getSeq());
+			CatPoImpl existCat = commonDaoImpl.find(CatPoImpl.class, catPo.getSeq());
 			assertEquals(catPo.getId(), existCat.getId());
 		}
 		long end = System.currentTimeMillis();
