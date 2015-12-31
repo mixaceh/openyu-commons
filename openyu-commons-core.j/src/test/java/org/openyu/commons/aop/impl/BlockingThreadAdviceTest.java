@@ -13,6 +13,7 @@ import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class BlockingThreadAdviceTest extends BaseTestSupporter {
+
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
@@ -20,16 +21,15 @@ public class BlockingThreadAdviceTest extends BaseTestSupporter {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		applicationContext = new ClassPathXmlApplicationContext(new String[] {
-				"applicationContext-init.xml",//
-				"org/openyu/commons/service/applicationContext-service.xml",//
-				"org/openyu/commons/thread/testContext-thread.xml",//
+		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
+				"applicationContext-init.xml", //
+				"org/openyu/commons/service/applicationContext-service.xml", //
+				"org/openyu/commons/thread/testContext-thread.xml", //
 				"org/openyu/commons/aop/applicationContext-aop.xml",//
 
 		});
 
-		blockingThreadAdvice = (BlockingThreadAdvice) applicationContext
-				.getBean("blockingThreadAdvice");
+		blockingThreadAdvice = (BlockingThreadAdvice) applicationContext.getBean("blockingThreadAdvice");
 	}
 
 	@Test
@@ -37,7 +37,6 @@ public class BlockingThreadAdviceTest extends BaseTestSupporter {
 	public void blockingThreadAdvice() {
 		System.out.println(blockingThreadAdvice);
 		assertNotNull(blockingThreadAdvice);
-		applicationContext.close();
 	}
 
 }
