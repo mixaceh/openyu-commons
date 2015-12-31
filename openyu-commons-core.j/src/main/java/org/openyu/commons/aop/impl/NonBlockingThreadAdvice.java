@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Qualifier;
-import org.openyu.commons.aop.supporter.BaseMethodInterceptorSupporter;
+import org.openyu.commons.aop.supporter.BaseAroundAdviceSupporter;
 import org.openyu.commons.thread.ThreadService;
 import org.openyu.commons.thread.anno.DefaultThreadService;
 
@@ -18,7 +18,7 @@ import org.openyu.commons.thread.anno.DefaultThreadService;
  *
  * 缺點:無法有傳回值,無法有順序執行
  */
-public class NonBlockingThreadAdvice extends BaseMethodInterceptorSupporter {
+public class NonBlockingThreadAdvice extends BaseAroundAdviceSupporter {
 
 	private static final long serialVersionUID = -2697604382610079339L;
 
@@ -39,14 +39,14 @@ public class NonBlockingThreadAdvice extends BaseMethodInterceptorSupporter {
 	public NonBlockingThreadAdvice() {
 	}
 
-	protected Object doInvoke(final MethodInvocation methodInvocation) throws Throwable {
+	protected Object doInvoke(final MethodInvocation invocation) throws Throwable {
 		Object result = null;
 		//
 		threadService.submit(new Runnable() {
 			public void run() {
 				// --------------------------------------------------
 				try {
-					methodInvocation.proceed();
+					invocation.proceed();
 				} catch (Throwable e) {
 					LOGGER.error(new StringBuilder("Exception encountered during run()").toString(), e);
 				}

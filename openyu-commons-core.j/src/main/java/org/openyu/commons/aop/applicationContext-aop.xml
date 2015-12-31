@@ -9,12 +9,41 @@
 
 	<!-- advice supporter -->
 	<bean
-		id="baseMethodInterceptorSupporter"
+		id="baseBeforeAdviceSupporter"
+		class="org.openyu.commons.aop.supporter.BaseBeforeAdviceSupporter"
 		abstract="true"
-		class="org.openyu.commons.aop.supporter.BaseMethodInterceptorSupporter"
 		parent="baseServiceSupporter">
 	</bean>
 
+	<bean
+		id="baseAroundAdviceSupporter"
+		class="org.openyu.commons.aop.supporter.BaseAroundAdviceSupporter"
+		abstract="true"
+		parent="baseServiceSupporter">
+	</bean>
+
+	<bean
+		id="baseAfterAdviceSupporter"
+		class="org.openyu.commons.aop.supporter.BaseAfterAdviceSupporter"
+		abstract="true"
+		parent="baseServiceSupporter">
+	</bean>
+
+	<bean
+		id="baseAfterReturningAdviceSupporter"
+		class="org.openyu.commons.aop.supporter.BaseAfterReturningAdviceSupporter"
+		abstract="true"
+		parent="baseServiceSupporter">
+	</bean>
+
+	<bean
+		id="baseAfterThrowingAdviceSupporter"
+		class="org.openyu.commons.aop.supporter.BaseAfterThrowingAdviceSupporter"
+		abstract="true"
+		parent="baseServiceSupporter">
+	</bean>	
+
+	<!-- advice -->
 	<bean
 		id="debugAdvice"
 		class="org.springframework.aop.interceptor.DebugInterceptor" />
@@ -25,13 +54,11 @@
 	<bean
 		id="blockingThreadAdvice"
 		class="org.openyu.commons.aop.impl.BlockingThreadAdvice"
-		parent="baseMethodInterceptorSupporter">
-	</bean>
+		parent="baseAroundAdviceSupporter" />
 
 	<bean
 		id="nonBlockingThreadAdvice"
 		class="org.openyu.commons.aop.impl.NonBlockingThreadAdvice"
-		parent="baseMethodInterceptorSupporter">
-	</bean>
+		parent="baseAroundAdviceSupporter" />
 
 </beans>

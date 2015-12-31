@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Qualifier;
-import org.openyu.commons.aop.supporter.BaseMethodInterceptorSupporter;
+import org.openyu.commons.aop.supporter.BaseAroundAdviceSupporter;
 import org.openyu.commons.thread.ThreadService;
 import org.openyu.commons.thread.anno.BlockingThreadService;
 
@@ -19,11 +19,10 @@ import org.openyu.commons.thread.anno.BlockingThreadService;
  *
  * 缺點:會block等待,執行結束後,才會繼續往下走
  */
-public class BlockingThreadAdvice extends BaseMethodInterceptorSupporter {
+public class BlockingThreadAdvice extends BaseAroundAdviceSupporter {
 
 	private static final long serialVersionUID = -6718879850739838005L;
 
-	/** The Constant log. */
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(BlockingThreadAdvice.class);
 
 	/**
@@ -36,7 +35,7 @@ public class BlockingThreadAdvice extends BaseMethodInterceptorSupporter {
 	}
 
 	@Override
-	protected Object doInvoke(final MethodInvocation methodInvocation) throws Throwable {
+	protected Object doInvoke(final MethodInvocation invocation) throws Throwable {
 		Object result = null;
 		//
 		Future<?> future = threadService.submit(new Callable<Object>() {
@@ -45,7 +44,7 @@ public class BlockingThreadAdvice extends BaseMethodInterceptorSupporter {
 				Object obj = null;
 				try {
 					// --------------------------------------------------
-					obj = methodInvocation.proceed();
+					obj = invocation.proceed();
 					// --------------------------------------------------
 				} catch (Throwable e) {
 					LOGGER.error(new StringBuilder("Exception encountered during call()").toString(), e);
