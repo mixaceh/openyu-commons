@@ -2,19 +2,16 @@ package org.openyu.commons.aop.supporter;
 
 import java.lang.reflect.Method;
 
-import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openyu.commons.aop.BaseAfterReturningAdvice;
-import org.openyu.commons.aop.BaseAroundAdvice;
-import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
 /**
  * 可在proceed後, 處理其他邏輯
  */
 public abstract class BaseAfterReturningAdviceSupporter extends BaseServiceSupporter
-		implements BaseAfterReturningAdvice, Supporter {
+		implements BaseAfterReturningAdvice {
 
 	private static final long serialVersionUID = -8066663886070767001L;
 
@@ -46,9 +43,8 @@ public abstract class BaseAfterReturningAdviceSupporter extends BaseServiceSuppo
 					.toString());
 			doAfterReturning(returnValue, method, args, target);
 		} catch (Throwable e) {
-			LOGGER.error(
-					new StringBuilder("Exception encountered during [After returing advice] afterReturning()").toString(),
-					e);
+			LOGGER.error(new StringBuilder("Exception encountered during [After returing advice] afterReturning()")
+					.toString(), e);
 		}
 	}
 

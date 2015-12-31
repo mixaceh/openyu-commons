@@ -4,13 +4,12 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openyu.commons.aop.BaseAroundAdvice;
-import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
 /**
  * 可在proceed前後, 處理其他邏輯
  */
-public abstract class BaseAroundAdviceSupporter extends BaseServiceSupporter implements BaseAroundAdvice, Supporter {
+public abstract class BaseAroundAdviceSupporter extends BaseServiceSupporter implements BaseAroundAdvice {
 
 	private static final long serialVersionUID = -8066663886070767001L;
 

@@ -5,13 +5,12 @@ import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openyu.commons.aop.BaseBeforeAdvice;
-import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
 /**
  * 可在proceed前, 處理其他邏輯
  */
-public abstract class BaseBeforeAdviceSupporter extends BaseServiceSupporter implements BaseBeforeAdvice, Supporter {
+public abstract class BaseBeforeAdviceSupporter extends BaseServiceSupporter implements BaseBeforeAdvice {
 
 	private static final long serialVersionUID = 7452564549990187991L;
 

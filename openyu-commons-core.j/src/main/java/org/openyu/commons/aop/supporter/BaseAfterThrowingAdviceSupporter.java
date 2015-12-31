@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.openyu.commons.aop.BaseAfterAdvice;
-import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
 /**
@@ -14,7 +13,7 @@ import org.openyu.commons.service.supporter.BaseServiceSupporter;
  * 利用Around advice, 使用MethodInterceptor來實作
  */
 public abstract class BaseAfterThrowingAdviceSupporter extends BaseServiceSupporter
-		implements BaseAfterAdvice, MethodInterceptor, Supporter {
+		implements BaseAfterAdvice, MethodInterceptor {
 
 	private static final long serialVersionUID = -6387285760375785973L;
 
@@ -50,12 +49,12 @@ public abstract class BaseAfterThrowingAdviceSupporter extends BaseServiceSuppor
 					e);
 			//
 			try {
-				LOGGER.info(new StringBuilder().append("[After throwing advice] afterThrowing ").append(getDisplayName())
-						.toString());
+				LOGGER.info(new StringBuilder().append("[After throwing advice] afterThrowing ")
+						.append(getDisplayName()).toString());
 				doAfterThrowing(invocation);
 			} catch (Throwable e2) {
-				LOGGER.error(new StringBuilder("Exception encountered during [After throwing advice] afterThrowing()").toString(),
-						e2);
+				LOGGER.error(new StringBuilder("Exception encountered during [After throwing advice] afterThrowing()")
+						.toString(), e2);
 			}
 			//
 			throw e;
