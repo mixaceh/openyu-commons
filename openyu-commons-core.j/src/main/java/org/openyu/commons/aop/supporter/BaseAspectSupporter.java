@@ -22,6 +22,8 @@ import org.slf4j.LoggerFactory;
  */
 public class BaseAspectSupporter extends BaseServiceSupporter implements BaseAspect {
 
+	private static final long serialVersionUID = 409601014664078042L;
+
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(BaseAspectSupporter.class);
 
 	public BaseAspectSupporter() {
