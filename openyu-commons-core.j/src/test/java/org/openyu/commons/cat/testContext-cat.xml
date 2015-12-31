@@ -29,5 +29,10 @@
 		id="catLogService"
 		class="org.openyu.commons.cat.service.impl.CatLogServiceImpl"
 		parent="logServiceSupporter" />
+		
+	<!-- cat aspect -->
+	<bean
+		id="catAspect"
+		class="org.openyu.commons.cat.aop.CatAspect" />
 
 </beans>

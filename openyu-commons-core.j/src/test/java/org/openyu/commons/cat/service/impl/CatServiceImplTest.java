@@ -10,6 +10,7 @@ import java.util.Locale;
 import org.junit.Test;
 import org.openyu.commons.cat.CatTestSupporter;
 import org.openyu.commons.cat.vo.impl.CatImpl;
+import org.openyu.commons.thread.ThreadHelper;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 
@@ -58,9 +59,7 @@ public class CatServiceImplTest extends CatTestSupporter {
 	 * 
 	 * insert會真正寫入db
 	 * 
-	 * update會真正寫入db
-[	 * 
-	 * delete會真正寫入db
+	 * update會真正寫入db [ * delete會真正寫入db
 	 * 
 	 * 效率會比dao慢
 	 */
@@ -95,7 +94,7 @@ public class CatServiceImplTest extends CatTestSupporter {
 	}
 
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 0, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	// round: 0.09 [+- 0.09], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 1, GC.time: 0.01, time.total: 0.88, time.warmup: 0.00,
 	// time.bench: 0.88
@@ -110,5 +109,24 @@ public class CatServiceImplTest extends CatTestSupporter {
 		CatImpl foundEntity = catService.find(CatImpl.class, cat.getSeq());
 		printFind(foundEntity);
 		assertCat(cat, foundEntity);
+	}
+
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	// pointcut=>class
+	// round: 1.47 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 1, GC.time: 0.06, time.total: 1.47, time.warmup: 0.00,
+	// time.bench: 1.47
+
+	// pointcut=>insterface
+	// round: 1.37 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 1, GC.time: 0.03, time.total: 1.37, time.warmup: 0.00,
+	// time.bench: 1.37
+	public void insertCat() {
+		CatImpl cat = randomCat();
+		// 有CatAspect處理log
+		catService.insertCat(cat);
+		//
+		ThreadHelper.sleep(3 * 1000);
 	}
 }
