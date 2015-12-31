@@ -26,23 +26,23 @@ public class CatAspect extends BaseAspectSupporter {
 
 	}
 
-	@Around("execution(public * org.openyu.commons.cat.service.CatService.insertCat*(..))")
-	public void recordInsert(ProceedingJoinPoint joinPoint) throws Throwable {
-		System.out.println("recordInsertCat() is running!");
+	@Around("execution(public * org.openyu.commons.cat.service.CatService.insertCat(..))")
+	public Object recordInsert(ProceedingJoinPoint joinPoint) throws Throwable {
+		System.out.println("recordInsert() is running!");
 		System.out.println("hijacked method : " + joinPoint.getSignature().getName());
 		System.out.println("hijacked arguments : " + Arrays.toString(joinPoint.getArgs()));
 
 		System.out.println("Around before is running!");
-		
-		joinPoint.proceed(); // continue on the intercepted method
-		
+		//
+		Object result = joinPoint.proceed(); // continue on the intercepted
+												// method
+		//
 		System.out.println("Around after is running!");
-
-		System.out.println("******");
-
 		// log
 		CatImpl cat = (CatImpl) joinPoint.getArgs()[0];
 		catLogService.recordInsert(cat.getId());
+		//
+		return result;
 	}
 
 }

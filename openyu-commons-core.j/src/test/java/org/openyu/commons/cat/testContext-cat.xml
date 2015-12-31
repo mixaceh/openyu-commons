@@ -35,4 +35,19 @@
 		id="catAspect"
 		class="org.openyu.commons.cat.aop.CatAspect" />
 
+	<!-- cat advice -->
+	<bean
+		id="catInsertAdvice"
+		class="org.openyu.commons.cat.aop.CatInsertAdvice" />
+		
+	<aop:config>
+		<aop:pointcut
+			id="catInsertPointcut"
+			expression="execution(public * org.openyu.commons.cat.service.CatService.insertCat2(..))" />
+		<aop:advisor
+			id="catInsertAdvisor"
+			advice-ref="catInsertAdvice"
+			pointcut-ref="catInsertPointcut" />
+	</aop:config>
+
 </beans>

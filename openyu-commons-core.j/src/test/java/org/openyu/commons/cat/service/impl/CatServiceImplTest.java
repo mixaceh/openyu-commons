@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.Serializable;
 import java.util.Locale;
 
+import org.aspectj.lang.annotation.Aspect;
 import org.junit.Test;
 import org.openyu.commons.cat.CatTestSupporter;
 import org.openyu.commons.cat.vo.impl.CatImpl;
@@ -95,9 +96,10 @@ public class CatServiceImplTest extends CatTestSupporter {
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	// round: 0.09 [+- 0.09], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
-	// 0.00], GC.calls: 1, GC.time: 0.01, time.total: 0.88, time.warmup: 0.00,
-	// time.bench: 0.88
+	// no aop
+	// round: 1.45 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 1.45, time.warmup: 0.00,
+	// time.bench: 1.45
 	public void insert() {
 		// 隨機
 		CatImpl cat = randomCat();
@@ -105,14 +107,18 @@ public class CatServiceImplTest extends CatTestSupporter {
 		Serializable pk = catService.insert(cat);
 		printInsert(pk);
 		assertNotNull(pk);
+		//
+		// CatImpl foundEntity = catService.find(CatImpl.class, cat.getSeq());
+		// printFind(foundEntity);
+		// assertCat(cat, foundEntity);
 
-		CatImpl foundEntity = catService.find(CatImpl.class, cat.getSeq());
-		printFind(foundEntity);
-		assertCat(cat, foundEntity);
+		//
+		ThreadHelper.sleep(3 * 1000);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	// @Aspect
 	// pointcut=>class
 	// round: 1.47 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 1, GC.time: 0.06, time.total: 1.47, time.warmup: 0.00,
@@ -124,8 +130,25 @@ public class CatServiceImplTest extends CatTestSupporter {
 	// time.bench: 1.37
 	public void insertCat() {
 		CatImpl cat = randomCat();
-		// 有CatAspect處理log
-		catService.insertCat(cat);
+		// CatAspect處理log
+		Serializable pk = catService.insertCat(cat);
+		printInsert(pk);
+		assertNotNull(pk);
+		//
+		ThreadHelper.sleep(3 * 1000);
+	}
+
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	// round: 1.56 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 1.56, time.warmup: 0.00,
+	// time.bench: 1.56
+	public void insertCat2() {
+		CatImpl cat = randomCat();
+		// CatInsertAdvice處理log
+		Serializable pk = catService.insertCat2(cat);
+		printInsert(pk);
+		assertNotNull(pk);
 		//
 		ThreadHelper.sleep(3 * 1000);
 	}

@@ -9,4 +9,6 @@ public interface CatService extends CommonService {
 
 	Serializable insertCat(CatImpl cat);
 
+	Serializable insertCat2(CatImpl cat);
+
 }

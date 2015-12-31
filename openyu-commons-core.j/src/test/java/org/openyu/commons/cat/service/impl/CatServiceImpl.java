@@ -40,4 +40,10 @@ public class CatServiceImpl extends CommonServiceSupporter implements CatService
 		return insert(cat);
 	}
 
+	@CommonTx
+	@Override
+	public Serializable insertCat2(CatImpl cat) {
+		return insert(cat);
+	}
+
 }
