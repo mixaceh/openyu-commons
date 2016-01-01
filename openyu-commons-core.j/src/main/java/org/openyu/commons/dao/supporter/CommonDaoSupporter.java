@@ -135,7 +135,7 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 	public <T> List<T> find(Class<?> entityClass) {
 		List<T> result = new LinkedList<T>();
 		try {
-			result = (List<T>) getHibernateTemplate().loadAll(entityClass);
+			result = (List<T>) hibernateTemplate.loadAll(entityClass);
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
@@ -216,7 +216,7 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 
 			// 使用load, 若讀不到資料時會報ObjectNotFoundException
 			// 使用get, 若讀不到資料則傳回null
-			result = (T) getHibernateTemplate().load(entityClass, seq);
+			result = (T) hibernateTemplate.load(entityClass, seq);
 		} catch (Exception ex) {
 			// throw new CommonDaoException(ex);
 		}
@@ -279,7 +279,7 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 	public <T> T findUniqueByHql(final Locale locale, final String hqlString, final Map<String, Object> params) {
 		T result = null;
 		try {
-			result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<T>() {
+			result = hibernateTemplate.executeWithNativeSession(new HibernateCallback<T>() {
 				@SuppressWarnings("unchecked")
 				public T doInHibernate(Session session) throws HibernateException {
 					Query query = session.createQuery(hqlString);
@@ -339,7 +339,7 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 		List<T> result = new LinkedList<T>();
 		try {
 			if (inquiry == null) {
-				result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<T>>() {
+				result = hibernateTemplate.executeWithNativeSession(new HibernateCallback<List<T>>() {
 					public List<T> doInHibernate(Session session) throws HibernateException {
 						Query query = session.createQuery(hqlString);
 						cacheQuery(query);
@@ -357,7 +357,7 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 				// 處理排序
 				processSort(inquiry, buff);
 				//
-				result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<T>>() {
+				result = hibernateTemplate.executeWithNativeSession(new HibernateCallback<List<T>>() {
 					public List<T> doInHibernate(Session session) throws HibernateException {
 						Query query = session.createQuery(buff.toString());
 						cacheQuery(query);
@@ -464,7 +464,7 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 		List<T> result = new LinkedList<T>();
 		try {
 			if (inquiry == null) {
-				result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<T>>() {
+				result = hibernateTemplate.executeWithNativeSession(new HibernateCallback<List<T>>() {
 					public List<T> doInHibernate(Session session) throws HibernateException {
 						SQLQuery query = session.createSQLQuery(sqlString);
 						cacheQuery(query);
@@ -482,7 +482,7 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 				// 處理排序
 				processSort(inquiry, buff);
 				//
-				result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<T>>() {
+				result = hibernateTemplate.executeWithNativeSession(new HibernateCallback<List<T>>() {
 					public List<T> doInHibernate(Session session) throws HibernateException {
 						SQLQuery query = session.createSQLQuery(buff.toString());
 						cacheQuery(query);
@@ -537,7 +537,7 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 		List<T> result = new LinkedList<T>();
 		//
 		try {
-			result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<List<T>>() {
+			result = hibernateTemplate.executeWithNativeSession(new HibernateCallback<List<T>>() {
 				public List<T> doInHibernate(Session session) throws HibernateException {
 					if (inquiry == null) {
 						FullTextQuery fullTextQuery = createFullTextQuery(session, luceneQuery, entities);
@@ -658,7 +658,7 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 			}
 			// System.out.println("rowCount:" + hqlBuffer.toString());
 
-			result = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Long>() {
+			result = hibernateTemplate.executeWithNativeSession(new HibernateCallback<Long>() {
 				public Long doInHibernate(Session session) throws HibernateException {
 					Query query = session.createQuery(hqlBuffer.toString());
 					cacheQuery(query);
@@ -688,7 +688,7 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 		try {
 			final String sQLProcessed = sqlString.replaceFirst("select\\s+(?:.*)\\s+from", "SELECT COUNT(1) from");
 
-			Long buff = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Long>() {
+			Long buff = hibernateTemplate.executeWithNativeSession(new HibernateCallback<Long>() {
 				public Long doInHibernate(Session session) throws HibernateException {
 					SQLQuery query = session.createSQLQuery(sQLProcessed);
 					cacheQuery(query);
@@ -753,8 +753,8 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 				// });
 				// result = safeGet(buff);
 
-				getHibernateTemplate().setCheckWriteOperations(false);
-				getHibernateTemplate().saveOrUpdate(entity);
+				hibernateTemplate.setCheckWriteOperations(false);
+				hibernateTemplate.saveOrUpdate(entity);
 				result = 1;
 			}
 			//
@@ -801,8 +801,8 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 				}
 			}
 			// 20140926
-			getHibernateTemplate().setCheckWriteOperations(false);
-			result = getHibernateTemplate().save(entity);
+			hibernateTemplate.setCheckWriteOperations(false);
+			result = hibernateTemplate.save(entity);
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
@@ -831,8 +831,14 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 		int result = 0;
 		try {
 			// 2014/09/26
-			getHibernateTemplate().setCheckWriteOperations(false);
-			getHibernateTemplate().update(entity);
+			hibernateTemplate.setCheckWriteOperations(false);
+			// org.springframework.dao.DuplicateKeyException: A different object
+			// with the same identifier value was already associated with the
+			// session
+			// hibernateTemplate.update(entity);
+
+			// #fix
+			hibernateTemplate.merge(entity);
 			result = 1;
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
@@ -890,8 +896,8 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 			// result = safeGet(buff);
 
 			// 20140926
-			getHibernateTemplate().setCheckWriteOperations(false);
-			getHibernateTemplate().delete(entity);
+			hibernateTemplate.setCheckWriteOperations(false);
+			hibernateTemplate.delete(entity);
 			result = 1;
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
@@ -1012,7 +1018,7 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 				hql.append(entityClass.getName());
 				hql.append(" ENTITY");
 				// System.out.println(hql);
-				Long buff = getHibernateTemplate().executeWithNativeSession(new HibernateCallback<Long>() {
+				Long buff = hibernateTemplate.executeWithNativeSession(new HibernateCallback<Long>() {
 					public Long doInHibernate(Session session) throws HibernateException {
 						Query query = session.createQuery(hql.toString());
 						cacheQuery(query);
