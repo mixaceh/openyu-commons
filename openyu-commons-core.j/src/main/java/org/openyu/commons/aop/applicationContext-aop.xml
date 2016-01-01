@@ -7,6 +7,14 @@
              http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
+	<!-- aspect supporter -->
+	<bean
+		id="baseAspectSupporter"
+		class="org.openyu.commons.aop.supporter.BaseAspectSupporter"
+		abstract="true"
+		parent="baseServiceSupporter">
+	</bean>
+		
 	<!-- advice supporter -->
 	<bean
 		id="baseBeforeAdviceSupporter"

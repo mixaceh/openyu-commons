@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.Serializable;
 import java.util.Locale;
 
-import org.aspectj.lang.annotation.Aspect;
 import org.junit.Test;
 import org.openyu.commons.cat.CatTestSupporter;
 import org.openyu.commons.cat.vo.impl.CatImpl;
@@ -140,6 +139,7 @@ public class CatServiceImplTest extends CatTestSupporter {
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	// AroundAdvice
 	// round: 1.56 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 1.56, time.warmup: 0.00,
 	// time.bench: 1.56

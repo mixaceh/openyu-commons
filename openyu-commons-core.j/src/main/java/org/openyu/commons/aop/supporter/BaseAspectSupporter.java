@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 1.此base類別不能宣告@Aspect
+ * 1.此類別不能宣告@Aspect
  * 
  * 2.不能是 super class 的方法
  * 

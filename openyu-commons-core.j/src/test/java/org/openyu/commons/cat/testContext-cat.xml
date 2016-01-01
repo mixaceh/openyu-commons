@@ -33,13 +33,15 @@
 	<!-- cat aspect -->
 	<bean
 		id="catAspect"
-		class="org.openyu.commons.cat.aop.CatAspect" />
+		class="org.openyu.commons.cat.aop.CatAspect"
+		parent="baseAspectSupporter" />
 
 	<!-- cat advice -->
 	<bean
 		id="catInsertAdvice"
-		class="org.openyu.commons.cat.aop.CatInsertAdvice" />
-		
+		class="org.openyu.commons.cat.aop.CatInsertAdvice"
+		parent="baseAroundAdviceSupporter" />
+
 	<aop:config>
 		<aop:pointcut
 			id="catInsertPointcut"

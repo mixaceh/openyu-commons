@@ -1,5 +1,6 @@
 package org.openyu.commons.cat.aop;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @Aspect
 public class CatAspect extends BaseAspectSupporter {
 
+	private static final long serialVersionUID = 2524265554035630063L;
+
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(CatAspect.class);
 
 	@Autowired
@@ -28,18 +31,23 @@ public class CatAspect extends BaseAspectSupporter {
 
 	@Around("execution(public * org.openyu.commons.cat.service.CatService.insertCat(..))")
 	public Object recordInsert(ProceedingJoinPoint joinPoint) throws Throwable {
-		System.out.println("recordInsert() is running!");
-		System.out.println("hijacked method : " + joinPoint.getSignature().getName());
-		System.out.println("hijacked arguments : " + Arrays.toString(joinPoint.getArgs()));
+		Object result = null;
+		//
+		String method = joinPoint.getSignature().getName();
+		Object[] args = joinPoint.getArgs();
+		CatImpl cat = (CatImpl) args[0];
+		//
+		System.out.println("@Aspect is running!");
+		System.out.println("method: " + method);
+		System.out.println("arguments: " + Arrays.toString(args));
 
 		System.out.println("Around before is running!");
 		//
-		Object result = joinPoint.proceed(); // continue on the intercepted
-												// method
+		result = joinPoint.proceed(); // continue on the intercepted
+										// method
 		//
 		System.out.println("Around after is running!");
 		// log
-		CatImpl cat = (CatImpl) joinPoint.getArgs()[0];
 		catLogService.recordInsert(cat.getId());
 		//
 		return result;

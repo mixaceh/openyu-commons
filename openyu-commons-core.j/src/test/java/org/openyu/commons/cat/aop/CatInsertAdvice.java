@@ -1,5 +1,8 @@
 package org.openyu.commons.cat.aop;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
 import org.aopalliance.intercept.MethodInvocation;
 import org.openyu.commons.aop.supporter.BaseAroundAdviceSupporter;
 import org.openyu.commons.cat.service.CatLogService;
@@ -20,13 +23,20 @@ public class CatInsertAdvice extends BaseAroundAdviceSupporter {
 	}
 
 	protected Object doInvoke(MethodInvocation invocation) throws Throwable {
+		Object result = null;
+		//
+		Method method= invocation.getMethod();
 		Object[] args = invocation.getArguments();
 		CatImpl cat = (CatImpl) args[0];
 		//
+		System.out.println("AroundAdvice is running!");
+		System.out.println("method: " + method.getName());
+		System.out.println("arguments: " + Arrays.toString(args));
+		//
 		System.out.println("Around before is running!");
 		//
-		Object result = invocation.proceed(); // continue on the intercepted
-												// method
+		result = invocation.proceed(); // continue on the intercepted
+										// method
 		//
 		System.out.println("Around after is running!");
 		//
