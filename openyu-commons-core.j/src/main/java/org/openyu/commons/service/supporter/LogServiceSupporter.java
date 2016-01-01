@@ -122,67 +122,6 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 		this.commonDao = commonDao;
 	}
 
-	/**
-	 * 內部啟動
-	 */
-	protected class StartCallbacker implements StartCallback {
-
-		@Override
-		public void doInAction() throws Exception {
-			//檢查設置
-			checkConfig();
-			//
-			// 建立新增佇列群
-			createInsertQueueGroup();
-			// 建立修改佇列群
-			createUpdateQueueGroup();
-			// 建立刪除佇列群
-			createDeleteQueueGroup();
-		}
-	}
-
-	/**
-	 * 內部關閉
-	 */
-	protected class ShutdownCallbacker implements ShutdownCallback {
-
-		@Override
-		public void doInAction() throws Exception {
-			if (insertQueueEnabled) {
-				insertQueueGroup.shutdown();
-			}
-			if (updateQueueEnabled) {
-				updateQueueGroup.shutdown();
-			}
-			if (deleteQueueEnabled) {
-				deleteQueueGroup.shutdown();
-			}
-		}
-	}
-
-	/**
-	 * 檢查設置
-	 * 
-	 * @throws Exception
-	 */
-	protected abstract void checkConfig() throws Exception;
-
-	/**
-	 * 內部啟動
-	 */
-	@Override
-	protected void doStart() throws Exception {
-		// move to StartCallbacker.doInAction()
-	}
-
-	/**
-	 * 內部關閉
-	 */
-	@Override
-	protected void doShutdown() throws Exception {
-		// move to ShutdownCallbacker.doInAction()
-	}
-
 	public long getInsertQueueListenMills() {
 		return insertQueueListenMills;
 	}
@@ -253,6 +192,67 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 
 	public void setDeleteQueueSize(int deleteQueueSize) {
 		this.deleteQueueSize = deleteQueueSize;
+	}
+
+	/**
+	 * 內部啟動
+	 */
+	protected class StartCallbacker implements StartCallback {
+
+		@Override
+		public void doInAction() throws Exception {
+			// 檢查設置
+			checkConfig();
+			//
+			// 建立新增佇列群
+			createInsertQueueGroup();
+			// 建立修改佇列群
+			createUpdateQueueGroup();
+			// 建立刪除佇列群
+			createDeleteQueueGroup();
+		}
+	}
+
+	/**
+	 * 內部關閉
+	 */
+	protected class ShutdownCallbacker implements ShutdownCallback {
+
+		@Override
+		public void doInAction() throws Exception {
+			if (insertQueueEnabled) {
+				insertQueueGroup.shutdown();
+			}
+			if (updateQueueEnabled) {
+				updateQueueGroup.shutdown();
+			}
+			if (deleteQueueEnabled) {
+				deleteQueueGroup.shutdown();
+			}
+		}
+	}
+
+	/**
+	 * 檢查設置
+	 * 
+	 * @throws Exception
+	 */
+	protected abstract void checkConfig() throws Exception;
+
+	/**
+	 * 內部啟動
+	 */
+	@Override
+	protected void doStart() throws Exception {
+		// move to StartCallbacker.doInAction()
+	}
+
+	/**
+	 * 內部關閉
+	 */
+	@Override
+	protected void doShutdown() throws Exception {
+		// move to ShutdownCallbacker.doInAction()
 	}
 
 	/**
@@ -328,6 +328,38 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 	}
 
 	/**
+	 * hdl查詢所有資料, = findAll
+	 * 
+	 * @param entityClass
+	 */
+	@Override
+	public <E> List<E> find(Class<?> entityClass) {
+		return commonDao.find(entityClass);
+	}
+
+	/**
+	 * hql查詢單筆pk資料
+	 * 
+	 * @param entityClass
+	 * @param seq
+	 */
+	@Override
+	public <T> T find(Class<?> entityClass, Serializable seq) {
+		return commonDao.find(entityClass, seq);
+	}
+
+	/**
+	 * hql查詢多筆pk資料
+	 * 
+	 * @param entityClass
+	 * @param seqs
+	 */
+	@Override
+	public <E> List<E> find(Class<?> entityClass, Collection<Serializable> seqs) {
+		return commonDao.find(entityClass, seqs);
+	}
+
+	/**
 	 * 新增佇列
 	 */
 	protected class InsertQueue<E> extends LoopQueueSupporter<E> {
@@ -347,8 +379,8 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 	 * @param e
 	 */
 	@LogTx
-	public <E> void insert(E e) {
-		commonDao.insert(e);
+	public <T> Serializable insert(T entity) {
+		return commonDao.insert(entity);
 	}
 
 	/**
@@ -371,8 +403,8 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 	 * @param e
 	 */
 	@LogTx
-	public <E> void update(E e) {
-		commonDao.update(e);
+	public <T> int update(T entity) {
+		return commonDao.update(entity);
 	}
 
 	/**
@@ -395,8 +427,8 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 	 * @param e
 	 */
 	@LogTx
-	public <E> void delete(E e) {
-		commonDao.delete(e);
+	public <T> int delete(T entity) {
+		return commonDao.delete(entity);
 	}
 
 	/**
@@ -411,7 +443,7 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 		if (this.insertQueueEnabled) {
 			result = insertQueueGroup.offer(entity);
 		} else {
-			Serializable pk = commonDao.insert(entity);
+			Serializable pk = insert(entity);
 			if (pk != null) {
 				result = true;
 			}
@@ -432,7 +464,7 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 		if (this.updateQueueEnabled) {
 			result = updateQueueGroup.offer(entity);
 		} else {
-			int updated = commonDao.update(entity);
+			int updated = update(entity);
 			if (updated > 0) {
 				result = true;
 			}
@@ -453,7 +485,7 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 		if (this.deleteQueueEnabled) {
 			result = deleteQueueGroup.offer(entity);
 		} else {
-			int deleted = commonDao.delete(entity);
+			int deleted = delete(entity);
 			if (deleted > 0) {
 				result = true;
 			}
@@ -505,5 +537,4 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 		}
 		return result;
 	}
-
 }

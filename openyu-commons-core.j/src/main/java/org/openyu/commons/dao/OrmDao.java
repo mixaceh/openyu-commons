@@ -14,7 +14,7 @@ public interface OrmDao extends BaseDao {
 	// ------------------------------------
 	// List find(Class entity);
 	/**
-	 * 查詢所有資料, = findAll
+	 * hql查詢所有資料, = findAll
 	 * 
 	 * @param entityClass
 	 */
@@ -28,7 +28,7 @@ public interface OrmDao extends BaseDao {
 	 * @param entityClass
 	 * @param seq
 	 */
-	<T> T find(Class<?> entityClass, Serializable seq); // id=pk
+	<T> T find(Class<?> entityClass, Serializable seq);
 
 	/**
 	 * hql查詢多筆pk資料

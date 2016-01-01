@@ -10,6 +10,60 @@ import java.util.List;
 public interface LogService extends BaseService {
 
 	// ------------------------------------
+	// 同步操作
+	// ------------------------------------
+	/**
+	 * hwl查詢所有資料, = findAll
+	 * 
+	 * @param entityClass
+	 */
+	<E> List<E> find(Class<?> entityClass);
+
+	/**
+	 * hql查詢單筆pk資料
+	 * 
+	 * @param entityClass
+	 * @param seq
+	 */
+	<T> T find(Class<?> entityClass, Serializable seq);
+
+	/**
+	 * hql查詢多筆pk資料
+	 * 
+	 * @param entityClass
+	 * @param seqs
+	 */
+	<E> List<E> find(Class<?> entityClass, Collection<Serializable> seqs);
+
+	/**
+	 * orm新增
+	 * 
+	 * =save()
+	 * 
+	 * @param entity
+	 * @return pk
+	 */
+	<T> Serializable insert(T entity);
+
+	/**
+	 * orm修改
+	 * 
+	 * =update()
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	<T> int update(T entity);
+
+	/**
+	 * orm刪除
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	<T> int delete(T entity);
+
+	// ------------------------------------
 	// 異步操作
 	// ------------------------------------
 	/**
@@ -66,4 +120,5 @@ public interface LogService extends BaseService {
 	 * @return the list
 	 */
 	List<Boolean> offerDelete(Class<?> entityClass, Collection<Serializable> seqs);
+
 }

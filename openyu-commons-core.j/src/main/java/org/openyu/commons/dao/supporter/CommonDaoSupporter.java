@@ -127,7 +127,7 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 	// --------------------------------------------------
 
 	/**
-	 * 查詢所有資料, = findAll
+	 * hql查詢所有資料, = findAll
 	 * 
 	 * @param entityClass
 	 */
