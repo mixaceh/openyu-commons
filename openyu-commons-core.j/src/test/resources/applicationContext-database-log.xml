@@ -109,14 +109,15 @@
 	-->
 
 	<tx:annotation-driven transaction-manager="logTx" />
-
+	
+	<!-- dao supporter -->
 	<bean
 		id="logDaoSupporter"
 		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
 		abstract="true"
 		p:hibernateTemplate-ref="logHibernateTemplate" />
 
-	<!-- log service supporter -->
+	<!-- service supporter -->
 	<bean
 		id="logServiceSupporter"
 		class="org.openyu.commons.service.supporter.LogServiceSupporter"

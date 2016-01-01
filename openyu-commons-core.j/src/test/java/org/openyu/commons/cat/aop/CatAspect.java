@@ -1,6 +1,5 @@
 package org.openyu.commons.cat.aop;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import org.aspectj.lang.ProceedingJoinPoint;

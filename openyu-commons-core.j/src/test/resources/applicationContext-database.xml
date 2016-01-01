@@ -113,7 +113,8 @@
 		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
 		p:sessionFactory-ref="sessionFactory" />
 	-->
-
+	
+	<!-- dao supporter -->
 	<bean
 		id="commonDaoSupporter"
 		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
@@ -123,8 +124,8 @@
 	<!-- service supporter -->
 	<bean
 		id="commonServiceSupporter"
+		class="org.openyu.commons.service.supporter.CommonServiceSupporter"
 		parent="baseServiceSupporter"
-		abstract="true"
-		class="org.openyu.commons.service.supporter.CommonServiceSupporter" />
+		abstract="true" />
 
 </beans>

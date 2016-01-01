@@ -43,7 +43,7 @@ public class CatLogServiceImpl extends LogServiceSupporter implements CatLogServ
 	 * @throws Exception
 	 */
 	protected final void checkConfig() throws Exception {
-		AssertHelper.notNull(this.commonDao, "The CommonDao is required");
+		AssertHelper.notNull(this.commonDao, "The CatLogDao is required");
 	}
 
 	// --------------------------------------------------
