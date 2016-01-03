@@ -29,7 +29,7 @@ public class CatAspect extends BaseAspectSupporter {
 	}
 
 	@Around("execution(public * org.openyu.commons.cat.service.CatService.insertCat(..))")
-	public Object recordInsert(ProceedingJoinPoint joinPoint) throws Throwable {
+	public Object insertCat(ProceedingJoinPoint joinPoint) throws Throwable {
 		Object result = null;
 		//
 		String method = joinPoint.getSignature().getName();
