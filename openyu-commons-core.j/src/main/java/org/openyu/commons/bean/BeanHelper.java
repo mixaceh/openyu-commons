@@ -361,9 +361,9 @@ public final class BeanHelper extends BaseHelperSupporter implements Supporter {
 			// #issue: 每次加總會變慢
 			// double sum = calcProbabilitySum(collection);
 			// System.out.println("sum: "+sum);
-			// 與randomByWeight的不同之處,直接用機率比對
+			// 與randomOf(weightSum)的不同之處,直接用機率比對
 			//
-			// #fix 傳入probabilitySum, ok
+			// #fix 傳入probSum, ok
 			double random = NumberHelper.randomDouble(0, probSum);
 			//
 			double accu = 0d;
