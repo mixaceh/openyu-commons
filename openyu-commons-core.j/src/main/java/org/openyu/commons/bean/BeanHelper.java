@@ -365,8 +365,8 @@ public final class BeanHelper extends BaseHelperSupporter implements Supporter {
 			//
 			// #fix 傳入probSum, ok
 			double random = NumberHelper.randomDouble(0, probSum);
-			//
 			double accu = 0d;
+			//
 			for (E entry : values) {
 				double low = accu;
 				double high = accu + entry.getProbability();
