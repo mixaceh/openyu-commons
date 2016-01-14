@@ -9,13 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.openyu.commons.hbase.HConnectionFactory;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
-public class PoolableHConnectionFactory extends BaseServiceSupporter implements
-		PoolableObjectFactory<HConnection> {
+public class PoolableHConnectionFactory extends BaseServiceSupporter implements PoolableObjectFactory<HConnection> {
 
 	private static final long serialVersionUID = -9073293273204183872L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(PoolableHConnectionFactory.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(PoolableHConnectionFactory.class);
 
 	protected volatile HConnectionFactory hConnectionFactory = null;
 
@@ -23,8 +21,8 @@ public class PoolableHConnectionFactory extends BaseServiceSupporter implements
 
 	private Configuration configuration;
 
-	public PoolableHConnectionFactory(HConnectionFactory hConnectionFactory,
-			ObjectPool<HConnection> pool, Configuration configuration) {
+	public PoolableHConnectionFactory(HConnectionFactory hConnectionFactory, ObjectPool<HConnection> pool,
+			Configuration configuration) {
 		this.hConnectionFactory = hConnectionFactory;
 		this.pool = pool;
 		this.pool.setFactory(this);
@@ -68,8 +66,7 @@ public class PoolableHConnectionFactory extends BaseServiceSupporter implements
 	public HConnection makeObject() throws Exception {
 		HConnection result = hConnectionFactory.createHConnection();
 		if (result == null) {
-			throw new IllegalStateException(
-					"HConnection factory returned null from createHConnection");
+			throw new IllegalStateException("HConnection factory returned null from createHConnection");
 		}
 		try {
 			result = new PoolableHConnection(result, this.pool);
@@ -82,12 +79,16 @@ public class PoolableHConnectionFactory extends BaseServiceSupporter implements
 
 	public void destroyObject(HConnection obj) throws Exception {
 		if (obj instanceof PoolableHConnection) {
-			((PoolableHConnection) obj).reallyClose();
+			PoolableHConnection conn = (PoolableHConnection) obj;
+			conn.reallyClose();
+		} else {
+			throw new UnsupportedOperationException(obj.toString());
 		}
 	}
 
 	public boolean validateObject(HConnection obj) {
 		try {
+			// TODO 只要連過線,之後斷線還是true
 			if (!(obj.isClosed())) {
 				return true;
 			} else {

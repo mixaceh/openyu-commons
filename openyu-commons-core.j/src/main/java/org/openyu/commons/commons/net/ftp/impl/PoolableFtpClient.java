@@ -23,14 +23,13 @@ import org.apache.commons.net.io.CopyStreamListener;
 import org.apache.commons.pool.ObjectPool;
 import org.openyu.commons.util.Delegateable;
 
-public class PoolableFtpClient extends FTPClient implements
-		Delegateable<FTPClient> {
+public class PoolableFtpClient extends FTPClient implements Delegateable<FTPClient> {
 
 	private boolean closed = false;
 
-	private ObjectPool<FTPClient> pool = null;
-
 	private FTPClient delegate;
+
+	private ObjectPool<FTPClient> pool = null;
 
 	private static final int DEFAULT_PORT = 21;
 
@@ -59,6 +58,9 @@ public class PoolableFtpClient extends FTPClient implements
 		}
 	}
 
+	/**
+	 * 返回pool
+	 */
 	public synchronized void disconnect() {
 		if (this.closed) {
 			return;
@@ -69,40 +71,36 @@ public class PoolableFtpClient extends FTPClient implements
 		} catch (Exception e) {
 			try {
 				this.pool.invalidateObject(this);
-			} catch (IllegalStateException ise) {
+			} catch (Exception ex) {
 				this.closed = true;
 				reallyClose();
-			} catch (Exception ie) {
 			}
-			throw new RuntimeException(
-					"Cannot close FTPClient (isClosed check failed)");
+			throw new RuntimeException("Cannot close FTPClient (isClosed check failed)");
 		}
 		if (!(isUnderlyingConectionClosed)) {
 			try {
 				this.pool.returnObject(this);
 				// }
-			} catch (IllegalStateException e) {
+			} catch (Exception e) {
 				this.closed = true;
 				reallyClose();
-			} catch (RuntimeException e) {
-				throw e;
-			} catch (Exception e) {
-				throw new RuntimeException(
-						"Cannot close FTPClient (return to pool failed)");
+				throw new RuntimeException("Cannot close FTPClient (return to pool failed)");
 			}
 		} else {
 			try {
 				this.pool.invalidateObject(this);
-			} catch (IllegalStateException e) {
+			} catch (Exception e) {
 				this.closed = true;
 				reallyClose();
-			} catch (Exception ie) {
 			}
 			throw new RuntimeException("Already closed.");
 		}
 	}
 
-	public void reallyClose() {
+	/**
+	 * 真正關閉連線
+	 */
+	public synchronized void reallyClose() {
 		try {
 			delegate.disconnect();
 		} catch (Exception ex) {
@@ -114,8 +112,7 @@ public class PoolableFtpClient extends FTPClient implements
 		return (!closed) || (this.delegate.isConnected());
 	}
 
-	public void connect(InetAddress host, int port) throws SocketException,
-			IOException {
+	public void connect(InetAddress host, int port) throws SocketException, IOException {
 		try {
 			this.delegate.connect(host, port);
 		} catch (SocketException e) {
@@ -125,8 +122,7 @@ public class PoolableFtpClient extends FTPClient implements
 		}
 	}
 
-	public void connect(String hostname, int port) throws SocketException,
-			IOException {
+	public void connect(String hostname, int port) throws SocketException, IOException {
 		try {
 			this.delegate.connect(hostname, port);
 		} catch (SocketException e) {
@@ -136,8 +132,8 @@ public class PoolableFtpClient extends FTPClient implements
 		}
 	}
 
-	public void connect(InetAddress host, int port, InetAddress localAddr,
-			int localPort) throws SocketException, IOException {
+	public void connect(InetAddress host, int port, InetAddress localAddr, int localPort)
+			throws SocketException, IOException {
 		try {
 			this.delegate.connect(host, port, localAddr, localPort);
 		} catch (SocketException e) {
@@ -147,8 +143,8 @@ public class PoolableFtpClient extends FTPClient implements
 		}
 	}
 
-	public void connect(String hostname, int port, InetAddress localAddr,
-			int localPort) throws SocketException, IOException {
+	public void connect(String hostname, int port, InetAddress localAddr, int localPort)
+			throws SocketException, IOException {
 		try {
 			this.delegate.connect(hostname, port, localAddr, localPort);
 		} catch (SocketException e) {
@@ -724,8 +720,7 @@ public class PoolableFtpClient extends FTPClient implements
 		return 0;
 	}
 
-	public boolean login(String username, String password, String account)
-			throws IOException {
+	public boolean login(String username, String password, String account) throws IOException {
 		checkOpen();
 		try {
 			return this.delegate.login(username, password, account);
@@ -905,8 +900,7 @@ public class PoolableFtpClient extends FTPClient implements
 		this.delegate.enterLocalPassiveMode();
 	}
 
-	public boolean enterRemoteActiveMode(InetAddress host, int port)
-			throws IOException {
+	public boolean enterRemoteActiveMode(InetAddress host, int port) throws IOException {
 		return this.delegate.enterRemoteActiveMode(host, port);
 	}
 
@@ -930,8 +924,7 @@ public class PoolableFtpClient extends FTPClient implements
 		this.delegate.setActivePortRange(minPort, maxPort);
 	}
 
-	public void setActiveExternalIPAddress(String ipAddress)
-			throws UnknownHostException {
+	public void setActiveExternalIPAddress(String ipAddress) throws UnknownHostException {
 		this.delegate.setActiveExternalIPAddress(ipAddress);
 	}
 
@@ -939,8 +932,7 @@ public class PoolableFtpClient extends FTPClient implements
 		return this.delegate.setFileType(fileType);
 	}
 
-	public boolean setFileType(int fileType, int formatOrByteSize)
-			throws IOException {
+	public boolean setFileType(int fileType, int formatOrByteSize) throws IOException {
 		return this.delegate.setFileType(fileType, formatOrByteSize);
 	}
 
@@ -976,8 +968,7 @@ public class PoolableFtpClient extends FTPClient implements
 		return this.delegate.completePendingCommand();
 	}
 
-	public boolean retrieveFile(String remote, OutputStream local)
-			throws IOException {
+	public boolean retrieveFile(String remote, OutputStream local) throws IOException {
 		checkOpen();
 		try {
 			return this.delegate.retrieveFile(remote, local);
@@ -997,8 +988,7 @@ public class PoolableFtpClient extends FTPClient implements
 		return null;
 	}
 
-	public boolean storeFile(String remote, InputStream local)
-			throws IOException {
+	public boolean storeFile(String remote, InputStream local) throws IOException {
 		checkOpen();
 		try {
 			return this.delegate.storeFile(remote, local);
@@ -1018,8 +1008,7 @@ public class PoolableFtpClient extends FTPClient implements
 		return null;
 	}
 
-	public boolean appendFile(String remote, InputStream local)
-			throws IOException {
+	public boolean appendFile(String remote, InputStream local) throws IOException {
 		checkOpen();
 		try {
 			return this.delegate.appendFile(remote, local);
@@ -1039,8 +1028,7 @@ public class PoolableFtpClient extends FTPClient implements
 		return null;
 	}
 
-	public boolean storeUniqueFile(String remote, InputStream local)
-			throws IOException {
+	public boolean storeUniqueFile(String remote, InputStream local) throws IOException {
 		return this.delegate.storeUniqueFile(remote, local);
 	}
 
@@ -1100,8 +1088,7 @@ public class PoolableFtpClient extends FTPClient implements
 		return false;
 	}
 
-	public String[] doCommandAsStrings(String command, String params)
-			throws IOException {
+	public String[] doCommandAsStrings(String command, String params) throws IOException {
 		checkOpen();
 		try {
 			return this.delegate.doCommandAsStrings(command, params);
@@ -1123,8 +1110,7 @@ public class PoolableFtpClient extends FTPClient implements
 		return this.delegate.mlistDir(pathname);
 	}
 
-	public FTPFile[] mlistDir(String pathname, FTPFileFilter filter)
-			throws IOException {
+	public FTPFile[] mlistDir(String pathname, FTPFileFilter filter) throws IOException {
 		return this.delegate.mlistDir(pathname, filter);
 	}
 
@@ -1256,8 +1242,7 @@ public class PoolableFtpClient extends FTPClient implements
 		return null;
 	}
 
-	public FTPFile[] listFiles(String pathname, FTPFileFilter filter)
-			throws IOException {
+	public FTPFile[] listFiles(String pathname, FTPFileFilter filter) throws IOException {
 		checkOpen();
 		try {
 			return this.delegate.listFiles(pathname, filter);
@@ -1291,13 +1276,11 @@ public class PoolableFtpClient extends FTPClient implements
 		return this.delegate.initiateListParsing();
 	}
 
-	public FTPListParseEngine initiateListParsing(String pathname)
-			throws IOException {
+	public FTPListParseEngine initiateListParsing(String pathname) throws IOException {
 		return this.delegate.initiateListParsing(pathname);
 	}
 
-	public FTPListParseEngine initiateListParsing(String parserKey,
-			String pathname) throws IOException {
+	public FTPListParseEngine initiateListParsing(String parserKey, String pathname) throws IOException {
 		return this.delegate.initiateListParsing(parserKey, pathname);
 	}
 
@@ -1313,8 +1296,7 @@ public class PoolableFtpClient extends FTPClient implements
 		return this.delegate.getModificationTime(pathname);
 	}
 
-	public boolean setModificationTime(String pathname, String timeval)
-			throws IOException {
+	public boolean setModificationTime(String pathname, String timeval) throws IOException {
 		return this.delegate.setModificationTime(pathname, timeval);
 	}
 

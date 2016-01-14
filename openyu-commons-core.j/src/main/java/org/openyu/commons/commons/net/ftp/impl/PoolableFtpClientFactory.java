@@ -8,20 +8,17 @@ import org.slf4j.LoggerFactory;
 import org.openyu.commons.commons.net.ftp.FtpClientFactory;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
-public class PoolableFtpClientFactory extends BaseServiceSupporter implements
-		PoolableObjectFactory<FTPClient> {
+public class PoolableFtpClientFactory extends BaseServiceSupporter implements PoolableObjectFactory<FTPClient> {
 
 	private static final long serialVersionUID = -732567508101509392L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(PoolableFtpClientFactory.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(PoolableFtpClientFactory.class);
 
 	protected volatile FtpClientFactory ftpClientFactory = null;
 
 	protected volatile ObjectPool<FTPClient> pool = null;
 
-	public PoolableFtpClientFactory(FtpClientFactory ftpClientFactory,
-			ObjectPool<FTPClient> pool) {
+	public PoolableFtpClientFactory(FtpClientFactory ftpClientFactory, ObjectPool<FTPClient> pool) {
 		this.ftpClientFactory = ftpClientFactory;
 		this.pool = pool;
 		this.pool.setFactory(this);
@@ -32,7 +29,7 @@ public class PoolableFtpClientFactory extends BaseServiceSupporter implements
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		
+
 	}
 
 	/**
@@ -40,7 +37,7 @@ public class PoolableFtpClientFactory extends BaseServiceSupporter implements
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		
+
 	}
 
 	public void setFTPClientFactory(FtpClientFactory ftpClientFactory) {
@@ -63,8 +60,7 @@ public class PoolableFtpClientFactory extends BaseServiceSupporter implements
 	public FTPClient makeObject() throws Exception {
 		FTPClient result = ftpClientFactory.createFTPClient();
 		if (result == null) {
-			throw new IllegalStateException(
-					"FTPClient factory returned null from createFTPClient");
+			throw new IllegalStateException("FTPClient factory returned null from createFTPClient");
 		}
 		try {
 			result = new PoolableFtpClient(result, this.pool);
@@ -77,13 +73,19 @@ public class PoolableFtpClientFactory extends BaseServiceSupporter implements
 
 	public void destroyObject(FTPClient obj) throws Exception {
 		if (obj instanceof PoolableFtpClient) {
-			((PoolableFtpClient) obj).reallyClose();
+			PoolableFtpClient conn = (PoolableFtpClient) obj;
+			conn.reallyClose();
+		} else {
+			throw new UnsupportedOperationException(obj.toString());
 		}
 	}
 
 	public boolean validateObject(FTPClient obj) {
 		try {
-			if (obj.isConnected()) {
+			// 只要連過線,之後斷線還是true
+			// if (obj.isConnected()) {
+			// #fix
+			if (obj.sendNoOp()) {
 				return true;
 			} else {
 				return false;

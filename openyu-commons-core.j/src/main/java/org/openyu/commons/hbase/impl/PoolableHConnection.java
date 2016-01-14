@@ -96,6 +96,9 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		}
 	}
 
+	/**
+	 * 返回pool
+	 */
 	public synchronized void close() {
 		if (this.closed) {
 			return;
@@ -106,10 +109,9 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 		} catch (Exception e) {
 			try {
 				this.pool.invalidateObject(this);
-			} catch (IllegalStateException ise) {
+			} catch (Exception ex) {
 				this.closed = true;
 				reallyClose();
-			} catch (Exception ie) {
 			}
 			throw new RuntimeException("Cannot close HConnection (isClosed check failed)");
 		}
@@ -125,26 +127,25 @@ public class PoolableHConnection implements HConnection, Delegateable<HBaseAdmin
 				}
 				//
 				this.pool.returnObject(this);
-			} catch (IllegalStateException e) {
+			} catch (Exception e) {
 				this.closed = true;
 				reallyClose();
-			} catch (RuntimeException e) {
-				throw e;
-			} catch (Exception e) {
 				throw new RuntimeException("Cannot close HConnection (return to pool failed)");
 			}
 		} else {
 			try {
 				this.pool.invalidateObject(this);
-			} catch (IllegalStateException e) {
+			} catch (Exception e) {
 				this.closed = true;
 				reallyClose();
-			} catch (Exception ie) {
 			}
 			throw new RuntimeException("Already closed.");
 		}
 	}
 
+	/**
+	 * 真正關閉連線
+	 */
 	public synchronized void reallyClose() {
 		try {
 			for (HTableInterface table : tablePool.values()) {
