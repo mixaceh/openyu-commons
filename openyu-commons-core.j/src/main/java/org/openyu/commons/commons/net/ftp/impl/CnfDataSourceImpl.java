@@ -12,19 +12,17 @@ import org.openyu.commons.commons.net.ftp.CnfDataSource;
 import org.openyu.commons.commons.net.ftp.FtpClientFactory;
 import org.openyu.commons.nio.NioHelper;
 
-public class CnfDataSourceImpl extends BaseServiceSupporter implements
-		CnfDataSource {
+public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSource {
 
 	private static final long serialVersionUID = 8466854041599525298L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(CnfDataSourceImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(CnfDataSourceImpl.class);
 
 	private String ip;
 
 	private int port;
 
-	private int timeout;
+	private int connectTimeout;
 
 	/**
 	 * 重試次數
@@ -97,12 +95,12 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements
 		this.port = port;
 	}
 
-	public synchronized int getTimeout() {
-		return timeout;
+	public synchronized int getConnectTimeout() {
+		return connectTimeout;
 	}
 
-	public synchronized void setTimeout(int timeout) {
-		this.timeout = timeout;
+	public synchronized void setConnectTimeout(int connectTimeout) {
+		this.connectTimeout = connectTimeout;
 	}
 
 	public synchronized int getRetryNumber() {
@@ -239,8 +237,7 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements
 		return this.config.timeBetweenEvictionRunsMillis;
 	}
 
-	public synchronized void setTimeBetweenEvictionRunsMillis(
-			long timeBetweenEvictionRunsMillis) {
+	public synchronized void setTimeBetweenEvictionRunsMillis(long timeBetweenEvictionRunsMillis) {
 		this.config.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis;
 	}
 
@@ -248,8 +245,7 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements
 		return this.config.numTestsPerEvictionRun;
 	}
 
-	public synchronized void setNumTestsPerEvictionRun(
-			int numTestsPerEvictionRun) {
+	public synchronized void setNumTestsPerEvictionRun(int numTestsPerEvictionRun) {
 		this.config.numTestsPerEvictionRun = numTestsPerEvictionRun;
 	}
 
@@ -257,8 +253,7 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements
 		return this.config.minEvictableIdleTimeMillis;
 	}
 
-	public synchronized void setMinEvictableIdleTimeMillis(
-			long minEvictableIdleTimeMillis) {
+	public synchronized void setMinEvictableIdleTimeMillis(long minEvictableIdleTimeMillis) {
 		this.config.minEvictableIdleTimeMillis = minEvictableIdleTimeMillis;
 	}
 
@@ -282,8 +277,7 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements
 		return config.softMinEvictableIdleTimeMillis;
 	}
 
-	public synchronized void setSoftMinEvictableIdleTimeMillis(
-			long softMinEvictableIdleTimeMillis) {
+	public synchronized void setSoftMinEvictableIdleTimeMillis(long softMinEvictableIdleTimeMillis) {
 		this.config.softMinEvictableIdleTimeMillis = softMinEvictableIdleTimeMillis;
 	}
 
@@ -327,8 +321,7 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements
 		}
 	}
 
-	protected synchronized CnfDataSource createCnfDataSource()
-			throws SocketException, IOException {
+	protected synchronized CnfDataSource createCnfDataSource() throws SocketException, IOException {
 		if (this.closed) {
 			throw new SocketException("CnfDataSource was already closed");
 		}
@@ -358,9 +351,8 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements
 		setTestOnReturn(false);
 		setTestWhileIdle(false);
 		//
-		result = new FtpClientFactoryImpl(ip, port, timeout, retryNumber,
-				retryPauseMills, username, password, bufferSize, clientMode,
-				fileType, controlEncoding, remotePath);
+		result = new FtpClientFactoryImpl(ip, port, connectTimeout, retryNumber, retryPauseMills, username, password,
+				bufferSize, clientMode, fileType, controlEncoding, remotePath);
 		return result;
 	}
 
@@ -395,24 +387,20 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements
 		this.instance = new PoolingCnfDataSource(this.objectPool);
 	}
 
-	protected void createPoolableFTPClientFactory(
-			FtpClientFactory ftpClientFactory) throws IOException {
+	protected void createPoolableFTPClientFactory(FtpClientFactory ftpClientFactory) throws IOException {
 		PoolableFtpClientFactory result = null;
 		try {
-			result = new PoolableFtpClientFactory(ftpClientFactory,
-					this.objectPool);
+			result = new PoolableFtpClientFactory(ftpClientFactory, this.objectPool);
 			validateConnectionFactory(result);
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new IOException(new StringBuilder()
-					.append("Cannot create PoolableFTPClientFactory (")
+			throw new IOException(new StringBuilder().append("Cannot create PoolableFTPClientFactory (")
 					.append(e.getMessage()).append(")").toString(), e);
 		}
 	}
 
-	protected void validateConnectionFactory(
-			PoolableFtpClientFactory poolableFactory) throws Exception {
+	protected void validateConnectionFactory(PoolableFtpClientFactory poolableFactory) throws Exception {
 		FTPClient fptClient = null;
 		try {
 			fptClient = (FTPClient) poolableFactory.makeObject();
@@ -427,7 +415,7 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements
 	// try {
 	// close();
 	// // TODO restart, 2015/09/17 use refresh()
-	// 
+	//
 	// } catch (Exception e) {
 	// LOGGER.error(new StringBuilder()
 	// .append("Could not restart CnfDataSource, cause: ")

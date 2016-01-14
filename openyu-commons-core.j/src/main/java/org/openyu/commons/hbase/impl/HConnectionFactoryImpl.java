@@ -46,8 +46,8 @@ public class HConnectionFactoryImpl extends BaseServiceSupporter implements
 	public HConnection createHConnection() throws ZooKeeperConnectionException {
 		HConnection result = null;
 		try {
-			Configuration connConf = HBaseConfiguration.create(configuration);
-			result = HConnectionManager.createConnection(connConf);
+			Configuration conf = HBaseConfiguration.create(configuration);
+			result = HConnectionManager.createConnection(conf);
 			result.getMaster();
 		} catch (Exception ex) {
 			throw new ZooKeeperConnectionException(ex.getMessage(), ex);

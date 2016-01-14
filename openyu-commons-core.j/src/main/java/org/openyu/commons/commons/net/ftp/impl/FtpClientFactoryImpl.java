@@ -1,6 +1,7 @@
 package org.openyu.commons.commons.net.ftp.impl;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.SocketException;
 
 import org.apache.commons.net.ftp.FTPClient;
@@ -12,19 +13,17 @@ import org.openyu.commons.thread.ThreadHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FtpClientFactoryImpl extends BaseServiceSupporter implements
-		FtpClientFactory {
+public class FtpClientFactoryImpl extends BaseServiceSupporter implements FtpClientFactory {
 
 	private static final long serialVersionUID = -6031828409170764020L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(FtpClientFactoryImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(FtpClientFactoryImpl.class);
 
 	private String ip;
 
 	private int port;
 
-	private int timeout;
+	private int connectTimeout;
 
 	private int retryNumber = NioHelper.DEFAULT_RETRY_NUMBER;
 
@@ -44,13 +43,12 @@ public class FtpClientFactoryImpl extends BaseServiceSupporter implements
 
 	private String remotePath;
 
-	public FtpClientFactoryImpl(String ip, int port, int timeout,
-			int retryNumber, long retryPauseMills, String username,
-			String password, int bufferSize, int clientMode, int fileType,
-			String controlEncoding, String remotePath) {
+	public FtpClientFactoryImpl(String ip, int port, int connectTimeout, int retryNumber, long retryPauseMills,
+			String username, String password, int bufferSize, int clientMode, int fileType, String controlEncoding,
+			String remotePath) {
 		this.ip = ip;
 		this.port = port;
-		this.timeout = timeout;
+		this.connectTimeout = connectTimeout;
 		this.retryNumber = retryNumber;
 		this.retryPauseMills = retryPauseMills;
 		this.username = username;
@@ -67,7 +65,7 @@ public class FtpClientFactoryImpl extends BaseServiceSupporter implements
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		
+
 	}
 
 	/**
@@ -75,14 +73,11 @@ public class FtpClientFactoryImpl extends BaseServiceSupporter implements
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		
+
 	}
 
 	public FTPClient createFTPClient() throws SocketException, IOException {
-		FTPClient result = new FTPClient();
-		result.setConnectTimeout(this.timeout);
-		result.setSendBufferSize(this.bufferSize);
-		result.setReceiveBufferSize(this.bufferSize);
+		FTPClient result = createClient();
 		//
 		int tries = 0;
 		boolean success = false;
@@ -91,35 +86,26 @@ public class FtpClientFactoryImpl extends BaseServiceSupporter implements
 				result.connect(this.ip, this.port);
 				success = true;
 				break;
-			} catch (Exception ex) {
+			} catch (ConnectException ex) {
+				// 當連線失敗時,重試
 				// ex.printStackTrace();
+				result = createClient();
+				//
 				++tries;
 				// [1/3] time(s) java.net.ConnectException: Connection refused:
 				// connect
-				LOGGER.warn("["
-						+ tries
-						+ "/"
-						+ (this.retryNumber != 0 ? this.retryNumber
-								: "INFINITE")
+				LOGGER.warn("[" + tries + "/" + (this.retryNumber != 0 ? this.retryNumber : "INFINITE")
 						+ "] time(s) Failed to get the connection");
 				// 0=無限
 				if (this.retryNumber != 0 && tries >= this.retryNumber) {
 					break;
 				}
 				// 重試暫停毫秒
-				ThreadHelper.sleep(NioHelper.retryPause(tries,
-						this.retryPauseMills));
+				ThreadHelper.sleep(NioHelper.retryPause(tries, this.retryPauseMills));
 				// Retrying connect to [10.1.24.143:21]. Already tried [2/3]
 				// time(s).
-				LOGGER.info("Retrying connect to ["
-						+ ip
-						+ ":"
-						+ port
-						+ "]. Already tried ["
-						+ (tries + 1)
-						+ "/"
-						+ (this.retryNumber != 0 ? this.retryNumber
-								: "INFINITE") + "] time(s)");
+				LOGGER.info("Retrying connect to [" + ip + ":" + port + "]. Already tried [" + (tries + 1) + "/"
+						+ (this.retryNumber != 0 ? this.retryNumber : "INFINITE") + "] time(s)");
 			}
 		}
 		//
@@ -131,8 +117,7 @@ public class FtpClientFactoryImpl extends BaseServiceSupporter implements
 			try {
 				login = result.login(this.username, this.password);
 				if (!login) {
-					LOGGER.error("[" + this.username + "] Can't login to ["
-							+ this.ip + ":" + this.port + "]");
+					LOGGER.error("[" + this.username + "] Can't login to [" + this.ip + ":" + this.port + "]");
 					throw new SocketException("Login failed");
 				}
 				//
@@ -167,6 +152,22 @@ public class FtpClientFactoryImpl extends BaseServiceSupporter implements
 				throw new SocketException(ex.getMessage());
 			}
 		}
+		return result;
+	}
+
+	/**
+	 * 建立FTPClient
+	 * 
+	 * @return
+	 * @throws SocketException
+	 * @throws IOException
+	 */
+	protected FTPClient createClient() throws SocketException, IOException {
+		FTPClient result = new FTPClient();
+		//
+		result.setConnectTimeout(this.connectTimeout);
+		result.setSendBufferSize(this.bufferSize);
+		result.setReceiveBufferSize(this.bufferSize);
 		return result;
 	}
 }
