@@ -371,13 +371,13 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSo
 	}
 
 	protected void validateConnectionFactory(PoolableFtpClientFactory poolableFactory) throws Exception {
-		FTPClient fptClient = null;
+		FTPClient ftpClient = null;
 		try {
-			fptClient = (FTPClient) poolableFactory.makeObject();
-			poolableFactory.activateObject(fptClient);
-			poolableFactory.passivateObject(fptClient);
+			ftpClient = (FTPClient) poolableFactory.makeObject();
+			poolableFactory.activateObject(ftpClient);
+			poolableFactory.passivateObject(ftpClient);
 		} finally {
-			poolableFactory.destroyObject(fptClient);
+			poolableFactory.destroyObject(ftpClient);
 		}
 	}
 

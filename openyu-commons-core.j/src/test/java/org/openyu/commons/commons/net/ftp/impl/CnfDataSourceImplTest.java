@@ -16,11 +16,10 @@ public class CnfDataSourceImplTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		// GQC
 		cnfDataSource = new CnfDataSourceImpl();
 		cnfDataSource.setIp("127.0.0.1");
 		cnfDataSource.setPort(21);
-		cnfDataSource.setTimeout(5000);
+		cnfDataSource.setConnectTimeout(5000);
 		//
 		cnfDataSource.setMaxActive(2000);
 		cnfDataSource.setMaxIdle(2000);
