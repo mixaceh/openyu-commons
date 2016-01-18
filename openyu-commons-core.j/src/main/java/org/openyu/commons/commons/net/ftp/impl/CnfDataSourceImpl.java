@@ -53,6 +53,7 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSo
 	private volatile boolean restartNeeded;
 
 	private GenericObjectPool.Config config = new GenericObjectPool.Config();
+
 	//
 	private volatile CnfDataSource instance;
 
@@ -294,13 +295,7 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSo
 	}
 
 	public FTPClient getFTPClient() throws SocketException, IOException {
-		FTPClient result = null;
-		try {
-			result = createCnfDataSource().getFTPClient();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return result;
+		return createCnfDataSource().getFTPClient();
 	}
 
 	public synchronized void close() throws IOException {
@@ -347,10 +342,6 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSo
 	protected FtpClientFactory createFTPClientFactory() throws IOException {
 		FtpClientFactory result = null;
 		//
-		setTestOnBorrow(false);
-		setTestOnReturn(false);
-		setTestWhileIdle(false);
-		//
 		result = new FtpClientFactoryImpl(ip, port, connectTimeout, retryNumber, retryPauseMills, username, password,
 				bufferSize, clientMode, fileType, controlEncoding, remotePath);
 		return result;
@@ -358,27 +349,6 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSo
 
 	protected void createObjectPool() {
 		GenericObjectPool<FTPClient> objectPool = new GenericObjectPool<FTPClient>();
-		// objectPool.setMaxActive(this.config.maxActive);
-		// objectPool.setMaxIdle(this.config.maxIdle);
-		// objectPool.setMinIdle(this.config.minIdle);
-		// objectPool.setMaxWait(this.config.maxWait);
-		// objectPool.setTestOnBorrow(this.config.testOnBorrow);
-		// objectPool.setTestOnReturn(this.config.testOnReturn);
-		// objectPool
-		// .setTimeBetweenEvictionRunsMillis(this.config.timeBetweenEvictionRunsMillis);
-		// objectPool
-		// .setNumTestsPerEvictionRun(this.config.numTestsPerEvictionRun);
-		// objectPool
-		// .setMinEvictableIdleTimeMillis(this.config.minEvictableIdleTimeMillis);
-		// objectPool.setTestWhileIdle(this.config.testWhileIdle);
-		//
-		// // 2014/11/02
-		// objectPool.setWhenExhaustedAction(this.config.whenExhaustedAction);
-		// objectPool
-		// .setSoftMinEvictableIdleTimeMillis(this.config.softMinEvictableIdleTimeMillis);
-		// objectPool.setLifo(this.config.lifo);
-
-		// 2014/11/02
 		objectPool.setConfig(config);
 		this.objectPool = objectPool;
 	}

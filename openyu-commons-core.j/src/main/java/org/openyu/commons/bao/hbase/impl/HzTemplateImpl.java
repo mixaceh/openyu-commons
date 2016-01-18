@@ -32,8 +32,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 
 	private static final long serialVersionUID = 5267122206605316626L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(HzTemplateImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(HzTemplateImpl.class);
 
 	private HzSessionFactory hzSessionFactory;
 
@@ -42,6 +41,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 	}
 
 	public HzTemplateImpl() {
+		this(null);
 	}
 
 	/**
@@ -110,8 +110,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 
 	public boolean tableExists(final String tableName) throws IOException {
 		return execute(new HzCallback<Boolean>() {
-			public Boolean doInAction(HzSession session)
-					throws HzTemplateException {
+			public Boolean doInAction(HzSession session) throws HzTemplateException {
 				try {
 					return session.tableExists(tableName);
 				} catch (Exception ex) {
@@ -123,8 +122,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 
 	public boolean tableExists(final byte[] tableName) throws IOException {
 		return execute(new HzCallback<Boolean>() {
-			public Boolean doInAction(HzSession session)
-					throws HzTemplateException {
+			public Boolean doInAction(HzSession session) throws HzTemplateException {
 				try {
 					return session.tableExists(tableName);
 				} catch (Exception ex) {
@@ -136,8 +134,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 
 	public HTableDescriptor[] listTables() throws IOException {
 		return execute(new HzCallback<HTableDescriptor[]>() {
-			public HTableDescriptor[] doInAction(HzSession session)
-					throws HzTemplateException {
+			public HTableDescriptor[] doInAction(HzSession session) throws HzTemplateException {
 				try {
 					return session.listTables();
 				} catch (Exception ex) {
@@ -173,13 +170,11 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		}
 	}
 
-	public <T> T execute(String tableName, HzTableCallback<T> action)
-			throws HzTemplateException {
+	public <T> T execute(String tableName, HzTableCallback<T> action) throws HzTemplateException {
 		return doExecute(tableName, action);
 	}
 
-	protected <T> T doExecute(String tableName, HzTableCallback<T> action)
-			throws HzTemplateException {
+	protected <T> T doExecute(String tableName, HzTableCallback<T> action) throws HzTemplateException {
 		AssertHelper.notNull(action, "The HzTableCallback must not be null");
 		//
 		T result = null;
@@ -204,11 +199,9 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 
 	// --------------------------------------------------
 
-	public boolean exists(String tableName, final Get paramGet)
-			throws IOException {
+	public boolean exists(String tableName, final Get paramGet) throws IOException {
 		return execute(tableName, new HzTableCallback<Boolean>() {
-			public Boolean doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Boolean doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					return table.exists(paramGet);
 				} catch (Exception ex) {
@@ -218,12 +211,10 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public void batch(String tableName, final List<? extends Row> paramList,
-			final Object[] paramArrayOfObject) throws IOException,
-			InterruptedException {
+	public void batch(String tableName, final List<? extends Row> paramList, final Object[] paramArrayOfObject)
+			throws IOException, InterruptedException {
 		execute(tableName, new HzTableCallback<Object>() {
-			public Object doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Object doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					table.batch(paramList, paramArrayOfObject);
 					return null;
@@ -237,8 +228,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 	public Object[] batch(String tableName, final List<? extends Row> paramList)
 			throws IOException, InterruptedException {
 		return execute(tableName, new HzTableCallback<Object[]>() {
-			public Object[] doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Object[] doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					return table.batch(paramList);
 				} catch (Exception ex) {
@@ -250,8 +240,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 
 	public Result get(String tableName, final Get paramGet) throws IOException {
 		return execute(tableName, new HzTableCallback<Result>() {
-			public Result doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Result doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					return table.get(paramGet);
 				} catch (Exception ex) {
@@ -261,11 +250,9 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public Result[] get(String tableName, final List<Get> paramList)
-			throws IOException {
+	public Result[] get(String tableName, final List<Get> paramList) throws IOException {
 		return execute(tableName, new HzTableCallback<Result[]>() {
-			public Result[] doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Result[] doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					return table.get(paramList);
 				} catch (Exception ex) {
@@ -275,11 +262,9 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public ResultScanner getScanner(String tableName, final Scan paramScan)
-			throws IOException {
+	public ResultScanner getScanner(String tableName, final Scan paramScan) throws IOException {
 		return execute(tableName, new HzTableCallback<ResultScanner>() {
-			public ResultScanner doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public ResultScanner doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					return table.getScanner(paramScan);
 				} catch (Exception ex) {
@@ -289,11 +274,9 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public ResultScanner getScanner(String tableName,
-			final byte[] paramArrayOfByte) throws IOException {
+	public ResultScanner getScanner(String tableName, final byte[] paramArrayOfByte) throws IOException {
 		return execute(tableName, new HzTableCallback<ResultScanner>() {
-			public ResultScanner doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public ResultScanner doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					return table.getScanner(paramArrayOfByte);
 				} catch (Exception ex) {
@@ -303,15 +286,12 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public ResultScanner getScanner(String tableName,
-			final byte[] paramArrayOfByte1, final byte[] paramArrayOfByte2)
+	public ResultScanner getScanner(String tableName, final byte[] paramArrayOfByte1, final byte[] paramArrayOfByte2)
 			throws IOException {
 		return execute(tableName, new HzTableCallback<ResultScanner>() {
-			public ResultScanner doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public ResultScanner doInAction(HTableInterface table) throws HzTemplateException {
 				try {
-					return table.getScanner(paramArrayOfByte1,
-							paramArrayOfByte2);
+					return table.getScanner(paramArrayOfByte1, paramArrayOfByte2);
 				} catch (Exception ex) {
 					throw new HzTemplateException(ex);
 				}
@@ -321,8 +301,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 
 	public void put(String tableName, final Put paramPut) throws IOException {
 		execute(tableName, new HzTableCallback<Object>() {
-			public Object doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Object doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					table.put(paramPut);
 					return null;
@@ -333,11 +312,9 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public void put(String tableName, final List<Put> paramList)
-			throws IOException {
+	public void put(String tableName, final List<Put> paramList) throws IOException {
 		execute(tableName, new HzTableCallback<Object>() {
-			public Object doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Object doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					table.put(paramList);
 					return null;
@@ -348,17 +325,13 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public boolean checkAndPut(String tableName,
-			final byte[] paramArrayOfByte1, final byte[] paramArrayOfByte2,
-			final byte[] paramArrayOfByte3, final byte[] paramArrayOfByte4,
-			final Put paramPut) throws IOException {
+	public boolean checkAndPut(String tableName, final byte[] paramArrayOfByte1, final byte[] paramArrayOfByte2,
+			final byte[] paramArrayOfByte3, final byte[] paramArrayOfByte4, final Put paramPut) throws IOException {
 		return execute(tableName, new HzTableCallback<Boolean>() {
-			public Boolean doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Boolean doInAction(HTableInterface table) throws HzTemplateException {
 				try {
-					return table.checkAndPut(paramArrayOfByte1,
-							paramArrayOfByte2, paramArrayOfByte3,
-							paramArrayOfByte4, paramPut);
+					return table.checkAndPut(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3, paramArrayOfByte4,
+							paramPut);
 				} catch (Exception ex) {
 					throw new HzTemplateException(ex);
 				}
@@ -366,11 +339,9 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public void delete(String tableName, final Delete paramDelete)
-			throws IOException {
+	public void delete(String tableName, final Delete paramDelete) throws IOException {
 		execute(tableName, new HzTableCallback<Object>() {
-			public Object doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Object doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					table.delete(paramDelete);
 					return null;
@@ -381,11 +352,9 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public void delete(String tableName, final List<Delete> paramList)
-			throws IOException {
+	public void delete(String tableName, final List<Delete> paramList) throws IOException {
 		execute(tableName, new HzTableCallback<Object>() {
-			public Object doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Object doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					table.delete(paramList);
 					return null;
@@ -396,16 +365,13 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public boolean checkAndDelete(String tableName,
-			final byte[] paramArrayOfByte1, final byte[] paramArrayOfByte2,
-			final byte[] paramArrayOfByte3, final byte[] paramArrayOfByte4,
-			final Delete paramDelete) throws IOException {
+	public boolean checkAndDelete(String tableName, final byte[] paramArrayOfByte1, final byte[] paramArrayOfByte2,
+			final byte[] paramArrayOfByte3, final byte[] paramArrayOfByte4, final Delete paramDelete)
+					throws IOException {
 		return execute(tableName, new HzTableCallback<Boolean>() {
-			public Boolean doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Boolean doInAction(HTableInterface table) throws HzTemplateException {
 				try {
-					return table.checkAndDelete(paramArrayOfByte1,
-							paramArrayOfByte2, paramArrayOfByte3,
+					return table.checkAndDelete(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3,
 							paramArrayOfByte4, paramDelete);
 				} catch (Exception ex) {
 					throw new HzTemplateException(ex);
@@ -414,11 +380,9 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public void mutateRow(String tableName, final RowMutations paramRowMutations)
-			throws IOException {
+	public void mutateRow(String tableName, final RowMutations paramRowMutations) throws IOException {
 		execute(tableName, new HzTableCallback<Object>() {
-			public Object doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Object doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					table.mutateRow(paramRowMutations);
 					return null;
@@ -429,11 +393,10 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public <T extends CoprocessorProtocol> T coprocessorProxy(String tableName,
-			final Class<T> paramClass, final byte[] paramArrayOfByte) {
+	public <T extends CoprocessorProtocol> T coprocessorProxy(String tableName, final Class<T> paramClass,
+			final byte[] paramArrayOfByte) {
 		return execute(tableName, new HzTableCallback<T>() {
-			public T doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public T doInAction(HTableInterface table) throws HzTemplateException {
 				try {
 					return table.coprocessorProxy(paramClass, paramArrayOfByte);
 				} catch (Exception ex) {
@@ -444,16 +407,13 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 	}
 
 	@Override
-	public <T extends CoprocessorProtocol, R> Map<byte[], R> coprocessorExec(
-			String tableName, final Class<T> paramClass,
-			final byte[] paramArrayOfByte1, final byte[] paramArrayOfByte2,
+	public <T extends CoprocessorProtocol, R> Map<byte[], R> coprocessorExec(String tableName,
+			final Class<T> paramClass, final byte[] paramArrayOfByte1, final byte[] paramArrayOfByte2,
 			final Call<T, R> paramCall) throws IOException, Throwable {
 		return execute(tableName, new HzTableCallback<Map<byte[], R>>() {
-			public Map<byte[], R> doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Map<byte[], R> doInAction(HTableInterface table) throws HzTemplateException {
 				try {
-					return table.coprocessorExec(paramClass, paramArrayOfByte1,
-							paramArrayOfByte2, paramCall);
+					return table.coprocessorExec(paramClass, paramArrayOfByte1, paramArrayOfByte2, paramCall);
 				} catch (Throwable ex) {
 					throw new HzTemplateException(ex);
 				}
@@ -461,17 +421,13 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 		});
 	}
 
-	public <T extends CoprocessorProtocol, R> void coprocessorExec(
-			String tableName, final Class<T> paramClass,
-			final byte[] paramArrayOfByte1, final byte[] paramArrayOfByte2,
-			final Call<T, R> paramCall, final Callback<R> paramCallback)
-			throws IOException, Throwable {
+	public <T extends CoprocessorProtocol, R> void coprocessorExec(String tableName, final Class<T> paramClass,
+			final byte[] paramArrayOfByte1, final byte[] paramArrayOfByte2, final Call<T, R> paramCall,
+			final Callback<R> paramCallback) throws IOException, Throwable {
 		execute(tableName, new HzTableCallback<Object>() {
-			public Object doInAction(HTableInterface table)
-					throws HzTemplateException {
+			public Object doInAction(HTableInterface table) throws HzTemplateException {
 				try {
-					table.coprocessorExec(paramClass, paramArrayOfByte1,
-							paramArrayOfByte2, paramCall, paramCallback);
+					table.coprocessorExec(paramClass, paramArrayOfByte1, paramArrayOfByte2, paramCall, paramCallback);
 					return null;
 				} catch (Throwable ex) {
 					throw new HzTemplateException(ex);

@@ -14,13 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 import org.openyu.commons.nio.NioHelper;
 
-public abstract class ThriftDataSourceSupporter extends BaseServiceSupporter
-		implements ThriftDataSource {
+public abstract class ThriftDataSourceSupporter extends BaseServiceSupporter implements ThriftDataSource {
 
 	private static final long serialVersionUID = 3731245735319377625L;
 
-	public static final Logger LOGGER = LoggerFactory
-			.getLogger(ThriftDataSourceSupporter.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(ThriftDataSourceSupporter.class);
 
 	protected String ip;
 
@@ -65,7 +63,7 @@ public abstract class ThriftDataSourceSupporter extends BaseServiceSupporter
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		
+
 	}
 
 	/**
@@ -194,8 +192,7 @@ public abstract class ThriftDataSourceSupporter extends BaseServiceSupporter
 		return this.config.timeBetweenEvictionRunsMillis;
 	}
 
-	public synchronized void setTimeBetweenEvictionRunsMillis(
-			long timeBetweenEvictionRunsMillis) {
+	public synchronized void setTimeBetweenEvictionRunsMillis(long timeBetweenEvictionRunsMillis) {
 		this.config.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis;
 	}
 
@@ -203,8 +200,7 @@ public abstract class ThriftDataSourceSupporter extends BaseServiceSupporter
 		return this.config.numTestsPerEvictionRun;
 	}
 
-	public synchronized void setNumTestsPerEvictionRun(
-			int numTestsPerEvictionRun) {
+	public synchronized void setNumTestsPerEvictionRun(int numTestsPerEvictionRun) {
 		this.config.numTestsPerEvictionRun = numTestsPerEvictionRun;
 	}
 
@@ -212,8 +208,7 @@ public abstract class ThriftDataSourceSupporter extends BaseServiceSupporter
 		return this.config.minEvictableIdleTimeMillis;
 	}
 
-	public synchronized void setMinEvictableIdleTimeMillis(
-			long minEvictableIdleTimeMillis) {
+	public synchronized void setMinEvictableIdleTimeMillis(long minEvictableIdleTimeMillis) {
 		this.config.minEvictableIdleTimeMillis = minEvictableIdleTimeMillis;
 	}
 
@@ -237,8 +232,7 @@ public abstract class ThriftDataSourceSupporter extends BaseServiceSupporter
 		return config.softMinEvictableIdleTimeMillis;
 	}
 
-	public synchronized void setSoftMinEvictableIdleTimeMillis(
-			long softMinEvictableIdleTimeMillis) {
+	public synchronized void setSoftMinEvictableIdleTimeMillis(long softMinEvictableIdleTimeMillis) {
 		this.config.softMinEvictableIdleTimeMillis = softMinEvictableIdleTimeMillis;
 	}
 
@@ -255,19 +249,12 @@ public abstract class ThriftDataSourceSupporter extends BaseServiceSupporter
 	}
 
 	public TTransport getTTransport() throws TTransportException {
-		TTransport result = null;
-		try {
-			result = createThriftDataSource().getTTransport();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return result;
+		return createThriftDataSource().getTTransport();
 	}
 
 	public synchronized void close() throws TTransportException {
 		if (this.closed) {
-			throw new TTransportException(dataSourceType
-					+ " was already closed");
+			throw new TTransportException(dataSourceType + " was already closed");
 		}
 		//
 		this.closed = true;
@@ -282,11 +269,9 @@ public abstract class ThriftDataSourceSupporter extends BaseServiceSupporter
 		}
 	}
 
-	protected synchronized ThriftDataSource createThriftDataSource()
-			throws TTransportException {
+	protected synchronized ThriftDataSource createThriftDataSource() throws TTransportException {
 		if (this.closed) {
-			throw new TTransportException(dataSourceType
-					+ " was already closed");
+			throw new TTransportException(dataSourceType + " was already closed");
 		}
 
 		if (this.instance != null) {
@@ -307,28 +292,19 @@ public abstract class ThriftDataSourceSupporter extends BaseServiceSupporter
 		return this.instance;
 	}
 
-	protected TTransportFactory createTTransportFactory()
-			throws TTransportException {
+	protected TTransportFactory createTTransportFactory() throws TTransportException {
 		TTransportFactory result = null;
 		//
-		setTestOnBorrow(false);
-		setTestOnReturn(false);
-		setTestWhileIdle(false);
-		//
 		if (!nonblocking) {
-			result = new TSocketTTransportFactoryImpl(ip, port, timeout,
-					retryNumber, retryPauseMills);
+			result = new TSocketTTransportFactoryImpl(ip, port, timeout, retryNumber, retryPauseMills);
 		} else {
-			result = new TFramedTTransportFactoryImpl(ip, port, timeout,
-					retryNumber, retryPauseMills);
+			result = new TFramedTTransportFactoryImpl(ip, port, timeout, retryNumber, retryPauseMills);
 		}
 		return result;
 	}
 
 	protected void createObjectPool() {
 		GenericObjectPool<TTransport> objectPool = new GenericObjectPool<TTransport>();
-
-		// 2014/11/02
 		objectPool.setConfig(config);
 		this.objectPool = objectPool;
 	}
@@ -342,11 +318,10 @@ public abstract class ThriftDataSourceSupporter extends BaseServiceSupporter
 	 * @param ttransportFactory
 	 * @throws TTransportException
 	 */
-	protected abstract void createPoolableTTransportFactory(
-			TTransportFactory ttransportFactory) throws TTransportException;
+	protected abstract void createPoolableTTransportFactory(TTransportFactory ttransportFactory)
+			throws TTransportException;
 
-	protected void validateConnectionFactory(
-			PoolableObjectFactory<TTransport> poolableFactory) throws Exception {
+	protected void validateConnectionFactory(PoolableObjectFactory<TTransport> poolableFactory) throws Exception {
 		TTransport ttransport = null;
 		try {
 			ttransport = poolableFactory.makeObject();

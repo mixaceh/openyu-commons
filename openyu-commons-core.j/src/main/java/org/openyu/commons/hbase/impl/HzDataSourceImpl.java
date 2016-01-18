@@ -14,47 +14,22 @@ import org.openyu.commons.hbase.HConnectionFactory;
 import org.openyu.commons.hbase.HzDataSource;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
-public class HzDataSourceImpl extends BaseServiceSupporter implements
-		HzDataSource {
+public class HzDataSourceImpl extends BaseServiceSupporter implements HzDataSource {
 
 	private static final long serialVersionUID = -3083482858192075169L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(HzDataSourceImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(HzDataSourceImpl.class);
 
 	private Properties properties = new Properties();
 
 	private Configuration configuration = HBaseConfiguration.create();
-	// //
-	// private int maxActive = GenericObjectPool.DEFAULT_MAX_ACTIVE;
 	//
-	// private int maxIdle = GenericObjectPool.DEFAULT_MAX_IDLE;
-	//
-	// private int minIdle = GenericObjectPool.DEFAULT_MIN_IDLE;
-
 	private int initialSize = 1;
 
-	// private long maxWait = GenericObjectPool.DEFAULT_MAX_WAIT;
-	//
 	private volatile boolean restartNeeded;
 
 	private GenericObjectPool.Config config = new GenericObjectPool.Config();
-	//
-	// private boolean testOnBorrow = GenericObjectPool.DEFAULT_TEST_ON_BORROW;
-	//
-	// private boolean testOnReturn = GenericObjectPool.DEFAULT_TEST_ON_RETURN;
-	//
-	// private long timeBetweenEvictionRunsMillis =
-	// GenericObjectPool.DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS;
-	//
-	// private int numTestsPerEvictionRun =
-	// GenericObjectPool.DEFAULT_NUM_TESTS_PER_EVICTION_RUN;
-	//
-	// private long minEvictableIdleTimeMillis =
-	// GenericObjectPool.DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS;
-	//
-	// private boolean testWhileIdle =
-	// GenericObjectPool.DEFAULT_TEST_WHILE_IDLE;
+
 	//
 	private volatile HzDataSource instance;
 
@@ -65,14 +40,14 @@ public class HzDataSourceImpl extends BaseServiceSupporter implements
 	public HzDataSourceImpl() {
 	}
 
-
 	/**
 	 * 內部啟動
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		
+
 	}
+
 	/**
 	 * 內部關閉
 	 */
@@ -90,8 +65,7 @@ public class HzDataSourceImpl extends BaseServiceSupporter implements
 		this.properties = properties;
 		//
 		for (Map.Entry entry : properties.entrySet()) {
-			configuration.set((String) entry.getKey(),
-					(String) entry.getValue());
+			configuration.set((String) entry.getKey(), (String) entry.getValue());
 		}
 	}
 
@@ -164,8 +138,7 @@ public class HzDataSourceImpl extends BaseServiceSupporter implements
 		return this.config.timeBetweenEvictionRunsMillis;
 	}
 
-	public synchronized void setTimeBetweenEvictionRunsMillis(
-			long timeBetweenEvictionRunsMillis) {
+	public synchronized void setTimeBetweenEvictionRunsMillis(long timeBetweenEvictionRunsMillis) {
 		this.config.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis;
 	}
 
@@ -173,8 +146,7 @@ public class HzDataSourceImpl extends BaseServiceSupporter implements
 		return this.config.numTestsPerEvictionRun;
 	}
 
-	public synchronized void setNumTestsPerEvictionRun(
-			int numTestsPerEvictionRun) {
+	public synchronized void setNumTestsPerEvictionRun(int numTestsPerEvictionRun) {
 		this.config.numTestsPerEvictionRun = numTestsPerEvictionRun;
 	}
 
@@ -182,8 +154,7 @@ public class HzDataSourceImpl extends BaseServiceSupporter implements
 		return this.config.minEvictableIdleTimeMillis;
 	}
 
-	public synchronized void setMinEvictableIdleTimeMillis(
-			long minEvictableIdleTimeMillis) {
+	public synchronized void setMinEvictableIdleTimeMillis(long minEvictableIdleTimeMillis) {
 		this.config.minEvictableIdleTimeMillis = minEvictableIdleTimeMillis;
 	}
 
@@ -207,8 +178,7 @@ public class HzDataSourceImpl extends BaseServiceSupporter implements
 		return config.softMinEvictableIdleTimeMillis;
 	}
 
-	public synchronized void setSoftMinEvictableIdleTimeMillis(
-			long softMinEvictableIdleTimeMillis) {
+	public synchronized void setSoftMinEvictableIdleTimeMillis(long softMinEvictableIdleTimeMillis) {
 		this.config.softMinEvictableIdleTimeMillis = softMinEvictableIdleTimeMillis;
 	}
 
@@ -225,21 +195,12 @@ public class HzDataSourceImpl extends BaseServiceSupporter implements
 	}
 
 	public HConnection getHConnection() throws ZooKeeperConnectionException {
-		HConnection result = null;
-		//
-		try {
-			result = createHzDataSource().getHConnection();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return result;
+		return createHzDataSource().getHConnection();
 	}
 
-	public synchronized void close()
-			throws ZooKeeperConnectionException {
+	public synchronized void close() throws ZooKeeperConnectionException {
 		if (this.closed) {
-			throw new ZooKeeperConnectionException(
-					"HzDataSource was already closed");
+			throw new ZooKeeperConnectionException("HzDataSource was already closed");
 		}
 		//
 		this.closed = true;
@@ -254,11 +215,9 @@ public class HzDataSourceImpl extends BaseServiceSupporter implements
 		}
 	}
 
-	protected synchronized HzDataSource createHzDataSource()
-			throws ZooKeeperConnectionException {
+	protected synchronized HzDataSource createHzDataSource() throws ZooKeeperConnectionException {
 		if (this.closed) {
-			throw new ZooKeeperConnectionException(
-					"HzDataSource was already closed");
+			throw new ZooKeeperConnectionException("HzDataSource was already closed");
 		}
 		//
 		if (this.instance != null) {
@@ -272,24 +231,17 @@ public class HzDataSourceImpl extends BaseServiceSupporter implements
 			for (int i = 0; i < this.initialSize; ++i)
 				this.objectPool.addObject();
 		} catch (Exception e) {
-			throw new ZooKeeperConnectionException("Error preloading the pool",
-					e);
+			throw new ZooKeeperConnectionException("Error preloading the pool", e);
 		}
 		//
 		String quorum = this.configuration.get("hbase.zookeeper.quorum", null);
-		int clientPort = this.configuration.getInt(
-				"hbase.zookeeper.property.clientPort", 0);
+		int clientPort = this.configuration.getInt("hbase.zookeeper.property.clientPort", 0);
 		LOGGER.info("Create HzDataSource [" + quorum + ":" + clientPort + "]");
 		return this.instance;
 	}
 
-	protected HConnectionFactory createHConnectionFactory()
-			throws ZooKeeperConnectionException {
+	protected HConnectionFactory createHConnectionFactory() throws ZooKeeperConnectionException {
 		HConnectionFactory result = null;
-		//
-		setTestOnBorrow(false);
-		setTestOnReturn(false);
-		setTestWhileIdle(false);
 		//
 		result = new HConnectionFactoryImpl(configuration);
 		return result;
@@ -297,27 +249,6 @@ public class HzDataSourceImpl extends BaseServiceSupporter implements
 
 	protected void createObjectPool() {
 		GenericObjectPool<HConnection> objectPool = new GenericObjectPool<HConnection>();
-		// objectPool.setMaxActive(this.config.maxActive);
-		// objectPool.setMaxIdle(this.config.maxIdle);
-		// objectPool.setMinIdle(this.config.minIdle);
-		// objectPool.setMaxWait(this.config.maxWait);
-		// objectPool.setTestOnBorrow(this.config.testOnBorrow);
-		// objectPool.setTestOnReturn(this.config.testOnReturn);
-		// objectPool
-		// .setTimeBetweenEvictionRunsMillis(this.config.timeBetweenEvictionRunsMillis);
-		// objectPool
-		// .setNumTestsPerEvictionRun(this.config.numTestsPerEvictionRun);
-		// objectPool
-		// .setMinEvictableIdleTimeMillis(this.config.minEvictableIdleTimeMillis);
-		// objectPool.setTestWhileIdle(this.config.testWhileIdle);
-		//
-		// // 2014/11/02
-		// objectPool.setWhenExhaustedAction(this.config.whenExhaustedAction);
-		// objectPool
-		// .setSoftMinEvictableIdleTimeMillis(this.config.softMinEvictableIdleTimeMillis);
-		// objectPool.setLifo(this.config.lifo);
-
-		// 2014/11/02
 		objectPool.setConfig(config);
 		this.objectPool = objectPool;
 	}
@@ -326,25 +257,22 @@ public class HzDataSourceImpl extends BaseServiceSupporter implements
 		this.instance = new PoolingHzDataSource(this.objectPool);
 	}
 
-	protected void createPoolableHConnectionFactory(
-			HConnectionFactory hConnectionFactory)
+	protected void createPoolableHConnectionFactory(HConnectionFactory hConnectionFactory)
 			throws ZooKeeperConnectionException {
 		PoolableHConnectionFactory result = null;
 		try {
-			result = new PoolableHConnectionFactory(hConnectionFactory,
-					this.objectPool, this.configuration);
+			result = new PoolableHConnectionFactory(hConnectionFactory, this.objectPool, this.configuration);
 			validateConnectionFactory(result);
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {
 			throw new ZooKeeperConnectionException(new StringBuilder()
-					.append("Cannot create PoolableHConnectionFactory (")
-					.append(e.getMessage()).append(")").toString(), e);
+					.append("Cannot create PoolableHConnectionFactory (").append(e.getMessage()).append(")").toString(),
+					e);
 		}
 	}
 
-	protected void validateConnectionFactory(
-			PoolableHConnectionFactory poolableFactory) throws Exception {
+	protected void validateConnectionFactory(PoolableHConnectionFactory poolableFactory) throws Exception {
 		HConnection hConnection = null;
 		try {
 			hConnection = (HConnection) poolableFactory.makeObject();
