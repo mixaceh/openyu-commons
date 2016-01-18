@@ -6,15 +6,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 import org.openyu.commons.thrift.TTransportFactory;
+import org.apache.thrift.transport.TFramedTransport;
+import org.apache.thrift.transport.TSocket;
+import org.apache.thrift.transport.TTransport;
+import org.apache.thrift.transport.TTransportException;
 import org.openyu.commons.nio.NioHelper;
 
-public abstract class TTransportFactorySupporter extends BaseServiceSupporter
-		implements TTransportFactory {
+public abstract class TTransportFactorySupporter extends BaseServiceSupporter implements TTransportFactory {
 
 	private static final long serialVersionUID = 7554826535443090258L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(TTransportFactorySupporter.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(TTransportFactorySupporter.class);
 
 	protected String ip;
 
@@ -28,8 +30,7 @@ public abstract class TTransportFactorySupporter extends BaseServiceSupporter
 
 	protected long retryPauseMills = NioHelper.DEFAULT_RETRY_PAUSE_MILLS;
 
-	public TTransportFactorySupporter(String ip, int port, int timeout,
-			int retryNumber, long retryPauseMills) {
+	public TTransportFactorySupporter(String ip, int port, int timeout, int retryNumber, long retryPauseMills) {
 		this.ip = ip;
 		this.port = port;
 		this.timeout = timeout;
@@ -38,21 +39,19 @@ public abstract class TTransportFactorySupporter extends BaseServiceSupporter
 	}
 
 	public TTransportFactorySupporter(String ip, int port) {
-		this(ip, port, 0, NioHelper.DEFAULT_RETRY_NUMBER,
-				NioHelper.DEFAULT_RETRY_PAUSE_MILLS);
+		this(ip, port, 0, NioHelper.DEFAULT_RETRY_NUMBER, NioHelper.DEFAULT_RETRY_PAUSE_MILLS);
 	}
 
 	public TTransportFactorySupporter(Socket socket) {
 		this.socket = socket;
 	}
 
-
 	/**
 	 * 內部啟動
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		
+
 	}
 
 	/**
@@ -60,6 +59,23 @@ public abstract class TTransportFactorySupporter extends BaseServiceSupporter
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		
+
+	}
+
+	/**
+	 * 建立連線
+	 * 
+	 * @return
+	 * @throws TTransportException
+	 */
+	protected TTransport createConneciton() throws TTransportException {
+		TTransport result = null;
+		//
+		if (this.socket == null) {
+			result = new TFramedTransport(new TSocket(this.ip, this.port, this.timeout));
+		} else {
+			result = new TFramedTransport(new TSocket(this.socket));
+		}
+		return result;
 	}
 }

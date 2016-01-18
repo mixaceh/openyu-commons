@@ -31,17 +31,16 @@ public interface CnfSession extends BaseModel, Closeable {
 	boolean isConnected();
 
 	// --------------------------------------------------
+	// 由此控制native方法是否開放給end使用
+	// --------------------------------------------------
 
-	void connect(InetAddress host, int port) throws SocketException,
-			IOException;
+	void connect(InetAddress host, int port) throws SocketException, IOException;
 
 	void connect(String hostname, int port) throws SocketException, IOException;
 
-	void connect(InetAddress host, int port, InetAddress localAddr,
-			int localPort) throws SocketException, IOException;
+	void connect(InetAddress host, int port, InetAddress localAddr, int localPort) throws SocketException, IOException;
 
-	void connect(String hostname, int port, InetAddress localAddr, int localPort)
-			throws SocketException, IOException;
+	void connect(String hostname, int port, InetAddress localAddr, int localPort) throws SocketException, IOException;
 
 	void connect(InetAddress host) throws SocketException, IOException;
 
@@ -209,8 +208,7 @@ public interface CnfSession extends BaseModel, Closeable {
 
 	int mlsd() throws IOException;
 
-	boolean login(String username, String password, String account)
-			throws IOException;
+	boolean login(String username, String password, String account) throws IOException;
 
 	int mlsd(String path) throws IOException;
 
@@ -252,8 +250,7 @@ public interface CnfSession extends BaseModel, Closeable {
 
 	void enterLocalPassiveMode();
 
-	boolean enterRemoteActiveMode(InetAddress host, int port)
-			throws IOException;
+	boolean enterRemoteActiveMode(InetAddress host, int port) throws IOException;
 
 	boolean enterRemotePassiveMode() throws IOException;
 
@@ -265,8 +262,7 @@ public interface CnfSession extends BaseModel, Closeable {
 
 	void setActivePortRange(int minPort, int maxPort);
 
-	void setActiveExternalIPAddress(String ipAddress)
-			throws UnknownHostException;
+	void setActiveExternalIPAddress(String ipAddress) throws UnknownHostException;
 
 	boolean setFileType(int fileType) throws IOException;
 
@@ -300,8 +296,7 @@ public interface CnfSession extends BaseModel, Closeable {
 
 	OutputStream appendFileStream(String remote) throws IOException;
 
-	boolean storeUniqueFile(String remote, InputStream local)
-			throws IOException;
+	boolean storeUniqueFile(String remote, InputStream local) throws IOException;
 
 	OutputStream storeUniqueFileStream(String remote) throws IOException;
 
@@ -325,8 +320,7 @@ public interface CnfSession extends BaseModel, Closeable {
 
 	boolean doCommand(String command, String params) throws IOException;
 
-	String[] doCommandAsStrings(String command, String params)
-			throws IOException;
+	String[] doCommandAsStrings(String command, String params) throws IOException;
 
 	FTPFile mlistFile(String pathname) throws IOException;
 
@@ -334,8 +328,7 @@ public interface CnfSession extends BaseModel, Closeable {
 
 	FTPFile[] mlistDir(String pathname) throws IOException;
 
-	FTPFile[] mlistDir(String pathname, FTPFileFilter filter)
-			throws IOException;
+	FTPFile[] mlistDir(String pathname, FTPFileFilter filter) throws IOException;
 
 	void setRestartOffset(long offset);
 
@@ -371,8 +364,7 @@ public interface CnfSession extends BaseModel, Closeable {
 
 	FTPFile[] listFiles() throws IOException;
 
-	FTPFile[] listFiles(String pathname, FTPFileFilter filter)
-			throws IOException;
+	FTPFile[] listFiles(String pathname, FTPFileFilter filter) throws IOException;
 
 	FTPFile[] listDirectories() throws IOException;
 
@@ -382,8 +374,7 @@ public interface CnfSession extends BaseModel, Closeable {
 
 	FTPListParseEngine initiateListParsing(String pathname) throws IOException;
 
-	FTPListParseEngine initiateListParsing(String parserKey, String pathname)
-			throws IOException;
+	FTPListParseEngine initiateListParsing(String parserKey, String pathname) throws IOException;
 
 	String getStatus() throws IOException;
 
@@ -391,8 +382,7 @@ public interface CnfSession extends BaseModel, Closeable {
 
 	String getModificationTime(String pathname) throws IOException;
 
-	boolean setModificationTime(String pathname, String timeval)
-			throws IOException;
+	boolean setModificationTime(String pathname, String timeval) throws IOException;
 
 	void setBufferSize(int bufSize);
 

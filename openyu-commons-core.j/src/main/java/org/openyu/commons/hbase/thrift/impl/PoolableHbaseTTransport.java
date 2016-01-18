@@ -10,8 +10,7 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.openyu.commons.util.Delegateable;
 
-public class PoolableHbaseTTransport extends TTransport implements
-		Delegateable<Hbase.Client> {
+public class PoolableHbaseTTransport extends TTransport implements Delegateable<Hbase.Client> {
 	/**
 	 * 真正關閉連線
 	 */
@@ -27,8 +26,7 @@ public class PoolableHbaseTTransport extends TTransport implements
 
 	private Hbase.Client delegate;
 
-	public PoolableHbaseTTransport(TTransport ttransport,
-			ObjectPool<TTransport> pool, boolean compactProtocol) {
+	public PoolableHbaseTTransport(TTransport ttransport, ObjectPool<TTransport> pool, boolean compactProtocol) {
 		this.ttransport = ttransport;
 		this.pool = pool;
 		//
@@ -53,13 +51,15 @@ public class PoolableHbaseTTransport extends TTransport implements
 					label = this.ttransport.toString();
 				} catch (Exception ex) {
 				}
-				throw new TTransportException("TTransport " + label
-						+ " was already closed");
+				throw new TTransportException("TTransport " + label + " was already closed");
 			}
 			throw new TTransportException("TTransport is null");
 		}
 	}
 
+	/**
+	 * 返回pool
+	 */
 	public synchronized void close() {
 		if (this.closed) {
 			return;
@@ -70,41 +70,41 @@ public class PoolableHbaseTTransport extends TTransport implements
 		} catch (Exception e) {
 			try {
 				this.pool.invalidateObject(this);
-			} catch (IllegalStateException ise) {
+			} catch (Exception ex) {
 				this.closed = true;
 				reallyClose();
-			} catch (Exception ie) {
 			}
-			throw new RuntimeException(
-					"Cannot close TTransport (isClosed check failed)");
+			throw new RuntimeException("Cannot close TTransport (isClosed check failed)");
 		}
 		if (!(isUnderlyingConectionClosed)) {
 			try {
 				this.pool.returnObject(this);
 				// }
-			} catch (IllegalStateException e) {
+			} catch (Exception e) {
 				this.closed = true;
 				reallyClose();
-			} catch (RuntimeException e) {
-				throw e;
-			} catch (Exception e) {
-				throw new RuntimeException(
-						"Cannot close TTransport (return to pool failed)");
+				throw new RuntimeException("Cannot close TTransport (return to pool failed)");
 			}
 		} else {
 			try {
 				this.pool.invalidateObject(this);
-			} catch (IllegalStateException e) {
+			} catch (Exception e) {
 				this.closed = true;
 				reallyClose();
-			} catch (Exception ie) {
 			}
 			throw new RuntimeException("Already closed.");
 		}
 	}
 
-	public void reallyClose() {
-		ttransport.close();
+	/**
+	 * 真正關閉連線
+	 */
+	public synchronized void reallyClose() {
+		try {
+			ttransport.close();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	public boolean isOpen() {
@@ -211,8 +211,7 @@ public class PoolableHbaseTTransport extends TTransport implements
 		}
 	}
 
-	protected void handleException(TTransportException e)
-			throws TTransportException {
+	protected void handleException(TTransportException e) throws TTransportException {
 		throw e;
 	}
 

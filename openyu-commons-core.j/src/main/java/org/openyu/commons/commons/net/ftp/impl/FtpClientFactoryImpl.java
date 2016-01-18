@@ -77,7 +77,7 @@ public class FtpClientFactoryImpl extends BaseServiceSupporter implements FtpCli
 	}
 
 	public FTPClient createFTPClient() throws SocketException, IOException {
-		FTPClient result = createClient();
+		FTPClient result = createConneciton();
 		//
 		int tries = 0;
 		boolean success = false;
@@ -89,7 +89,7 @@ public class FtpClientFactoryImpl extends BaseServiceSupporter implements FtpCli
 			} catch (ConnectException ex) {
 				// 當連線失敗時,重試
 				// ex.printStackTrace();
-				result = createClient();
+				result = createConneciton();
 				//
 				++tries;
 				// [1/3] time(s) java.net.ConnectException: Connection refused:
@@ -156,13 +156,13 @@ public class FtpClientFactoryImpl extends BaseServiceSupporter implements FtpCli
 	}
 
 	/**
-	 * 建立FTPClient
+	 * 建立連線
 	 * 
 	 * @return
 	 * @throws SocketException
 	 * @throws IOException
 	 */
-	protected FTPClient createClient() throws SocketException, IOException {
+	protected FTPClient createConneciton() throws SocketException, IOException {
 		FTPClient result = new FTPClient();
 		//
 		result.setConnectTimeout(this.connectTimeout);

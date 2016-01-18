@@ -8,13 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.openyu.commons.thrift.TTransportFactory;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
-public class PoolableHbaseTTransportFactory extends BaseServiceSupporter
-		implements PoolableObjectFactory<TTransport> {
+public class PoolableHbaseTTransportFactory extends BaseServiceSupporter implements PoolableObjectFactory<TTransport> {
 
 	private static final long serialVersionUID = -3233577852753579687L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(PoolableHbaseTTransportFactory.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(PoolableHbaseTTransportFactory.class);
 
 	protected volatile TTransportFactory ttransportFactory = null;
 
@@ -22,8 +20,8 @@ public class PoolableHbaseTTransportFactory extends BaseServiceSupporter
 
 	private boolean compactProtocol;
 
-	public PoolableHbaseTTransportFactory(TTransportFactory ttransportFactory,
-			ObjectPool<TTransport> pool, boolean compactProtocol) {
+	public PoolableHbaseTTransportFactory(TTransportFactory ttransportFactory, ObjectPool<TTransport> pool,
+			boolean compactProtocol) {
 		this.ttransportFactory = ttransportFactory;
 		this.pool = pool;
 		this.pool.setFactory(this);
@@ -67,12 +65,10 @@ public class PoolableHbaseTTransportFactory extends BaseServiceSupporter
 	public TTransport makeObject() throws Exception {
 		TTransport result = ttransportFactory.createTTransport();
 		if (result == null) {
-			throw new IllegalStateException(
-					"TTransport factory returned null from createTTransport");
+			throw new IllegalStateException("TTransport factory returned null from createTTransport");
 		}
 		try {
-			result = new PoolableHbaseTTransport(result, this.pool,
-					this.compactProtocol);
+			result = new PoolableHbaseTTransport(result, this.pool, this.compactProtocol);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			result = null;
@@ -88,6 +84,7 @@ public class PoolableHbaseTTransportFactory extends BaseServiceSupporter
 
 	public boolean validateObject(TTransport obj) {
 		try {
+			// TODO 只要連過線,之後斷線還是true
 			if (obj.isOpen()) {
 				return true;
 			} else {
