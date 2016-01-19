@@ -72,11 +72,11 @@ public class PoolableFtpClientFactory extends BaseServiceSupporter implements Po
 	}
 
 	public void destroyObject(FTPClient obj) throws Exception {
-		if (obj instanceof PoolableFtpClient) {
-			PoolableFtpClient conn = (PoolableFtpClient) obj;
-			conn.reallyClose();
-		} else {
-			throw new UnsupportedOperationException(obj.toString());
+		if (obj != null) {
+			if (obj instanceof PoolableFtpClient) {
+				PoolableFtpClient conn = (PoolableFtpClient) obj;
+				conn.reallyClose();
+			}
 		}
 	}
 

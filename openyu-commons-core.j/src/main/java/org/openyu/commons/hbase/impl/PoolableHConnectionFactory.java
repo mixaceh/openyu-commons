@@ -78,11 +78,11 @@ public class PoolableHConnectionFactory extends BaseServiceSupporter implements 
 	}
 
 	public void destroyObject(HConnection obj) throws Exception {
-		if (obj instanceof PoolableHConnection) {
-			PoolableHConnection conn = (PoolableHConnection) obj;
-			conn.reallyClose();
-		} else {
-			throw new UnsupportedOperationException(obj.toString());
+		if (obj != null) {
+			if (obj instanceof PoolableHConnection) {
+				PoolableHConnection conn = (PoolableHConnection) obj;
+				conn.reallyClose();
+			}
 		}
 	}
 

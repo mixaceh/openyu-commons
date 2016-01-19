@@ -17,7 +17,6 @@ public class CnfSessionFactoryImplTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		// GQC
 		cnfDataSource = new CnfDataSourceImpl();
 		cnfDataSource.setIp("127.0.0.1");
 		cnfDataSource.setPort(21);
