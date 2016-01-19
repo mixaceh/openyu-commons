@@ -7,19 +7,18 @@ import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.SystemHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class CnfFtoSupporterTest extends BaseTestSupporter {
+public class FtpClientFtoSupporterTest extends BaseTestSupporter {
 
-	private static FtpClientFtoSupporter cnfFtoSupporter;
+	private static FtpClientFtoSupporter ftpClientFtoSupporter;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		applicationContext = new ClassPathXmlApplicationContext(new String[] {
-				"META-INF/applicationContext-commons-core.xml",//
-				"applicationContext-init.xml",//
-				"applicationContext-commons-net-ftp.xml",//
+		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
+				"applicationContext-init.xml", //
+				"applicationContext-bean.xml", //
+				"applicationContext-ftp-client.xml",//
 		});
-		cnfFtoSupporter = (FtpClientFtoSupporter) applicationContext
-				.getBean("cnfFtoSupporter");
+		ftpClientFtoSupporter = (FtpClientFtoSupporter) applicationContext.getBean("ftpClientFtoSupporter");
 	}
 
 	@Test
@@ -30,7 +29,7 @@ public class CnfFtoSupporterTest extends BaseTestSupporter {
 		//
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = cnfFtoSupporter.listFiles();
+			result = ftpClientFtoSupporter.listFiles();
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -46,7 +45,7 @@ public class CnfFtoSupporterTest extends BaseTestSupporter {
 		//
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = cnfFtoSupporter.listNames();
+			result = ftpClientFtoSupporter.listNames();
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");

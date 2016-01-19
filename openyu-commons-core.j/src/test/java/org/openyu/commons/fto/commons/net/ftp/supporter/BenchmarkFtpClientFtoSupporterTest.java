@@ -22,25 +22,24 @@ import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
+public class BenchmarkFtpClientFtoSupporterTest extends BaseTestSupporter {
 
-	private static FtpClientFtoSupporter cnfFtoSupporter;
+	private static FtpClientFtoSupporter ftpClientFtoSupporter;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		applicationContext = new ClassPathXmlApplicationContext(new String[] {
-				"META-INF/applicationContext-commons-core.xml",//
-				"applicationContext-init.xml",//
-				"applicationContext-commons-net-ftp.xml",//
+		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
+				"applicationContext-init.xml", //
+				"applicationContext-bean.xml", //
+				"applicationContext-ftp-client.xml",//
 		});
-		cnfFtoSupporter = (FtpClientFtoSupporter) applicationContext
-				.getBean("cnfFtoSupporter");
+		ftpClientFtoSupporter = (FtpClientFtoSupporter) applicationContext.getBean("ftpClientFtoSupporter");
 	}
 
 	@Test
-	public void cnfFtoSupporter() {
-		System.out.println(cnfFtoSupporter);
-		assertNotNull(cnfFtoSupporter);
+	public void ftpClientFtoSupporter() {
+		System.out.println(ftpClientFtoSupporter);
+		assertNotNull(ftpClientFtoSupporter);
 	}
 
 	// ---------------------------------------------------
@@ -105,8 +104,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 		try {
 			ftpClient = createFTPClient();
 			//
-			in = new ByteArrayInputStream(
-					ByteHelper.randomByteArray(LENGTH_OF_BYTES));
+			in = new ByteArrayInputStream(ByteHelper.randomByteArray(LENGTH_OF_BYTES));
 			boolean writed = ftpClient.storeFile(DIR + "/TEST.txt", in);
 			System.out.println(writed);
 		} catch (Exception ex) {
@@ -122,7 +120,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 	// ---------------------------------------------------
 	// native
 	// ---------------------------------------------------
-	public static class NativeTest extends BenchmarkCnfFtoSupporterTest {
+	public static class NativeTest extends BenchmarkFtpClientFtoSupporterTest {
 
 		@Test
 		// storeFile: 10000 files, 102400000 bytes / 845318 ms. = 121.14
@@ -139,8 +137,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
 			//
-			ExecutorService service = Executors
-					.newFixedThreadPool(NUM_OF_THREADS);
+			ExecutorService service = Executors.newFixedThreadPool(NUM_OF_THREADS);
 			long beg = System.currentTimeMillis();
 			for (int i = 0; i < NUM_OF_THREADS; i++) {
 				//
@@ -150,8 +147,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 						try {
 							//
 							for (int i = 0; i < NUM_OF_TIMES; i++) {
-								byte[] buff = ByteHelper
-										.randomByteArray(LENGTH_OF_BYTES);
+								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								//
 								FTPClient ftpClient = null;
 								InputStream in = null;
@@ -161,11 +157,9 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 									in = new ByteArrayInputStream(buff);
 									// 0_0.txt
 									String fileName = userId + "_" + i + ".txt";
-									boolean writed = ftpClient.storeFile(DIR
-											+ "/" + fileName, in);
+									boolean writed = ftpClient.storeFile(DIR + "/" + fileName, in);
 
-									System.out.println("I[" + userId + "] F[" + i
-											+ "], " + writed);
+									System.out.println("I[" + userId + "] F[" + i + "], " + writed);
 									//
 									if (writed) {
 										timesCounter.incrementAndGet();
@@ -202,19 +196,13 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			//
 			long end = System.currentTimeMillis();
 			long dur = (end - beg);
-			double result = NumberHelper.round(
-					byteCounter.get() / (double) dur, 2);
-			double kresult = NumberHelper
-					.round((byteCounter.get() / (double) 1024)
-							/ (dur / (double) 1000), 2);
-			double mbresult = NumberHelper.round((byteCounter.get()
-					/ (double) 1024 / (double) 1024)
-					/ (dur / (double) 1000), 2);
+			double result = NumberHelper.round(byteCounter.get() / (double) dur, 2);
+			double kresult = NumberHelper.round((byteCounter.get() / (double) 1024) / (dur / (double) 1000), 2);
+			double mbresult = NumberHelper
+					.round((byteCounter.get() / (double) 1024 / (double) 1024) / (dur / (double) 1000), 2);
 			//
-			System.out.println("storeFile: " + timesCounter.get() + " files, "
-					+ byteCounter.get() + " bytes / " + dur + " ms. = "
-					+ result + " BYTES/MS, " + kresult + " K/S, " + mbresult
-					+ " MB/S");
+			System.out.println("storeFile: " + timesCounter.get() + " files, " + byteCounter.get() + " bytes / " + dur
+					+ " ms. = " + result + " BYTES/MS, " + kresult + " K/S, " + mbresult + " MB/S");
 		}
 
 		@Test
@@ -230,8 +218,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
 			//
-			ExecutorService service = Executors
-					.newFixedThreadPool(NUM_OF_THREADS);
+			ExecutorService service = Executors.newFixedThreadPool(NUM_OF_THREADS);
 			long beg = System.currentTimeMillis();
 			for (int i = 0; i < NUM_OF_THREADS; i++) {
 				//
@@ -241,8 +228,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 						try {
 							//
 							for (int i = 0; i < NUM_OF_TIMES; i++) {
-								byte[] buff = ByteHelper
-										.randomByteArray(LENGTH_OF_BYTES);
+								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								//
 								FTPClient ftpClient = null;
 								OutputStream out = null;
@@ -252,11 +238,9 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 									//
 									out = new ByteArrayOutputStream();
 									String fileName = userId + "_" + i + ".txt";
-									boolean read = ftpClient.retrieveFile(DIR
-											+ "/" + fileName, out);
+									boolean read = ftpClient.retrieveFile(DIR + "/" + fileName, out);
 
-									System.out.println("I[" + userId + "] F[" + i
-											+ "], " + read);
+									System.out.println("I[" + userId + "] F[" + i + "], " + read);
 									//
 									if (read) {
 										timesCounter.incrementAndGet();
@@ -293,19 +277,13 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			//
 			long end = System.currentTimeMillis();
 			long dur = (end - beg);
-			double result = NumberHelper.round(
-					byteCounter.get() / (double) dur, 2);
-			double kresult = NumberHelper
-					.round((byteCounter.get() / (double) 1024)
-							/ (dur / (double) 1000), 2);
-			double mbresult = NumberHelper.round((byteCounter.get()
-					/ (double) 1024 / (double) 1024)
-					/ (dur / (double) 1000), 2);
+			double result = NumberHelper.round(byteCounter.get() / (double) dur, 2);
+			double kresult = NumberHelper.round((byteCounter.get() / (double) 1024) / (dur / (double) 1000), 2);
+			double mbresult = NumberHelper
+					.round((byteCounter.get() / (double) 1024 / (double) 1024) / (dur / (double) 1000), 2);
 			//
-			System.out.println("retrieveFile: " + timesCounter.get()
-					+ " files, " + byteCounter.get() + " bytes / " + dur
-					+ " ms. = " + result + " BYTES/MS, " + kresult + " K/S, "
-					+ mbresult + " MB/S");
+			System.out.println("retrieveFile: " + timesCounter.get() + " files, " + byteCounter.get() + " bytes / "
+					+ dur + " ms. = " + result + " BYTES/MS, " + kresult + " K/S, " + mbresult + " MB/S");
 		}
 
 		@Test
@@ -321,8 +299,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
 			//
-			ExecutorService service = Executors
-					.newFixedThreadPool(NUM_OF_THREADS);
+			ExecutorService service = Executors.newFixedThreadPool(NUM_OF_THREADS);
 			long beg = System.currentTimeMillis();
 			for (int i = 0; i < NUM_OF_THREADS; i++) {
 				//
@@ -332,8 +309,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 						try {
 							//
 							for (int i = 0; i < NUM_OF_TIMES; i++) {
-								byte[] buff = ByteHelper
-										.randomByteArray(LENGTH_OF_BYTES);
+								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								//
 								FTPClient ftpClient = null;
 								OutputStream out = null;
@@ -344,12 +320,9 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 									out = new ByteArrayOutputStream();
 									String fileName = userId + "_" + i + ".txt";
 									String newName = "RENAME_" + fileName;
-									boolean renamed = ftpClient.rename(DIR
-											+ "/" + fileName, DIR + "/"
-											+ newName);
+									boolean renamed = ftpClient.rename(DIR + "/" + fileName, DIR + "/" + newName);
 
-									System.out.println("I[" + userId + "] F[" + i
-											+ "], " + renamed);
+									System.out.println("I[" + userId + "] F[" + i + "], " + renamed);
 									//
 									if (renamed) {
 										timesCounter.incrementAndGet();
@@ -386,13 +359,11 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			//
 			long end = System.currentTimeMillis();
 			long dur = (end - beg);
-			double result = NumberHelper.round(timesCounter.get()
-					/ (double) dur, 2);
-			double sresult = NumberHelper.round(timesCounter.get()
-					/ (dur / (double) 1000), 2);
+			double result = NumberHelper.round(timesCounter.get() / (double) dur, 2);
+			double sresult = NumberHelper.round(timesCounter.get() / (dur / (double) 1000), 2);
 			//
-			System.out.println("rename: " + timesCounter.get() + " files / "
-					+ dur + " ms. = " + result + " F/MS, " + sresult + " F/S");
+			System.out.println("rename: " + timesCounter.get() + " files / " + dur + " ms. = " + result + " F/MS, "
+					+ sresult + " F/S");
 		}
 
 		@Test
@@ -407,8 +378,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
 			//
-			ExecutorService service = Executors
-					.newFixedThreadPool(NUM_OF_THREADS);
+			ExecutorService service = Executors.newFixedThreadPool(NUM_OF_THREADS);
 			long beg = System.currentTimeMillis();
 			for (int i = 0; i < NUM_OF_THREADS; i++) {
 				//
@@ -418,8 +388,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 						try {
 							//
 							for (int i = 0; i < NUM_OF_TIMES; i++) {
-								byte[] buff = ByteHelper
-										.randomByteArray(LENGTH_OF_BYTES);
+								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								//
 								FTPClient ftpClient = null;
 								OutputStream out = null;
@@ -430,11 +399,9 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 									out = new ByteArrayOutputStream();
 									String fileName = userId + "_" + i + ".txt";
 									String newName = "RENAME_" + fileName;
-									boolean deleted = ftpClient.deleteFile(DIR
-											+ "/" + newName);
+									boolean deleted = ftpClient.deleteFile(DIR + "/" + newName);
 
-									System.out.println("I[" + userId + "] F[" + i
-											+ "], " + deleted);
+									System.out.println("I[" + userId + "] F[" + i + "], " + deleted);
 									//
 									if (deleted) {
 										timesCounter.incrementAndGet();
@@ -471,21 +438,18 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			//
 			long end = System.currentTimeMillis();
 			long dur = (end - beg);
-			double result = NumberHelper.round(timesCounter.get()
-					/ (double) dur, 2);
-			double sresult = NumberHelper.round(timesCounter.get()
-					/ (dur / (double) 1000), 2);
+			double result = NumberHelper.round(timesCounter.get() / (double) dur, 2);
+			double sresult = NumberHelper.round(timesCounter.get() / (dur / (double) 1000), 2);
 			//
-			System.out.println("deleteFile: " + timesCounter.get() + " files, "
-					+ byteCounter.get() + " bytes / " + dur + " ms. = "
-					+ result + " F/MS, " + sresult + " F/S");
+			System.out.println("deleteFile: " + timesCounter.get() + " files, " + byteCounter.get() + " bytes / " + dur
+					+ " ms. = " + result + " F/MS, " + sresult + " F/S");
 		}
 	}
 
 	// ---------------------------------------------------
 	// optimized
 	// ---------------------------------------------------
-	public static class OptimizedTest extends BenchmarkCnfFtoSupporterTest {
+	public static class OptimizedTest extends BenchmarkFtpClientFtoSupporterTest {
 
 		@Test
 		// write: 10000 files, 102400000 bytes / 512460 ms. = 199.82 BYTES/MS,
@@ -500,8 +464,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
 			//
-			ExecutorService service = Executors
-					.newFixedThreadPool(NUM_OF_THREADS);
+			ExecutorService service = Executors.newFixedThreadPool(NUM_OF_THREADS);
 			long beg = System.currentTimeMillis();
 			for (int i = 0; i < NUM_OF_THREADS; i++) {
 				//
@@ -512,19 +475,16 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 						try {
 							//
 							for (int i = 0; i < NUM_OF_TIMES; i++) {
-								byte[] buff = ByteHelper
-										.randomByteArray(LENGTH_OF_BYTES);
+								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								InputStream in = null;
 								try {
 									//
 									in = new ByteArrayInputStream(buff);
 									// 0_0.txt
 									String fileName = userId + "_" + i + ".txt";
-									boolean writed = cnfFtoSupporter.write(DIR
-											+ "/" + fileName, in);
+									boolean writed = ftpClientFtoSupporter.write(DIR + "/" + fileName, in);
 
-									System.out.println("I[" + userId + "] F[" + i
-											+ "], " + writed);
+									System.out.println("I[" + userId + "] F[" + i + "], " + writed);
 									//
 									if (writed) {
 										timesCounter.incrementAndGet();
@@ -554,19 +514,13 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			//
 			long end = System.currentTimeMillis();
 			long dur = (end - beg);
-			double result = NumberHelper.round(
-					byteCounter.get() / (double) dur, 2);
-			double kresult = NumberHelper
-					.round((byteCounter.get() / (double) 1024)
-							/ (dur / (double) 1000), 2);
-			double mbresult = NumberHelper.round((byteCounter.get()
-					/ (double) 1024 / (double) 1024)
-					/ (dur / (double) 1000), 2);
+			double result = NumberHelper.round(byteCounter.get() / (double) dur, 2);
+			double kresult = NumberHelper.round((byteCounter.get() / (double) 1024) / (dur / (double) 1000), 2);
+			double mbresult = NumberHelper
+					.round((byteCounter.get() / (double) 1024 / (double) 1024) / (dur / (double) 1000), 2);
 			//
-			System.out.println("write: " + timesCounter.get() + " files, "
-					+ byteCounter.get() + " bytes / " + dur + " ms. = "
-					+ result + " BYTES/MS, " + kresult + " K/S, " + mbresult
-					+ " MB/S");
+			System.out.println("write: " + timesCounter.get() + " files, " + byteCounter.get() + " bytes / " + dur
+					+ " ms. = " + result + " BYTES/MS, " + kresult + " K/S, " + mbresult + " MB/S");
 		}
 
 		@Test
@@ -582,8 +536,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
 			//
-			ExecutorService service = Executors
-					.newFixedThreadPool(NUM_OF_THREADS);
+			ExecutorService service = Executors.newFixedThreadPool(NUM_OF_THREADS);
 			long beg = System.currentTimeMillis();
 			for (int i = 0; i < NUM_OF_THREADS; i++) {
 				//
@@ -593,18 +546,15 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 						try {
 							//
 							for (int i = 0; i < NUM_OF_TIMES; i++) {
-								byte[] buff = ByteHelper
-										.randomByteArray(LENGTH_OF_BYTES);
+								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								OutputStream out = null;
 								//
 								try {
 									out = new ByteArrayOutputStream();
 									String fileName = userId + "_" + i + ".txt";
-									boolean read = cnfFtoSupporter.read(DIR
-											+ "/" + fileName, out);
+									boolean read = ftpClientFtoSupporter.read(DIR + "/" + fileName, out);
 
-									System.out.println("I[" + userId + "] F[" + i
-											+ "], " + read);
+									System.out.println("I[" + userId + "] F[" + i + "], " + read);
 									//
 									if (read) {
 										timesCounter.incrementAndGet();
@@ -634,19 +584,13 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			//
 			long end = System.currentTimeMillis();
 			long dur = (end - beg);
-			double result = NumberHelper.round(
-					byteCounter.get() / (double) dur, 2);
-			double kresult = NumberHelper
-					.round((byteCounter.get() / (double) 1024)
-							/ (dur / (double) 1000), 2);
-			double mbresult = NumberHelper.round((byteCounter.get()
-					/ (double) 1024 / (double) 1024)
-					/ (dur / (double) 1000), 2);
+			double result = NumberHelper.round(byteCounter.get() / (double) dur, 2);
+			double kresult = NumberHelper.round((byteCounter.get() / (double) 1024) / (dur / (double) 1000), 2);
+			double mbresult = NumberHelper
+					.round((byteCounter.get() / (double) 1024 / (double) 1024) / (dur / (double) 1000), 2);
 			//
-			System.out.println("read: " + timesCounter.get() + " files, "
-					+ byteCounter.get() + " bytes / " + dur + " ms. = "
-					+ result + " BYTES/MS, " + kresult + " K/S, " + mbresult
-					+ " MB/S");
+			System.out.println("read: " + timesCounter.get() + " files, " + byteCounter.get() + " bytes / " + dur
+					+ " ms. = " + result + " BYTES/MS, " + kresult + " K/S, " + mbresult + " MB/S");
 		}
 
 		@Test
@@ -661,8 +605,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
 			//
-			ExecutorService service = Executors
-					.newFixedThreadPool(NUM_OF_THREADS);
+			ExecutorService service = Executors.newFixedThreadPool(NUM_OF_THREADS);
 			long beg = System.currentTimeMillis();
 			for (int i = 0; i < NUM_OF_THREADS; i++) {
 				//
@@ -672,20 +615,17 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 						try {
 							//
 							for (int i = 0; i < NUM_OF_TIMES; i++) {
-								byte[] buff = ByteHelper
-										.randomByteArray(LENGTH_OF_BYTES);
+								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								OutputStream out = null;
 								//
 								try {
 									out = new ByteArrayOutputStream();
 									String fileName = userId + "_" + i + ".txt";
 									String newName = "RENAME_" + fileName;
-									boolean renamed = cnfFtoSupporter.rename(
-											DIR + "/" + fileName, DIR + "/"
-													+ newName);
+									boolean renamed = ftpClientFtoSupporter.rename(DIR + "/" + fileName,
+											DIR + "/" + newName);
 
-									System.out.println("I[" + userId + "] F[" + i
-											+ "], " + renamed);
+									System.out.println("I[" + userId + "] F[" + i + "], " + renamed);
 									//
 									if (renamed) {
 										timesCounter.incrementAndGet();
@@ -715,13 +655,11 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			//
 			long end = System.currentTimeMillis();
 			long dur = (end - beg);
-			double result = NumberHelper.round(timesCounter.get()
-					/ (double) dur, 2);
-			double sresult = NumberHelper.round(timesCounter.get()
-					/ (dur / (double) 1000), 2);
+			double result = NumberHelper.round(timesCounter.get() / (double) dur, 2);
+			double sresult = NumberHelper.round(timesCounter.get() / (dur / (double) 1000), 2);
 			//
-			System.out.println("rename: " + timesCounter.get() + " files / "
-					+ dur + " ms. = " + result + " F/MS, " + sresult + " F/S");
+			System.out.println("rename: " + timesCounter.get() + " files / " + dur + " ms. = " + result + " F/MS, "
+					+ sresult + " F/S");
 		}
 
 		@Test
@@ -736,8 +674,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			final AtomicLong timesCounter = new AtomicLong(0);
 			final AtomicLong byteCounter = new AtomicLong(0);
 			//
-			ExecutorService service = Executors
-					.newFixedThreadPool(NUM_OF_THREADS);
+			ExecutorService service = Executors.newFixedThreadPool(NUM_OF_THREADS);
 			long beg = System.currentTimeMillis();
 			for (int i = 0; i < NUM_OF_THREADS; i++) {
 				//
@@ -747,19 +684,16 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 						try {
 							//
 							for (int i = 0; i < NUM_OF_TIMES; i++) {
-								byte[] buff = ByteHelper
-										.randomByteArray(LENGTH_OF_BYTES);
+								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								OutputStream out = null;
 								//
 								try {
 									out = new ByteArrayOutputStream();
 									String fileName = userId + "_" + i + ".txt";
 									String newName = "RENAME_" + fileName;
-									boolean deleted = cnfFtoSupporter
-											.delete(DIR + "/" + newName);
+									boolean deleted = ftpClientFtoSupporter.delete(DIR + "/" + newName);
 
-									System.out.println("I[" + userId + "] F[" + i
-											+ "], " + deleted);
+									System.out.println("I[" + userId + "] F[" + i + "], " + deleted);
 									//
 									if (deleted) {
 										timesCounter.incrementAndGet();
@@ -788,13 +722,11 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 			//
 			long end = System.currentTimeMillis();
 			long dur = (end - beg);
-			double result = NumberHelper.round(timesCounter.get()
-					/ (double) dur, 2);
-			double sresult = NumberHelper.round(timesCounter.get()
-					/ (dur / (double) 1000), 2);
+			double result = NumberHelper.round(timesCounter.get() / (double) dur, 2);
+			double sresult = NumberHelper.round(timesCounter.get() / (dur / (double) 1000), 2);
 			//
-			System.out.println("delete: " + timesCounter.get() + " files / "
-					+ dur + " ms. = " + result + " F/MS, " + sresult + " F/S");
+			System.out.println("delete: " + timesCounter.get() + " files / " + dur + " ms. = " + result + " F/MS, "
+					+ sresult + " F/S");
 		}
 	}
 
