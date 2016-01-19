@@ -1,13 +1,13 @@
 package org.openyu.commons.blank;
 
-import org.openyu.commons.service.supporter.BaseServiceFactorySupporter;
+import org.openyu.commons.service.supporter.BaseServiceFactoryBeanSupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * BlankService工廠
  */
-public final class BlankServiceFactoryBean<T extends BlankService> extends BaseServiceFactorySupporter<BlankService> {
+public final class BlankServiceFactoryBean<T extends BlankService> extends BaseServiceFactoryBeanSupporter<BlankService> {
 
 	private static final long serialVersionUID = -1401366707657809071L;
 

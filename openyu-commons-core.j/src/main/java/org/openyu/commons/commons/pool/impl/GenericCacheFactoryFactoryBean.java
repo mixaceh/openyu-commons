@@ -2,7 +2,7 @@ package org.openyu.commons.commons.pool.impl;
 
 import org.openyu.commons.commons.pool.CacheableObjectFactory;
 import org.openyu.commons.commons.pool.GenericCacheFactory;
-import org.openyu.commons.service.supporter.BaseServiceFactorySupporter;
+import org.openyu.commons.service.supporter.BaseServiceFactoryBeanSupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * GenericCacheFactory工廠
  */
 public final class GenericCacheFactoryFactoryBean<T, U extends GenericCacheFactory<T>>
-		extends BaseServiceFactorySupporter<GenericCacheFactory<T>> {
+		extends BaseServiceFactoryBeanSupporter<GenericCacheFactory<T>> {
 
 	private static final long serialVersionUID = 7441283283901230776L;
 

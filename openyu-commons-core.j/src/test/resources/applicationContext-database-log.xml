@@ -13,7 +13,7 @@
 	<bean
 		id="logDataSourceTarget"
 		class="org.openyu.commons.commons.dbcp.BasicDataSourceFactoryBean"
-		parent="baseFactorySupporter">
+		parent="baseFactoryBeanSupporter">
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/dbcp-log.properties" />

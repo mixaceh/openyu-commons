@@ -1,7 +1,7 @@
 package org.openyu.commons.util;
 
-import org.openyu.commons.service.supporter.BaseFactorySupporter;
-import org.openyu.commons.service.supporter.BaseServiceFactorySupporter;
+import org.openyu.commons.service.supporter.BaseFactoryBeanSupporter;
+import org.openyu.commons.service.supporter.BaseServiceFactoryBeanSupporter;
 import org.openyu.commons.thread.ThreadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * ConfigHelper工廠
  */
-public final class ConfigHelperFactoryBean extends BaseFactorySupporter<ConfigHelper> {
+public final class ConfigHelperFactoryBean extends BaseFactoryBeanSupporter<ConfigHelper> {
 
 	private static final long serialVersionUID = 7441283283901230776L;
 

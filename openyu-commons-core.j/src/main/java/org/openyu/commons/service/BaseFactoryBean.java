@@ -9,6 +9,6 @@ import org.springframework.beans.factory.FactoryBean;
  * 
  * 2.properties
  */
-public interface BaseFactory<T> extends BaseService, FactoryBean<T> {
+public interface BaseFactoryBean<T> extends BaseService, FactoryBean<T> {
 
 }

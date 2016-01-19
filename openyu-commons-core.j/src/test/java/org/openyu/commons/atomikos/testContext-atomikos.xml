@@ -103,7 +103,7 @@
 	<bean
 		id="atomikosDataSourceBeanFactoryBean"
 		class="org.openyu.commons.atomikos.AtomikosDataSourceBeanFactoryBean"
-		parent="baseFactorySupporter">
+		parent="baseFactoryBeanSupporter">
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/atomikos.properties" />
@@ -121,7 +121,7 @@
 	<bean
 		id="atomikosDataSourceBeanGroupFactoryBean"
 		class="org.openyu.commons.atomikos.AtomikosDataSourceBeanGroupFactoryBean"
-		parent="baseFactorySupporter">
+		parent="baseFactoryBeanSupporter">
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/atomikosX.properties" />

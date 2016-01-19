@@ -17,7 +17,7 @@ public class ApplicationContextFtpClientTest extends BaseTestSupporter {
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"META-INF/applicationContext-commons-core.xml", //
+				"applicationContext-bean.xml", //
 				"applicationContext-ftp-client.xml",//
 		});
 	}

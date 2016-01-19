@@ -91,7 +91,7 @@
 	<bean
 		id="basicDataSourceFactoryBean"
 		class="org.openyu.commons.commons.dbcp.BasicDataSourceFactoryBean"
-		parent="baseFactorySupporter">
+		parent="baseFactoryBeanSupporter">
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/dbcp.properties" />
@@ -109,7 +109,7 @@
 	<bean
 		id="basicDataSourceGroupFactoryBean"
 		class="org.openyu.commons.commons.dbcp.BasicDataSourceGroupFactoryBean"
-		parent="baseFactorySupporter">
+		parent="baseFactoryBeanSupporter">
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/dbcp.properties" />

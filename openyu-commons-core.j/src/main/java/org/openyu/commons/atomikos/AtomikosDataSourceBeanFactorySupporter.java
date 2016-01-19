@@ -2,14 +2,14 @@ package org.openyu.commons.atomikos;
 
 import java.util.Properties;
 
-import org.openyu.commons.service.supporter.BaseFactorySupporter;
+import org.openyu.commons.service.supporter.BaseFactoryBeanSupporter;
 import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atomikos.jdbc.AtomikosDataSourceBean;
 
-public abstract class AtomikosDataSourceBeanFactorySupporter<T> extends BaseFactorySupporter<T> {
+public abstract class AtomikosDataSourceBeanFactorySupporter<T> extends BaseFactoryBeanSupporter<T> {
 
 	private static final long serialVersionUID = 1808079562064927282L;
 

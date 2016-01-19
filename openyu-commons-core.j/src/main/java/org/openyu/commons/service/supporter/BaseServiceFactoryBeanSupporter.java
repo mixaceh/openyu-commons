@@ -9,17 +9,17 @@ import org.slf4j.LoggerFactory;
  * 
  * 1.實作 BaseService 的 service
  * 
- * 2.否則該用 BaseFactorySupporter
+ * 2.若不是BaseService, 要用BaseFactoryBeanSupporter
  */
-public abstract class BaseServiceFactorySupporter<T extends BaseService> extends BaseFactorySupporter<BaseService> {
+public abstract class BaseServiceFactoryBeanSupporter<T extends BaseService> extends BaseFactoryBeanSupporter<BaseService> {
 
 	private static final long serialVersionUID = -2017478815658304020L;
 
-	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseServiceFactorySupporter.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseServiceFactoryBeanSupporter.class);
 
 	protected T service;
 
-	public BaseServiceFactorySupporter() {
+	public BaseServiceFactoryBeanSupporter() {
 	}
 
 	/**

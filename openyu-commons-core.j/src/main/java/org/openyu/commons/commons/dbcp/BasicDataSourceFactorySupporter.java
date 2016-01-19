@@ -1,7 +1,7 @@
 package org.openyu.commons.commons.dbcp;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.openyu.commons.service.supporter.BaseFactorySupporter;
+import org.openyu.commons.service.supporter.BaseFactoryBeanSupporter;
 import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * BasicDataSource工廠Supporter
  */
-public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactorySupporter<T> {
+public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBeanSupporter<T> {
 
 	private static final long serialVersionUID = -7843419748237271524L;
 

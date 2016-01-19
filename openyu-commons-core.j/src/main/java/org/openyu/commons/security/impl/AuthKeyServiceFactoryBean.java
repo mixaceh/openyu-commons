@@ -3,7 +3,7 @@ package org.openyu.commons.security.impl;
 import org.openyu.commons.enumz.EnumHelper;
 import org.openyu.commons.security.AuthKeyService;
 import org.openyu.commons.security.SecurityType;
-import org.openyu.commons.service.supporter.BaseServiceFactorySupporter;
+import org.openyu.commons.service.supporter.BaseServiceFactoryBeanSupporter;
 import org.openyu.commons.thread.ThreadService;
 import org.openyu.commons.thread.anno.DefaultThreadService;
 import org.slf4j.Logger;
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * 認證碼服務工廠
  */
 public final class AuthKeyServiceFactoryBean<T extends AuthKeyService>
-		extends BaseServiceFactorySupporter<AuthKeyService> {
+		extends BaseServiceFactoryBeanSupporter<AuthKeyService> {
 
 	private static final long serialVersionUID = -5900541933254854765L;
 

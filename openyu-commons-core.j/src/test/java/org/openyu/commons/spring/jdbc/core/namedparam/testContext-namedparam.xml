@@ -27,7 +27,7 @@
 	<bean
 		id="basicDataSourceGroupFactoryBean"
 		class="org.openyu.commons.commons.dbcp.BasicDataSourceGroupFactoryBean"
-		parent="baseFactorySupporter">
+		parent="baseFactoryBeanSupporter">
 		<property
 			name="configLocation"
 			value="file:src/test/config/etc/dbcp.properties" />
@@ -36,7 +36,7 @@
 	<bean
 		id="namedParameterJdbcTemplateGroupFactoryBean"
 		class="org.openyu.commons.spring.jdbc.core.namedparam.NamedParameterJdbcTemplateGroupFactoryBean"
-		parent="baseFactorySupporter">
+		parent="baseFactoryBeanSupporter">
 		<!--  
 		<constructor-arg ref="basicDataSourceGroupFactoryBean" />
 		-->

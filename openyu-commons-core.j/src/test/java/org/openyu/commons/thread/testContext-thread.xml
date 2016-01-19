@@ -38,7 +38,7 @@
 	<bean
 		id="threadServiceFactoryBean"
 		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
-		parent="baseServiceFactorySupporter"
+		parent="baseServiceFactoryBeanSupporter"
 		p:configLocation="file:src/test/config/etc/ThreadService.properties" />
 
 	<bean
@@ -53,7 +53,7 @@
 	<bean
 		id="blockingThreadServiceFactoryBean"
 		class="org.openyu.commons.thread.impl.ThreadServiceFactoryBean"
-		parent="baseServiceFactorySupporter"
+		parent="baseServiceFactoryBeanSupporter"
 		p:configLocation="file:src/test/config/etc/BlockingThreadService.properties" />
 
 </beans>

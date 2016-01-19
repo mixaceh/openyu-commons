@@ -1,6 +1,6 @@
 package org.openyu.commons.thread.impl;
 
-import org.openyu.commons.service.supporter.BaseServiceFactorySupporter;
+import org.openyu.commons.service.supporter.BaseServiceFactoryBeanSupporter;
 import org.openyu.commons.thread.ThreadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,33 +9,33 @@ import org.slf4j.LoggerFactory;
  * ThreadService工廠
  */
 public final class ThreadServiceFactoryBean<T extends ThreadService>
-		extends BaseServiceFactorySupporter<ThreadService> {
+		extends BaseServiceFactoryBeanSupporter<ThreadService> {
 
 	private static final long serialVersionUID = 7441283283901230776L;
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(ThreadServiceFactoryBean.class);
 
-	public static final  String MAX_EXECUTOR_SIZE = "maxExecutorSize";
+	public static final String MAX_EXECUTOR_SIZE = "maxExecutorSize";
 	/**
 	 * 預設executor的最大數目
 	 */
 	public static final int DEFAULT_MAX_EXECUTOR_SIZE = 1;
 
-	public static final  String CORE_POOL_SIZE = "corePoolSize";
+	public static final String CORE_POOL_SIZE = "corePoolSize";
 
 	public static final int DEFAULT_CORE_POOL_SIZE = 8;
 
-	public static final  String KEEP_ALIVE_SECONDS = "keepAliveSeconds";
+	public static final String KEEP_ALIVE_SECONDS = "keepAliveSeconds";
 
 	public static final int DEFAULT_KEEP_ALIVE_SECONDS = 60;
 
-	public static final  String MAX_POOL_SIZE = "maxPoolSize";
+	public static final String MAX_POOL_SIZE = "maxPoolSize";
 	/**
 	 * 預設thread的最大數目
 	 */
 	public static final int DEFAULT_MAX_POOL_SIZE = 8;
 
-	public static final  String QUEUE_CAPACITY = "queueCapacity";
+	public static final String QUEUE_CAPACITY = "queueCapacity";
 
 	public static final int DEFAULT_QUEUE_CAPACITY = 8;
 

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- Apache Commons Net FTP Connection Pool -->
+	<!-- use PropertyOverrideConfigurer in applicationContext-init.xml -->
+	<bean
+		id="cnfDataSource"
+		class="org.openyu.commons.commons.net.ftp.impl.CnfDataSourceImpl"
+		destroy-method="close">
+		<property name="ip">
+			<value>127.0.0.1</value>
+		</property>
+		<property name="port">
+			<value>21</value>
+		</property>
+		<property name="timeout">
+			<value>5000</value>
+		</property>
+		<property name="retryNumber">
+			<value>3</value>
+		</property>
+		<property name="retryPauseMills">
+			<value>1000</value>
+		</property>
+		<property name="username">
+			<value>root</value>
+		</property>
+		<property name="password">
+			<value>1111</value>
+		</property>
+		<property name="bufferSize">
+			<value>131072</value>
+		</property>
+		<property name="clientMode">
+			<value>2</value>
+		</property>
+		<property name="fileType">
+			<value>2</value>
+		</property>
+		<property name="controlEncoding">
+			<value>UTF-8</value>
+		</property>
+		<property name="remotePath">
+			<value>inbound/</value>
+		</property>
+		<property name="initialSize">
+			<value>1</value>
+		</property>
+		<property name="maxActive">
+			<value>10</value>
+		</property>
+		<property name="maxIdle">
+			<value>10</value>
+		</property>
+		<property name="minIdle">
+			<value>1</value>
+		</property>
+		<property name="maxWait">
+			<value>10000</value>
+		</property>
+		<property name="timeBetweenEvictionRunsMillis">
+			<value>60000</value>
+		</property>
+		<property name="numTestsPerEvictionRun">
+			<value>3</value>
+		</property>
+		<property name="minEvictableIdleTimeMillis">
+			<value>60000</value>
+		</property>
+	</bean>
+
+	<bean
+		id="cnfSessionFactory"
+		class="org.openyu.commons.commons.net.ftp.impl.CnfSessionFactoryImpl"
+		p:cnfDataSource-ref="cnfDataSource" />
+
+	<bean
+		id="cnfTemplate"
+		class="org.openyu.commons.fto.commons.net.ftp.impl.CnfTemplateImpl"
+		p:cnfSessionFactory-ref="cnfSessionFactory" />
+
+	<!-- fto supporter, use cnfSessionFactory 
+	<bean
+		id="cnfFtoSupporter"
+		class="org.openyu.commons.fto.commons.net.ftp.supporter.CnfFtoSupporter"
+		p:cnfSessionFactory-ref="cnfSessionFactory" />
+	-->
+	
+	<!-- fto supporter, use cnfTemplate -->
+	<bean
+		id="cnfFtoSupporter"
+		class="org.openyu.commons.fto.commons.net.ftp.supporter.CnfFtoSupporter"
+		p:cnfTemplate-ref="cnfTemplate" />
+
+</beans>

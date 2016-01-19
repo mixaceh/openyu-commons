@@ -8,75 +8,14 @@
 
 	<!-- Apache Commons Net FTP Connection Pool -->
 	<bean
-		id="ftpClientConnectionFactory"
-		class="org.openyu.commons.commons.net.ftp.impl.FtpClientConnectionFactoryImpl"
-		destroy-method="close">
-		<property name="ip">
-			<value>${ftpClient.ip}</value>
-		</property>
-		<property name="port">
-			<value>${ftpClient.port}</value>
-		</property>
-		<property name="connectTimeout">
-			<value>${ftpClient.connectTimeout}</value>
-		</property>
-		<property name="retryNumber">
-			<value>${ftpClient.retryNumber}</value>
-		</property>
-		<property name="retryPauseMills">
-			<value>${ftpClient.retryPauseMills}</value>
-		</property>
-		<property name="username">
-			<value>${ftpClient.username}</value>
-		</property>
-		<property name="password">
-			<value>${ftpClient.password}</value>
-		</property>
-		<property name="bufferSize">
-			<value>${ftpClient.bufferSize}</value>
-		</property>
-		<property name="clientMode">
-			<value>${ftpClient.clientMode}</value>
-		</property>
-		<property name="fileType">
-			<value>${ftpClient.fileType}</value>
-		</property>
-		<property name="controlEncoding">
-			<value>${ftpClient.controlEncoding}</value>
-		</property>
-		<property name="remotePath">
-			<value>${ftpClient.remotePath}</value>
-		</property>
-		<property name="initialSize">
-			<value>${ftpClient.initialSize}</value>
-		</property>
-		<property name="maxActive">
-			<value>${ftpClient.maxActive}</value>
-		</property>
-		<property name="maxIdle">
-			<value>${ftpClient.maxIdle}</value>
-		</property>
-		<property name="minIdle">
-			<value>${ftpClient.minIdle}</value>
-		</property>
-		<property name="maxWait">
-			<value>${ftpClient.maxWait}</value>
-		</property>
-		<property name="timeBetweenEvictionRunsMillis">
-			<value>${ftpClient.timeBetweenEvictionRunsMillis}</value>
-		</property>
-		<property name="numTestsPerEvictionRun">
-			<value>${ftpClient.numTestsPerEvictionRun}</value>
-		</property>
-		<property name="minEvictableIdleTimeMillis">
-			<value>${ftpClient.minEvictableIdleTimeMillis}</value>
-		</property>
-	</bean>
+		id="ftpClientConnectionFactoryFactoryBean"
+		class="org.openyu.commons.commons.net.ftp.impl.FtpClientConnectionFactoryFactoryBean"
+		p:configLocation="file:src/test/config/etc/ftp-client.properties" />
 
 	<bean
 		id="ftpClientSessionFactory"
 		class="org.openyu.commons.commons.net.ftp.impl.FtpClientSessionFactoryImpl"
-		p:ftpClientConnectionFactory-ref="ftpClientConnectionFactory" />
+		p:ftpClientConnectionFactory-ref="ftpClientConnectionFactoryFactoryBean" />
 
 	<bean
 		id="ftpClientTemplate"

@@ -13,7 +13,7 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
              http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
-	<!-- init by project -->
+	<!-- init -->
 	<import resource="classpath:applicationContext-init.xml" />
 
 	<!-- bean -->
@@ -23,11 +23,6 @@
 	<!-- database -->
 	<import resource="classpath:applicationContext-database.xml" />
 	<import resource="classpath:applicationContext-database-log.xml" />
-
-	<!-- cxf 
-	<import resource="classpath:applicationContext-cxf.xml" /> 
-	-->
-
 	<!-- scheduler -->
 	<import resource="classpath:applicationContext-scheduler.xml" />
 

@@ -3,14 +3,14 @@ package org.openyu.commons.spring.jdbc.datasource;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.openyu.commons.service.supporter.BaseFactorySupporter;
+import org.openyu.commons.service.supporter.BaseFactoryBeanSupporter;
 import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 
 public class LazyConnectionDataSourceProxyGroupFactoryBean
-		extends BaseFactorySupporter<LazyConnectionDataSourceProxy[]> {
+		extends BaseFactoryBeanSupporter<LazyConnectionDataSourceProxy[]> {
 
 	private static final long serialVersionUID = 1560497754167571755L;
 

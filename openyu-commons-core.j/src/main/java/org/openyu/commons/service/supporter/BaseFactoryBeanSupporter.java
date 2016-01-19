@@ -3,7 +3,7 @@ package org.openyu.commons.service.supporter;
 import java.util.Properties;
 
 import org.apache.commons.collections.ExtendedProperties;
-import org.openyu.commons.service.BaseFactory;
+import org.openyu.commons.service.BaseFactoryBean;
 import org.openyu.commons.service.ShutdownCallback;
 import org.openyu.commons.service.StartCallback;
 import org.slf4j.Logger;
@@ -20,11 +20,11 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
  * 
  * 3.extendedProperties (merged configLocation and properties)
  */
-public abstract class BaseFactorySupporter<T> extends BaseServiceSupporter implements BaseFactory<T> {
+public abstract class BaseFactoryBeanSupporter<T> extends BaseServiceSupporter implements BaseFactoryBean<T> {
 
 	private static final long serialVersionUID = -1565481677571797118L;
 
-	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseFactorySupporter.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseFactoryBeanSupporter.class);
 
 	private transient Resource configLocation;
 
@@ -35,7 +35,7 @@ public abstract class BaseFactorySupporter<T> extends BaseServiceSupporter imple
 	 */
 	protected transient ExtendedProperties extendedProperties = new ExtendedProperties();
 
-	public BaseFactorySupporter() {
+	public BaseFactoryBeanSupporter() {
 		addServiceCallback("StartCallbacker", new StartCallbacker());
 		addServiceCallback("ShutdownCallbacker", new ShutdownCallbacker());
 	}
