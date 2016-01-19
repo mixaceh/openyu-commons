@@ -24,24 +24,24 @@ import org.apache.hadoop.hbase.TableNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openyu.commons.model.supporter.BaseModelSupporter;
-import org.openyu.commons.commons.net.ftp.CnfSession;
-import org.openyu.commons.commons.net.ftp.ex.CnfSessionException;
+import org.openyu.commons.commons.net.ftp.FtpClientSession;
+import org.openyu.commons.commons.net.ftp.ex.FtpClientSessionException;
 
-public class CnfSessionImpl extends BaseModelSupporter implements
-		CnfSession {
+public class FtpClientSessionImpl extends BaseModelSupporter implements
+		FtpClientSession {
 
 	private static final long serialVersionUID = 7538640140017769305L;
 
 	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(CnfSessionImpl.class);
+			.getLogger(FtpClientSessionImpl.class);
 
 	protected boolean closed = false;
 
-	private transient CnfSessionFactoryImpl factory;
+	private transient FtpClientSessionFactoryImpl factory;
 
 	protected FTPClient delegate;
 
-	public CnfSessionImpl(CnfSessionFactoryImpl factory,
+	public FtpClientSessionImpl(FtpClientSessionFactoryImpl factory,
 			FTPClient ftpClient) {
 		this.factory = factory;
 		this.delegate = ftpClient;
@@ -53,20 +53,20 @@ public class CnfSessionImpl extends BaseModelSupporter implements
 
 	protected void errorIfClosed() {
 		if (this.closed)
-			throw new CnfSessionException("CnfSession was already closed");
+			throw new FtpClientSessionException("FtpClientSession was already closed");
 	}
 
-	public void close() throws CnfSessionException {
+	public void close() throws FtpClientSessionException {
 		if (isClosed()) {
-			throw new CnfSessionException(
-					"CnfSession was already closed");
+			throw new FtpClientSessionException(
+					"FtpClientSession was already closed");
 		}
 		this.closed = true;
 		//
 		try {
 			this.factory.closeSession();
 		} catch (Exception ex) {
-			throw new CnfSessionException("Cannot close CnfSession");
+			throw new FtpClientSessionException("Cannot close FtpClientSession");
 		}
 	}
 

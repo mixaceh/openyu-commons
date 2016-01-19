@@ -8,15 +8,15 @@ import org.apache.commons.pool.impl.GenericObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
-import org.openyu.commons.commons.net.ftp.CnfDataSource;
+import org.openyu.commons.commons.net.ftp.FtpClientConnectionFactory;
 import org.openyu.commons.commons.net.ftp.FtpClientFactory;
 import org.openyu.commons.nio.NioHelper;
 
-public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSource {
+public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter implements FtpClientConnectionFactory {
 
 	private static final long serialVersionUID = 8466854041599525298L;
 
-	private static transient final Logger LOGGER = LoggerFactory.getLogger(CnfDataSourceImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(FtpClientConnectionFactoryImpl.class);
 
 	private String ip;
 
@@ -55,13 +55,13 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSo
 	private GenericObjectPool.Config config = new GenericObjectPool.Config();
 
 	//
-	private volatile CnfDataSource instance;
+	private volatile FtpClientConnectionFactory instance;
 
 	protected GenericObjectPool<FTPClient> objectPool;
 
 	private boolean closed;
 
-	public CnfDataSourceImpl() {
+	public FtpClientConnectionFactoryImpl() {
 	}
 
 	/**
@@ -295,12 +295,12 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSo
 	}
 
 	public FTPClient getFTPClient() throws SocketException, IOException {
-		return createCnfDataSource().getFTPClient();
+		return createFtpClientConnectionFactory().getFTPClient();
 	}
 
 	public synchronized void close() throws IOException {
 		if (this.closed) {
-			throw new IOException("CnfDataSource was already closed");
+			throw new IOException("FtpClientConnectionFactory was already closed");
 		}
 		//
 		this.closed = true;
@@ -316,9 +316,9 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSo
 		}
 	}
 
-	protected synchronized CnfDataSource createCnfDataSource() throws SocketException, IOException {
+	protected synchronized FtpClientConnectionFactory createFtpClientConnectionFactory() throws SocketException, IOException {
 		if (this.closed) {
-			throw new SocketException("CnfDataSource was already closed");
+			throw new SocketException("FtpClientConnectionFactory was already closed");
 		}
 
 		if (this.instance != null) {
@@ -335,7 +335,7 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSo
 			throw new IOException("Error preloading the pool", e);
 		}
 		//
-		LOGGER.info("Create CnfDataSource [" + ip + ":" + port + "]");
+		LOGGER.info("Create FtpClientConnectionFactory [" + ip + ":" + port + "]");
 		return this.instance;
 	}
 
@@ -354,7 +354,7 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSo
 	}
 
 	protected void createInstance() throws SocketException {
-		this.instance = new PoolingCnfDataSource(this.objectPool);
+		this.instance = new PoolingFtpClientConnectionFactory(this.objectPool);
 	}
 
 	protected void createPoolableFTPClientFactory(FtpClientFactory ftpClientFactory) throws IOException {
@@ -380,17 +380,4 @@ public class CnfDataSourceImpl extends BaseServiceSupporter implements CnfDataSo
 			poolableFactory.destroyObject(ftpClient);
 		}
 	}
-
-	// public synchronized void restart() {
-	// try {
-	// close();
-	// // TODO restart, 2015/09/17 use refresh()
-	//
-	// } catch (Exception e) {
-	// LOGGER.error(new StringBuilder()
-	// .append("Could not restart CnfDataSource, cause: ")
-	// .append(e.getMessage()).toString());
-	// }
-	// }
-
 }

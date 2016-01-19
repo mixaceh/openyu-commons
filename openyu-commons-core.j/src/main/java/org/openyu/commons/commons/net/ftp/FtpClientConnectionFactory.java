@@ -7,9 +7,9 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.openyu.commons.service.BaseService;
 
 /**
- * Apache Commons Net FTP DataSource
+ * Apache Commons Net FTP ConnectionFactory
  */
-public interface CnfDataSource extends BaseService {
+public interface FtpClientConnectionFactory extends BaseService {
 
 	/**
 	 * 取得連線

@@ -4,11 +4,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
-import org.openyu.commons.commons.net.ftp.CnfDataSource;
-import org.openyu.commons.commons.net.ftp.CnfSession;
-import org.openyu.commons.commons.net.ftp.CnfSessionFactory;
-import org.openyu.commons.fto.commons.net.ftp.CnfTemplate;
-import org.openyu.commons.fto.commons.net.ftp.supporter.CnfFtoSupporter;
+import org.openyu.commons.commons.net.ftp.FtpClientConnectionFactory;
+import org.openyu.commons.commons.net.ftp.FtpClientSession;
+import org.openyu.commons.commons.net.ftp.FtpClientSessionFactory;
+import org.openyu.commons.fto.commons.net.ftp.FtpClientTemplate;
+import org.openyu.commons.fto.commons.net.ftp.supporter.FtpClientFtoSupporter;
 import org.apache.commons.net.ftp.FTPClient;
 
 public class ApplicationContextCommonsNetFtpTest extends BaseTestSupporter {
@@ -24,7 +24,7 @@ public class ApplicationContextCommonsNetFtpTest extends BaseTestSupporter {
 
 	@Test
 	public void cnfDataSource() throws Exception {
-		CnfDataSource bean = (CnfDataSource) applicationContext
+		FtpClientConnectionFactory bean = (FtpClientConnectionFactory) applicationContext
 				.getBean("cnfDataSource");
 		System.out.println(bean);
 		assertNotNull(bean);
@@ -36,31 +36,31 @@ public class ApplicationContextCommonsNetFtpTest extends BaseTestSupporter {
 
 	@Test
 	public void cnfSessionFactory() throws Exception {
-		CnfSessionFactory bean = (CnfSessionFactory) applicationContext
+		FtpClientSessionFactory bean = (FtpClientSessionFactory) applicationContext
 				.getBean("cnfSessionFactory");
 		System.out.println(bean);
 		assertNotNull(bean);
 		//
-		CnfSession session = bean.openSession();
+		FtpClientSession session = bean.openSession();
 		System.out.println(session);
 		assertNotNull(session);
 	}
 
 	@Test
 	public void cnfTemplate() throws Exception {
-		CnfTemplate bean = (CnfTemplate) applicationContext
+		FtpClientTemplate bean = (FtpClientTemplate) applicationContext
 				.getBean("cnfTemplate");
 		System.out.println(bean);
 		assertNotNull(bean);
 		//
-		CnfSession session = bean.getSession();
+		FtpClientSession session = bean.getSession();
 		System.out.println(session);
 		assertNotNull(session);
 	}
 
 	@Test
 	public void cnfFtoSupporter() {
-		CnfFtoSupporter bean = (CnfFtoSupporter) applicationContext
+		FtpClientFtoSupporter bean = (FtpClientFtoSupporter) applicationContext
 				.getBean("cnfFtoSupporter");
 		System.out.println(bean);
 		assertNotNull(bean);

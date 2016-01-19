@@ -13,8 +13,7 @@ public class FtpClientFactoryImplTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		// DEV
-		factory = new FtpClientFactoryImpl("10.1.24.143", 21, 0, 3, 1000L,
+		factory = new FtpClientFactoryImpl("127.0.0.1", 21, 0, 3, 1000L,
 				"root", "1111", 128 * 1024, 2, 2, "UTF-8",
 				"inbound/");
 	}

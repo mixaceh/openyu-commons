@@ -20,11 +20,11 @@ import org.apache.commons.net.ftp.FTPListParseEngine;
 import org.apache.commons.net.ftp.parser.FTPFileEntryParserFactory;
 import org.apache.commons.net.io.CopyStreamListener;
 import org.openyu.commons.model.BaseModel;
-import org.openyu.commons.commons.net.ftp.ex.CnfSessionException;
+import org.openyu.commons.commons.net.ftp.ex.FtpClientSessionException;
 
-public interface CnfSession extends BaseModel, Closeable {
+public interface FtpClientSession extends BaseModel, Closeable {
 
-	void close() throws CnfSessionException;
+	void close() throws FtpClientSessionException;
 
 	boolean isClosed();
 

@@ -5,21 +5,21 @@ import java.net.SocketException;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.pool.ObjectPool;
-import org.openyu.commons.commons.net.ftp.CnfDataSource;
+import org.openyu.commons.commons.net.ftp.FtpClientConnectionFactory;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
-public class PoolingCnfDataSource extends BaseServiceSupporter implements
-		CnfDataSource {
+public class PoolingFtpClientConnectionFactory extends BaseServiceSupporter implements
+		FtpClientConnectionFactory {
 
 	private static final long serialVersionUID = 4671468693002418428L;
 
 	private ObjectPool<FTPClient> pool;
 
-	public PoolingCnfDataSource() {
+	public PoolingFtpClientConnectionFactory() {
 		this(null);
 	}
 
-	public PoolingCnfDataSource(ObjectPool<FTPClient> pool) {
+	public PoolingFtpClientConnectionFactory(ObjectPool<FTPClient> pool) {
 		this.pool = pool;
 	}
 

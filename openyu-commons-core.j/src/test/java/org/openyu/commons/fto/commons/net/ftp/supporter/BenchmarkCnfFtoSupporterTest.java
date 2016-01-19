@@ -24,7 +24,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 
-	private static CnfFtoSupporter cnfFtoSupporter;
+	private static FtpClientFtoSupporter cnfFtoSupporter;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -33,7 +33,7 @@ public class BenchmarkCnfFtoSupporterTest extends BaseTestSupporter {
 				"applicationContext-init.xml",//
 				"applicationContext-commons-net-ftp.xml",//
 		});
-		cnfFtoSupporter = (CnfFtoSupporter) applicationContext
+		cnfFtoSupporter = (FtpClientFtoSupporter) applicationContext
 				.getBean("cnfFtoSupporter");
 	}
 

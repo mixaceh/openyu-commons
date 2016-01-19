@@ -2,19 +2,19 @@ package org.openyu.commons.fto.commons.net.ftp.ex;
 
 import org.openyu.commons.lang.ex.BaseRuntimeException;
 
-public class CnfFtoException extends BaseRuntimeException {
+public class FtpClientFtoException extends BaseRuntimeException {
 	
 	private static final long serialVersionUID = -7232266508228584182L;
 
-	public CnfFtoException(Throwable cause) {
+	public FtpClientFtoException(Throwable cause) {
 		super(cause);
 	}
 
-	public CnfFtoException(String message, Throwable cause) {
+	public FtpClientFtoException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public CnfFtoException(String message) {
+	public FtpClientFtoException(String message) {
 		super(message);
 	}
 }

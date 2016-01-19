@@ -11,7 +11,7 @@ import org.openyu.commons.fto.BaseFto;
 /**
  * Apache Commons Net FTP File Transfer Object
  */
-public interface CnfFto extends BaseFto {
+public interface FtpClientFto extends BaseFto {
 
 	String[] listNames(String pathname) throws IOException;
 

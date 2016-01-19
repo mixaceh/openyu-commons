@@ -6,21 +6,21 @@ import java.io.OutputStream;
 
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
-import org.openyu.commons.commons.net.ftp.CnfSession;
-import org.openyu.commons.commons.net.ftp.CnfSessionFactory;
-import org.openyu.commons.fto.commons.net.ftp.ex.CnfTemplateException;
+import org.openyu.commons.commons.net.ftp.FtpClientSession;
+import org.openyu.commons.commons.net.ftp.FtpClientSessionFactory;
+import org.openyu.commons.fto.commons.net.ftp.ex.FtpClientTemplateException;
 
-public interface CnfTemplate {
+public interface FtpClientTemplate {
 
-	CnfSessionFactory getCnfSessionFactory();
+	FtpClientSessionFactory getFtpClientSessionFactory();
 
-	void setCnfSessionFactory(CnfSessionFactory cnfSessionFactory);
+	void setFtpClientSessionFactory(FtpClientSessionFactory ftpClientSessionFactory);
 
-	CnfSession getSession();
+	FtpClientSession getSession();
 
 	void closeSession();
 
-	<T> T execute(CnfCallback<T> action) throws CnfTemplateException;
+	<T> T execute(FtpClientCallback<T> action) throws FtpClientTemplateException;
 
 	// --------------------------------------------------
 	

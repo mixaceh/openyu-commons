@@ -10,36 +10,36 @@ import org.junit.Test;
 import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.lang.SystemHelper;
 
-public class CnfDataSourceImplTest {
+public class FtpClientConnectionFactoryImplTest {
 
-	protected static CnfDataSourceImpl cnfDataSource;
+	protected static FtpClientConnectionFactoryImpl ftpClientConnectionFactory;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		cnfDataSource = new CnfDataSourceImpl();
-		cnfDataSource.setIp("127.0.0.1");
-		cnfDataSource.setPort(21);
-		cnfDataSource.setConnectTimeout(5000);
+		ftpClientConnectionFactory = new FtpClientConnectionFactoryImpl();
+		ftpClientConnectionFactory.setIp("127.0.0.1");
+		ftpClientConnectionFactory.setPort(21);
+		ftpClientConnectionFactory.setConnectTimeout(5000);
 		//
-		cnfDataSource.setMaxActive(2000);
-		cnfDataSource.setMaxIdle(2000);
+		ftpClientConnectionFactory.setMaxActive(2000);
+		ftpClientConnectionFactory.setMaxIdle(2000);
 		//
-		cnfDataSource.setRetryNumber(3);
-		cnfDataSource.setRetryPauseMills(1000L);
+		ftpClientConnectionFactory.setRetryNumber(3);
+		ftpClientConnectionFactory.setRetryPauseMills(1000L);
 		//
-		cnfDataSource.setUsername("root");
-		cnfDataSource.setPassword("1111");
-		cnfDataSource.setBufferSize(128 * 1024);
-		cnfDataSource.setClientMode(2);
-		cnfDataSource.setFileType(2);
-		cnfDataSource.setControlEncoding("UTF-8");
-		cnfDataSource.setRemotePath("inbound/");
+		ftpClientConnectionFactory.setUsername("root");
+		ftpClientConnectionFactory.setPassword("1111");
+		ftpClientConnectionFactory.setBufferSize(128 * 1024);
+		ftpClientConnectionFactory.setClientMode(2);
+		ftpClientConnectionFactory.setFileType(2);
+		ftpClientConnectionFactory.setControlEncoding("UTF-8");
+		ftpClientConnectionFactory.setRemotePath("inbound/");
 	}
 
 	@Test
-	public void cnfDataSource() {
-		System.out.println(cnfDataSource);
-		assertNotNull(cnfDataSource);
+	public void ftpClientConnectionFactory() {
+		System.out.println(ftpClientConnectionFactory);
+		assertNotNull(ftpClientConnectionFactory);
 	}
 
 	@Test
@@ -49,7 +49,7 @@ public class CnfDataSourceImplTest {
 		FTPClient result = null;
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = cnfDataSource.getFTPClient();
+			result = ftpClientConnectionFactory.getFTPClient();
 			System.out.println(result);
 			assertNotNull(result);
 			result.disconnect();
@@ -60,15 +60,15 @@ public class CnfDataSourceImplTest {
 
 	@Test
 	public void close() throws Exception {
-		cnfDataSource.getFTPClient();
-		cnfDataSource.close();
+		ftpClientConnectionFactory.getFTPClient();
+		ftpClientConnectionFactory.close();
 	}
 
 	@Test(expected = IOException.class)
 	public void closeException() throws Exception {
-		cnfDataSource.getFTPClient();
-		cnfDataSource.close();
-		cnfDataSource.close();
+		ftpClientConnectionFactory.getFTPClient();
+		ftpClientConnectionFactory.close();
+		ftpClientConnectionFactory.close();
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class CnfDataSourceImplTest {
 		int count = 1;
 		FTPClient result = null;
 		for (int i = 0; i < count; i++) {
-			result = cnfDataSource.getFTPClient();
+			result = ftpClientConnectionFactory.getFTPClient();
 			// result.disconnect();
 		}
 		//
@@ -106,7 +106,7 @@ public class CnfDataSourceImplTest {
 
 	@Test
 	public void ftpClient() throws Exception {
-		FTPClient ftpClient = cnfDataSource.getFTPClient();
+		FTPClient ftpClient = ftpClientConnectionFactory.getFTPClient();
 		//
 		System.out.println(ftpClient);
 		assertNotNull(ftpClient);
@@ -120,7 +120,7 @@ public class CnfDataSourceImplTest {
 		//
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			FTPClient client = cnfDataSource.getFTPClient();
+			FTPClient client = ftpClientConnectionFactory.getFTPClient();
 			System.out.println(client);
 			//
 			String[] result = client.listNames();

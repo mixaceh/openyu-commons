@@ -9,7 +9,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class CnfFtoSupporterTest extends BaseTestSupporter {
 
-	private static CnfFtoSupporter cnfFtoSupporter;
+	private static FtpClientFtoSupporter cnfFtoSupporter;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -18,7 +18,7 @@ public class CnfFtoSupporterTest extends BaseTestSupporter {
 				"applicationContext-init.xml",//
 				"applicationContext-commons-net-ftp.xml",//
 		});
-		cnfFtoSupporter = (CnfFtoSupporter) applicationContext
+		cnfFtoSupporter = (FtpClientFtoSupporter) applicationContext
 				.getBean("cnfFtoSupporter");
 	}
 
