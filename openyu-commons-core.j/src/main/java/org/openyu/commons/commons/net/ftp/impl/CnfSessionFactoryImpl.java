@@ -90,11 +90,11 @@ public class CnfSessionFactoryImpl extends BaseServiceSupporter implements
 			this.closed = true;
 			// TODO cnfSessionHolder 未清
 			if (cnfDataSource instanceof CnfDataSourceImpl) {
-				CnfDataSourceImpl cnfds = (CnfDataSourceImpl) cnfDataSource;
-				CnfDataSourceImpl oldcnfds = cnfds;
-				cnfds = null;
-				if (oldcnfds != null) {
-					oldcnfds.close();
+				CnfDataSourceImpl ds = (CnfDataSourceImpl) cnfDataSource;
+				CnfDataSourceImpl oldDs = ds;
+				ds = null;
+				if (oldDs != null) {
+					oldDs.close();
 				}
 			}
 		} catch (Exception ex) {

@@ -91,11 +91,11 @@ public class HzSessionFactoryImpl extends BaseServiceSupporter implements
 			this.closed = true;
 			// TODO hzSessionHolder 未清
 			if (hzDataSource instanceof HzDataSourceImpl) {
-				HzDataSourceImpl hzds = (HzDataSourceImpl) hzDataSource;
-				HzDataSourceImpl oldhzds = hzds;
-				hzds = null;
-				if (oldhzds != null) {
-					oldhzds.close();
+				HzDataSourceImpl ds = (HzDataSourceImpl) hzDataSource;
+				HzDataSourceImpl oldhDs = ds;
+				ds = null;
+				if (oldhDs != null) {
+					oldhDs.close();
 				}
 			}
 		} catch (Exception ex) {
