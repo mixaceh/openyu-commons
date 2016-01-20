@@ -1,4 +1,4 @@
-package org.openyu.commons.xmpp;
+package org.openyu.commons.smack;
 
 import java.io.IOException;
 
