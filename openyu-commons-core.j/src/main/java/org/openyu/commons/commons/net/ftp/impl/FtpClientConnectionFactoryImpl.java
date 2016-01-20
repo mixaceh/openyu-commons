@@ -324,9 +324,9 @@ public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter impleme
 		if (this.instance != null) {
 			return this.instance;
 		}
-		FtpClientFactory ftpClientFactory = createFTPClientFactory();
+		FtpClientFactory ftpClientFactory = createFtpClientFactory();
 		createObjectPool();
-		createPoolableFTPClientFactory(ftpClientFactory);
+		createPoolableFtpClientFactory(ftpClientFactory);
 		createInstance();
 		try {
 			for (int i = 0; i < this.initialSize; ++i)
@@ -339,7 +339,7 @@ public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter impleme
 		return this.instance;
 	}
 
-	protected FtpClientFactory createFTPClientFactory() throws IOException {
+	protected FtpClientFactory createFtpClientFactory() throws IOException {
 		FtpClientFactory result = null;
 		//
 		result = new FtpClientFactoryImpl(ip, port, connectTimeout, retryNumber, retryPauseMills, username, password,
@@ -357,7 +357,7 @@ public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter impleme
 		this.instance = new PoolingFtpClientConnectionFactory(this.objectPool);
 	}
 
-	protected void createPoolableFTPClientFactory(FtpClientFactory ftpClientFactory) throws IOException {
+	protected void createPoolableFtpClientFactory(FtpClientFactory ftpClientFactory) throws IOException {
 		PoolableFtpClientFactory result = null;
 		try {
 			result = new PoolableFtpClientFactory(ftpClientFactory, this.objectPool);
@@ -365,7 +365,7 @@ public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter impleme
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new IOException(new StringBuilder().append("Cannot create PoolableFTPClientFactory (")
+			throw new IOException(new StringBuilder().append("Cannot create PoolableFtpClientFactory (")
 					.append(e.getMessage()).append(")").toString(), e);
 		}
 	}

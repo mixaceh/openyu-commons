@@ -40,7 +40,7 @@ public class PoolableFtpClientFactory extends BaseServiceSupporter implements Po
 
 	}
 
-	public void setFTPClientFactory(FtpClientFactory ftpClientFactory) {
+	public void setFtpClientFactory(FtpClientFactory ftpClientFactory) {
 		this.ftpClientFactory = ftpClientFactory;
 	}
 
