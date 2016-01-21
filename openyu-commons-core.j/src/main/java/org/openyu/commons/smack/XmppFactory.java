@@ -8,7 +8,7 @@ import org.jivesoftware.smack.XMPPException;
 import org.openyu.commons.service.BaseService;
 
 
-public interface XmppConnectionFactory extends BaseService {
+public interface XmppFactory extends BaseService {
 
 	/**
 	 * 建立連線
