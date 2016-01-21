@@ -31,8 +31,8 @@
 	
 	<!-- fto supporter, use ftpClientTemplate -->
 	<bean
-		id="ftpClientFtoSupporter"
-		class="org.openyu.commons.fto.commons.net.ftp.supporter.FtpClientFtoSupporter"
+		id="commonFtoSupporter"
+		class="org.openyu.commons.fto.supporter.CommonFtoSupporter"
 		p:ftpClientTemplate-ref="ftpClientTemplate" />
 
 </beans>

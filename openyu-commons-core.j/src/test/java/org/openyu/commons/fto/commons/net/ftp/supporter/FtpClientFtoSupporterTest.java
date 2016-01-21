@@ -3,13 +3,14 @@ package org.openyu.commons.fto.commons.net.ftp.supporter;
 import org.apache.commons.net.ftp.FTPFile;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openyu.commons.fto.supporter.CommonFtoSupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.SystemHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class FtpClientFtoSupporterTest extends BaseTestSupporter {
 
-	private static FtpClientFtoSupporter ftpClientFtoSupporter;
+	private static CommonFtoSupporter ftpClientFtoSupporter;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -18,7 +19,7 @@ public class FtpClientFtoSupporterTest extends BaseTestSupporter {
 				"applicationContext-bean.xml", //
 				"applicationContext-ftp-client.xml",//
 		});
-		ftpClientFtoSupporter = (FtpClientFtoSupporter) applicationContext.getBean("ftpClientFtoSupporter");
+		ftpClientFtoSupporter = (CommonFtoSupporter) applicationContext.getBean("ftpClientFtoSupporter");
 	}
 
 	@Test

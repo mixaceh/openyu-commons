@@ -8,7 +8,7 @@ import org.openyu.commons.commons.net.ftp.FtpClientConnectionFactory;
 import org.openyu.commons.commons.net.ftp.FtpClientSession;
 import org.openyu.commons.commons.net.ftp.FtpClientSessionFactory;
 import org.openyu.commons.fto.commons.net.ftp.FtpClientTemplate;
-import org.openyu.commons.fto.commons.net.ftp.supporter.FtpClientFtoSupporter;
+import org.openyu.commons.fto.supporter.CommonFtoSupporter;
 import org.apache.commons.net.ftp.FTPClient;
 
 public class ApplicationContextFtpClientTest extends BaseTestSupporter {
@@ -58,7 +58,7 @@ public class ApplicationContextFtpClientTest extends BaseTestSupporter {
 
 	@Test
 	public void ftpClientFtoSupporter() {
-		FtpClientFtoSupporter bean = (FtpClientFtoSupporter) applicationContext.getBean("ftpClientFtoSupporter");
+		CommonFtoSupporter bean = (CommonFtoSupporter) applicationContext.getBean("ftpClientFtoSupporter");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}

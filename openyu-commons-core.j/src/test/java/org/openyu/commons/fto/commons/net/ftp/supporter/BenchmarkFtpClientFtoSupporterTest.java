@@ -15,6 +15,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openyu.commons.fto.supporter.CommonFtoSupporter;
 import org.openyu.commons.io.IoHelper;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.ByteHelper;
@@ -24,7 +25,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class BenchmarkFtpClientFtoSupporterTest extends BaseTestSupporter {
 
-	private static FtpClientFtoSupporter ftpClientFtoSupporter;
+	private static CommonFtoSupporter ftpClientFtoSupporter;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -33,7 +34,7 @@ public class BenchmarkFtpClientFtoSupporterTest extends BaseTestSupporter {
 				"applicationContext-bean.xml", //
 				"applicationContext-ftp-client.xml",//
 		});
-		ftpClientFtoSupporter = (FtpClientFtoSupporter) applicationContext.getBean("ftpClientFtoSupporter");
+		ftpClientFtoSupporter = (CommonFtoSupporter) applicationContext.getBean("ftpClientFtoSupporter");
 	}
 
 	@Test

@@ -45,7 +45,9 @@ import org.openyu.commons.util.AssertHelper;
 import org.openyu.commons.util.CollectionHelper;
 
 /**
- * 20140923, upgrade to hibernate4
+ * 2014/09/23, upgrade to hibernate4
+ * 
+ * 2014/10/09, 改為不繼承spring HibernateDaoSupport
  */
 // public class OjDaoSupporter extends HibernateDaoSupport implements
 // ApplicationContextAware, OjDao, Supporter {

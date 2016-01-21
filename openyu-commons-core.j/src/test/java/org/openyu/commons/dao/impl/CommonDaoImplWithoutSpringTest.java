@@ -52,7 +52,7 @@ import org.openyu.commons.lang.NumberHelper;
  * 3.測試物件,/test/org.openyu.commons.entity.Dog
  * 
  */
-public class CommonDaoImplTest extends BaseTestSupporter {
+public class CommonDaoImplWithoutSpringTest extends BaseTestSupporter {
 
 	private static Configuration configuration;
 
