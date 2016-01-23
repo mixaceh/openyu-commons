@@ -1,4 +1,4 @@
-package org.openyu.commons.fto.commons.net.ftp.impl;
+package org.openyu.commons.commons.net.ftp.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,17 +6,17 @@ import java.io.OutputStream;
 
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
-import org.openyu.commons.fto.commons.net.ftp.FtpClientCallback;
-import org.openyu.commons.fto.commons.net.ftp.FtpClientTemplate;
-import org.openyu.commons.fto.commons.net.ftp.ex.FtpClientTemplateException;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
+import org.openyu.commons.commons.net.ftp.FtpClientCallback;
 import org.openyu.commons.commons.net.ftp.FtpClientSession;
 import org.openyu.commons.commons.net.ftp.FtpClientSessionFactory;
+import org.openyu.commons.commons.net.ftp.FtpClientTemplate;
+import org.openyu.commons.commons.net.ftp.ex.FtpClientTemplateException;
 import org.openyu.commons.util.AssertHelper;
 
 public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpClientTemplate, InitializingBean, DisposableBean {

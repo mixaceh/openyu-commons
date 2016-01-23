@@ -1,4 +1,4 @@
-package org.openyu.commons.fto.commons.net.ftp;
+package org.openyu.commons.commons.net.ftp;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,9 +6,7 @@ import java.io.OutputStream;
 
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
-import org.openyu.commons.commons.net.ftp.FtpClientSession;
-import org.openyu.commons.commons.net.ftp.FtpClientSessionFactory;
-import org.openyu.commons.fto.commons.net.ftp.ex.FtpClientTemplateException;
+import org.openyu.commons.commons.net.ftp.ex.FtpClientTemplateException;
 
 public interface FtpClientTemplate {
 

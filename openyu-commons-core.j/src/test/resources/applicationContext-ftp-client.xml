@@ -19,7 +19,7 @@
 
 	<bean
 		id="ftpClientTemplate"
-		class="org.openyu.commons.fto.commons.net.ftp.impl.FtpClientTemplateImpl"
+		class="org.openyu.commons.commons.net.ftp.impl.FtpClientTemplateImpl"
 		p:ftpClientSessionFactory-ref="ftpClientSessionFactory" />
 
 	<!-- fto supporter, use ftpClientSessionFactory 

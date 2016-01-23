@@ -1,4 +1,4 @@
-package org.openyu.commons.fto.commons.net.ftp.ex;
+package org.openyu.commons.commons.net.ftp.ex;
 
 import org.openyu.commons.lang.ex.BaseRuntimeException;
 
