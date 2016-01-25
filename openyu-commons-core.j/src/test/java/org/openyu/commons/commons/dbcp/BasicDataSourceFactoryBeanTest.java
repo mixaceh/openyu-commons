@@ -32,9 +32,11 @@ public class BasicDataSourceFactoryBeanTest extends BaseTestSupporter {
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void basicDataSource() {
+	public void basicDataSource() throws Exception {
 		System.out.println(basicDataSource);
 		assertNotNull(basicDataSource);
+		//
+		System.out.println(basicDataSource.getConnection());
 	}
 
 	@Test

@@ -102,7 +102,7 @@ public class FtpClientFactoryImpl extends BaseServiceSupporter implements FtpCli
 				}
 				// 重試暫停毫秒
 				ThreadHelper.sleep(NioHelper.retryPause(tries, this.retryPauseMills));
-				// Retrying connect to [10.1.24.143:21]. Already tried [2/3]
+				// Retrying connect to [127.0.0.1:21]. Already tried [1/3]
 				// time(s).
 				LOGGER.info("Retrying connect to [" + ip + ":" + port + "]. Already tried [" + (tries + 1) + "/"
 						+ (this.retryNumber != 0 ? this.retryNumber : "INFINITE") + "] time(s)");

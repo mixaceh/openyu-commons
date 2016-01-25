@@ -30,6 +30,7 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 	public static final int DEFAULT_KEEP_ALIVE_SECONDS = 60;
 
 	public static final String MAX_POOL_SIZE = "maxPoolSize";
+
 	/**
 	 * 預設thread的最大數目
 	 */

@@ -6,11 +6,19 @@ import java.io.IOException;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.lang.SystemHelper;
 
-public class FtpClientConnectionFactoryImplTest {
+import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
+import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+
+public class FtpClientConnectionFactoryImplTest extends BaseTestSupporter {
+
+	@Rule
+	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
 	protected static FtpClientConnectionFactoryImpl ftpClientConnectionFactory;
 
@@ -19,10 +27,10 @@ public class FtpClientConnectionFactoryImplTest {
 		ftpClientConnectionFactory = new FtpClientConnectionFactoryImpl();
 		ftpClientConnectionFactory.setIp("127.0.0.1");
 		ftpClientConnectionFactory.setPort(21);
-		ftpClientConnectionFactory.setConnectTimeout(5000);
+		ftpClientConnectionFactory.setConnectTimeout(15000);
 		//
-		ftpClientConnectionFactory.setMaxActive(2000);
-		ftpClientConnectionFactory.setMaxIdle(2000);
+		ftpClientConnectionFactory.setMaxActive(10);
+		ftpClientConnectionFactory.setMaxIdle(10);
 		//
 		ftpClientConnectionFactory.setRetryNumber(3);
 		ftpClientConnectionFactory.setRetryPauseMills(1000L);
@@ -37,6 +45,10 @@ public class FtpClientConnectionFactoryImplTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	// round: 0.02 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.02, time.warmup: 0.00,
+	// time.bench: 0.02
 	public void ftpClientConnectionFactory() {
 		System.out.println(ftpClientConnectionFactory);
 		assertNotNull(ftpClientConnectionFactory);
@@ -44,27 +56,33 @@ public class FtpClientConnectionFactoryImplTest {
 
 	@Test
 	// 10 times: 2357 mills.
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 0, concurrency = 10)
+	// round: 2.67 [+- 0.27], round.block: 1.68 [+- 0.56], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 2.76, time.warmup: 0.01,
+	// time.bench: 2.75
 	public void getFTPClient() throws Exception {
-		int count = 10;
 		FTPClient result = null;
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = ftpClientConnectionFactory.getFTPClient();
-			System.out.println(result);
-			assertNotNull(result);
-			result.disconnect();
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		result = ftpClientConnectionFactory.getFTPClient();
+		System.out.println(result);
+		assertNotNull(result);
+		result.disconnect();
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	// round: 1.74 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 1.74, time.warmup: 0.00,
+	// time.bench: 1.74
 	public void close() throws Exception {
 		ftpClientConnectionFactory.getFTPClient();
 		ftpClientConnectionFactory.close();
 	}
 
 	@Test(expected = IOException.class)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	// round: 1.83 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 1.83, time.warmup: 0.00,
+	// time.bench: 1.83
 	public void closeException() throws Exception {
 		ftpClientConnectionFactory.getFTPClient();
 		ftpClientConnectionFactory.close();
@@ -72,6 +90,7 @@ public class FtpClientConnectionFactoryImplTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void mockGetFTPClient() throws Exception {
 		int count = 1;
 		FTPClient result = null;
@@ -80,12 +99,12 @@ public class FtpClientConnectionFactoryImplTest {
 			// result.disconnect();
 		}
 		//
-		System.out.println("[" + Thread.currentThread().getName() + "] "
-				+ result);
+		System.out.println("[" + Thread.currentThread().getName() + "] " + result);
 		Thread.sleep(3 * 60 * 1000);
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void mockGetFTPClientWithMultiThread() throws Exception {
 		for (int i = 0; i < 5; i++) {
 			Thread thread = new Thread(new Runnable() {
@@ -105,6 +124,10 @@ public class FtpClientConnectionFactoryImplTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	// round: 1.75 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 1.75, time.warmup: 0.00,
+	// time.bench: 1.75
 	public void ftpClient() throws Exception {
 		FTPClient ftpClient = ftpClientConnectionFactory.getFTPClient();
 		//
@@ -115,21 +138,18 @@ public class FtpClientConnectionFactoryImplTest {
 
 	@Test
 	// 10 times: 12094 mills.
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 0, concurrency = 10)
+	// round: 3.33 [+- 0.25], round.block: 1.59 [+- 0.53], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 3.42, time.warmup: 0.00,
+	// time.bench: 3.42
 	public void listNames() throws Exception {
-		int count = 10;
+		FTPClient client = ftpClientConnectionFactory.getFTPClient();
+		System.out.println(client);
 		//
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			FTPClient client = ftpClientConnectionFactory.getFTPClient();
-			System.out.println(client);
-			//
-			String[] result = client.listNames();
-			//
-			SystemHelper.println(result);
-			client.disconnect();
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		String[] result = client.listNames();
+		//
+		SystemHelper.println(result);
+		client.disconnect();
 	}
 
 }

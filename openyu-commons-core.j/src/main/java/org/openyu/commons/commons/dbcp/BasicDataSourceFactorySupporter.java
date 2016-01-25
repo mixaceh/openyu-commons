@@ -91,6 +91,14 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 
 	public static final boolean DEFAULT_LOG_ABANDONED = false;
 
+	/**
+	 * 所有屬性
+	 */
+	public static final String[] ALL_PROPERTIES = { URL, DRIVER_CLASSNAME, USERNAME, PASSWORD, MAX_ACTIVE, INITIAL_SIZE,
+			MAX_WAIT, MIN_IDLE, MAX_IDLE, TIME_BETWEEN_EVICTION_RUNS_MILLIS, MIN_EVICTABLE_IDLE_TIME_MILLIS,
+			VALIDATION_QUERY, TEST_WHILE_IDLE, TEST_ON_BORROW, TEST_ON_RETURN, POOL_PREPARED_STATEMENTS,
+			REMOVE_ABANDONED, REMOVE_EABANDONED_TIMEOUT, LOG_ABANDONED };
+
 	public BasicDataSourceFactorySupporter() {
 
 	}
