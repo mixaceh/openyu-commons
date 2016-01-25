@@ -1,5 +1,7 @@
 package org.openyu.commons.lang;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -7,162 +9,132 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
-public class CloneHelperTest
-{
+import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
+import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception
-	{}
+public class CloneHelperTest extends BaseTestSupporter {
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception
-	{}
-
-	@Before
-	public void setUp() throws Exception
-	{}
-
-	@After
-	public void tearDown() throws Exception
-	{}
+	@Rule
+	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
 	@Test
-	//no cache
-	//1000000 times: 515 mills.
-	//1000000 times: 537 mills.
-	//1000000 times: 509 mills.
+	// no cache
+	// 1000000 times: 515 mills.
+	// 1000000 times: 537 mills.
+	// 1000000 times: 509 mills.
 	//
-	//cache
-	//1000000 times: 533 mills.
-	//1000000 times: 531 mills.
-	//1000000 times: 530 mills.
-	public void genericClone()
-	{
+	// cache
+	// 1000000 times: 533 mills.
+	// 1000000 times: 531 mills.
+	// 1000000 times: 530 mills.
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	// round: 0.42 [+- 0.04], round.block: 0.02 [+- 0.01], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 4, GC.time: 0.01, time.total: 0.43, time.warmup: 0.00,
+	// time.bench: 0.43
+	public void genericClone() {
 		Date value = new Date();
 		System.out.println("value: " + value);
 		//
 		Date cloneValue = null;
 
-		int count = 1000000;//100w
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++)
-		{
-			cloneValue = CloneHelper.genericClone(value);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		cloneValue = CloneHelper.genericClone(value);
 		//
-		cloneValue.setYear(50);//1950
+		cloneValue.setYear(50);// 1950
 		System.out.println("modified cloneValue: " + cloneValue);
 		System.out.println("after value: " + value);
 	}
 
 	@Test
-	//1000000 times: 1771 mills.
-	//1000000 times: 1778 mills.
-	//1000000 times: 1818 mills.
+	// 1000000 times: 1771 mills.
+	// 1000000 times: 1778 mills.
+	// 1000000 times: 1818 mills.
 	//
-	//#fix
-	//1000000 times: 1311 mills.
-	//1000000 times: 1316 mills.
-	//1000000 times: 1327 mills.
-	public void deepCloneByArray()
-	{
+	// #fix
+	// 1000000 times: 1311 mills.
+	// 1000000 times: 1316 mills.
+	// 1000000 times: 1327 mills.
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	public void deepCloneWithArray() {
 		Object[] values = new Object[] { new Date(), "aaa", 123 };
 		SystemHelper.println(values);
 		//
 		Object[] cloneValues = null;
-		int count = 1000000;//100w
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++)
-		{
-			//cloneValue = CloneHelper.genericClone(value);
-			cloneValues = CloneHelper.deepClone(values);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		// cloneValue = CloneHelper.genericClone(value);
+		cloneValues = CloneHelper.deepClone(values);
 		//
 		Date date = (Date) cloneValues[0];
-		date.setYear(50);//1950
-		SystemHelper.println(cloneValues);//1950
-		SystemHelper.println(values);//今天日期
+		date.setYear(50);// 1950
+		SystemHelper.println(cloneValues);// 1950
+		SystemHelper.println(values);// 今天日期
 	}
 
 	@Test
-	//1000000 times: 1288 mills.
-	//1000000 times: 1292 mills.
-	//1000000 times: 1297 mills.
+	// 1000000 times: 1288 mills.
+	// 1000000 times: 1292 mills.
+	// 1000000 times: 1297 mills.
 	//
-	//#fix
-	//1000000 times: 1012 mills. 
-	//1000000 times: 1016 mills. 
-	//1000000 times: 1015 mills. 
-	public void deepCloneByList()
-	{
+	// #fix
+	// 1000000 times: 1012 mills.
+	// 1000000 times: 1016 mills.
+	// 1000000 times: 1015 mills.
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	public void deepCloneWithList() {
 		List value = new LinkedList();
 		value.add(new Date());
 		value.add(Locale.TRADITIONAL_CHINESE);
 		System.out.println("value: " + value);
 		//
 		List cloneValue = null;
-		int count = 1000000;//100w
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++)
-		{
-			//cloneValue = CloneHelper.genericClone(value);
-			cloneValue = CloneHelper.deepClone(value);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		// cloneValue = CloneHelper.genericClone(value);
+		cloneValue = CloneHelper.deepClone(value);
 		//
 		Date date = (Date) cloneValue.get(0);
-		date.setYear(50);//1950
+		date.setYear(50);// 1950
 		System.out.println("modified cloneValue: " + cloneValue);
 		System.out.println("after value: " + value);
 	}
 
 	@Test
-	//1000000 times: 1771 mills.
-	//1000000 times: 1778 mills.
-	//1000000 times: 1818 mills.
+	// 1000000 times: 1771 mills.
+	// 1000000 times: 1778 mills.
+	// 1000000 times: 1818 mills.
 	//
-	//#fix
-	//1000000 times: 1311 mills.
-	//1000000 times: 1316 mills.
-	//1000000 times: 1327 mills.
-	public void deepCloneByMap()
-	{
+	// #fix
+	// 1000000 times: 1311 mills.
+	// 1000000 times: 1316 mills.
+	// 1000000 times: 1327 mills.
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	public void deepCloneWithMap() {
 		Map value = new LinkedHashMap();
 		value.put(1, new Date());
 		value.put(2, Locale.TRADITIONAL_CHINESE);
 		System.out.println("value: " + value);
 		//
 		Map cloneValue = null;
-		int count = 1000000;//100w
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++)
-		{
-			//cloneValue = CloneHelper.genericClone(value);
-			cloneValue = CloneHelper.deepClone(value);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		// cloneValue = CloneHelper.genericClone(value);
+		cloneValue = CloneHelper.deepClone(value);
 		//
 		Date date = (Date) cloneValue.get(1);
-		date.setYear(50);//1950
+		date.setYear(50);// 1950
 		System.out.println("modified cloneValue: " + cloneValue);
 		System.out.println("after value: " + value);
 	}
 
 	@Test
-	public void cloneByList()
-	{
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	// round: 0.38 [+- 0.04], round.block: 0.01 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 4, GC.time: 0.01, time.total: 0.39, time.warmup: 0.00,
+	// time.bench: 0.39
+
+	// cloner
+	// round: 0.09 [+- 0.01], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 3, GC.time: 0.01, time.total: 0.10, time.warmup: 0.00,
+	// time.bench: 0.10
+	public void cloneWithList() {
 		List<String> value = new LinkedList<String>();
 		value.add("aaa");
 		value.add("bbb");
@@ -170,15 +142,12 @@ public class CloneHelperTest
 		System.out.println("value: " + value);
 		//
 		List<String> result = null;
-		int count = 1;//100w
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++)
-		{
-			result = CloneHelper.clone(value);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		result = CloneHelper.clone(value);
 		//
-		System.out.println(result);
+		result.remove(0);
+		//
+		System.out.println("old: " + value);
+		System.out.println("new: " + result);
+		assertTrue(value.size() == 3);
 	}
 }

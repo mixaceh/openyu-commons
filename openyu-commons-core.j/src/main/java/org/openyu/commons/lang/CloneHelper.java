@@ -16,9 +16,18 @@ import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.rits.cloning.Cloner;
+
 public final class CloneHelper extends BaseHelperSupporter {
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(CloneHelper.class);
+
+	/**
+	 * https://code.google.com/p/cloning/wiki/Usage
+	 * 
+	 * Cloner is thread safe.
+	 */
+	private static Cloner cloner = new Cloner();
 
 	private CloneHelper() {
 		throw new HelperException(
@@ -36,10 +45,28 @@ public final class CloneHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static <T> T clone(Object value) {
+	public static <T> T ___clone(Object value) {
 		T result = null;
 		if (value != null) {
 			result = deepClone(value);
+		}
+		return result;
+	}
+
+	/**
+	 * 2015/01/25
+	 * 
+	 * 改為用 cloner
+	 * 
+	 * @param value
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T clone(Object value) {
+		T result = null;
+		if (value != null) {
+			// result = deepClone(value);
+			result = (T) cloner.deepClone(value);
 		}
 		return result;
 	}
