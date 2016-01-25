@@ -8,9 +8,9 @@ import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.SystemHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class FtpClientFtoSupporterTest extends BaseTestSupporter {
+public class CommonFtoSupporterTest extends BaseTestSupporter {
 
-	private static CommonFtoSupporter ftpClientFtoSupporter;
+	private static CommonFtoSupporter commonFtoSupporter;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -19,7 +19,7 @@ public class FtpClientFtoSupporterTest extends BaseTestSupporter {
 				"applicationContext-bean.xml", //
 				"applicationContext-ftp-client.xml",//
 		});
-		ftpClientFtoSupporter = (CommonFtoSupporter) applicationContext.getBean("ftpClientFtoSupporter");
+		commonFtoSupporter = (CommonFtoSupporter) applicationContext.getBean("commonFtoSupporter");
 	}
 
 	@Test
@@ -30,7 +30,7 @@ public class FtpClientFtoSupporterTest extends BaseTestSupporter {
 		//
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = ftpClientFtoSupporter.listFiles();
+			result = commonFtoSupporter.listFiles();
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -46,7 +46,7 @@ public class FtpClientFtoSupporterTest extends BaseTestSupporter {
 		//
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = ftpClientFtoSupporter.listNames();
+			result = commonFtoSupporter.listNames();
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
