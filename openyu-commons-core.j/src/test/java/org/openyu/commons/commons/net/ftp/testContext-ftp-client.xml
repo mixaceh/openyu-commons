@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<bean
+		id="testConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property
+			name="order"
+			value="1" />
+		<property
+			name="ignoreUnresolvablePlaceholders"
+			value="true" />
+		<property name="locations">
+			<list>
+				<value>file:src/test/config/etc/ftp-client.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Apache Commons Net FTP Connection Pool -->
+	<bean
+		id="ftpClientConnectionFactory"
+		class="org.openyu.commons.commons.net.ftp.impl.FtpClientConnectionFactoryImpl">
+		<property
+			name="ip"
+			value="127.0.0.1" />
+		<property
+			name="port"
+			value="21" />
+		<property
+			name="connectTimeout"
+			value="15000" />
+		<property
+			name="retryNumber"
+			value="3" />
+		<property
+			name="retryPauseMills"
+			value="1000" />
+		<property
+			name="username"
+			value="root" />
+		<property
+			name="password"
+			value="1111" />
+		<property
+			name="bufferSize"
+			value="131072" />
+		<property
+			name="clientMode"
+			value="2" />
+		<property
+			name="fileType"
+			value="2" />
+		<property
+			name="controlEncoding"
+			value="UTF-8" />
+		<property
+			name="remotePath"
+			value="inbound/" />
+
+		<property
+			name="maxActive"
+			value="10" />
+		<property
+			name="initialSize"
+			value="1" />
+		<property
+			name="maxWait"
+			value="10000" />
+		<property
+			name="minIdle"
+			value="1" />
+		<property
+			name="maxIdle"
+			value="10" />
+
+
+		<property
+			name="timeBetweenEvictionRunsMillis"
+			value="60000" />
+		<property
+			name="numTestsPerEvictionRun"
+			value="3" />
+		<property
+			name="minEvictableIdleTimeMillis"
+			value="60000" />
+
+		<property
+			name="testWhileIdle"
+			value="true" />
+		<property
+			name="testOnBorrow"
+			value="false" />
+		<property
+			name="testOnReturn"
+			value="false" />
+	</bean>
+
+	<bean
+		id="ftpClientConnectionFactoryFactoryBean"
+		class="org.openyu.commons.commons.net.ftp.impl.FtpClientConnectionFactoryFactoryBean"
+		p:configLocation="file:src/test/config/etc/ftp-client.properties" />
+
+	<bean
+		id="ftpClientSessionFactory"
+		class="org.openyu.commons.commons.net.ftp.impl.FtpClientSessionFactoryImpl"
+		p:ftpClientConnectionFactory-ref="ftpClientConnectionFactoryFactoryBean" />
+
+	<bean
+		id="ftpClientTemplate"
+		class="org.openyu.commons.commons.net.ftp.impl.FtpClientTemplateImpl"
+		p:ftpClientSessionFactory-ref="ftpClientSessionFactory" />
+
+</beans>
