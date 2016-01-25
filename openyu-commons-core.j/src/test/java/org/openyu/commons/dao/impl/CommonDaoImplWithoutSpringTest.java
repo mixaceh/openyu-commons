@@ -45,7 +45,7 @@ import org.openyu.commons.lang.CloneHelper;
 import org.openyu.commons.lang.NumberHelper;
 
 /**
- * 1.不使用spring ioc測試,直接以建構方式, new HibernateDaoSupporter()測試
+ * 1.不使用spring ioc測試,直接以建構方式, new CommonDaoImpl()測試
  * 
  * 2.hibernate.cfg.xml
  * 

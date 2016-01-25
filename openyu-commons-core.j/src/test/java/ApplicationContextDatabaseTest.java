@@ -10,14 +10,12 @@ import org.hibernate.SessionFactory;
 import org.hibernate.jdbc.Work;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.service.CommonService;
-import org.openyu.commons.thread.ThreadHelper;
 
 public class ApplicationContextDatabaseTest extends BaseTestSupporter {
 

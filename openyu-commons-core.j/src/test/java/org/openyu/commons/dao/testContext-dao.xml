@@ -119,7 +119,7 @@
 		p:hibernateTemplate-ref="commonHibernateTemplate" />
 
 	<bean
-		id="commonDaoImpl"
+		id="commonDao"
 			class="org.openyu.commons.dao.impl.CommonDaoImpl"
 		parent="commonDaoSupporter" />
 

@@ -87,6 +87,9 @@
 		<property name="hibernate.search.default.indexBase">search</property>
 		<property name="javax.persistence.validation.mode">none</property>
 
+		<!-- test -->
+		<mapping class="org.openyu.commons.cat.po.impl.CatPoImpl" />
+		<mapping class="org.openyu.commons.dog.po.impl.DogPoImpl" />
 	</session-factory>
 
 </hibernate-configuration>
