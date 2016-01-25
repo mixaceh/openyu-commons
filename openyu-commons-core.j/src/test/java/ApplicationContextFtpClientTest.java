@@ -25,7 +25,7 @@ public class ApplicationContextFtpClientTest extends BaseTestSupporter {
 	@Test
 	public void ftpClientConnectionFactory() throws Exception {
 		FtpClientConnectionFactory bean = (FtpClientConnectionFactory) applicationContext
-				.getBean("ftpClientConnectionFactory");
+				.getBean("ftpClientConnectionFactoryFactoryBean");
 		System.out.println(bean);
 		assertNotNull(bean);
 		//
@@ -57,8 +57,8 @@ public class ApplicationContextFtpClientTest extends BaseTestSupporter {
 	}
 
 	@Test
-	public void ftpClientFtoSupporter() {
-		CommonFtoSupporter bean = (CommonFtoSupporter) applicationContext.getBean("ftpClientFtoSupporter");
+	public void commonFtoSupporter() {
+		CommonFtoSupporter bean = (CommonFtoSupporter) applicationContext.getBean("commonFtoSupporter");
 		System.out.println(bean);
 		assertNotNull(bean);
 	}

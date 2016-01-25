@@ -31,7 +31,10 @@ public class BasicDataSourceFactoryBeanTest extends BaseTestSupporter {
 	}
 
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds =1, warmupRounds = 0, concurrency = 1)
+	// round: 0.20 [+- 0.09], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.39, time.warmup: 0.00,
+	// time.bench: 0.39
 	public void basicDataSource() throws Exception {
 		System.out.println(basicDataSource);
 		assertNotNull(basicDataSource);

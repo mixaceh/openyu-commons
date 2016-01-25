@@ -63,6 +63,10 @@
 			name="timeBetweenEvictionRunsMillis"
 			value="60000" />
 
+		<property
+			name="numTestsPerEvictionRun"
+			value="3" />
+
       <!-- 一個連接在池中最小生存的時間，單位是毫秒 -->
 		<property
 			name="minEvictableIdleTimeMillis"

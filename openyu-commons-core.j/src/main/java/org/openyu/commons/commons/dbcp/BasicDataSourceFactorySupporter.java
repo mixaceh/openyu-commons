@@ -55,6 +55,10 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 
 	public static final long DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS = -1L;
 
+	public static final String NUM_TESTS_PER_EVICTION_RUN = "numTestsPerEvictionRun";
+
+	public static final int DEFAULT_NUM_TESTS_PER_EVICTION_RUN = 3;
+
 	public static final String MIN_EVICTABLE_IDLE_TIME_MILLIS = "minEvictableIdleTimeMillis";
 
 	public static final long DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS = 1800000L;
@@ -95,9 +99,9 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 	 * 所有屬性
 	 */
 	public static final String[] ALL_PROPERTIES = { URL, DRIVER_CLASSNAME, USERNAME, PASSWORD, MAX_ACTIVE, INITIAL_SIZE,
-			MAX_WAIT, MIN_IDLE, MAX_IDLE, TIME_BETWEEN_EVICTION_RUNS_MILLIS, MIN_EVICTABLE_IDLE_TIME_MILLIS,
-			VALIDATION_QUERY, TEST_WHILE_IDLE, TEST_ON_BORROW, TEST_ON_RETURN, POOL_PREPARED_STATEMENTS,
-			REMOVE_ABANDONED, REMOVE_EABANDONED_TIMEOUT, LOG_ABANDONED };
+			MAX_WAIT, MIN_IDLE, MAX_IDLE, TIME_BETWEEN_EVICTION_RUNS_MILLIS, NUM_TESTS_PER_EVICTION_RUN,
+			MIN_EVICTABLE_IDLE_TIME_MILLIS, VALIDATION_QUERY, TEST_WHILE_IDLE, TEST_ON_BORROW, TEST_ON_RETURN,
+			POOL_PREPARED_STATEMENTS, REMOVE_ABANDONED, REMOVE_EABANDONED_TIMEOUT, LOG_ABANDONED };
 
 	public BasicDataSourceFactorySupporter() {
 
@@ -134,6 +138,8 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 			//
 			result.setTimeBetweenEvictionRunsMillis(extendedProperties.getLong(TIME_BETWEEN_EVICTION_RUNS_MILLIS,
 					DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS));
+			result.setNumTestsPerEvictionRun(
+					extendedProperties.getInt(NUM_TESTS_PER_EVICTION_RUN, DEFAULT_NUM_TESTS_PER_EVICTION_RUN));
 			result.setMinEvictableIdleTimeMillis(
 					extendedProperties.getLong(MIN_EVICTABLE_IDLE_TIME_MILLIS, DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS));
 			result.setValidationQuery(extendedProperties.getString(VALIDATION_QUERY, DEFAULT_VALIDATION_QUERY));

@@ -1,6 +1,7 @@
 package org.openyu.commons.commons.net.ftp.impl;
 
 import org.openyu.commons.commons.net.ftp.FtpClientConnectionFactory;
+import org.openyu.commons.nio.NioHelper;
 import org.openyu.commons.service.supporter.BaseServiceFactoryBeanSupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +20,21 @@ public final class FtpClientConnectionFactoryFactoryBean<T extends FtpClientConn
 
 	public static final String DEFAULT_IP = null;
 
-	public static final String DRIVER_CLASSNAME = "driverClassName";
+	public static final String PORT = "port";
 
-	public static final String DEFAULT_DRIVER_CLASSNAME = null;
+	public static final int DEFAULT_PORT = 21;
+
+	public static final String CONNECT_TIMEOUT = "connectTimeout";
+
+	public static final int DEFAULT_CONNECT_TIMEOUT = 0;
+
+	public static final String RETRY_NUMBER = "retryNumber";
+
+	public static final int DEFAULT_RETRY_NUMBER = NioHelper.DEFAULT_RETRY_NUMBER;
+
+	public static final String RETRY_PAUSE_MILLS = "retryPauseMills";
+
+	public static final long DEFAULT_RETRY_PAUSE_MILLS = NioHelper.DEFAULT_RETRY_PAUSE_MILLS;
 
 	public static final String USERNAME = "username";
 
@@ -30,6 +43,27 @@ public final class FtpClientConnectionFactoryFactoryBean<T extends FtpClientConn
 	public static final String PASSWORD = "password";
 
 	public static final String DEFAULT_PASSWORD = null;
+
+	public static final String BUFFER_SIZE = "bufferSize";
+
+	public static final int DEFAULT_BUFFER_SIZE = 1024;
+
+	public static final String CLIENT_MODE = "clientMode";
+
+	public static final int DEFAULT_CLIENT_MODE = 2;
+
+	public static final String FILE_TYPE = "fileType";
+
+	public static final int DEFAULT_FILE_TYPE = 0;
+
+	public static final String CONTROLE_ENCODING = "controlEncoding";
+
+	public static final String DEFAULT_CONTROLE_ENCODING = "UTF-8";
+
+	public static final String REMOTE_PATH = "remotePath";
+
+	public static final String DEFAULT_REMOTE_PATH = "/";
+
 	//
 	public static final String MAX_ACTIVE = "maxActive";
 
@@ -55,13 +89,13 @@ public final class FtpClientConnectionFactoryFactoryBean<T extends FtpClientConn
 
 	public static final long DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS = -1L;
 
+	public static final String NUM_TESTS_PER_EVICTION_RUN = "numTestsPerEvictionRun";
+
+	public static final int DEFAULT_NUM_TESTS_PER_EVICTION_RUN = 3;
+
 	public static final String MIN_EVICTABLE_IDLE_TIME_MILLIS = "minEvictableIdleTimeMillis";
 
 	public static final long DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS = 1800000L;
-
-	public static final String VALIDATION_QUERY = "validationQuery";
-
-	public static final String DEFAULT_VALIDATION_QUERY = null;
 
 	public static final String TEST_WHILE_IDLE = "testWhileIdle";
 
@@ -74,30 +108,14 @@ public final class FtpClientConnectionFactoryFactoryBean<T extends FtpClientConn
 	public static final String TEST_ON_RETURN = "testOnReturn";
 
 	public static final boolean DEFAULT_TEST_ON_RETURN = false;
-	//
-	public static final String POOL_PREPARED_STATEMENTS = "poolPreparedStatements";
-
-	public static final boolean DEFAULT_POOL_PREPARED_STATEMENTS = false;
-
-	public static final String REMOVE_ABANDONED = "removeAbandoned";
-
-	public static final boolean DEFAULT_REMOVE_ABANDONED = false;
-
-	public static final String REMOVE_EABANDONED_TIMEOUT = "removeAbandonedTimeout";
-
-	public static final int DEFAULT_REMOVE_EABANDONED_TIMEOUT = 300;
-
-	public static final String LOG_ABANDONED = "logAbandoned";
-
-	public static final boolean DEFAULT_LOG_ABANDONED = false;
 
 	/**
 	 * 所有屬性
 	 */
-	public static final String[] ALL_PROPERTIES = { IP, DRIVER_CLASSNAME, USERNAME, PASSWORD, MAX_ACTIVE, INITIAL_SIZE,
-			MAX_WAIT, MIN_IDLE, MAX_IDLE, TIME_BETWEEN_EVICTION_RUNS_MILLIS, MIN_EVICTABLE_IDLE_TIME_MILLIS,
-			VALIDATION_QUERY, TEST_WHILE_IDLE, TEST_ON_BORROW, TEST_ON_RETURN, POOL_PREPARED_STATEMENTS,
-			REMOVE_ABANDONED, REMOVE_EABANDONED_TIMEOUT, LOG_ABANDONED };
+	public static final String[] ALL_PROPERTIES = { IP, PORT, CONNECT_TIMEOUT, RETRY_NUMBER, RETRY_PAUSE_MILLS,
+			USERNAME, PASSWORD, BUFFER_SIZE, CLIENT_MODE, FILE_TYPE, CONTROLE_ENCODING, REMOTE_PATH, MAX_ACTIVE,
+			INITIAL_SIZE, MAX_WAIT, MIN_IDLE, MAX_IDLE, TIME_BETWEEN_EVICTION_RUNS_MILLIS, NUM_TESTS_PER_EVICTION_RUN,
+			MIN_EVICTABLE_IDLE_TIME_MILLIS, TEST_WHILE_IDLE, TEST_ON_BORROW, TEST_ON_RETURN };
 
 	public FtpClientConnectionFactoryFactoryBean() {
 	}
@@ -120,8 +138,35 @@ public final class FtpClientConnectionFactoryFactoryBean<T extends FtpClientConn
 			/**
 			 * extendedProperties
 			 */
-			// TODO
-
+			result.setIp(extendedProperties.getString(IP, DEFAULT_IP));
+			result.setPort(extendedProperties.getInt(PORT, DEFAULT_PORT));
+			result.setConnectTimeout(extendedProperties.getInt(CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT));
+			result.setRetryNumber(extendedProperties.getInt(RETRY_NUMBER, DEFAULT_RETRY_NUMBER));
+			result.setRetryPauseMills(extendedProperties.getLong(RETRY_PAUSE_MILLS, DEFAULT_RETRY_PAUSE_MILLS));
+			result.setUsername(extendedProperties.getString(USERNAME, DEFAULT_USERNAME));
+			result.setPassword(extendedProperties.getString(PASSWORD, DEFAULT_PASSWORD));
+			result.setBufferSize(extendedProperties.getInt(BUFFER_SIZE, DEFAULT_BUFFER_SIZE));
+			result.setClientMode(extendedProperties.getInt(CLIENT_MODE, DEFAULT_CLIENT_MODE));
+			result.setFileType(extendedProperties.getInt(FILE_TYPE, DEFAULT_FILE_TYPE));
+			result.setControlEncoding(extendedProperties.getString(CONTROLE_ENCODING, DEFAULT_CONTROLE_ENCODING));
+			result.setRemotePath(extendedProperties.getString(REMOTE_PATH, DEFAULT_REMOTE_PATH));
+			//
+			result.setMaxActive(extendedProperties.getInt(MAX_ACTIVE, DEFAULT_MAX_ACTIVE));
+			result.setInitialSize(extendedProperties.getInt(INITIAL_SIZE, DEFAULT_INITIAL_SIZE));
+			result.setMaxWait(extendedProperties.getLong(MAX_WAIT, DEFAULT_MAX_WAIT));
+			result.setMinIdle(extendedProperties.getInt(MIN_IDLE, DEFAULT_MIN_IDLE));
+			result.setMaxIdle(extendedProperties.getInt(MAX_IDLE, DEFAULT_MAX_IDLE));
+			//
+			result.setTimeBetweenEvictionRunsMillis(extendedProperties.getLong(TIME_BETWEEN_EVICTION_RUNS_MILLIS,
+					DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS));
+			result.setNumTestsPerEvictionRun(
+					extendedProperties.getInt(NUM_TESTS_PER_EVICTION_RUN, DEFAULT_NUM_TESTS_PER_EVICTION_RUN));
+			result.setMinEvictableIdleTimeMillis(
+					extendedProperties.getLong(MIN_EVICTABLE_IDLE_TIME_MILLIS, DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS));
+			result.setTestWhileIdle(extendedProperties.getBoolean(TEST_WHILE_IDLE, DEFAULT_TEST_WHILE_IDLE));
+			result.setTestOnBorrow(extendedProperties.getBoolean(TEST_ON_BORROW, DEFAULT_TEST_ON_BORROW));
+			result.setTestOnReturn(extendedProperties.getBoolean(TEST_ON_RETURN, DEFAULT_TEST_ON_RETURN));
+			//
 			/**
 			 * injectiion
 			 */

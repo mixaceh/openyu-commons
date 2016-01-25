@@ -42,6 +42,7 @@ public class FtpClientConnectionFactoryImplTest extends BaseTestSupporter {
 		ftpClientConnectionFactory.setFileType(2);
 		ftpClientConnectionFactory.setControlEncoding("UTF-8");
 		ftpClientConnectionFactory.setRemotePath("inbound/");
+		ftpClientConnectionFactory.start();
 	}
 
 	@Test

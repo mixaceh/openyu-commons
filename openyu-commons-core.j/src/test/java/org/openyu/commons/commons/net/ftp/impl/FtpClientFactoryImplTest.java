@@ -23,6 +23,7 @@ public class FtpClientFactoryImplTest extends BaseTestSupporter {
 	public static void setUpBeforeClass() throws Exception {
 		factory = new FtpClientFactoryImpl("127.0.0.1", 21, 15000, 3, 1000L, "root", "1111", 128 * 1024, 2, 2,
 				"UTF-8", "inbound/");
+		factory.start();
 	}
 
 	@Test

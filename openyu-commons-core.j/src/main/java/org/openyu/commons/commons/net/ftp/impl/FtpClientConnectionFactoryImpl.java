@@ -299,9 +299,10 @@ public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter impleme
 	}
 
 	public synchronized void close() throws IOException {
-		if (this.closed) {
-			throw new IOException("FtpClientConnectionFactory was already closed");
-		}
+		// if (this.closed) {
+		// throw new IOException("FtpClientConnectionFactory was already
+		// closed");
+		// }
 		//
 		this.closed = true;
 		GenericObjectPool<FTPClient> oldpool = this.objectPool;
@@ -316,7 +317,8 @@ public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter impleme
 		}
 	}
 
-	protected synchronized FtpClientConnectionFactory createFtpClientConnectionFactory() throws SocketException, IOException {
+	protected synchronized FtpClientConnectionFactory createFtpClientConnectionFactory()
+			throws SocketException, IOException {
 		if (this.closed) {
 			throw new SocketException("FtpClientConnectionFactory was already closed");
 		}

@@ -47,6 +47,7 @@ public class FtpClientSessionFactoryImplTest extends BaseTestSupporter {
 		//
 		ftpClientSessionFactory = new FtpClientSessionFactoryImpl();
 		ftpClientSessionFactory.setFtpClientConnectionFactory(ftpClientConnectionFactory);
+		ftpClientSessionFactory.start();
 	}
 
 	@Test
