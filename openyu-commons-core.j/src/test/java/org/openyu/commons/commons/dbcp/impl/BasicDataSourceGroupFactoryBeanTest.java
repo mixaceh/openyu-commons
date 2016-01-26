@@ -1,4 +1,4 @@
-package org.openyu.commons.commons.dbcp;
+package org.openyu.commons.commons.dbcp.impl;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -13,12 +13,12 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BasicDataSourceFactoryBeanTest extends BaseTestSupporter {
+public class BasicDataSourceGroupFactoryBeanTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static BasicDataSource basicDataSource;
+	private static BasicDataSource[] basicDataSources;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -27,26 +27,25 @@ public class BasicDataSourceFactoryBeanTest extends BaseTestSupporter {
 				"org/openyu/commons/commons/dbcp/testContext-dbcp.xml",//
 
 		});
-		basicDataSource = applicationContext.getBean("basicDataSourceFactoryBean", BasicDataSource.class);
+		basicDataSources = applicationContext.getBean("basicDataSourceGroupFactoryBean", BasicDataSource[].class);
 	}
 
 	@Test
-	@BenchmarkOptions(benchmarkRounds =1, warmupRounds = 0, concurrency = 1)
-	// round: 0.20 [+- 0.09], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
-	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.39, time.warmup: 0.00,
-	// time.bench: 0.39
-	public void basicDataSource() throws Exception {
-		System.out.println(basicDataSource);
-		assertNotNull(basicDataSource);
+	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
+	public void basicDataSources() throws Exception {
+		System.out.println(basicDataSources);
+		assertNotNull(basicDataSources);
 		//
-		System.out.println(basicDataSource.getConnection());
+		for (BasicDataSource dataSource : basicDataSources) {
+			System.out.println(dataSource.getConnection());
+		}
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void close() {
-		System.out.println(basicDataSource);
-		assertNotNull(basicDataSource);
+		System.out.println(basicDataSources);
+		assertNotNull(basicDataSources);
 		applicationContext.close();
 		// 多次,不會丟出ex
 		applicationContext.close();
@@ -55,8 +54,8 @@ public class BasicDataSourceFactoryBeanTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void refresh() {
-		System.out.println(basicDataSource);
-		assertNotNull(basicDataSource);
+		System.out.println(basicDataSources);
+		assertNotNull(basicDataSources);
 		applicationContext.refresh();
 		// 多次,不會丟出ex
 		applicationContext.refresh();

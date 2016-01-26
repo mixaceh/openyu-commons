@@ -7,8 +7,9 @@ import java.io.OutputStream;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
 import org.openyu.commons.commons.net.ftp.ex.FtpClientTemplateException;
+import org.openyu.commons.service.BaseService;
 
-public interface FtpClientTemplate {
+public interface FtpClientTemplate extends BaseService {
 
 	FtpClientSessionFactory getFtpClientSessionFactory();
 
@@ -21,7 +22,7 @@ public interface FtpClientTemplate {
 	<T> T execute(FtpClientCallback<T> action) throws FtpClientTemplateException;
 
 	// --------------------------------------------------
-	
+
 	String[] listNames(String pathname) throws IOException;
 
 	String[] listNames() throws IOException;
@@ -30,8 +31,7 @@ public interface FtpClientTemplate {
 
 	FTPFile[] listFiles() throws IOException;
 
-	FTPFile[] listFiles(String pathname, FTPFileFilter filter)
-			throws IOException;
+	FTPFile[] listFiles(String pathname, FTPFileFilter filter) throws IOException;
 
 	FTPFile[] listDirectories() throws IOException;
 

@@ -1,4 +1,4 @@
-package org.openyu.commons.commons.dbcp;
+package org.openyu.commons.commons.dbcp.supporter;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.openyu.commons.service.supporter.BaseFactoryBeanSupporter;

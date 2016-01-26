@@ -7,6 +7,7 @@ import java.net.SocketException;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.openyu.commons.commons.net.ftp.FtpClientFactory;
+import org.openyu.commons.commons.net.ftp.ex.FtpClientException;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 import org.openyu.commons.nio.NioHelper;
 import org.openyu.commons.thread.ThreadHelper;
@@ -76,81 +77,87 @@ public class FtpClientFactoryImpl extends BaseServiceSupporter implements FtpCli
 
 	}
 
-	public FTPClient createFTPClient() throws SocketException, IOException {
-		FTPClient result = createConneciton();
+	public FTPClient createFTPClient() throws FtpClientException {
+		FTPClient result = null;
 		//
-		int tries = 0;
-		boolean success = false;
-		for (;;) {
-			try {
-				result.connect(this.ip, this.port);
-				success = true;
-				break;
-			} catch (ConnectException ex) {
-				// 當連線失敗時,重試
-				// ex.printStackTrace();
-				result = createConneciton();
-				//
-				++tries;
-				// [1/3] time(s) java.net.ConnectException: Connection refused:
-				// connect
-				LOGGER.warn("[" + tries + "/" + (this.retryNumber != 0 ? this.retryNumber : "INFINITE")
-						+ "] time(s) Failed to get the connection");
-				// 0=無限
-				if (this.retryNumber != 0 && tries >= this.retryNumber) {
-					break;
-				}
-				// 重試暫停毫秒
-				ThreadHelper.sleep(NioHelper.retryPause(tries, this.retryPauseMills));
-				// Retrying connect to [127.0.0.1:21]. Already tried [1/3]
-				// time(s).
-				LOGGER.info("Retrying connect to [" + ip + ":" + port + "]. Already tried [" + (tries + 1) + "/"
-						+ (this.retryNumber != 0 ? this.retryNumber : "INFINITE") + "] time(s)");
-			}
-		}
-		//
-		if (!success) {
-			LOGGER.error("Can't connect to [" + this.ip + ":" + this.port + "]");
-			throw new SocketException("Connection refused");
-		} else {
-			boolean login = false;
-			try {
-				login = result.login(this.username, this.password);
-				if (!login) {
-					LOGGER.error("[" + this.username + "] Can't login to [" + this.ip + ":" + this.port + "]");
-					throw new SocketException("Login failed");
-				}
-				//
-				int reply = result.getReplyCode();
-				if (!FTPReply.isPositiveCompletion(reply)) {
-					throw new SocketException("Reply failed, reply: " + reply);
-				}
-				//
-				result.setBufferSize(this.bufferSize);
-				switch (this.clientMode) {
-				case 0:
-					result.enterLocalActiveMode();
-					break;
-				case 2:
-					result.enterLocalPassiveMode();
-					break;
-				}
-				result.setFileType(this.fileType);
-				result.setControlEncoding(this.controlEncoding);
-				result.changeWorkingDirectory(this.remotePath);
-			} catch (Exception ex) {
+		try {
+			result = createConneciton();
+			int tries = 0;
+			boolean success = false;
+			for (;;) {
 				try {
-					if (login) {
-						result.logout();
+					result.connect(this.ip, this.port);
+					success = true;
+					break;
+				} catch (ConnectException ex) {
+					// 當連線失敗時,重試
+					// ex.printStackTrace();
+					result = createConneciton();
+					//
+					++tries;
+					// [1/3] time(s) java.net.ConnectException: Connection
+					// refused:
+					// connect
+					LOGGER.warn("[" + tries + "/" + (this.retryNumber != 0 ? this.retryNumber : "INFINITE")
+							+ "] time(s) Failed to get the connection");
+					// 0=無限
+					if (this.retryNumber != 0 && tries >= this.retryNumber) {
+						break;
 					}
-					if (result.isConnected()) {
-						result.disconnect();
-					}
-				} catch (Exception ex2) {
+					// 重試暫停毫秒
+					ThreadHelper.sleep(NioHelper.retryPause(tries, this.retryPauseMills));
+					// Retrying connect to [127.0.0.1:21]. Already tried [1/3]
+					// time(s).
+					LOGGER.info("Retrying connect to [" + ip + ":" + port + "]. Already tried [" + (tries + 1) + "/"
+							+ (this.retryNumber != 0 ? this.retryNumber : "INFINITE") + "] time(s)");
 				}
-				//
-				throw new SocketException(ex.getMessage());
 			}
+			//
+			if (!success) {
+				LOGGER.error("Can't connect to [" + this.ip + ":" + this.port + "]");
+				throw new FtpClientException("Connection refused");
+			} else {
+				boolean login = false;
+				try {
+					login = result.login(this.username, this.password);
+					if (!login) {
+						LOGGER.error("[" + this.username + "] Can't login to [" + this.ip + ":" + this.port + "]");
+						throw new SocketException("Login failed");
+					}
+					//
+					int reply = result.getReplyCode();
+					if (!FTPReply.isPositiveCompletion(reply)) {
+						throw new SocketException("Reply failed, reply: " + reply);
+					}
+					//
+					result.setBufferSize(this.bufferSize);
+					switch (this.clientMode) {
+					case 0:
+						result.enterLocalActiveMode();
+						break;
+					case 2:
+						result.enterLocalPassiveMode();
+						break;
+					}
+					result.setFileType(this.fileType);
+					result.setControlEncoding(this.controlEncoding);
+					result.changeWorkingDirectory(this.remotePath);
+				} catch (Exception e) {
+					try {
+						if (login) {
+							result.logout();
+						}
+						if (result.isConnected()) {
+							result.disconnect();
+						}
+					} catch (Exception e2) {
+					}
+					//
+					throw new FtpClientException(e);
+				}
+			}
+		} catch (Exception e) {
+			throw new FtpClientException(e);
 		}
 		return result;
 	}
@@ -162,7 +169,7 @@ public class FtpClientFactoryImpl extends BaseServiceSupporter implements FtpCli
 	 * @throws SocketException
 	 * @throws IOException
 	 */
-	protected FTPClient createConneciton() throws SocketException, IOException {
+	protected FTPClient createConneciton() throws Exception {
 		FTPClient result = new FTPClient();
 		//
 		result.setConnectTimeout(this.connectTimeout);

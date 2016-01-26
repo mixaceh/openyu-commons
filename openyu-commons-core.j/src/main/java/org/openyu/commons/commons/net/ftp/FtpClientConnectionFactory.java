@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.SocketException;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.openyu.commons.commons.net.ftp.ex.FtpClientException;
 import org.openyu.commons.service.BaseService;
 
 /**
@@ -18,5 +19,5 @@ public interface FtpClientConnectionFactory extends BaseService {
 	 * @throws SocketException
 	 * @throws IOException
 	 */
-	FTPClient getFTPClient() throws SocketException, IOException;
+	FTPClient getFTPClient() throws FtpClientException;
 }

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 import org.openyu.commons.commons.net.ftp.FtpClientConnectionFactory;
 import org.openyu.commons.commons.net.ftp.FtpClientFactory;
+import org.openyu.commons.commons.net.ftp.ex.FtpClientException;
 import org.openyu.commons.nio.NioHelper;
 
 public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter implements FtpClientConnectionFactory {
@@ -294,8 +295,12 @@ public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter impleme
 		return this.restartNeeded;
 	}
 
-	public FTPClient getFTPClient() throws SocketException, IOException {
-		return createFtpClientConnectionFactory().getFTPClient();
+	public FTPClient getFTPClient() throws FtpClientException {
+		try {
+			return createFtpClientConnectionFactory().getFTPClient();
+		} catch (Exception e) {
+			throw new FtpClientException(e);
+		}
 	}
 
 	public synchronized void close() throws IOException {
