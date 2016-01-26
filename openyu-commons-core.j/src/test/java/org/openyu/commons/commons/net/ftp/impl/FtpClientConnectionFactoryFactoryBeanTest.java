@@ -24,7 +24,7 @@ public class FtpClientConnectionFactoryFactoryBeanTest extends BaseTestSupporter
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/commons/net/ftp/testContext-ftp-client.xml",//
+				"org/openyu/commons/commons/net/ftp/testContext-net-ftp.xml",//
 
 		});
 		ftpClientConnectionFactory = applicationContext.getBean("ftpClientConnectionFactoryFactoryBean",

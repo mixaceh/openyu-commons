@@ -32,7 +32,7 @@ public class BenchmarkFtpClientFtoSupporterTest extends BaseTestSupporter {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
 				"applicationContext-bean.xml", //
-				"applicationContext-ftp-client.xml",//
+				"applicationContext-net-ftp.xml",//
 		});
 		ftpClientFtoSupporter = (CommonFtoSupporter) applicationContext.getBean("ftpClientFtoSupporter");
 	}

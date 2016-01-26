@@ -17,7 +17,7 @@
 			value="true" />
 		<property name="locations">
 			<list>
-				<value>file:src/test/config/etc/ftp-client.properties</value>
+				<value>file:src/test/config/etc/net-ftp.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -104,7 +104,7 @@
 	<bean
 		id="ftpClientConnectionFactoryFactoryBean"
 		class="org.openyu.commons.commons.net.ftp.impl.FtpClientConnectionFactoryFactoryBean"
-		p:configLocation="file:src/test/config/etc/ftp-client.properties" />
+		p:configLocation="file:src/test/config/etc/net-ftp.properties" />
 
 	<bean
 		id="ftpClientSessionFactory"

@@ -11,14 +11,14 @@ import org.openyu.commons.commons.net.ftp.FtpClientTemplate;
 import org.openyu.commons.fto.supporter.CommonFtoSupporter;
 import org.apache.commons.net.ftp.FTPClient;
 
-public class ApplicationContextFtpClientTest extends BaseTestSupporter {
+public class ApplicationContextNetFtpTest extends BaseTestSupporter {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
 				"applicationContext-bean.xml", //
-				"applicationContext-ftp-client.xml",//
+				"applicationContext-net-ftp.xml",//
 		});
 	}
 

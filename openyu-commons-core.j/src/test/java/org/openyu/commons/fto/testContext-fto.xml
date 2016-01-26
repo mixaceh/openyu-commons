@@ -6,11 +6,12 @@
 	xsi:schemaLocation="
              http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
+	
 	<!-- Apache Commons Net FTP Connection Pool -->
 	<bean
 		id="ftpClientConnectionFactoryFactoryBean"
 		class="org.openyu.commons.commons.net.ftp.impl.FtpClientConnectionFactoryFactoryBean"
-		p:configLocation="file:src/test/config/etc/ftp-client.properties" />
+		p:configLocation="file:src/test/config/etc/net-ftp.properties" />
 
 	<bean
 		id="ftpClientSessionFactory"
@@ -22,17 +23,14 @@
 		class="org.openyu.commons.commons.net.ftp.impl.FtpClientTemplateImpl"
 		p:ftpClientSessionFactory-ref="ftpClientSessionFactory" />
 
-	<!-- fto supporter, use ftpClientSessionFactory 
-	<bean
-		id="ftpClientFtoSupporter"
-		class="org.openyu.commons.fto.commons.net.ftp.supporter.FtpClientFtoSupporter"
-		p:ftpClientSessionFactory-ref="ftpClientSessionFactory" />
-	-->
-	
-	<!-- fto supporter, use ftpClientTemplate -->
 	<bean
 		id="commonFtoSupporter"
 		class="org.openyu.commons.fto.supporter.CommonFtoSupporter"
 		p:ftpClientTemplate-ref="ftpClientTemplate" />
+
+	<bean
+		id="commonFto"
+		class="org.openyu.commons.fto.impl.CommonFtoImpl"
+		parent="commonFtoSupporter" />
 
 </beans>
