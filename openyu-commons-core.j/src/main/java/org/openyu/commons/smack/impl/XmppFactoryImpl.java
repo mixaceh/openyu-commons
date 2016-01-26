@@ -68,9 +68,6 @@ public class XmppFactoryImpl extends BaseServiceSupporter implements XmppFactory
 
 	private long packetReplyTimeout;
 
-	// ============================================
-	// listener
-	// ============================================
 	private Map<StanzaListener, StanzaFilter> asyncRecvListeners;
 
 	private Set<ConnectionListener> connectionListeners;

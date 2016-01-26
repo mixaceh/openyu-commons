@@ -6,10 +6,10 @@ import java.net.SocketException;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.pool.ObjectPool;
 import org.openyu.commons.commons.net.ftp.FtpClientConnectionFactory;
+import org.openyu.commons.commons.net.ftp.ex.FtpClientException;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
-public class PoolingFtpClientConnectionFactory extends BaseServiceSupporter implements
-		FtpClientConnectionFactory {
+public class PoolingFtpClientConnectionFactory extends BaseServiceSupporter implements FtpClientConnectionFactory {
 
 	private static final long serialVersionUID = 4671468693002418428L;
 
@@ -28,7 +28,7 @@ public class PoolingFtpClientConnectionFactory extends BaseServiceSupporter impl
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		
+
 	}
 
 	/**
@@ -36,11 +36,10 @@ public class PoolingFtpClientConnectionFactory extends BaseServiceSupporter impl
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		
+
 	}
 
-	public void setPool(ObjectPool<FTPClient> pool)
-			throws IllegalStateException, NullPointerException {
+	public void setPool(ObjectPool<FTPClient> pool) throws IllegalStateException, NullPointerException {
 		if (null != this.pool)
 			throw new IllegalStateException("Pool already set");
 		if (null == pool) {
@@ -49,19 +48,12 @@ public class PoolingFtpClientConnectionFactory extends BaseServiceSupporter impl
 		this.pool = pool;
 	}
 
-	public FTPClient getFTPClient() throws SocketException, IOException {
+	public FTPClient getFTPClient() throws FtpClientException {
 		FTPClient result = null;
 		try {
 			result = this.pool.borrowObject();
-		} catch (SocketException e) {
-			throw e;
-		} catch (IOException e) {
-			throw new IOException("Cannot get a FTPClient, pool error "
-					+ e.getMessage(), e);
-		} catch (RuntimeException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new IOException("Cannot get a FTPClient, general error", e);
+			throw new FtpClientException("Cannot get a FTPClient, pool error " + e.getMessage(), e);
 		}
 		return result;
 	}
