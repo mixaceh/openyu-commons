@@ -1,13 +1,6 @@
 package org.openyu.commons.fto.impl;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.Serializable;
-import java.util.Locale;
-
-import org.apache.commons.net.ftp.FTPClient;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
