@@ -1,7 +1,5 @@
 package org.openyu.commons.smack.impl;
 
-import javax.annotation.PostConstruct;
-
 import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.packet.Message;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
@@ -16,6 +14,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.util.Assert;
 
 public class XmppTemplateImpl extends BaseServiceSupporter implements XmppTemplate {
+
+	private static final long serialVersionUID = -3622934785953049788L;
 
 	private static transient final Logger LOGGER = LogManager.getLogger(XmppTemplateImpl.class);
 
