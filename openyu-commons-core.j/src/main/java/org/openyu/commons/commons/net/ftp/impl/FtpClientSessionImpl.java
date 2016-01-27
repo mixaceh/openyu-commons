@@ -37,13 +37,13 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 
 	protected boolean closed = false;
 
-	private transient FtpClientSessionFactoryImpl factory;
+	private transient FtpClientSessionFactoryImpl ftpClientSessionFactoryImpl;
 
 	protected FTPClient delegate;
 
-	public FtpClientSessionImpl(FtpClientSessionFactoryImpl factory,
+	public FtpClientSessionImpl(FtpClientSessionFactoryImpl ftpClientSessionFactoryImpl,
 			FTPClient ftpClient) {
-		this.factory = factory;
+		this.ftpClientSessionFactoryImpl = ftpClientSessionFactoryImpl;
 		this.delegate = ftpClient;
 	}
 
@@ -64,7 +64,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		this.closed = true;
 		//
 		try {
-			this.factory.closeSession();
+			this.ftpClientSessionFactoryImpl.closeSession();
 		} catch (Exception ex) {
 			throw new FtpClientSessionException("Cannot close FtpClientSession");
 		}

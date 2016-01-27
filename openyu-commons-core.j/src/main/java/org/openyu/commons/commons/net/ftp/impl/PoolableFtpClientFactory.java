@@ -62,20 +62,16 @@ public class PoolableFtpClientFactory extends BaseServiceSupporter implements Po
 		if (result == null) {
 			throw new IllegalStateException("FTPClient factory returned null from createFTPClient");
 		}
-		try {
-			result = new PoolableFtpClient(result, this.pool);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			result = null;
-		}
+		result = new PoolableFtpClient(result, this.pool);
+		//
 		return result;
 	}
 
 	public void destroyObject(FTPClient obj) throws Exception {
 		if (obj != null) {
 			if (obj instanceof PoolableFtpClient) {
-				PoolableFtpClient conn = (PoolableFtpClient) obj;
-				conn.reallyClose();
+				PoolableFtpClient poolable = (PoolableFtpClient) obj;
+				poolable.reallyClose();
 			}
 		}
 	}
@@ -85,11 +81,7 @@ public class PoolableFtpClientFactory extends BaseServiceSupporter implements Po
 			// 只要連過線,之後斷線還是true
 			// if (obj.isConnected()) {
 			// #fix
-			if (obj.sendNoOp()) {
-				return true;
-			} else {
-				return false;
-			}
+			return obj.sendNoOp();
 		} catch (Exception e) {
 			return false;
 		}

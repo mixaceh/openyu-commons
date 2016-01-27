@@ -62,20 +62,16 @@ public class PoolableXmppFactory extends BaseServiceSupporter implements Poolabl
 		if (result == null) {
 			throw new IllegalStateException("XMPPConnection factory returned null from createXMPPConnection");
 		}
-		try {
-			result = new PoolableXmppConnection(result, this.pool);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			result = null;
-		}
+		result = new PoolableXmppConnection(result, this.pool);
+		//
 		return result;
 	}
 
 	public void destroyObject(XMPPConnection obj) throws Exception {
 		if (obj != null) {
 			if (obj instanceof PoolableXmppConnection) {
-				PoolableXmppConnection conn = (PoolableXmppConnection) obj;
-				conn.reallyClose();
+				PoolableXmppConnection poolable = (PoolableXmppConnection) obj;
+				poolable.reallyClose();
 			}
 		}
 	}
@@ -94,8 +90,8 @@ public class PoolableXmppFactory extends BaseServiceSupporter implements Poolabl
 			// #fix
 			if (obj != null) {
 				if (obj instanceof PoolableXmppConnection) {
-					PoolableXmppConnection conn = (PoolableXmppConnection) obj;
-					result = conn.isAlive();
+					PoolableXmppConnection poolable = (PoolableXmppConnection) obj;
+					result = poolable.isAlive();
 				}
 			}
 		} catch (Exception e) {

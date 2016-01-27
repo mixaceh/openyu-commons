@@ -1,5 +1,6 @@
 package org.openyu.commons.smack;
 
+import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.packet.Message;
 import org.openyu.commons.service.BaseService;
 import org.openyu.commons.smack.ex.XmppTemplateException;
@@ -18,8 +19,8 @@ public interface XmppTemplate extends BaseService {
 
 	// --------------------------------------------------
 
-	void sendMessage(String userJID, String text) throws XmppTemplateException;
+	void sendMessage(String userJID, String text) throws NotConnectedException;
 
-	void sendMessage(String userJID, Message message) throws XmppTemplateException;
+	void sendMessage(String userJID, Message message) throws NotConnectedException;
 
 }

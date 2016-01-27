@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 public class XmppConnectionFactoryImpl extends BaseServiceSupporter implements XmppConnectionFactory {
 
-	private static final long serialVersionUID = -5860451287613207101L;
+	private static final long serialVersionUID = -7238702688979345039L;
 
 	private static transient final Logger LOGGER = LogManager.getLogger(XmppConnectionFactoryImpl.class);
 
@@ -403,10 +403,6 @@ public class XmppConnectionFactoryImpl extends BaseServiceSupporter implements X
 	}
 
 	public synchronized void close() throws IOException {
-		// if (this.closed) {
-		// throw new IOException("XmppConnectionFactory was already closed");
-		// }
-		//
 		this.closed = true;
 		GenericObjectPool<XMPPConnection> oldpool = this.objectPool;
 		this.objectPool = null;

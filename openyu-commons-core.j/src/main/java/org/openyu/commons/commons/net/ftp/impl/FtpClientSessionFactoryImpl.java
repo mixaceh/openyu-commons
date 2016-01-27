@@ -4,18 +4,17 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
+import org.openyu.commons.util.AssertHelper;
 import org.openyu.commons.commons.net.ftp.FtpClientConnectionFactory;
 import org.openyu.commons.commons.net.ftp.FtpClientSession;
 import org.openyu.commons.commons.net.ftp.FtpClientSessionFactory;
 import org.openyu.commons.commons.net.ftp.ex.FtpClientException;
 
-public class FtpClientSessionFactoryImpl extends BaseServiceSupporter implements
-		FtpClientSessionFactory {
+public class FtpClientSessionFactoryImpl extends BaseServiceSupporter implements FtpClientSessionFactory {
 
 	private static final long serialVersionUID = 5691760949867661150L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(FtpClientSessionFactoryImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(FtpClientSessionFactoryImpl.class);
 
 	private FtpClientConnectionFactory ftpClientConnectionFactory;
 
@@ -31,7 +30,7 @@ public class FtpClientSessionFactoryImpl extends BaseServiceSupporter implements
 	 */
 	@Override
 	protected void doStart() throws Exception {
-
+		AssertHelper.notNull(ftpClientConnectionFactory, "The FtpClientConnectionFactory is required");
 	}
 
 	/**
@@ -90,16 +89,15 @@ public class FtpClientSessionFactoryImpl extends BaseServiceSupporter implements
 			this.closed = true;
 			// TODO sessionHolder 未清
 			if (ftpClientConnectionFactory instanceof FtpClientConnectionFactoryImpl) {
-				FtpClientConnectionFactoryImpl factory = (FtpClientConnectionFactoryImpl) ftpClientConnectionFactory;
-				FtpClientConnectionFactoryImpl oldFactory = factory;
-				factory = null;
+				FtpClientConnectionFactoryImpl oldFactory = (FtpClientConnectionFactoryImpl) ftpClientConnectionFactory;
+				ftpClientConnectionFactory = null;
 				if (oldFactory != null) {
 					oldFactory.close();
 				}
+
 			}
 		} catch (Exception ex) {
-			throw new FtpClientException(
-					"Cannot close FtpClientSessionFactory, general error", ex);
+			throw new FtpClientException("Cannot close FtpClientSessionFactory, general error", ex);
 		}
 	}
 

@@ -33,6 +33,22 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 		this(null);
 	}
 
+	/**
+	 * 內部啟動
+	 */
+	@Override
+	protected void doStart() throws Exception {
+		AssertHelper.notNull(ftpClientSessionFactory, "The FtpClientSessionFactory is required");
+	}
+
+	/**
+	 * 內部關閉
+	 */
+	@Override
+	protected void doShutdown() throws Exception {
+
+	}
+
 	public FtpClientSessionFactory getFtpClientSessionFactory() {
 		return ftpClientSessionFactory;
 	}
@@ -55,22 +71,6 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 		} catch (Exception ex) {
 			throw new FtpClientTemplateException("Could not close FtpClientSession", ex);
 		}
-	}
-
-	/**
-	 * 內部啟動
-	 */
-	@Override
-	protected void doStart() throws Exception {
-		AssertHelper.notNull(ftpClientSessionFactory, "The FtpClientSessionFactory is required");
-	}
-
-	/**
-	 * 內部關閉
-	 */
-	@Override
-	protected void doShutdown() throws Exception {
-
 	}
 
 	public <T> T execute(FtpClientCallback<T> action) throws FtpClientTemplateException {
