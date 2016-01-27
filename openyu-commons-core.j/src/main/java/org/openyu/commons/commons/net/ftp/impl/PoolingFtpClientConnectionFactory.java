@@ -1,7 +1,5 @@
 package org.openyu.commons.commons.net.ftp.impl;
 
-import java.io.IOException;
-import java.net.SocketException;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.pool.ObjectPool;
