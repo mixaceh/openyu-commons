@@ -113,65 +113,29 @@ public class PoolableFtpClient extends FTPClient implements Delegateable<FTPClie
 	}
 
 	public void connect(InetAddress host, int port) throws SocketException, IOException {
-		try {
-			this.delegate.connect(host, port);
-		} catch (SocketException e) {
-			handleException(e);
-		} catch (IOException e) {
-			handleException(e);
-		}
+		this.delegate.connect(host, port);
 	}
 
 	public void connect(String hostname, int port) throws SocketException, IOException {
-		try {
-			this.delegate.connect(hostname, port);
-		} catch (SocketException e) {
-			handleException(e);
-		} catch (IOException e) {
-			handleException(e);
-		}
+		this.delegate.connect(hostname, port);
 	}
 
 	public void connect(InetAddress host, int port, InetAddress localAddr, int localPort)
 			throws SocketException, IOException {
-		try {
-			this.delegate.connect(host, port, localAddr, localPort);
-		} catch (SocketException e) {
-			handleException(e);
-		} catch (IOException e) {
-			handleException(e);
-		}
+		this.delegate.connect(host, port, localAddr, localPort);
 	}
 
 	public void connect(String hostname, int port, InetAddress localAddr, int localPort)
 			throws SocketException, IOException {
-		try {
-			this.delegate.connect(hostname, port, localAddr, localPort);
-		} catch (SocketException e) {
-			handleException(e);
-		} catch (IOException e) {
-			handleException(e);
-		}
+		this.delegate.connect(hostname, port, localAddr, localPort);
 	}
 
 	public void connect(InetAddress host) throws SocketException, IOException {
-		try {
-			this.delegate.connect(host);
-		} catch (SocketException e) {
-			handleException(e);
-		} catch (IOException e) {
-			handleException(e);
-		}
+		this.delegate.connect(host);
 	}
 
 	public void connect(String hostname) throws SocketException, IOException {
-		try {
-			this.delegate.connect(hostname);
-		} catch (SocketException e) {
-			handleException(e);
-		} catch (IOException e) {
-			handleException(e);
-		}
+		this.delegate.connect(hostname);
 	}
 
 	public boolean isAvailable() {
@@ -222,12 +186,7 @@ public class PoolableFtpClient extends FTPClient implements Delegateable<FTPClie
 
 	public int sendCommand(String command, String args) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.sendCommand(command, args);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.sendCommand(command, args);
 	}
 
 	public void setTcpNoDelay(boolean on) throws SocketException {
@@ -274,42 +233,27 @@ public class PoolableFtpClient extends FTPClient implements Delegateable<FTPClie
 		return this.delegate.verifyRemote(socket);
 	}
 
-	public int sendCommand(int command, String args) throws IOException {
-		checkOpen();
-		try {
-			return this.delegate.sendCommand(command, args);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
-	}
-
 	public void setSocketFactory(SocketFactory factory) {
 		this.delegate.setSocketFactory(factory);
-	}
-
-	public int sendCommand(String command) throws IOException {
-		checkOpen();
-		try {
-			return this.delegate.sendCommand(command);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
 	}
 
 	public void setServerSocketFactory(ServerSocketFactory factory) {
 		this.delegate.setServerSocketFactory(factory);
 	}
 
+	public int sendCommand(int command, String args) throws IOException {
+		checkOpen();
+		return this.delegate.sendCommand(command, args);
+	}
+
+	public int sendCommand(String command) throws IOException {
+		checkOpen();
+		return this.delegate.sendCommand(command);
+	}
+
 	public int sendCommand(int command) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.sendCommand(command);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.sendCommand(command);
 	}
 
 	public int getReplyCode() {
@@ -350,282 +294,142 @@ public class PoolableFtpClient extends FTPClient implements Delegateable<FTPClie
 
 	public int user(String username) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.user(username);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.user(username);
 	}
 
 	public int pass(String password) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.pass(password);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.pass(password);
 	}
 
 	public int acct(String account) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.acct(account);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.acct(account);
 	}
 
 	public int abor() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.abor();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.abor();
 	}
 
 	public int cwd(String directory) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.cwd(directory);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.cwd(directory);
 	}
 
 	public int cdup() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.cdup();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.cdup();
 	}
 
 	public int quit() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.quit();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.quit();
 	}
 
 	public int rein() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.rein();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.rein();
 	}
 
 	public int smnt(String dir) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.smnt(dir);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.smnt(dir);
 	}
 
 	public int port(InetAddress host, int port) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.port(host, port);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.port(host, port);
 	}
 
 	public int eprt(InetAddress host, int port) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.eprt(host, port);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.eprt(host, port);
 	}
 
 	public int pasv() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.pasv();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.pasv();
 	}
 
 	public int epsv() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.epsv();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.epsv();
 	}
 
 	public int type(int fileType, int formatOrByteSize) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.type(fileType, formatOrByteSize);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.type(fileType, formatOrByteSize);
 	}
 
 	public int type(int fileType) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.type(fileType);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.type(fileType);
 	}
 
 	public int stru(int structure) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.stru(structure);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.stru(structure);
 	}
 
 	public int mode(int mode) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.mode(mode);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.mode(mode);
 	}
 
 	public int retr(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.retr(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.retr(pathname);
 	}
 
 	public int stor(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.stor(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.stor(pathname);
 	}
 
 	public int stou() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.stou();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.stou();
 	}
 
 	public int stou(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.stou(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.stou(pathname);
 	}
 
 	public int appe(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.appe(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.appe(pathname);
 	}
 
 	public int allo(int bytes) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.allo(bytes);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.allo(bytes);
 	}
 
 	public int feat() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.feat();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.feat();
 	}
 
 	public int allo(int bytes, int recordSize) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.allo(bytes, recordSize);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.allo(bytes, recordSize);
 	}
 
 	public int rest(String marker) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.rest(marker);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.rest(marker);
 	}
 
 	public int mdtm(String file) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.mdtm(file);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.mdtm(file);
 	}
 
 	public int mfmt(String pathname, String timeval) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.mfmt(pathname, timeval);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.mfmt(pathname, timeval);
 	}
 
 	public void setDataTimeout(int timeout) {
@@ -662,152 +466,77 @@ public class PoolableFtpClient extends FTPClient implements Delegateable<FTPClie
 
 	public int mkd(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.mkd(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.mkd(pathname);
 	}
 
 	public boolean login(String username, String password) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.login(username, password);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.login(username, password);
 	}
 
 	public int pwd() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.pwd();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.pwd();
 	}
 
 	public int list() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.list();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.list();
 	}
 
 	public int list(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.list(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.list(pathname);
 	}
 
 	public int mlsd() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.mlsd();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.mlsd();
 	}
 
 	public boolean login(String username, String password, String account) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.login(username, password, account);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.login(username, password, account);
 	}
 
 	public int mlsd(String path) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.mlsd(path);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.mlsd(path);
 	}
 
 	public int mlst() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.mlst();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.mlst();
 	}
 
 	public int mlst(String path) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.mlst(path);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.mlst(path);
 	}
 
 	public int nlst() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.nlst();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.nlst();
 	}
 
 	public int nlst(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.nlst(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.nlst(pathname);
 	}
 
 	public int site(String parameters) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.site(parameters);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.site(parameters);
 	}
 
 	public boolean logout() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.logout();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.logout();
 	}
 
 	public int syst() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.syst();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.syst();
 	}
 
 	public boolean changeWorkingDirectory(String pathname) throws IOException {
@@ -816,72 +545,37 @@ public class PoolableFtpClient extends FTPClient implements Delegateable<FTPClie
 
 	public int stat() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.stat();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.stat();
 	}
 
 	public int stat(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.stat(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.stat(pathname);
 	}
 
 	public boolean changeToParentDirectory() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.changeToParentDirectory();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.changeToParentDirectory();
 	}
 
 	public int help() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.help();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.help();
 	}
 
 	public boolean structureMount(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.structureMount(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.structureMount(pathname);
 	}
 
 	public int help(String command) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.help(command);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.help(command);
 	}
 
 	public int noop() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.noop();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return this.delegate.noop();
 	}
 
 	public boolean isStrictMultilineParsing() {
@@ -970,62 +664,32 @@ public class PoolableFtpClient extends FTPClient implements Delegateable<FTPClie
 
 	public boolean retrieveFile(String remote, OutputStream local) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.retrieveFile(remote, local);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.retrieveFile(remote, local);
 	}
 
 	public InputStream retrieveFileStream(String remote) throws IOException {
 		checkOpen();
-		try {
-			return delegate.retrieveFileStream(remote);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return null;
+		return delegate.retrieveFileStream(remote);
 	}
 
 	public boolean storeFile(String remote, InputStream local) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.storeFile(remote, local);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.storeFile(remote, local);
 	}
 
 	public OutputStream storeFileStream(String remote) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.storeFileStream(remote);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return null;
+		return this.delegate.storeFileStream(remote);
 	}
 
 	public boolean appendFile(String remote, InputStream local) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.appendFile(remote, local);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.appendFile(remote, local);
 	}
 
 	public OutputStream appendFileStream(String remote) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.appendFileStream(remote);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return null;
+		return this.delegate.appendFileStream(remote);
 	}
 
 	public boolean storeUniqueFile(String remote, InputStream local) throws IOException {
@@ -1070,32 +734,17 @@ public class PoolableFtpClient extends FTPClient implements Delegateable<FTPClie
 
 	public boolean allocate(int bytes, int recordSize) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.allocate(bytes, recordSize);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.allocate(bytes, recordSize);
 	}
 
 	public boolean doCommand(String command, String params) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.doCommand(command, params);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.doCommand(command, params);
 	}
 
 	public String[] doCommandAsStrings(String command, String params) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.doCommandAsStrings(command, params);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return null;
+		return this.delegate.doCommandAsStrings(command, params);
 	}
 
 	public FTPFile mlistFile(String pathname) throws IOException {
@@ -1124,62 +773,32 @@ public class PoolableFtpClient extends FTPClient implements Delegateable<FTPClie
 
 	public boolean rename(String from, String to) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.rename(from, to);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.rename(from, to);
 	}
 
 	public boolean abort() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.abort();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.abort();
 	}
 
 	public boolean deleteFile(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.deleteFile(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.deleteFile(pathname);
 	}
 
 	public boolean removeDirectory(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.removeDirectory(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.removeDirectory(pathname);
 	}
 
 	public boolean makeDirectory(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.makeDirectory(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return false;
+		return this.delegate.makeDirectory(pathname);
 	}
 
 	public String printWorkingDirectory() throws IOException {
 		checkOpen();
-		try {
-			return delegate.printWorkingDirectory();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return null;
+		return delegate.printWorkingDirectory();
 	}
 
 	public boolean sendSiteCommand(String arguments) throws IOException {
@@ -1204,72 +823,37 @@ public class PoolableFtpClient extends FTPClient implements Delegateable<FTPClie
 
 	public String[] listNames(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.listNames(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return null;
+		return this.delegate.listNames(pathname);
 	}
 
 	public String[] listNames() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.listNames();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return null;
+		return this.delegate.listNames();
 	}
 
 	public FTPFile[] listFiles(String pathname) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.listFiles(pathname);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return null;
+		return this.delegate.listFiles(pathname);
 	}
 
 	public FTPFile[] listFiles() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.listFiles();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return null;
+		return this.delegate.listFiles();
 	}
 
 	public FTPFile[] listFiles(String pathname, FTPFileFilter filter) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.listFiles(pathname, filter);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return null;
+		return this.delegate.listFiles(pathname, filter);
 	}
 
 	public FTPFile[] listDirectories() throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.listDirectories();
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return null;
+		return this.delegate.listDirectories();
 	}
 
 	public FTPFile[] listDirectories(String parent) throws IOException {
 		checkOpen();
-		try {
-			return this.delegate.listDirectories(parent);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return null;
+		return this.delegate.listDirectories(parent);
 	}
 
 	public FTPListParseEngine initiateListParsing() throws IOException {
@@ -1362,10 +946,6 @@ public class PoolableFtpClient extends FTPClient implements Delegateable<FTPClie
 
 	public String getSystemName() throws IOException {
 		return this.delegate.getSystemName();
-	}
-
-	protected void handleException(IOException e) throws IOException {
-		throw e;
 	}
 
 	public String toString() {

@@ -62,12 +62,14 @@ public class XmppSessionImpl extends BaseModelSupporter implements XmppSession {
 
 	@Override
 	public void sendMessage(String userJID, String text) throws NotConnectedException {
+		errorIfClosed();
 		Chat chat = delegate.createChat(userJID);
 		chat.sendMessage(text);
 	}
 
 	@Override
 	public void sendMessage(String userJID, Message message) throws NotConnectedException {
+		errorIfClosed();
 		Chat chat = delegate.createChat(userJID);
 		chat.sendMessage(message);
 	}

@@ -20,20 +20,17 @@ import org.apache.commons.net.ftp.FTPFileFilter;
 import org.apache.commons.net.ftp.FTPListParseEngine;
 import org.apache.commons.net.ftp.parser.FTPFileEntryParserFactory;
 import org.apache.commons.net.io.CopyStreamListener;
-import org.apache.hadoop.hbase.TableNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openyu.commons.model.supporter.BaseModelSupporter;
 import org.openyu.commons.commons.net.ftp.FtpClientSession;
 import org.openyu.commons.commons.net.ftp.ex.FtpClientSessionException;
 
-public class FtpClientSessionImpl extends BaseModelSupporter implements
-		FtpClientSession {
+public class FtpClientSessionImpl extends BaseModelSupporter implements FtpClientSession {
 
 	private static final long serialVersionUID = 7538640140017769305L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(FtpClientSessionImpl.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(FtpClientSessionImpl.class);
 
 	protected boolean closed = false;
 
@@ -41,8 +38,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 
 	protected FTPClient delegate;
 
-	public FtpClientSessionImpl(FtpClientSessionFactoryImpl ftpClientSessionFactoryImpl,
-			FTPClient ftpClient) {
+	public FtpClientSessionImpl(FtpClientSessionFactoryImpl ftpClientSessionFactoryImpl, FTPClient ftpClient) {
 		this.ftpClientSessionFactoryImpl = ftpClientSessionFactoryImpl;
 		this.delegate = ftpClient;
 	}
@@ -58,8 +54,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 
 	public void close() throws FtpClientSessionException {
 		if (isClosed()) {
-			throw new FtpClientSessionException(
-					"FtpClientSession was already closed");
+			throw new FtpClientSessionException("FtpClientSession was already closed");
 		}
 		this.closed = true;
 		//
@@ -71,27 +66,24 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 	}
 
 	public boolean isConnected() {
-		return (!isClosed()) && (this.delegate != null)
-				&& (this.delegate.isConnected());
+		return (!isClosed()) && (this.delegate != null) && (this.delegate.isConnected());
 	}
 
-	public void connect(InetAddress host, int port) throws SocketException,
-			IOException {
+	public void connect(InetAddress host, int port) throws SocketException, IOException {
 		delegate.connect(host, port);
 	}
 
-	public void connect(String hostname, int port) throws SocketException,
-			IOException {
+	public void connect(String hostname, int port) throws SocketException, IOException {
 		delegate.connect(hostname, port);
 	}
 
-	public void connect(InetAddress host, int port, InetAddress localAddr,
-			int localPort) throws SocketException, IOException {
+	public void connect(InetAddress host, int port, InetAddress localAddr, int localPort)
+			throws SocketException, IOException {
 		delegate.connect(host, port, localAddr, localPort);
 	}
 
-	public void connect(String hostname, int port, InetAddress localAddr,
-			int localPort) throws SocketException, IOException {
+	public void connect(String hostname, int port, InetAddress localAddr, int localPort)
+			throws SocketException, IOException {
 		delegate.connect(hostname, port, localAddr, localPort);
 	}
 
@@ -149,12 +141,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 
 	public int sendCommand(String command, String args) throws IOException {
 		errorIfClosed();
-		try {
-			return delegate.sendCommand(command, args);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return delegate.sendCommand(command, args);
 	}
 
 	public void setTcpNoDelay(boolean on) throws SocketException {
@@ -203,12 +190,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 
 	public int sendCommand(int command, String args) throws IOException {
 		errorIfClosed();
-		try {
-			return delegate.sendCommand(command, args);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return delegate.sendCommand(command, args);
 	}
 
 	public void setSocketFactory(SocketFactory factory) {
@@ -217,12 +199,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 
 	public int sendCommand(String command) throws IOException {
 		errorIfClosed();
-		try {
-			return delegate.sendCommand(command);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return delegate.sendCommand(command);
 	}
 
 	public void setServerSocketFactory(ServerSocketFactory factory) {
@@ -231,12 +208,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 
 	public int sendCommand(int command) throws IOException {
 		errorIfClosed();
-		try {
-			return delegate.sendCommand(command);
-		} catch (IOException e) {
-			handleException(e);
-		}
-		return 0;
+		return delegate.sendCommand(command);
 	}
 
 	public int getReplyCode() {
@@ -447,8 +419,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		return delegate.mlsd();
 	}
 
-	public boolean login(String username, String password, String account)
-			throws IOException {
+	public boolean login(String username, String password, String account) throws IOException {
 		return delegate.login(username, password, account);
 	}
 
@@ -532,8 +503,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		delegate.enterLocalPassiveMode();
 	}
 
-	public boolean enterRemoteActiveMode(InetAddress host, int port)
-			throws IOException {
+	public boolean enterRemoteActiveMode(InetAddress host, int port) throws IOException {
 		return delegate.enterRemoteActiveMode(host, port);
 	}
 
@@ -557,8 +527,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		delegate.setActivePortRange(minPort, maxPort);
 	}
 
-	public void setActiveExternalIPAddress(String ipAddress)
-			throws UnknownHostException {
+	public void setActiveExternalIPAddress(String ipAddress) throws UnknownHostException {
 		delegate.setActiveExternalIPAddress(ipAddress);
 	}
 
@@ -566,8 +535,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		return delegate.setFileType(fileType);
 	}
 
-	public boolean setFileType(int fileType, int formatOrByteSize)
-			throws IOException {
+	public boolean setFileType(int fileType, int formatOrByteSize) throws IOException {
 		return delegate.setFileType(fileType, formatOrByteSize);
 	}
 
@@ -603,8 +571,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		return delegate.completePendingCommand();
 	}
 
-	public boolean retrieveFile(String remote, OutputStream local)
-			throws IOException {
+	public boolean retrieveFile(String remote, OutputStream local) throws IOException {
 		return delegate.retrieveFile(remote, local);
 	}
 
@@ -612,8 +579,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		return delegate.retrieveFileStream(remote);
 	}
 
-	public boolean storeFile(String remote, InputStream local)
-			throws IOException {
+	public boolean storeFile(String remote, InputStream local) throws IOException {
 		return delegate.storeFile(remote, local);
 	}
 
@@ -621,8 +587,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		return delegate.storeFileStream(remote);
 	}
 
-	public boolean appendFile(String remote, InputStream local)
-			throws IOException {
+	public boolean appendFile(String remote, InputStream local) throws IOException {
 		return delegate.appendFile(remote, local);
 	}
 
@@ -630,8 +595,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		return delegate.appendFileStream(remote);
 	}
 
-	public boolean storeUniqueFile(String remote, InputStream local)
-			throws IOException {
+	public boolean storeUniqueFile(String remote, InputStream local) throws IOException {
 		return delegate.storeUniqueFile(remote, local);
 	}
 
@@ -679,8 +643,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		return delegate.doCommand(command, params);
 	}
 
-	public String[] doCommandAsStrings(String command, String params)
-			throws IOException {
+	public String[] doCommandAsStrings(String command, String params) throws IOException {
 		return delegate.doCommandAsStrings(command, params);
 	}
 
@@ -696,8 +659,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		return delegate.mlistDir(pathname);
 	}
 
-	public FTPFile[] mlistDir(String pathname, FTPFileFilter filter)
-			throws IOException {
+	public FTPFile[] mlistDir(String pathname, FTPFileFilter filter) throws IOException {
 		return delegate.mlistDir(pathname, filter);
 	}
 
@@ -769,8 +731,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		return delegate.listFiles();
 	}
 
-	public FTPFile[] listFiles(String pathname, FTPFileFilter filter)
-			throws IOException {
+	public FTPFile[] listFiles(String pathname, FTPFileFilter filter) throws IOException {
 		return delegate.listFiles(pathname, filter);
 	}
 
@@ -786,13 +747,11 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		return delegate.initiateListParsing();
 	}
 
-	public FTPListParseEngine initiateListParsing(String pathname)
-			throws IOException {
+	public FTPListParseEngine initiateListParsing(String pathname) throws IOException {
 		return delegate.initiateListParsing(pathname);
 	}
 
-	public FTPListParseEngine initiateListParsing(String parserKey,
-			String pathname) throws IOException {
+	public FTPListParseEngine initiateListParsing(String parserKey, String pathname) throws IOException {
 		return delegate.initiateListParsing(parserKey, pathname);
 	}
 
@@ -808,8 +767,7 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 		return delegate.getModificationTime(pathname);
 	}
 
-	public boolean setModificationTime(String pathname, String timeval)
-			throws IOException {
+	public boolean setModificationTime(String pathname, String timeval) throws IOException {
 		return delegate.setModificationTime(pathname, timeval);
 	}
 
@@ -875,15 +833,6 @@ public class FtpClientSessionImpl extends BaseModelSupporter implements
 
 	public String getSystemName() throws IOException {
 		return delegate.getSystemName();
-	}
-
-	protected void handleException(TableNotFoundException e)
-			throws TableNotFoundException {
-		throw e;
-	}
-
-	protected void handleException(IOException e) throws IOException {
-		throw e;
 	}
 
 	public String toString() {

@@ -121,6 +121,10 @@ public class PoolableXmppConnection implements XMPPConnection {
 		}
 	}
 
+	public boolean isConnected() {
+		return (!closed) || (this.delegate.isConnected());
+	}
+
 	@SuppressWarnings("unchecked")
 	protected void removeAllListeners(XMPPTCPConnection conn) {
 
@@ -192,10 +196,6 @@ public class PoolableXmppConnection implements XMPPConnection {
 
 	public String getStreamId() {
 		return delegate.getStreamId();
-	}
-
-	public boolean isConnected() {
-		return (!closed) || (this.delegate.isConnected());
 	}
 
 	public boolean isAuthenticated() {
