@@ -22,37 +22,33 @@ public class FTPClientTest extends BaseTestSupporter {
 	 * 
 	 * @return
 	 */
-	public static FTPClient createFTPClient() {
+	public static FTPClient createFTPClient() throws Exception {
 		FTPClient result = null;
-		try {
-			result = new FTPClient();
-			//
-			result.setConnectTimeout(15000);
-			result.setSendBufferSize(128 * 1024);
-			result.setReceiveBufferSize(128 * 1024);
-			//
-			result.connect("127.0.0.1", 21);
-			boolean login = result.login("root", "1111");
-			if (!login) {
-				System.out.println("login: " + login);
-				return null;
-			}
-			//
-			int reply = result.getReplyCode();
-			// FTPReply stores a set of constants for FTP reply codes.
-			if (!FTPReply.isPositiveCompletion(reply)) {
-				result.disconnect();
-				return null;
-			}
-			//
-			result.enterLocalPassiveMode();
-			result.setFileType(FTPClient.BINARY_FILE_TYPE);
-			result.setControlEncoding("UTF-8");
-			result.changeWorkingDirectory("inbound/");
-			//
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		result = new FTPClient();
+		//
+		result.setConnectTimeout(15000);
+		result.setSendBufferSize(128 * 1024);
+		result.setReceiveBufferSize(128 * 1024);
+		//
+		result.connect("127.0.0.1", 21);
+		boolean login = result.login("root", "1111");
+		if (!login) {
+			System.out.println("login: " + login);
+			return null;
 		}
+		//
+		int reply = result.getReplyCode();
+		// FTPReply stores a set of constants for FTP reply codes.
+		if (!FTPReply.isPositiveCompletion(reply)) {
+			result.disconnect();
+			return null;
+		}
+		//
+		result.enterLocalPassiveMode();
+		result.setFileType(FTPClient.BINARY_FILE_TYPE);
+		result.setControlEncoding("UTF-8");
+		result.changeWorkingDirectory("inbound/");
+		//
 		return result;
 	}
 
@@ -61,7 +57,7 @@ public class FTPClientTest extends BaseTestSupporter {
 	// round: 0.90 [+- 0.01], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 1.80, time.warmup: 0.00,
 	// time.bench: 1.80
-	public void ftpClient() {
+	public void ftpClient() throws Exception {
 		FTPClient ftpClient = createFTPClient();
 		System.out.println(ftpClient);
 		assertNotNull(ftpClient);
