@@ -3,14 +3,12 @@ package org.openyu.commons.kryo;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Test;
 
 import com.esotericsoftware.kryo.Kryo;
 //kryo-3.0.0
 //import com.esotericsoftware.kryo.pool.KryoFactory;
 //import com.esotericsoftware.kryo.pool.KryoPool;
 
-import org.openyu.commons.hbase.ex.HzException;
 import org.openyu.commons.kryo.FieldSerializerTest.DefaultTypes;
 import org.openyu.commons.lang.NumberHelper;
 
@@ -84,7 +82,7 @@ public class KryoPoolBenchmarkTest {
 //				pool.release(kryo);
 //			}
 //		} catch (Exception ex) {
-//			throw new HzException("Cannot close HzSession, general error", ex);
+//			e.printStackTrace();
 //		}
 //	}
 
