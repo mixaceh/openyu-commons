@@ -107,12 +107,13 @@ public class ConfigHelperTest {
 		// log4j
 		org.apache.log4j.Logger LOGGER = org.apache.log4j.LogManager.getLogger(ConfigHelperTest.class);
 		//
-		// 2016/02/05 21:18:33 INFO ConfigHelper:534 - Using Log4j
-		// 2016/02/05 21:18:33 INFO ConfigHelperTest:112 - Log4j Config File
-		// src/test/config/etc/test-log4j.propreties
-		String confFile = "src/test/config/etc/test-log4j.propreties";
+		String confFile = "src/test/resources/bak/log4j.properties";
+
+		// 2016/02/06 01:24:57 INFO ConfigHelper:534 - Using Log4j
+		// 2016/02/06 01:24:57 INFO ConfigHelperTest:115 - Config File
+		// src/test/resources/bak/log4j.propreties
 		ConfigHelper.setLog4jConfigFile(confFile);
-		LOGGER.info("Log4j Config File " + confFile);
+		LOGGER.info("Config File " + confFile);
 	}
 
 	@Test
@@ -120,17 +121,13 @@ public class ConfigHelperTest {
 		// log4j2
 		org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ConfigHelperTest.class);
 		//
-		// 2016/02/05 21:29:11 INFO ConfigHelperTest:127 - Log4j2 Config File
-		// src/test/resources/log4j2.xml
 		String confFile = "src/test/resources/log4j2.xml";
-		LOGGER.info("Log4j2 Config File " + confFile);
-		//
-		// 21:14:23,208 INFO ConfigHelper:540 - Using Log4j2
-		// 21:14:23,208 INFO ConfigHelperTest:125 - Log4j2 Config File
-		// src/test/config/etc/test-log4j2.xml
-		confFile = "src/test/config/etc/test-log4j2.xml";
+
+		// 2016/02/06 01:26:35 INFO ConfigHelper:540 - Using Log4j2
+		// 2016/02/06 01:26:35 INFO ConfigHelperTest:126 - Config File
+		// src/test/resources/log4j2.xml
 		ConfigHelper.setLog4jConfigFile(confFile);
-		LOGGER.info("Log4j2 Config File " + confFile);
+		LOGGER.info("Config File " + confFile);
 	}
 
 	@Test
@@ -138,17 +135,13 @@ public class ConfigHelperTest {
 		// slf4j
 		Logger LOGGER = LoggerFactory.getLogger(ConfigHelperTest.class);
 		//
-		// 2016/02/06 00:14:22 INFO ConfigHelperTest:142 - Slf4j Config File
-		// src/test/resources/log4j2.xml
 		String confFile = "src/test/resources/log4j2.xml";
-		LOGGER.info("Slf4j Config File " + confFile);
-		//
-		// 21:19:24,696 INFO ConfigHelper:540 - Using Log4j2
-		// 21:19:24,696 INFO ConfigHelperTest:147 - Slef4j Config File
-		// src/test/config/etc/test-log4j2.xml
-		confFile = "src/test/config/etc/test-log4j2.xml";
+
+		// 2016/02/06 01:27:54 INFO ConfigHelper:540 - Using Log4j2
+		// 2016/02/06 01:27:54 INFO ConfigHelperTest:141 - Config File
+		// src/test/resources/log4j2.xml
 		ConfigHelper.setLog4jConfigFile(confFile);
-		LOGGER.info("Slf4j Config File " + confFile);
+		LOGGER.info("Config File " + confFile);
 	}
 
 }
