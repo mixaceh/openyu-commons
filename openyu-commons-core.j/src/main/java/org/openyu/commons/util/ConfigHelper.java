@@ -537,7 +537,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 			// log4j2
 			LoggerContext context = (LoggerContext) LogManager.getContext(false);
 			context.setConfigLocation(new File(log4jConfigFile).toURI());
-			LOGGER.info("Using Log4j 2");
+			LOGGER.info("Using Log4j2");
 		}
 	}
 

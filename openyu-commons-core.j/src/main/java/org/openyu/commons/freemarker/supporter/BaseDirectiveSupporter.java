@@ -9,11 +9,9 @@ import java.util.Map;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.springframework.util.StopWatch;
 
 import org.openyu.commons.freemarker.BaseDirective;
 import org.openyu.commons.freemarker.FreeMarkerHelper;
-import org.openyu.commons.lang.BooleanHelper;
 import org.openyu.commons.mark.Supporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,70 +28,28 @@ public abstract class BaseDirectiveSupporter implements BaseDirective, Supporter
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseDirectiveSupporter.class);
 
-	/**
-	 * 停用
-	 */
-	private boolean disable;
-
-	/**
-	 * 記錄
-	 */
-	private boolean logEnable;
-
 	public BaseDirectiveSupporter() {
 
-	}
-
-	public boolean isDisable() {
-		return disable;
-	}
-
-	public void setDisable(boolean disable) {
-		this.disable = disable;
-	}
-
-	public boolean isLogEnable() {
-		return logEnable;
-	}
-
-	public void setLogEnable(boolean logEnable) {
-		this.logEnable = logEnable;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body)
 			throws TemplateException, IOException {
 		try {
-			if (!disable) {
-				directive(env, params, loopVars, body);
-				log(log, params);
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+			// --------------------------------------------------
+			doExecute(env, params, loopVars, body);
+			// --------------------------------------------------
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during execute()").toString(), e);
+			throw e;
 		}
 	}
 
-	protected void log(Logger log, Map<String, TemplateModel> params) {
-		log(log, params, null);
-	}
-
-	protected void log(Logger log, Map<String, TemplateModel> params, StopWatch stopWatch) {
-		if (logEnable) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("[thread-");
-			sb.append(Thread.currentThread().getId());
-			sb.append("] ");
-			sb.append(params);
-			//
-			if (stopWatch != null) {
-				sb.append(" in ");
-				sb.append(stopWatch.getTotalTimeMillis());
-				sb.append(" mills.");
-			}
-			//
-			log.info(sb.toString());
-		}
-	}
+	/**
+	 * 內部執行
+	 */
+	protected abstract void doExecute(Environment env, Map<String, TemplateModel> params, TemplateModel[] loopVars,
+			TemplateDirectiveBody body) throws TemplateException, IOException;
 
 	/**
 	 * 

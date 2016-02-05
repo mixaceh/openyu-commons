@@ -1,7 +1,5 @@
 package org.openyu.commons.freemarker;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.HashMap;
@@ -21,41 +19,27 @@ import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
-public class FreeMarkerTest extends BaseTestSupporter
-{
-	private static Configuration freeMarkerConfiguration;
+public class FreeMarkerTest extends BaseTestSupporter {
+	private static Configuration freemarkerConfiguration;
 
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception
-	{
-		applicationContext = new ClassPathXmlApplicationContext(
-			new String[] { "applicationContext-init.xml",// 
-			});
+	public static void setUpBeforeClass() throws Exception {
+		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
+				"applicationContext-init.xml", //
+				"applicationContext-bean.xml",//
+		});
 
-		freeMarkerConfiguration = (Configuration) applicationContext.getBean("freeMarkerConfiguration");
+		freemarkerConfiguration = (Configuration) applicationContext.getBean("freemarkerConfiguration");
 	}
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception
-	{}
-
-	@Before
-	public void setUp() throws Exception
-	{}
-
-	@After
-	public void tearDown() throws Exception
-	{}
-
 	@Test
-	public void process() throws Exception
-	{
-		//原設定是file system, user/template/hello.ftl
-		//Template template = configuration.getTemplate("hello.ftl");
+	public void process() throws Exception {
+		// 原設定是file system, user/template/hello.ftl
+		// Template template = configuration.getTemplate("hello.ftl");
 
-		//為了測試改為class system
-		freeMarkerConfiguration.setClassForTemplateLoading(getClass(), "/");
-		Template template = freeMarkerConfiguration.getTemplate("org/openyu/commons/freeMarker/hello.ftl");
+		// 為了測試改為class system
+		freemarkerConfiguration.setClassForTemplateLoading(getClass(), "/");
+		Template template = freemarkerConfiguration.getTemplate("org/openyu/commons/freeMarker/hello.ftl");
 		System.out.println("template: " + template);
 		System.out.println("--------------------------------------");
 		//
@@ -63,7 +47,7 @@ public class FreeMarkerTest extends BaseTestSupporter
 		Map<String, Object> rootMap = new HashMap<String, Object>();
 		rootMap.put("message", "Hello World!");
 
-		//List parsing 
+		// List parsing
 		List<String> countries = new LinkedList<String>();
 		countries.add("India");
 		countries.add("United States");
@@ -80,25 +64,24 @@ public class FreeMarkerTest extends BaseTestSupporter
 		out.flush();
 
 		// File output
-		//		Writer file = new FileWriter(new File("hello.txt"));
+		// Writer file = new FileWriter(new File("hello.txt"));
 		//
-		//		template.process(data, file);
+		// template.process(data, file);
 		//
-		//		file.flush();
-		//		file.close();
+		// file.flush();
+		// file.close();
 	}
 
 	@Test
-	public void directive() throws Exception
-	{
-		//原設定是file system, user/template/hello.ftl
-		//Template template = configuration.getTemplate("helloDirective.ftl");
+	public void directive() throws Exception {
+		// 原設定是file system, user/template/hello.ftl
+		// Template template = configuration.getTemplate("helloDirective.ftl");
 
-		//為了測試改為class system
-		freeMarkerConfiguration.setClassForTemplateLoading(getClass(), "/");
-		Template template = freeMarkerConfiguration.getTemplate("org/openyu/commons/freeMarker/helloDirective.ftl");
-
-		System.out.println("template: " + template);
+		// 為了測試改為class system
+		freemarkerConfiguration.setClassForTemplateLoading(getClass(), "/");
+		Template template = freemarkerConfiguration.getTemplate("org/openyu/commons/freeMarker/helloDirective.ftl");
+		System.out.println("--------------------------------------");
+		System.out.println(template);
 		System.out.println("--------------------------------------");
 		//
 		Map<String, Object> rootMap = new HashMap<String, Object>();

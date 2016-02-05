@@ -219,7 +219,7 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	}
 
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 1, concurrency = 1)
 	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.73, time.warmup: 0.73,
 	// time.bench: 0.01

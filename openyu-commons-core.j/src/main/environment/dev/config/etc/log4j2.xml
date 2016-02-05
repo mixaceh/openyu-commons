@@ -6,32 +6,31 @@
 			target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{yyyy/MM/dd HH:mm:ss} %5p %c{1}\:%L - %m%n" />
 		</Console>
-		<!--  
 		<RollingRandomAccessFile
 			name="RollingRandomAccessFile"
-			fileName="log/log4j.log"
-			filePattern="log/log4j-%d{yyyy-MM-dd}-%i.log.gz">
+			fileName="../log/log4j.log"
+			filePattern="../log/log4j-%d{yyyy-MM-dd}-%i.log.gz">
 			<PatternLayout>
-				<Pattern>%d{yyyy/MM/dd HH:mm:ss} %5p %c{1}\:%L - %m%n</Pattern>
+				<!--  
+				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+				-->
+				<Pattern>%d{%d{yyyy/MM/dd HH:mm:ss} %5p %c{1}\:%L - %m%n</Pattern>
 			</PatternLayout>
 			<Policies>
 				<TimeBasedTriggeringPolicy />
-				<SizeBasedTriggeringPolicy size="10 MB" />
+				<SizeBasedTriggeringPolicy size="100 MB" />
 			</Policies>
 			<DefaultRolloverStrategy max="10" />
 		</RollingRandomAccessFile>
-		-->
 	</Appenders>
 	<Loggers>
 		<Root level="info">
 			<AppenderRef
 				ref="Console"
 				level="info" />
-			<!--  
 			<AppenderRef
 				ref="RollingRandomAccessFile"
 				level="info" />
-			-->
 		</Root>
 		<Logger
 			name="org.springframework.jdbc"

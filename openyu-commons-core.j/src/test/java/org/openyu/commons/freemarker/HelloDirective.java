@@ -13,16 +13,14 @@ import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
 
-public class HelloDirective extends BaseDirectiveSupporter
-{
+public class HelloDirective extends BaseDirectiveSupporter {
 	protected static final String RESULTS = "results";
 
-	public HelloDirective()
-	{}
+	public HelloDirective() {
+	}
 
-	public void directive(Environment env, Map params, TemplateModel loopVars[],
-							TemplateDirectiveBody body) throws TemplateException, IOException
-	{
+	protected void doExecute(Environment env, Map params, TemplateModel loopVars[], TemplateDirectiveBody body)
+			throws TemplateException, IOException {
 		List<String> countries = new LinkedList<String>();
 		countries.add("India");
 		countries.add("United States");
@@ -30,8 +28,7 @@ public class HelloDirective extends BaseDirectiveSupporter
 		countries.add("France");
 		//
 		env.setVariable(RESULTS, ObjectWrapper.DEFAULT_WRAPPER.wrap(countries));
-		if (body != null)
-		{
+		if (body != null) {
 			body.render(env.getOut());
 		}
 	}
