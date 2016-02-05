@@ -9,13 +9,14 @@ import java.util.Map;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.springframework.util.StopWatch;
 
 import org.openyu.commons.freemarker.BaseDirective;
 import org.openyu.commons.freemarker.FreeMarkerHelper;
+import org.openyu.commons.lang.BooleanHelper;
 import org.openyu.commons.mark.Supporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
@@ -26,7 +27,8 @@ import freemarker.template.TemplateModel;
  * 標籤
  */
 public abstract class BaseDirectiveSupporter implements BaseDirective, Supporter {
-	private static transient final Logger log = LogManager.getLogger(BaseDirectiveSupporter.class);
+
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseDirectiveSupporter.class);
 
 	/**
 	 * 停用

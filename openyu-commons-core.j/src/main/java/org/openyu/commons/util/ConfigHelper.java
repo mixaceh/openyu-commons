@@ -20,6 +20,8 @@ import org.apache.commons.configuration.DefaultConfigurationBuilder;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.log4j.PropertyConfigurator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
 //import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 //import org.apache.commons.configuration.tree.DefaultConfigurationNode;
 import org.slf4j.Logger;
@@ -27,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.web.context.support.ServletContextResource;
 import org.openyu.commons.enumz.EnumHelper;
-import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.io.FileHelper;
 import org.openyu.commons.security.SecurityType;
@@ -179,11 +180,18 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	// --------------------------------------------------------
 	/**
-	 * 預設log4j設定檔檔名
+	 * 預設Log4j設定檔檔名
 	 * 
 	 * log4j.properties
 	 */
 	private final static String DEFAULT_LOG4J_CONFIG_FILE_NAME = "log4j.properties";
+
+	/**
+	 * 預設Log4j2設定檔檔名, 支援 XML, JSON, YAML, or properties format
+	 * 
+	 * log4j2.xml
+	 */
+	private final static String DEFAULT_LOG4J2_CONFIG_FILE_NAME = "log4j2.xml";
 
 	/**
 	 * 預設log4j設定檔
@@ -334,8 +342,9 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	}
 
 	public ConfigHelper() {
-//		throw new HelperException(
-//				new StringBuilder().append(ConfigHelper.class.getName()).append(" can not construct").toString());
+		// throw new HelperException(
+		// new StringBuilder().append(ConfigHelper.class.getName()).append(" can
+		// not construct").toString());
 	}
 
 	/**
@@ -518,7 +527,18 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		ConfigHelper.log4jConfigFile = log4jConfigFile;
 		ConfigHelper.log4jConfigLocation = null;
 		//
-		PropertyConfigurator.configure(log4jConfigFile);
+		int pos = log4jConfigFile.indexOf("log4j2");
+		// log4j
+		if (pos < 0) {
+			PropertyConfigurator.configure(log4jConfigFile);
+			LOGGER.info("Using Log4j");
+
+		} else {
+			// log4j2
+			LoggerContext context = (LoggerContext) LogManager.getContext(false);
+			context.setConfigLocation(new File(log4jConfigFile).toURI());
+			LOGGER.info("Using Log4j 2");
+		}
 	}
 
 	/**
@@ -530,11 +550,21 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		return log4jConfigLocation;
 	}
 
-	public static void setLog4jConfigLocation(Resource log4jConfigLocation) {
+	public static void setLog4jConfigLocation(Resource log4jConfigLocation) throws Exception {
 		ConfigHelper.log4jConfigLocation = log4jConfigLocation;
 		ConfigHelper.log4jConfigFile = getFile(log4jConfigLocation);
 		//
-		PropertyConfigurator.configure(log4jConfigFile);
+		int pos = log4jConfigFile.indexOf("log4j2");
+		// log4j
+		if (pos < 0) {
+			PropertyConfigurator.configure(log4jConfigFile);
+			LOGGER.info("Using Log4j");
+		} else {
+			// log4j2
+			LoggerContext context = (LoggerContext) LogManager.getContext(false);
+			context.setConfigLocation(log4jConfigLocation.getURI());
+			LOGGER.info("Using Log4j2");
+		}
 	}
 
 	// --------------------------------------------------------

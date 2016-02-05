@@ -2,6 +2,8 @@ package org.openyu.commons.util;
 
 import org.junit.Test;
 import org.openyu.commons.thread.ThreadHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -45,13 +47,10 @@ public class ConfigHelperTest {
 		for (int i = 0; i < 100; i++) {
 			ThreadHelper.sleep(3 * 1000);
 			System.out.println("debug: " + ConfigHelper.isDebug());
-			System.out.println("debug: "
-					+ ConfigHelper.getBoolean("configHelper.debug"));
+			System.out.println("debug: " + ConfigHelper.getBoolean("configHelper.debug"));
 			//
-			System.out.println("compressType: "
-					+ ConfigHelper.getCompressType());
-			System.out.println("compressType: "
-					+ ConfigHelper.getString("configHelper.compressType"));
+			System.out.println("compressType: " + ConfigHelper.getCompressType());
+			System.out.println("compressType: " + ConfigHelper.getString("configHelper.compressType"));
 		}
 	}
 
@@ -59,9 +58,8 @@ public class ConfigHelperTest {
 	public void getterWithSpring() {
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
 				new String[] { "applicationContext-init.xml",//
-				});
-		ConfigHelper bean = (ConfigHelper) applicationContext
-				.getBean("configHelper");
+		});
+		ConfigHelper bean = (ConfigHelper) applicationContext.getBean("configHelper");
 		System.out.println(bean);
 
 		// src\test\config\etc\config.xml
@@ -97,13 +95,44 @@ public class ConfigHelperTest {
 		for (int i = 0; i < 100; i++) {
 			ThreadHelper.sleep(3 * 1000);
 			System.out.println("debug: " + bean.isDebug());
-			System.out.println("debug: "
-					+ bean.getBoolean("configHelper.debug"));
+			System.out.println("debug: " + bean.getBoolean("configHelper.debug"));
 			//
 			System.out.println("compressType: " + bean.getCompressType());
-			System.out.println("compressType: "
-					+ bean.getString("configHelper.compressType"));
+			System.out.println("compressType: " + bean.getString("configHelper.compressType"));
 		}
+	}
+
+	@Test
+	public void loggerWithLog4j() {
+		org.apache.log4j.Logger LOGGER = org.apache.log4j.LogManager.getLogger(ConfigHelper.class);
+		//
+		ConfigHelper.setLog4jConfigFile("src/test/config/etc/test-log4j.propreties");
+		LOGGER.info("use src/test/config/etc/test-log4j.propreties");
+		LOGGER.info("no date just time");
+	}
+
+	@Test
+	public void loggerWithLog4j2() {
+		org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ConfigHelper.class);
+		//
+		LOGGER.info("use src/test/resources/log4j2.xml");
+		LOGGER.info("info");
+		//
+		ConfigHelper.setLog4jConfigFile("src/test/config/etc/test-log4j2.xml");
+		LOGGER.info("use src/test/config/etc/test-log4j2.xml");
+		LOGGER.info("no date just time");
+	}
+
+	@Test
+	public void loggerWithSlf4j() {
+		Logger LOGGER = LoggerFactory.getLogger(ConfigHelper.class);
+		//
+		LOGGER.info("use src/test/resources/log4j2.xml");
+		LOGGER.info("info");
+		//
+		ConfigHelper.setLog4jConfigFile("src/test/config/etc/test-log4j2.xml");
+		LOGGER.info("use src/test/config/etc/test-log4j2.xml");
+		LOGGER.info("no date just time");
 	}
 
 }

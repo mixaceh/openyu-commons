@@ -20,10 +20,11 @@ import java.util.Map;
 //import net.sf.json.util.JSONUtils;
 //import net.sf.json.xml.XMLSerializer;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
+import org.openyu.commons.lang.BooleanHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 將save/load -> 改成read/write
@@ -31,7 +32,7 @@ import org.openyu.commons.helper.supporter.BaseHelperSupporter;
  */
 public final class JsonHelper extends BaseHelperSupporter {
 
-	private static transient final Logger log = LogManager.getLogger(JsonHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(JsonHelper.class);
 
 	//
 	// private static JsonConfig jsonConfig = new JsonConfig();

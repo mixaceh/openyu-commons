@@ -2,12 +2,10 @@ package org.openyu.commons.lang;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,6 +13,8 @@ import org.junit.Test;
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class BooleanHelperTest.
@@ -26,7 +26,6 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	// round: 0.00
 	public void BooleanHelper() throws Exception {
 		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.lang.BooleanHelper");
 		//
@@ -41,15 +40,14 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * Creates the boolean.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	// round: 0.00
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.81, time.warmup: 0.80,
+	// time.bench: 0.01
 	public void createBoolean() {
 		Boolean result = null;
 		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			result = BooleanHelper.createBoolean(true);
-		}
+		result = BooleanHelper.createBoolean(true);
 		//
 		System.out.println(result);
 		assertTrue(result);
@@ -71,15 +69,14 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * To boolean.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	// round: 0.00
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.81, time.warmup: 0.80,
+	// time.bench: 0.01
 	public void toBoolean() {
 		boolean result = false;
 		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			result = BooleanHelper.toBoolean("true");
-		}
+		result = BooleanHelper.toBoolean("true");
 		//
 		System.out.println(result);
 		assertTrue(result);
@@ -119,15 +116,14 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * Random booleanz.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	// round: 0.00
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.72, time.warmup: 0.71,
+	// time.bench: 0.01
 	public void randomBooleanz() {
 		boolean result = false;
 		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			result = BooleanHelper.randomBoolean();
-		}
+		result = BooleanHelper.randomBoolean();
 		//
 		System.out.println(result);
 	}
@@ -136,15 +132,14 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * Safe get.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	// round: 0.00
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.73, time.warmup: 0.73,
+	// time.bench: 0.01
 	public void safeGet() {
 		boolean result = false;
 		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			result = BooleanHelper.safeGet(Boolean.TRUE);
-		}
+		result = BooleanHelper.safeGet(Boolean.TRUE);
 		//
 		System.out.println(result);
 		assertTrue(result);
@@ -157,15 +152,14 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * To stringz.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	// round: 0.00
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.73, time.warmup: 0.73,
+	// time.bench: 0.01
 	public void toStringz() {
 		String result = null;
 		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			result = BooleanHelper.toString(true);
-		}
+		result = BooleanHelper.toString(true);
 		//
 		System.out.println(result);
 		assertEquals("1", result);
@@ -184,15 +178,14 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * To int.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	// round: 0.00
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.73, time.warmup: 0.73,
+	// time.bench: 0.01
 	public void toInt() {
 		int result = -1;
 		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			result = BooleanHelper.toInt(true);
-		}
+		result = BooleanHelper.toInt(true);
 		//
 		System.out.println(result);
 		assertEquals(1, result);
@@ -207,30 +200,14 @@ public class BooleanHelperTest extends BaseTestSupporter {
 		assertEquals(1, result);
 	}
 
-	// @Test
-	// @BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
-	// // round: 0.00
-	// public void readResolve() throws Exception {
-	// BooleanHelper object = BooleanHelper.getInstance();
-	// Method method = getDeclaredMethod(BooleanHelper.Class,
-	// "readResolve");
-	// //
-	// Object result = null;
-	// //
-	// final int COUNT = 1000;
-	// for (int i = 0; i < COUNT; i++) {
-	// result = method.invoke(object);
-	// }
-	// //
-	// System.out.println(result);
-	// assertNotNull(result);
-	// }
-
 	/**
 	 * True false.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.73, time.warmup: 0.73,
+	// time.bench: 0.01
 	public void trueFalse() {
 		System.out.println(false & false & false);// false
 		System.out.println(true & false & true);// false
@@ -240,4 +217,15 @@ public class BooleanHelperTest extends BaseTestSupporter {
 		System.out.println(true | false | true);// true
 		System.out.println(true | true | true);// true
 	}
+
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.73, time.warmup: 0.73,
+	// time.bench: 0.01
+	public void info() {
+		Logger LOGGER = LoggerFactory.getLogger(BooleanHelper.class);
+		LOGGER.info("abc");
+	}
+
 }

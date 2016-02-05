@@ -1,25 +1,16 @@
 package org.openyu.commons.jxl;
 
-import jxl.write.WritableWorkbook;
+import org.openyu.commons.lang.BooleanHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import jxl.write.WritableWorkbook;
 
 public class JxlHelper {
 
-	private static transient final Logger log = LogManager
-			.getLogger(JxlHelper.class);
-
-	private static JxlHelper instance;
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(JxlHelper.class);
 
 	public JxlHelper() {
-	}
-
-	public static synchronized JxlHelper getInstance() {
-		if (instance == null) {
-			instance = new JxlHelper();
-		}
-		return instance;
 	}
 
 	public static void writeClose(WritableWorkbook writableWorkbook) {

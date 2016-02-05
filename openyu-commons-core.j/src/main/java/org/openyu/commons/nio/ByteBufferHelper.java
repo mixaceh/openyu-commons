@@ -6,11 +6,11 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.lang.EncodingHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ByteBuffer輔助類
@@ -22,7 +22,7 @@ import org.openyu.commons.lang.EncodingHelper;
  */
 public final class ByteBufferHelper extends BaseHelperSupporter {
 
-	private static transient final Logger log = LogManager.getLogger(ByteBufferHelper.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(ByteBufferHelper.class);
 
 	private ByteBufferHelper() {
 		throw new HelperException(

@@ -18,16 +18,12 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.CookiesAware;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.apache.struts2.interceptor.SessionAware;
 import org.apache.struts2.util.ServletContextAware;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 
 import org.openyu.commons.bean.BeanCollector;
@@ -51,6 +47,9 @@ import org.openyu.commons.util.CollectionHelper;
 import org.openyu.commons.util.DateHelper;
 import org.openyu.commons.util.TimeZoneHelper;
 import org.openyu.commons.web.struts2.BaseAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
@@ -67,18 +66,14 @@ import com.opensymphony.xwork2.Preparable;
  * 
  * LOGIN = "login"
  */
-public class BaseActionSupporter extends ActionSupport implements BaseAction, Supporter,
-		ServletContextAware, SessionAware, ServletRequestAware, ServletResponseAware, CookiesAware,
-		Preparable
-{
+public class BaseActionSupporter extends ActionSupport implements BaseAction, Supporter, ServletContextAware,
+		SessionAware, ServletRequestAware, ServletResponseAware, CookiesAware, Preparable {
 	private static final long serialVersionUID = -7712187070058585941L;
 
-	private static transient final Logger log = LogManager.getLogger(BaseActionSupporter.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseActionSupporter.class);
 
 	protected transient ApplicationContext applicationContext;
 
-	// @Autowired
-	// @Qualifier("threadService")
 	@DefaultThreadService
 	protected transient ThreadService threadService;
 
@@ -174,14 +169,13 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	// --------------------------------------------------
 	protected InputStream downloadStream;
 
-	public BaseActionSupporter()
-	{}
+	public BaseActionSupporter() {
+	}
 
 	/**
 	 * struts2 作為初始化用
 	 */
-	public void prepare() throws Exception
-	{
+	public void prepare() throws Exception {
 		initialize();
 	}
 
@@ -191,93 +185,78 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 在action 上,利用 implements Preparable, 及struts.xml: Prepare Interceptor
 	 * <interceptor-ref name="prepare" />,初始化
 	 */
-	public void initialize()
-	{
-		//初始化查詢條件
+	public void initialize() {
+		// 初始化查詢條件
 		initializeInquiry(beanCollector.createInquiry());
 
-		//目前排序欄位
+		// 目前排序欄位
 		inquiry.setSort(new SortImpl());
-		//目前排序方向
+		// 目前排序方向
 		inquiry.setOrder(new OrderImpl());
 	}
 
-	public void setApplicationContext(ApplicationContext applicationContext)
-	{
+	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
 
-	public ServletContext getApplication()
-	{
+	public ServletContext getApplication() {
 		return application;
 	}
 
-	public void setServletContext(ServletContext application)
-	{
+	public void setServletContext(ServletContext application) {
 		this.application = application;
 	}
 
-	public Map<String, Object> getSession()
-	{
+	public Map<String, Object> getSession() {
 		return session;
 	}
 
-	public void setSession(Map<String, Object> session)
-	{
+	public void setSession(Map<String, Object> session) {
 		this.session = session;
 	}
 
-	public HttpSession getHttpSession()
-	{
+	public HttpSession getHttpSession() {
 		return httpSession;
 	}
 
-	public String getSessionId()
-	{
+	public String getSessionId() {
 		return httpSession.getId();
 	}
 
-	public HttpServletRequest getRequest()
-	{
+	public HttpServletRequest getRequest() {
 		return request;
 	}
 
-	public void setServletRequest(HttpServletRequest request)
-	{
+	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
 		//
 		this.httpSession = request.getSession();
 		this.cookies = request.getCookies();
 	}
 
-	public HttpServletResponse getReponse()
-	{
+	public HttpServletResponse getReponse() {
 		return reponse;
 	}
 
-	public void setServletResponse(HttpServletResponse reponse)
-	{
+	public void setServletResponse(HttpServletResponse reponse) {
 		this.reponse = reponse;
 	}
 
-	public Map<String, String> getCookiesMap()
-	{
+	public Map<String, String> getCookiesMap() {
 		return cookiesMap;
 	}
 
-	public void setCookiesMap(Map<String, String> cookiesMap)
-	{
+	public void setCookiesMap(Map<String, String> cookiesMap) {
 		this.cookiesMap = cookiesMap;
 	}
 
-	public Cookie[] getCookies()
-	{
+	public Cookie[] getCookies() {
 		return cookies;
 	}
 
-	public PageContext getPageContext()
-	{
-		//return (PageContext) ActionContext.getContext().get(ServletActionContext.PAGE_CONTEXT);
+	public PageContext getPageContext() {
+		// return (PageContext)
+		// ActionContext.getContext().get(ServletActionContext.PAGE_CONTEXT);
 		return ServletActionContext.getPageContext();
 	}
 
@@ -286,8 +265,7 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 
 	 * @return
 	 */
-	public Locale getLocale()
-	{
+	public Locale getLocale() {
 		return super.getLocale();
 	}
 
@@ -296,9 +274,8 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 
 	 * @return
 	 */
-	public TimeZone getTimeZone()
-	{
-		//TODO 應改為session上的timeZone,暫時先用系統的
+	public TimeZone getTimeZone() {
+		// TODO 應改為session上的timeZone,暫時先用系統的
 		return TimeZoneHelper.getTimeZone();
 	}
 
@@ -307,25 +284,23 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 
 	 * @return
 	 */
-	public List<TrueFalseOption> getTrueFalseOptions()
-	{
+	public List<TrueFalseOption> getTrueFalseOptions() {
 		return beanCollector.getTrueFalseOptions();
 	}
 
-	public String getTrueFalseName(boolean value)
-	{
+	public String getTrueFalseName(boolean value) {
 		return getTrueFalseName(value, getLocale());
 	}
 
 	/**
 	 * 取得,是否(true/false)選項名稱
 	 * 
-	 * @param value, TrueFalse.getId().getValue()
+	 * @param value,
+	 *            TrueFalse.getId().getValue()
 	 * @param locale
 	 * @return
 	 */
-	public String getTrueFalseName(boolean value, Locale locale)
-	{
+	public String getTrueFalseName(boolean value, Locale locale) {
 		return beanCollector.getTrueFalseName(value, locale);
 	}
 
@@ -334,25 +309,23 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 
 	 * @return
 	 */
-	public List<WhetherOption> getWhetherOptions()
-	{
+	public List<WhetherOption> getWhetherOptions() {
 		return beanCollector.getWhetherOptions();
 	}
 
-	public String getWhetherName(String value)
-	{
+	public String getWhetherName(String value) {
 		return getWhetherName(value, getLocale());
 	}
 
 	/**
 	 * 取得,全部是否("all"/"true"/"false")選項名稱
 	 * 
-	 * @param value, Whether.getId().getValue()
+	 * @param value,
+	 *            Whether.getId().getValue()
 	 * @param locale
 	 * @return
 	 */
-	public String getWhetherName(String value, Locale locale)
-	{
+	public String getWhetherName(String value, Locale locale) {
 		return beanCollector.getWhetherName(value, locale);
 	}
 
@@ -361,90 +334,74 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 
 	 * @return
 	 */
-	public Inquiry getInquiry()
-	{
+	public Inquiry getInquiry() {
 		return inquiry;
 	}
 
-	public void setInquiry(Inquiry inquiry)
-	{
+	public void setInquiry(Inquiry inquiry) {
 		this.inquiry = inquiry;
 	}
 
 	// pick
-	public List<Serializable> getSeqs()
-	{
+	public List<Serializable> getSeqs() {
 		return seqs;
 	}
 
-	public void setSeqs(List<Serializable> seqs)
-	{
+	public void setSeqs(List<Serializable> seqs) {
 		this.seqs = seqs;
 	}
 
 	// --------------------------------------------------
 	// 上傳
 	// --------------------------------------------------
-	public String[] getUploadTitle()
-	{
+	public String[] getUploadTitle() {
 		return uploadTitle;
 	}
 
-	public void setUploadTitle(String[] uploadTitle)
-	{
+	public void setUploadTitle(String[] uploadTitle) {
 		this.uploadTitle = uploadTitle;
 	}
 
-	public File[] getUpload()
-	{
+	public File[] getUpload() {
 		return upload;
 	}
 
-	public void setUpload(File[] upload)
-	{
+	public void setUpload(File[] upload) {
 		this.upload = upload;
 	}
 
-	public String[] getUploadFileName()
-	{
+	public String[] getUploadFileName() {
 		return uploadFileName;
 	}
 
-	public void setUploadFileName(String[] uploadFileName)
-	{
+	public void setUploadFileName(String[] uploadFileName) {
 		this.uploadFileName = uploadFileName;
 	}
 
-	public String[] getUploadContentType()
-	{
+	public String[] getUploadContentType() {
 		return uploadContentType;
 	}
 
-	public void setUploadContentType(String[] uploadContentType)
-	{
+	public void setUploadContentType(String[] uploadContentType) {
 		this.uploadContentType = uploadContentType;
 	}
 
-	public String getSavePath()
-	{
+	public String getSavePath() {
 		return savePath;
 	}
 
-	public void setSavePath(String savePath)
-	{
+	public void setSavePath(String savePath) {
 		this.savePath = savePath;
 	}
 
 	// --------------------------------------------------
 	// 下載
 	// --------------------------------------------------
-	public InputStream getDownloadStream()
-	{
+	public InputStream getDownloadStream() {
 		return downloadStream;
 	}
 
-	public void setDownloadStream(InputStream downloadStream)
-	{
+	public void setDownloadStream(InputStream downloadStream) {
 		this.downloadStream = downloadStream;
 	}
 
@@ -453,32 +410,26 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 
 	 * @param value
 	 */
-	protected void initializeInquiry(Inquiry value)
-	{
-		if (value != null)
-		{
-			//分頁條件
+	protected void initializeInquiry(Inquiry value) {
+		if (value != null) {
+			// 分頁條件
 			Pagination pagination = value.getPagination();
-			if (pagination != null)
-			{
+			if (pagination != null) {
 				this.inquiry.setPagination(pagination);
 			}
-			//排序欄位選項
+			// 排序欄位選項
 			List<Sort> sorts = value.getSorts();
-			if (CollectionHelper.notEmpty(sorts))
-			{
+			if (CollectionHelper.notEmpty(sorts)) {
 				this.inquiry.setSorts(sorts);
 			}
-			//排序方向選項
+			// 排序方向選項
 			List<Order> orders = value.getOrders();
-			if (CollectionHelper.notEmpty(orders))
-			{
+			if (CollectionHelper.notEmpty(orders)) {
 				this.inquiry.setOrders(orders);
 			}
 		}
-		//null則清空
-		else
-		{
+		// null則清空
+		else {
 			this.inquiry.setPagination(null);
 			this.inquiry.getSorts().clear();
 			this.inquiry.getOrders().clear();
@@ -490,8 +441,7 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 
 	 * @return
 	 */
-	public String execute()
-	{
+	public String execute() {
 		return SUCCESS;
 	}
 
@@ -500,8 +450,7 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 
 	 * @return
 	 */
-	public String getRealPath()
-	{
+	public String getRealPath() {
 		return getRealPath("");
 	}
 
@@ -511,8 +460,7 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * @param path
 	 * @return
 	 */
-	public String getRealPath(String path)
-	{
+	public String getRealPath(String path) {
 		return application.getRealPath(path);
 	}
 
@@ -521,27 +469,21 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 
 	 * @return
 	 */
-	public String getClientIp()
-	{
+	public String getClientIp() {
 		String ip = request.getHeader("X-Forwarded-For");
-		if (StringHelper.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
-		{
+		if (StringHelper.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
 			ip = request.getHeader("Proxy-Client-IP");
 		}
-		if (StringHelper.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
-		{
+		if (StringHelper.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
 			ip = request.getHeader("WL-Proxy-Client-IP");
 		}
-		if (StringHelper.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
-		{
+		if (StringHelper.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
 			ip = request.getHeader("HTTP_CLIENT_IP");
 		}
-		if (StringHelper.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
-		{
+		if (StringHelper.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
 			ip = request.getHeader("HTTP_X_FORWARDED_FOR");
 		}
-		if (StringHelper.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
-		{
+		if (StringHelper.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
 			ip = request.getRemoteAddr();
 		}
 		return ip;
@@ -552,8 +494,7 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 
 	 * @return
 	 */
-	public int getClientPort()
-	{
+	public int getClientPort() {
 		return request.getRemotePort();
 	}
 
@@ -562,8 +503,7 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 
 	 * @return
 	 */
-	public String getServerIp()
-	{
+	public String getServerIp() {
 		return request.getLocalAddr();
 	}
 
@@ -572,8 +512,7 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	 * 
 	 * @return
 	 */
-	public int getServerPort()
-	{
+	public int getServerPort() {
 		return request.getLocalPort();
 	}
 
@@ -581,65 +520,54 @@ public class BaseActionSupporter extends ActionSupport implements BaseAction, Su
 	// 只是為了簡化寫法
 	// ----------------------------------------------------------------
 
-	protected String toString(boolean value)
-	{
+	protected String toString(boolean value) {
 		return BooleanHelper.toString(value);
 	}
 
-	protected String toString(char value)
-	{
+	protected String toString(char value) {
 		return CharHelper.toString(value);
 	}
 
-	protected String toString(String value)
-	{
+	protected String toString(String value) {
 		return value;
 	}
 
 	// ----------------------------------------------------------------
-	//數字
+	// 數字
 	// ----------------------------------------------------------------
-	protected <T> String toString(Number value)
-	{
+	protected <T> String toString(Number value) {
 		return toString(value, null);
 	}
 
-	protected <T> String toString(Number value, String pattern)
-	{
+	protected <T> String toString(Number value, String pattern) {
 		return toString(value, pattern, getLocale());
 	}
 
-	protected <T> String toString(Number value, String pattern, Locale locale)
-	{
+	protected <T> String toString(Number value, String pattern, Locale locale) {
 
 		return NumberHelper.toString(value, pattern, locale);
 	}
 
 	// ----------------------------------------------------------------
-	//日期
+	// 日期
 	// ----------------------------------------------------------------
-	protected String toString(Date value)
-	{
+	protected String toString(Date value) {
 		return toString(value, null);
 	}
 
-	protected String toString(Date value, String pattern)
-	{
+	protected String toString(Date value, String pattern) {
 		return toString(value, pattern, getTimeZone());
 	}
 
-	protected String toString(Date value, String pattern, TimeZone timeZone)
-	{
+	protected String toString(Date value, String pattern, TimeZone timeZone) {
 		return toString(value, pattern, timeZone, getLocale());
 	}
 
-	protected String toString(Date value, String pattern, TimeZone timeZone, Locale locale)
-	{
+	protected String toString(Date value, String pattern, TimeZone timeZone, Locale locale) {
 		return DateHelper.toString(value, pattern, timeZone, locale);
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		ToStringBuilder builder = new ToStringBuilder(this);
 		builder.appendSuper(super.toString());
 		builder.append("inquiry", inquiry);

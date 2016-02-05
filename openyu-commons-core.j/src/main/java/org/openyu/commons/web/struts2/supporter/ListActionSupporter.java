@@ -1,30 +1,27 @@
 package org.openyu.commons.web.struts2.supporter;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
 import org.openyu.commons.web.struts2.ListAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 列表控制器
  */
-public class ListActionSupporter extends BaseActionSupporter implements ListAction
-{
+public class ListActionSupporter extends BaseActionSupporter implements ListAction {
 
 	private static final long serialVersionUID = -2327135166014191447L;
 
-	private static transient final Logger log = LogManager.getLogger(ListActionSupporter.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(ListActionSupporter.class);
 
-	public ListActionSupporter()
-	{}
+	public ListActionSupporter() {
+	}
 
 	/**
 	 * 列表
 	 * 
 	 * @return
 	 */
-	public String list()
-	{
+	public String list() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -33,8 +30,7 @@ public class ListActionSupporter extends BaseActionSupporter implements ListActi
 	 * 
 	 * @return
 	 */
-	public String find()
-	{
+	public String find() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -43,8 +39,7 @@ public class ListActionSupporter extends BaseActionSupporter implements ListActi
 	 * 
 	 * @return
 	 */
-	public String search()
-	{
+	public String search() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -53,8 +48,7 @@ public class ListActionSupporter extends BaseActionSupporter implements ListActi
 	 * 
 	 * @return
 	 */
-	public String view()
-	{
+	public String view() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -63,8 +57,7 @@ public class ListActionSupporter extends BaseActionSupporter implements ListActi
 	 * 
 	 * @return
 	 */
-	public String add()
-	{
+	public String add() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -73,8 +66,7 @@ public class ListActionSupporter extends BaseActionSupporter implements ListActi
 	 * 
 	 * @return
 	 */
-	public String addSave()
-	{
+	public String addSave() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -83,8 +75,7 @@ public class ListActionSupporter extends BaseActionSupporter implements ListActi
 	 * 
 	 * @return
 	 */
-	public String edit()
-	{
+	public String edit() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -93,8 +84,7 @@ public class ListActionSupporter extends BaseActionSupporter implements ListActi
 	 * 
 	 * @return
 	 */
-	public String editSave()
-	{
+	public String editSave() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -103,8 +93,7 @@ public class ListActionSupporter extends BaseActionSupporter implements ListActi
 	 * 
 	 * @return
 	 */
-	public String save()
-	{
+	public String save() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -113,8 +102,7 @@ public class ListActionSupporter extends BaseActionSupporter implements ListActi
 	 * 
 	 * @return
 	 */
-	public String delete()
-	{
+	public String delete() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -123,8 +111,7 @@ public class ListActionSupporter extends BaseActionSupporter implements ListActi
 	 * 
 	 * @return
 	 */
-	public String download()
-	{
+	public String download() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -133,8 +120,7 @@ public class ListActionSupporter extends BaseActionSupporter implements ListActi
 	 * 
 	 * @return
 	 */
-	public String upload()
-	{
+	public String upload() {
 		throw new UnsupportedOperationException();
 	}
 
