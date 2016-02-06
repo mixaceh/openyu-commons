@@ -3,7 +3,7 @@
 <configuration>
 	<system />
 	<xml
-		fileName="config-init.xml"
+		fileName="configuration-init.xml"
 		encoding="UTF-8">
 		<reloadingStrategy
 			refreshDelay="5000"
@@ -11,7 +11,7 @@
 	</xml>
 
 	<xml
-		fileName="config-op.xml"
+		fileName="configuration-op.xml"
 		encoding="UTF-8">
 		<reloadingStrategy
 			refreshDelay="5000"
@@ -19,7 +19,7 @@
 	</xml>
 
 	<xml
-		fileName="config-debug.xml"
+		fileName="configuration-debug.xml"
 		encoding="UTF-8">
 		<reloadingStrategy
 			refreshDelay="5000"

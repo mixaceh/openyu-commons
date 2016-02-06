@@ -18,14 +18,18 @@ public final class ConfigHelperFactoryBean extends BaseFactoryBeanSupporter<Conf
 	/**
 	 * 預設設定檔
 	 * 
-	 * file:src/test/config/etc/config.xml
+	 * file:src/test/config/etc/configuration.xml
 	 */
-	public static final String DEFAULT_CONFIGURATION_LOCATION = "file:" + ConfigHelper.DEFAULT_CONFIG_FILE;
+	public static final String DEFAULT_CONFIGURATION_LOCATION = "file:" + ConfigHelper.DEFAULT_CONFIGURATION_FILE;
+
+	public static final String JSON_DIR_LOCATION = "jsonDirLocation";
+
+	public static final String DEFAULT_JSON_DIR_LOCATION = "file:" + ConfigHelper.DEFAULT_JSON_DIR;
 
 	/**
 	 * 所有屬性
 	 */
-	public static final String[] ALL_PROPERTIES = { CONFIGURATION_LOCATION };
+	public static final String[] ALL_PROPERTIES = { CONFIGURATION_LOCATION, JSON_DIR_LOCATION };
 
 	public ConfigHelperFactoryBean() {
 	}
@@ -53,8 +57,11 @@ public final class ConfigHelperFactoryBean extends BaseFactoryBeanSupporter<Conf
 
 			UrlResource configurationLocation = new UrlResource(
 					extendedProperties.getString(CONFIGURATION_LOCATION, DEFAULT_CONFIGURATION_LOCATION));
-			ConfigHelper.setConfigLocation(configurationLocation);
-			
+			ConfigHelper.setConfigurationLocation(configurationLocation);
+			//
+			UrlResource jsonDirLocation = new UrlResource(
+					extendedProperties.getString(JSON_DIR_LOCATION, DEFAULT_JSON_DIR_LOCATION));
+			ConfigHelper.setJsonDirLocation(jsonDirLocation);
 
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during reinitializeConfigHelper()").toString(), e);

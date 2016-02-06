@@ -27,11 +27,11 @@ import org.openyu.commons.io.FileHelper;
 import org.openyu.commons.security.SecurityType;
 
 /**
- * 1.預設設定檔: src/test/config/etc/config.xml
+ * 1.預設設定檔: src/test/config/etc/configuration.xml
  * 
  * 2.直接使用static方法取值
  * 
- * 3.可利用spring重新給設定檔路徑configLocation
+ * 3.可利用spring重新給設定檔路徑configurationLocation
  */
 public final class ConfigHelper extends BaseHelperSupporter {
 
@@ -51,29 +51,29 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	/**
 	 * 預設設定檔檔名
 	 * 
-	 * config.xml
+	 * configuration.xml
 	 */
-	public final static String DEFAULT_CONFIG_FILE_NAME = "config.xml";
+	public final static String DEFAULT_CONFIGURATION_FILE_NAME = "configuration.xml";
 
 	/**
 	 * 預設設定檔
 	 * 
-	 * src/test/config/etc/config.xml
+	 * src/test/config/etc/configuration.xml
 	 */
-	public final static String DEFAULT_CONFIG_FILE = DEFAULT_CONFIG_DIR + File.separator + "etc" + File.separator
-			+ DEFAULT_CONFIG_FILE_NAME;
+	public final static String DEFAULT_CONFIGURATION_FILE = DEFAULT_CONFIG_DIR + File.separator + "etc" + File.separator
+			+ DEFAULT_CONFIGURATION_FILE_NAME;
 
 	/**
 	 * 設定檔
 	 */
-	private static String configFile = DEFAULT_CONFIG_FILE;
+	private static String configurationFile = DEFAULT_CONFIGURATION_FILE;
 
 	/**
 	 * 設定檔資源,由spring注入
 	 * 
-	 * file:src/test/config/etc/config.xml
+	 * file:src/test/config/etc/configuration.xml
 	 */
-	private static Resource configLocation;
+	private static Resource configurationLocation;
 
 	private static DefaultConfigurationBuilder configurationBuilder;
 
@@ -338,16 +338,16 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	}
 
-	public static String getConfigFile() {
-		return configFile;
+	public static String getConfigurationFile() {
+		return configurationFile;
 	}
 
-	public static void setConfigFile(String configFile) {
-		ConfigHelper.configFile = configFile;
-		ConfigHelper.configLocation = null;
+	public static void setConfigurationFile(String configurationFile) {
+		ConfigHelper.configurationFile = configurationFile;
+		ConfigHelper.configurationLocation = null;
 		//
 		staticBuild = false;
-		buildWithFile(configFile);
+		buildWithFile(configurationFile);
 	}
 
 	/**
@@ -355,13 +355,13 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 * 
 	 * @return
 	 */
-	public static Resource getConfigLocation() {
-		return configLocation;
+	public static Resource getConfigurationLocation() {
+		return configurationLocation;
 	}
 
-	public static void setConfigLocation(Resource configLocation) {
-		ConfigHelper.configLocation = configLocation;
-		ConfigHelper.configFile = getFile(configLocation);
+	public static void setConfigurationLocation(Resource configurationLocation) {
+		ConfigHelper.configurationLocation = configurationLocation;
+		ConfigHelper.configurationFile = getFile(configurationLocation);
 		//
 		staticBuild = false;
 		buildWithFile(null);
@@ -396,11 +396,11 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		buildDir(DEFAULT_JSON_DIR, jsonDirLocation, jsonDir);
 	}
 
-	public Resource getJsonDirLocation() {
+	public static Resource getJsonDirLocation() {
 		return jsonDirLocation;
 	}
 
-	public void setJsonDirLocation(Resource jsonDirLocation) {
+	public static void setJsonDirLocation(Resource jsonDirLocation) {
 		ConfigHelper.jsonDirLocation = jsonDirLocation;
 		ConfigHelper.jsonDir = getFile(jsonDirLocation);
 		//
@@ -634,14 +634,15 @@ public final class ConfigHelper extends BaseHelperSupporter {
 				if (staticBuild) {
 					return;
 				} else {
-					LOGGER.error("Can not find configLocation: " + (assignFile != null ? assignFile : configLocation));
+					LOGGER.error("Can not find configLocation: "
+							+ (assignFile != null ? assignFile : configurationLocation));
 					return;
 				}
 			}
 			//
 			configuration = configurationBuilder.getConfiguration(true);
 			// 2014/11/25,
-			// 需設為true,否則即是在config.xml有設FileChangedReloadingStrategy,也是無法reload
+			// 需設為true,否則即是在configuration.xml有設FileChangedReloadingStrategy,也是無法reload
 			configuration.setForceReloadCheck(true);
 
 			// // config-op.xml
@@ -686,8 +687,8 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		//
 		try {
 			// 當沒使用spring注入時,或指定設定檔
-			if (configLocation == null || assignFile != null) {
-				String fileName = (assignFile != null ? assignFile : DEFAULT_CONFIG_FILE);
+			if (configurationLocation == null || assignFile != null) {
+				String fileName = (assignFile != null ? assignFile : DEFAULT_CONFIGURATION_FILE);
 				File file = new File(fileName);
 				if (file.exists()) {
 					configurationBuilder = new DefaultConfigurationBuilder();
@@ -699,7 +700,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 						LOGGER.info("Reinitialization of file [" + fileName + "]");
 					}
 				} else {
-					// 當在web下,會出現src\test\config\etc\config.xml File does
+					// 當在web下,會出現src\test\config\etc\configuration.xml File does
 					// not exist, 預設的檔案找不到, 這是正常的
 					//
 					// 1.若在spring下, 可在applicationContext-ini.xml可重新設定
@@ -708,15 +709,15 @@ public final class ConfigHelper extends BaseHelperSupporter {
 					// 更改以下設定的目錄
 					//
 					// ConfigHelper
-					// .setConfigFile("src/main/webapp/WEB-INF/config/etc/config.xml");
+					// .setConfigFile("src/main/webapp/WEB-INF/config/etc/configuration.xml");
 					LOGGER.warn("[" + fileName + "] File does not exist");
 				}
 			}
 			// 使用spring注入時
 			else {
-				// file:src/test/config/etc/config.xml
-				// src/test/config/etc/config.xml
-				URL url = configLocation.getURL();
+				// file:src/test/config/etc/configuration.xml
+				// src/test/config/etc/configuration.xml
+				URL url = configurationLocation.getURL();
 				LOGGER.info("Reinitialize with Spring [" + (url != null ? url.getFile() : null) + "]");
 
 				if (url != null) {

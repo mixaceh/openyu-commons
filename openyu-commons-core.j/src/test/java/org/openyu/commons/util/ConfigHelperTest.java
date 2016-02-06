@@ -15,7 +15,7 @@ public class ConfigHelperTest {
 	@Test
 	public void getter() {
 		// src\test\config\etc\config.xml
-		System.out.println(ConfigHelper.getConfigFile());
+		System.out.println(ConfigHelper.getConfigurationFile());
 		// log4j.properties
 		System.out.println(ConfigHelper.getLog4jConfigFile());
 		//
@@ -63,7 +63,7 @@ public class ConfigHelperTest {
 		System.out.println(bean);
 
 		// src\test\config\etc\config.xml
-		System.out.println(bean.getConfigFile());
+		System.out.println(bean.getConfigurationFile());
 		// log4j.properties
 		System.out.println(bean.getLog4jConfigFile());
 		//

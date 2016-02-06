@@ -36,7 +36,7 @@ public class ConfigHelperSpringTest extends BaseTestSupporter {
 	@Test
 	public void getConfigLocation() {
 		Resource result = null;
-		result = configHelper.getConfigLocation();
+		result = configHelper.getConfigurationLocation();
 		// URL [file:src/test/config/etc/config.xml]
 		System.out.println(result);
 		//
@@ -78,21 +78,21 @@ public class ConfigHelperSpringTest extends BaseTestSupporter {
 
 		// UrlResource,org.springframework.core.io.DefaultResourceLoader$ClassPathContextResource
 		System.out.println(result.getClass());
-		System.out.println("getConfigFile(): " + ConfigHelper.getConfigFile());
+		System.out.println("getConfigFile(): " + ConfigHelper.getConfigurationFile());
 		System.out.println("getConfigLocation(): "
-				+ configHelper.getConfigLocation());
+				+ configHelper.getConfigurationLocation());
 		System.out.println("isDebug(): " + ConfigHelper.isDebug());
 		//
 		assertNotNull(result);
 
 		// 改設定檔位置
-		ConfigHelper.setConfigFile("src/test/config/etc/config.xml");
-		System.out.println("getConfigFile(): " + ConfigHelper.getConfigFile());
+		ConfigHelper.setConfigurationFile("src/test/config/etc/config.xml");
+		System.out.println("getConfigFile(): " + ConfigHelper.getConfigurationFile());
 		System.out.println("getConfigLocation(): "
-				+ configHelper.getConfigLocation());
+				+ configHelper.getConfigurationLocation());
 		System.out.println("isDebug(): " + ConfigHelper.isDebug());
 		//
-		ConfigHelper.setConfigFile("src/test/config/etc/config.xml");
+		ConfigHelper.setConfigurationFile("src/test/config/etc/config.xml");
 	}
 
 	@Test
