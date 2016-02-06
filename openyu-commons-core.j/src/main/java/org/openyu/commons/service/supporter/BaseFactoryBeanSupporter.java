@@ -73,7 +73,7 @@ public abstract class BaseFactoryBeanSupporter<T> extends BaseServiceSupporter i
 			PropertiesLoaderUtils.fillProperties(props, this.configLocation);
 		}
 		if (this.properties != null) {
-			LOGGER.info(new StringBuilder().append("Loading properties from setProperties(Properties)").toString());
+			LOGGER.info(new StringBuilder().append("Loading config from properties").toString());
 			props.putAll(this.properties);
 			// 清除原properties,省mem,因之後會使用extendedProperties了
 			this.properties.clear();
@@ -82,7 +82,7 @@ public abstract class BaseFactoryBeanSupporter<T> extends BaseServiceSupporter i
 		if (props.size() > 0) {
 			this.extendedProperties = ExtendedProperties.convertProperties(props);
 			if (this.extendedProperties.size() > 0) {
-				LOGGER.info(new StringBuilder().append("Pros: " + extendedProperties).toString());
+				LOGGER.info(new StringBuilder().append("All properties: " + extendedProperties).toString());
 			}
 		}
 	}

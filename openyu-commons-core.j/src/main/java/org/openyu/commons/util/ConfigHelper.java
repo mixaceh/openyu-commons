@@ -6,24 +6,17 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-//import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-//import java.util.concurrent.ConcurrentHashMap;
-//import java.util.concurrent.ConcurrentMap;
-//import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.configuration.CombinedConfiguration;
-//import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.DefaultConfigurationBuilder;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
-//import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
-//import org.apache.commons.configuration.tree.DefaultConfigurationNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -47,27 +40,27 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	/**
 	 * 是否由Static()建構
 	 */
-	protected static boolean staticBuild;
+	private static boolean staticBuild;
 	/**
 	 * 預設設定檔目錄
 	 * 
 	 * src/test/config
 	 */
-	private final static String DEFAULT_CONFIG_DIR = "src" + File.separator + "test" + File.separator + "config";
+	public final static String DEFAULT_CONFIG_DIR = "src" + File.separator + "test" + File.separator + "config";
 
 	/**
 	 * 預設設定檔檔名
 	 * 
 	 * config.xml
 	 */
-	private final static String DEFAULT_CONFIG_FILE_NAME = "config.xml";
+	public final static String DEFAULT_CONFIG_FILE_NAME = "config.xml";
 
 	/**
 	 * 預設設定檔
 	 * 
 	 * src/test/config/etc/config.xml
 	 */
-	private final static String DEFAULT_CONFIG_FILE = DEFAULT_CONFIG_DIR + File.separator + "etc" + File.separator
+	public final static String DEFAULT_CONFIG_FILE = DEFAULT_CONFIG_DIR + File.separator + "etc" + File.separator
 			+ DEFAULT_CONFIG_FILE_NAME;
 
 	/**
@@ -94,7 +87,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 * 
 	 * src/test/config/json
 	 */
-	private final static String DEFAULT_JSON_DIR = DEFAULT_CONFIG_DIR + File.separator + "json";
+	public final static String DEFAULT_JSON_DIR = DEFAULT_CONFIG_DIR + File.separator + "json";
 
 	/**
 	 * json目錄
@@ -342,19 +335,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	}
 
 	public ConfigHelper() {
-		// throw new HelperException(
-		// new StringBuilder().append(ConfigHelper.class.getName()).append(" can
-		// not construct").toString());
-	}
 
-	/**
-	 * 1.清除configuration
-	 * 
-	 * 2.清除cache
-	 */
-	protected void closeInternal() throws Exception {
-		configurationBuilder = null;
-		configuration.clear();
 	}
 
 	public static String getConfigFile() {
@@ -374,11 +355,11 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 * 
 	 * @return
 	 */
-	public Resource getConfigLocation() {
+	public static Resource getConfigLocation() {
 		return configLocation;
 	}
 
-	public void setConfigLocation(Resource configLocation) {
+	public static void setConfigLocation(Resource configLocation) {
 		ConfigHelper.configLocation = configLocation;
 		ConfigHelper.configFile = getFile(configLocation);
 		//
@@ -736,7 +717,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 				// file:src/test/config/etc/config.xml
 				// src/test/config/etc/config.xml
 				URL url = configLocation.getURL();
-				LOGGER.info("Reinitialization with Spring [" + (url != null ? url.getFile() : null) + "]");
+				LOGGER.info("Reinitialize with Spring [" + (url != null ? url.getFile() : null) + "]");
 
 				if (url != null) {
 					configurationBuilder = new DefaultConfigurationBuilder(url);

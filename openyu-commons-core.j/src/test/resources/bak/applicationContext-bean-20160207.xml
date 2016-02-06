@@ -43,13 +43,46 @@
 		resource="classpath:org/openyu/commons/freemarker/applicationContext-freemarker.xml" />
 
 	<!-- quartz -->
-	<import resource="classpath:org/openyu/commons/quartz/applicationContext-quartz.xml" />
+	<import
+		resource="classpath:org/openyu/commons/quartz/applicationContext-quartz.xml" />
 
 	<!-- configHelper -->
 	<bean
 		id="configHelper"
-		class="org.openyu.commons.util.ConfigHelperFactoryBean"
-		p:configLocation="file:src/test/config/etc/ConfigHelper.properties" />
+		class="org.openyu.commons.util.ConfigHelper">
+		<property name="configLocation">
+			<value>file:src/test/config/etc/config.xml</value>
+		</property>
+		<!--  
+		<property name="log4jConfigLocation">
+			<value>classpath:log4j.properties</value>
+		</property>
+		-->
+		<property name="jsonDirLocation">
+			<value>file:src/test/config/json</value>
+		</property>
+		<property name="keyDirLocation">
+			<value>file:src/test/config/key</value>
+		</property>
+		<property name="serDirLocation">
+			<value>file:src/test/config/ser</value>
+		</property>
+		<property name="xmlDirLocation">
+			<value>file:src/test/config/xml</value>
+		</property>
+		<property name="excelDirLocation">
+			<value>file:src/test/config/excel</value>
+		</property>
+		<property name="outputDirLocation">
+			<value>file:custom/output</value>
+		</property>
+		<property name="downloadDirLocation">
+			<value>file:custom/download</value>
+		</property>
+		<property name="uploadDirLocation">
+			<value>file:custom/upload</value>
+		</property>
+	</bean>
 
 	<bean
 		id="propertyPlaceholderConfigurer"

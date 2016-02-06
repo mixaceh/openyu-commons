@@ -1,10 +1,9 @@
 package org.openyu.commons.util;
 
 import org.openyu.commons.service.supporter.BaseFactoryBeanSupporter;
-import org.openyu.commons.service.supporter.BaseServiceFactoryBeanSupporter;
-import org.openyu.commons.thread.ThreadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.UrlResource;
 
 /**
  * ConfigHelper工廠
@@ -15,70 +14,82 @@ public final class ConfigHelperFactoryBean extends BaseFactoryBeanSupporter<Conf
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(ConfigHelperFactoryBean.class);
 
-	// public static final String MAX_EXECUTOR_SIZE = "maxExecutorSize";
-	// /**
-	// * 預設executor的最大數目
-	// */
-	// public static final int DEFAULT_MAX_EXECUTOR_SIZE = 1;
-	//
-	// public static final String CORE_POOL_SIZE = "corePoolSize";
-	//
-	// public static final int DEFAULT_CORE_POOL_SIZE = 8;
-	//
-	// public static final String KEEP_ALIVE_SECONDS = "keepAliveSeconds";
-	//
-	// public static final int DEFAULT_KEEP_ALIVE_SECONDS = 60;
-	//
-	// public static final String MAX_POOL_SIZE = "maxPoolSize";
-	// /**
-	// * 預設thread的最大數目
-	// */
-	// public static final int DEFAULT_MAX_POOL_SIZE = 8;
-	//
-	// public static final String QUEUE_CAPACITY = "queueCapacity";
-	//
-	// public static final int DEFAULT_QUEUE_CAPACITY = 8;
+	public static final String CONFIGURATION_LOCATION = "configurationLocation";
+	/**
+	 * 預設設定檔
+	 * 
+	 * file:src/test/config/etc/config.xml
+	 */
+	public static final String DEFAULT_CONFIGURATION_LOCATION = "file:" + ConfigHelper.DEFAULT_CONFIG_FILE;
 
 	/**
 	 * 所有屬性
 	 */
-	public static final String[] ALL_PROPERTIES = {};
+	public static final String[] ALL_PROPERTIES = { CONFIGURATION_LOCATION };
 
 	public ConfigHelperFactoryBean() {
 	}
 
 	/**
-	 * 建構
+	 * 重新初始化ConfigHelper
 	 * 
 	 * @return
 	 */
-	protected ConfigHelper createConfigHelper() throws Exception {
-		ConfigHelper result = null;
+	protected void reinitializeConfigHelper() throws Exception {
 		try {
 			/**
 			 * extendedProperties
 			 */
-			result.setMaxExecutorSize(extendedProperties.getInt(MAX_EXECUTOR_SIZE, DEFAULT_MAX_EXECUTOR_SIZE));
-			result.setCorePoolSize(extendedProperties.getInt(CORE_POOL_SIZE, DEFAULT_CORE_POOL_SIZE));
-			result.setKeepAliveSeconds(extendedProperties.getInt(KEEP_ALIVE_SECONDS, DEFAULT_KEEP_ALIVE_SECONDS));
-			result.setMaxPoolSize(extendedProperties.getInt(MAX_POOL_SIZE, DEFAULT_MAX_POOL_SIZE));
-			result.setQueueCapacity(extendedProperties.getInt(QUEUE_CAPACITY, DEFAULT_QUEUE_CAPACITY));
+			// result.setMaxExecutorSize(extendedProperties.getInt(MAX_EXECUTOR_SIZE,
+			// DEFAULT_MAX_EXECUTOR_SIZE));
+			// result.setCorePoolSize(extendedProperties.getInt(CORE_POOL_SIZE,
+			// DEFAULT_CORE_POOL_SIZE));
+			// result.setKeepAliveSeconds(extendedProperties.getInt(KEEP_ALIVE_SECONDS,
+			// DEFAULT_KEEP_ALIVE_SECONDS));
+			// result.setMaxPoolSize(extendedProperties.getInt(MAX_POOL_SIZE,
+			// DEFAULT_MAX_POOL_SIZE));
+			// result.setQueueCapacity(extendedProperties.getInt(QUEUE_CAPACITY,
+			// DEFAULT_QUEUE_CAPACITY));
 
-			/**
-			 * injectiion
-			 */
+			UrlResource configurationLocation = new UrlResource(
+					extendedProperties.getString(CONFIGURATION_LOCATION, DEFAULT_CONFIGURATION_LOCATION));
+			ConfigHelper.setConfigLocation(configurationLocation);
+			
 
-			// 啟動
-			result.start();
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during createConfigHelper()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during reinitializeConfigHelper()").toString(), e);
 			try {
-				result = (ConfigHelper) shutdownConfigHelper();
+
 			} catch (Exception sie) {
 				throw sie;
 			}
 			throw e;
 		}
-		return result;
 	}
+
+	@Override
+	protected void doStart() throws Exception {
+		reinitializeConfigHelper();
+	}
+
+	@Override
+	protected void doShutdown() throws Exception {
+
+	}
+
+	@Override
+	public ConfigHelper getObject() throws Exception {
+		return null;
+	}
+
+	@Override
+	public Class<?> getObjectType() {
+		return ConfigHelper.class;
+	}
+
+	@Override
+	public boolean isSingleton() {
+		return true;
+	}
+
 }
