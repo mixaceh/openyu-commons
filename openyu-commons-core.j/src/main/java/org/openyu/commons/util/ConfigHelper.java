@@ -212,6 +212,25 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 */
 	private static String DEFAULT_CUSTOM_DIR = "custom";
 
+	// --------------------------------------------------------
+	/**
+	 * 預設input目錄
+	 * 
+	 * custom/input
+	 */
+	private final static String DEFAULT_INPUT_DIR = DEFAULT_CUSTOM_DIR + File.separator + "input";
+
+	/**
+	 * input目錄
+	 */
+	private static String inputDir = DEFAULT_INPUT_DIR;
+
+	/**
+	 * input目錄資源,由spring注入
+	 */
+	private static Resource inputDirLocation;
+
+	// --------------------------------------------------------
 	/**
 	 * 預設output目錄
 	 * 
@@ -549,6 +568,29 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	}
 
 	// --------------------------------------------------------
+	public static String getInputDir() {
+		return inputDir;
+	}
+
+	public static void setInputDir(String inputDir) {
+		ConfigHelper.inputDir = inputDir;
+		ConfigHelper.inputDirLocation = null;
+		//
+		buildDir(DEFAULT_INPUT_DIR, inputDirLocation, inputDir);
+	}
+
+	public Resource getInputDirLocation() {
+		return inputDirLocation;
+	}
+
+	public void setInputDirLocation(Resource inputDirLocation) {
+		ConfigHelper.inputDirLocation = inputDirLocation;
+		ConfigHelper.inputDir = getFile(inputDirLocation);
+		//
+		buildDir(DEFAULT_INPUT_DIR, inputDirLocation, null);
+	}
+
+	// --------------------------------------------------------
 	public static String getOutputDir() {
 		return outputDir;
 	}
@@ -750,12 +792,12 @@ public final class ConfigHelper extends BaseHelperSupporter {
 				if (resource instanceof ServletContextResource) {
 					ServletContextResource recource = (ServletContextResource) resource;
 					// 1./cms/WEB-INF/xml
-					// 2./cms/custom/output
+					// 2./cms/custom/input
 					FileHelper.md(recource.getFile().getAbsolutePath());
 				}
 				// file:xml
 				// xml
-				// custom/output
+				// custom/input
 				else {
 					URL url = resource.getURL();
 					if (url != null) {

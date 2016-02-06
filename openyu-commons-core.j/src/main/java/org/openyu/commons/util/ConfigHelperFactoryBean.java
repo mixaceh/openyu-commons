@@ -15,6 +15,7 @@ public final class ConfigHelperFactoryBean extends BaseFactoryBeanSupporter<Conf
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(ConfigHelperFactoryBean.class);
 
 	public static final String CONFIGURATION_LOCATION = "configurationLocation";
+
 	/**
 	 * 預設設定檔
 	 * 
@@ -24,6 +25,11 @@ public final class ConfigHelperFactoryBean extends BaseFactoryBeanSupporter<Conf
 
 	public static final String JSON_DIR_LOCATION = "jsonDirLocation";
 
+	/**
+	 * 預設json目錄
+	 * 
+	 * src/test/config/json
+	 */
 	public static final String DEFAULT_JSON_DIR_LOCATION = "file:" + ConfigHelper.DEFAULT_JSON_DIR;
 
 	/**
@@ -44,17 +50,6 @@ public final class ConfigHelperFactoryBean extends BaseFactoryBeanSupporter<Conf
 			/**
 			 * extendedProperties
 			 */
-			// result.setMaxExecutorSize(extendedProperties.getInt(MAX_EXECUTOR_SIZE,
-			// DEFAULT_MAX_EXECUTOR_SIZE));
-			// result.setCorePoolSize(extendedProperties.getInt(CORE_POOL_SIZE,
-			// DEFAULT_CORE_POOL_SIZE));
-			// result.setKeepAliveSeconds(extendedProperties.getInt(KEEP_ALIVE_SECONDS,
-			// DEFAULT_KEEP_ALIVE_SECONDS));
-			// result.setMaxPoolSize(extendedProperties.getInt(MAX_POOL_SIZE,
-			// DEFAULT_MAX_POOL_SIZE));
-			// result.setQueueCapacity(extendedProperties.getInt(QUEUE_CAPACITY,
-			// DEFAULT_QUEUE_CAPACITY));
-
 			UrlResource configurationLocation = new UrlResource(
 					extendedProperties.getString(CONFIGURATION_LOCATION, DEFAULT_CONFIGURATION_LOCATION));
 			ConfigHelper.setConfigurationLocation(configurationLocation);
@@ -62,6 +57,7 @@ public final class ConfigHelperFactoryBean extends BaseFactoryBeanSupporter<Conf
 			UrlResource jsonDirLocation = new UrlResource(
 					extendedProperties.getString(JSON_DIR_LOCATION, DEFAULT_JSON_DIR_LOCATION));
 			ConfigHelper.setJsonDirLocation(jsonDirLocation);
+			// TODO
 
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during reinitializeConfigHelper()").toString(), e);
