@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,6 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.io.Resource;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.ClassHelper;
 
@@ -25,37 +25,38 @@ public class ConfigHelperSpringTest extends BaseTestSupporter {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		applicationContext = new ClassPathXmlApplicationContext(
-				new String[] { "applicationContext-init.xml",//
-				});
+		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
+				"applicationContext-init.xml", //
+				"applicationContext-bean.xml",//
+		});
 
-		configHelper = (ConfigHelper) applicationContext
-				.getBean("configHelper");
+		configHelper = (ConfigHelper) applicationContext.getBean("configHelper");
 	}
 
 	@Test
-	public void getConfigLocation() {
-		Resource result = null;
-		result = configHelper.getConfigurationLocation();
+	public void getConfigurationUrl() {
+		URL result = null;
+		result = ConfigHelper.getConfigurationUrl();
 		// URL [file:src/test/config/etc/config.xml]
-		System.out.println(result);
+		System.out.println("URL: " + result);
 		//
 		try {
 			// src/test/config/etc/config.xml
 			// classpath ->
 			// D:/dev/openyu/trunk/openyu-commons-core.j/src/test/config/etc/config.xml
-			System.out.println("getFile(): " + result.getFile());
+			System.out.println("getFile(): " + result.getFile());// src/test/config/etc/configuration.xml
 		} catch (Exception ex) {
 			System.out.println("getFile(): null");// null
 		}
 		//
-		System.out.println("getFilename(): " + result.getFilename());// config.xml
+		// System.out.println("getFilename(): " + result.getFilename());//
+		// config.xml
 		//
 		try {
 			// src/test/config/etc/config.xml
 			// classpath ->
 			// file:D:/dev/openyu/trunk/openyu-commons-core.j/src/test/config/etc/config.xml
-			System.out.println("getURL(): " + result.getURL());
+			System.out.println("getURL(): " + result);// file:src/test/config/etc/configuration.xml
 		} catch (Exception ex) {
 			System.out.println("getURL(): null");// null
 		}
@@ -64,41 +65,37 @@ public class ConfigHelperSpringTest extends BaseTestSupporter {
 			// src/test/config/etc/xxx.xml
 			// classpath ->
 			// file:D:/dev/openyu/trunk/openyu-commons-core.j/src/test/config/etc/xxx.xml
-			System.out.println("getURI(): " + result.getURI());
+			System.out.println("getURI(): " + result.toURI());// file:src/test/config/etc/configuration.xml
 		} catch (Exception ex) {
 			System.out.println("getURI(): null");// null
 		}
 		//
-		try {
-			// java.io.BufferedInputStream@1fafb02
-			System.out.println("getInputStream(): " + result.getInputStream());
-		} catch (Exception ex) {
-			System.out.println("getInputStream(): null");// null
-		}
+		// try {
+		// // java.io.BufferedInputStream@1fafb02
+		// System.out.println("getInputStream(): " + result.getInputStream());
+		// } catch (Exception ex) {
+		// System.out.println("getInputStream(): null");// null
+		// }
 
 		// UrlResource,org.springframework.core.io.DefaultResourceLoader$ClassPathContextResource
 		System.out.println(result.getClass());
-		System.out.println("getConfigFile(): " + ConfigHelper.getConfigurationFile());
-		System.out.println("getConfigLocation(): "
-				+ configHelper.getConfigurationLocation());
+		System.out.println("getConfigurationFile(): " + ConfigHelper.getConfigurationFile());
+		System.out.println("getConfigurationUrl(): " + ConfigHelper.getConfigurationUrl());
 		System.out.println("isDebug(): " + ConfigHelper.isDebug());
 		//
 		assertNotNull(result);
 
 		// 改設定檔位置
-		ConfigHelper.setConfigurationFile("src/test/config/etc/config.xml");
+		ConfigHelper.setConfigurationFile("src/test/config/etc/configuration.xml");
 		System.out.println("getConfigFile(): " + ConfigHelper.getConfigurationFile());
-		System.out.println("getConfigLocation(): "
-				+ configHelper.getConfigurationLocation());
+		System.out.println("getConfigLocation(): " + ConfigHelper.getConfigurationUrl());
 		System.out.println("isDebug(): " + ConfigHelper.isDebug());
-		//
-		ConfigHelper.setConfigurationFile("src/test/config/etc/config.xml");
 	}
 
 	@Test
-	public void getXmlDir() {
-		Resource result = null;
-		result = configHelper.getXmlDirLocation();
+	public void getXmlDirUrl() {
+		URL result = null;
+		result = ConfigHelper.getXmlDirUrl();
 		System.out.println(result);// URL [file:data/xml]
 		//
 		try {
@@ -107,72 +104,44 @@ public class ConfigHelperSpringTest extends BaseTestSupporter {
 			System.out.println("getFile(): null");// null
 		}
 		//
-		System.out.println("getFilename(): " + result.getFilename());// xml
+		// System.out.println("getFilename(): " + result.getFilename());// xml
 		//
 		try {
-			System.out.println("getURL(): " + result.getURL());// file:data/xml
+			System.out.println("getURL(): " + result);// file:data/xml
 		} catch (Exception ex) {
 			System.out.println("getURL(): null");// null
 		}
 		//
 		try {
-			System.out.println("getURI(): " + result.getURI());// file:data/xml
+			System.out.println("getURI(): " + result.toURI());// file:data/xml
 		} catch (Exception ex) {
 			System.out.println("getURI(): null");// null
 		}
-		// s
-		try {
-			System.out.println("getInputStream(): " + result.getInputStream());// null
-		} catch (Exception ex) {
-			System.out.println("getInputStream(): null");// null
-		}
 		//
-		System.out.println(result.getClass());// UrlResource
+		// try {
+		// System.out.println("getInputStream(): " + result.getInputStream());//
+		// null
+		// } catch (Exception ex) {
+		// System.out.println("getInputStream(): null");// null
+		// }
+		//
 		System.out.println("getXmlDir(): " + ConfigHelper.getXmlDir());
 		//
 		assertNotNull(result);
 	}
 
 	@Test
-	public void getXmlDirByStatic() {
-		// data/xml
-		System.out.println("getXmlDir(): " + ConfigHelper.getXmlDir());
-	}
-
-	@Test
 	public void getter() {
-		int count = 1;// 100w
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			System.out.println(ConfigHelper.getJsonDir());
-			System.out.println(ConfigHelper.getKeyDir());
-			System.out.println(ConfigHelper.getSerDir());
-			System.out.println(ConfigHelper.getXmlDir());
-			System.out.println(ConfigHelper.getExcelDir());
-			//
-			System.out.println(ConfigHelper.getOutputDir());
-			System.out.println(ConfigHelper.getDownloadDir());
-			System.out.println(ConfigHelper.getUploadDir());
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
-	}
-
-	@Test
-	// 1000000 times: 381 mills.
-	// 1000000 times: 385 mills.
-	// 1000000 times: 386 mills.
-	public void getPropertyAndCache() {
-		String result = null;
-		int count = 1000000;// 100w
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = ConfigHelper.getString("configHelper.debug");
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
-
-		System.out.println(result);
+		System.out.println(ConfigHelper.getJsonDir());
+		System.out.println(ConfigHelper.getKeyDir());
+		System.out.println(ConfigHelper.getSerDir());
+		System.out.println(ConfigHelper.getXmlDir());
+		System.out.println(ConfigHelper.getExcelDir());
+		//
+		System.out.println(ConfigHelper.getInputDir());
+		System.out.println(ConfigHelper.getOutputDir());
+		System.out.println(ConfigHelper.getDownloadDir());
+		System.out.println(ConfigHelper.getUploadDir());
 	}
 
 	@Test
@@ -294,8 +263,7 @@ public class ConfigHelperSpringTest extends BaseTestSupporter {
 		int count = 1000000;// 100w
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = ConfigHelper
-					.configurationsAt("classHelper.poMapping.entry");
+			result = ConfigHelper.configurationsAt("classHelper.poMapping.entry");
 			for (HierarchicalConfiguration node : result) {
 				key = node.getString("key");
 				poClass = ClassHelper.forName(key);
@@ -344,8 +312,7 @@ public class ConfigHelperSpringTest extends BaseTestSupporter {
 		for (int i = 0; i < count; i++) {
 			// list =
 			// ConfigHelper.configurationsAt("classHelper.poMapping.entry");
-			result = ConfigHelper
-					.configurationsAt("xxxclassHelper.poMapping.entry");
+			result = ConfigHelper.configurationsAt("xxxclassHelper.poMapping.entry");
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -383,8 +350,7 @@ public class ConfigHelperSpringTest extends BaseTestSupporter {
 			// sub =
 			// ConfigHelper.configurationAt("classHelper.poMapping.entry(0)");
 			try {
-				result = ConfigHelper
-						.configurationAt("xxxclassHelper.poMapping.entry(0)");
+				result = ConfigHelper.configurationAt("xxxclassHelper.poMapping.entry(0)");
 			} catch (Exception ex) {
 			}
 		}

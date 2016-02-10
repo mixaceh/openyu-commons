@@ -19,8 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-import org.springframework.web.context.support.ServletContextResource;
+//import org.springframework.web.context.support.ServletContextResource;
 import org.openyu.commons.enumz.EnumHelper;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.io.FileHelper;
@@ -40,7 +39,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	/**
 	 * 是否由Static()建構
 	 */
-	private static boolean staticBuild;
+	private static boolean buildWithStatic;
 	/**
 	 * 預設設定檔目錄
 	 * 
@@ -69,11 +68,11 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	private static String configurationFile = DEFAULT_CONFIGURATION_FILE;
 
 	/**
-	 * 設定檔資源,由spring注入
+	 * 設定檔資源
 	 * 
 	 * file:src/test/config/etc/configuration.xml
 	 */
-	private static Resource configurationLocation;
+	private static URL configurationUrl;
 
 	private static DefaultConfigurationBuilder configurationBuilder;
 
@@ -95,9 +94,9 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	private static String jsonDir = DEFAULT_JSON_DIR;
 
 	/**
-	 * json目錄資源,由spring注入
+	 * json目錄資源
 	 */
-	private static Resource jsonDirLocation;
+	private static URL jsonDirUrl;
 
 	// --------------------------------------------------------
 	/**
@@ -113,9 +112,9 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	private static String keyDir = DEFAULT_KEY_DIR;
 
 	/**
-	 * key目錄資源,由spring注入
+	 * key目錄資源
 	 */
-	private static Resource keyDirLocation;
+	private static URL keyDirUrl;
 
 	// --------------------------------------------------------
 	/**
@@ -131,9 +130,9 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	private static String serDir = DEFAULT_SER_DIR;
 
 	/**
-	 * ser目錄資源,由spring注入
+	 * ser目錄資源
 	 */
-	private static Resource serDirLocation;
+	private static URL serDirUrl;
 
 	// --------------------------------------------------------
 	/**
@@ -149,9 +148,9 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	private static String xmlDir = DEFAULT_XML_DIR;
 
 	/**
-	 * xml目錄資源,由spring注入
+	 * xml目錄資源
 	 */
-	private static Resource xmlDirLocation;
+	private static URL xmlDirUrl;
 
 	// --------------------------------------------------------
 	/**
@@ -167,9 +166,9 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	private static String excelDir = DEFAULT_EXCEL_DIR;
 
 	/**
-	 * excel目錄資源,由spring注入
+	 * excel目錄資源
 	 */
-	private static Resource excelDirLocation;
+	private static URL excelDirUrl;
 
 	// --------------------------------------------------------
 	/**
@@ -199,9 +198,9 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	private static String log4jConfigFile = DEFAULT_LOG4J_CONFIG_FILE;
 
 	/**
-	 * log4j設定檔,由spring注入
+	 * log4j設定檔
 	 */
-	private static Resource log4jConfigLocation;
+	private static URL log4jConfigUrl;
 
 	// --------------------------------------------------------
 	// custom
@@ -226,9 +225,9 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	private static String inputDir = DEFAULT_INPUT_DIR;
 
 	/**
-	 * input目錄資源,由spring注入
+	 * input目錄資源
 	 */
-	private static Resource inputDirLocation;
+	private static URL inputDirUrl;
 
 	// --------------------------------------------------------
 	/**
@@ -244,9 +243,9 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	private static String outputDir = DEFAULT_OUTPUT_DIR;
 
 	/**
-	 * output目錄資源,由spring注入
+	 * output目錄資源
 	 */
-	private static Resource outputDirLocation;
+	private static URL outputDirUrl;
 
 	// --------------------------------------------------------
 	/**
@@ -260,9 +259,9 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	private static String downloadDir = DEFAULT_DOWNLOAD_DIR;
 
 	/**
-	 * download目錄資源,由spring注入
+	 * download目錄資源
 	 */
-	private static Resource downloadDirLocation;
+	private static URL downloadDirUrl;
 
 	// --------------------------------------------------------
 	/**
@@ -278,7 +277,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	/**
 	 * upload目錄資源,由spring注入
 	 */
-	private static Resource uploadDirLocation;
+	private static URL uploadDirUrl;
 
 	// --------------------------------------------------------
 	// config-op.xml
@@ -316,22 +315,15 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	/** 安全性類別 */
 	public final static String SECURITY_TYPE = "configHelper.securityType";
 
-	// private static SecurityType securityType;
-
 	/** 安全性key */
 	public final static String SECURITY_KEY = "configHelper.securityKey";
 
-	// private static String securityKey;
-
 	/** 是否壓縮 */
-	// private static boolean compress;
 
 	public final static String COMPRESS = "configHelper.compress";
 
 	/** 壓縮類別 */
 	public final static String COMPRESS_TYPE = "configHelper.compressType";
-
-	// private static CompressType compressType;
 
 	// --------------------------------------------------------
 	// config-debug.xml
@@ -348,7 +340,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	protected static class Static {
 		public Static() {
-			staticBuild = true;
+			buildWithStatic = true;
 			buildWithFile(null);
 		}
 	}
@@ -363,44 +355,22 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	public static void setConfigurationFile(String configurationFile) {
 		ConfigHelper.configurationFile = configurationFile;
-		ConfigHelper.configurationLocation = null;
+		ConfigHelper.configurationUrl = null;
 		//
-		staticBuild = false;
+		buildWithStatic = false;
 		buildWithFile(configurationFile);
 	}
 
-	/**
-	 * spring注入
-	 * 
-	 * @return
-	 */
-	public static Resource getConfigurationLocation() {
-		return configurationLocation;
+	public static URL getConfigurationUrl() {
+		return configurationUrl;
 	}
 
-	public static void setConfigurationLocation(Resource configurationLocation) {
-		ConfigHelper.configurationLocation = configurationLocation;
-		ConfigHelper.configurationFile = getFile(configurationLocation);
+	public static void setConfigurationUrl(URL configurationUrl) {
+		ConfigHelper.configurationUrl = configurationUrl;
+		ConfigHelper.configurationFile = configurationUrl.getFile();
 		//
-		staticBuild = false;
+		buildWithStatic = false;
 		buildWithFile(null);
-	}
-
-	/**
-	 * 取得檔名含路徑
-	 * 
-	 * @param resource
-	 * @return
-	 */
-	public static String getFile(Resource resource) {
-		String result = null;
-		try {
-			if (resource != null) {
-				result = resource.getFile().getPath();
-			}
-		} catch (Exception ex) {
-		}
-		return result;
 	}
 
 	// --------------------------------------------------------
@@ -410,20 +380,20 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	public static void setJsonDir(String jsonDir) {
 		ConfigHelper.jsonDir = jsonDir;
-		ConfigHelper.jsonDirLocation = null;
+		ConfigHelper.jsonDirUrl = null;
 		//
-		buildDir(DEFAULT_JSON_DIR, jsonDirLocation, jsonDir);
+		buildDir(jsonDirUrl, jsonDir);
 	}
 
-	public static Resource getJsonDirLocation() {
-		return jsonDirLocation;
+	public static URL getJsonDirUrl() {
+		return jsonDirUrl;
 	}
 
-	public static void setJsonDirLocation(Resource jsonDirLocation) {
-		ConfigHelper.jsonDirLocation = jsonDirLocation;
-		ConfigHelper.jsonDir = getFile(jsonDirLocation);
+	public static void setJsonDirUrl(URL jsonDirUrl) {
+		ConfigHelper.jsonDirUrl = jsonDirUrl;
+		ConfigHelper.jsonDir = jsonDirUrl.getFile();
 		//
-		buildDir(DEFAULT_JSON_DIR, jsonDirLocation, null);
+		buildDir(jsonDirUrl, null);
 	}
 
 	// --------------------------------------------------------
@@ -433,20 +403,20 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	public static void setKeyDir(String keyDir) {
 		ConfigHelper.keyDir = keyDir;
-		ConfigHelper.keyDirLocation = null;
+		ConfigHelper.keyDirUrl = null;
 		//
-		buildDir(DEFAULT_KEY_DIR, keyDirLocation, keyDir);
+		buildDir(keyDirUrl, keyDir);
 	}
 
-	public Resource getKeyDirLocation() {
-		return keyDirLocation;
+	public URL getKeyDirUrl() {
+		return keyDirUrl;
 	}
 
-	public void setKeyDirLocation(Resource keyDirLocation) {
-		ConfigHelper.keyDirLocation = keyDirLocation;
-		ConfigHelper.keyDir = getFile(keyDirLocation);
+	public void setKeyDirUrl(URL keyDirUrl) {
+		ConfigHelper.keyDirUrl = keyDirUrl;
+		ConfigHelper.keyDir = keyDirUrl.getFile();
 		//
-		buildDir(DEFAULT_KEY_DIR, keyDirLocation, null);
+		buildDir(keyDirUrl, null);
 	}
 
 	// --------------------------------------------------------
@@ -456,20 +426,20 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	public static void setSerDir(String serDir) {
 		ConfigHelper.serDir = serDir;
-		ConfigHelper.serDirLocation = null;
+		ConfigHelper.serDirUrl = null;
 		//
-		buildDir(DEFAULT_SER_DIR, serDirLocation, serDir);
+		buildDir(serDirUrl, serDir);
 	}
 
-	public Resource getSerDirLocation() {
-		return serDirLocation;
+	public URL getSerDirUrl() {
+		return serDirUrl;
 	}
 
-	public void setSerDirLocation(Resource serDirLocation) {
-		ConfigHelper.serDirLocation = serDirLocation;
-		ConfigHelper.serDir = getFile(serDirLocation);
+	public void setSerDirUrl(URL serDirUrl) {
+		ConfigHelper.serDirUrl = serDirUrl;
+		ConfigHelper.serDir = serDirUrl.getFile();
 		//
-		buildDir(DEFAULT_SER_DIR, serDirLocation, null);
+		buildDir(serDirUrl, null);
 	}
 
 	// --------------------------------------------------------
@@ -479,20 +449,20 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	public static void setXmlDir(String xmlDir) {
 		ConfigHelper.xmlDir = xmlDir;
-		ConfigHelper.xmlDirLocation = null;
+		ConfigHelper.xmlDirUrl = null;
 		//
-		buildDir(DEFAULT_XML_DIR, xmlDirLocation, xmlDir);
+		buildDir(xmlDirUrl, xmlDir);
 	}
 
-	public Resource getXmlDirLocation() {
-		return xmlDirLocation;
+	public static URL getXmlDirUrl() {
+		return xmlDirUrl;
 	}
 
-	public void setXmlDirLocation(Resource xmlDirLocation) {
-		ConfigHelper.xmlDirLocation = xmlDirLocation;
-		ConfigHelper.xmlDir = getFile(xmlDirLocation);
+	public static void setXmlDirUrl(URL xmlUrl) {
+		ConfigHelper.xmlDirUrl = xmlUrl;
+		ConfigHelper.xmlDir = xmlUrl.getFile();
 		//
-		buildDir(DEFAULT_XML_DIR, xmlDirLocation, null);
+		buildDir(xmlUrl, null);
 	}
 
 	// --------------------------------------------------------
@@ -502,20 +472,20 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	public static void setExcelDir(String excelDir) {
 		ConfigHelper.excelDir = excelDir;
-		ConfigHelper.excelDirLocation = null;
+		ConfigHelper.excelDirUrl = null;
 		//
-		buildDir(DEFAULT_EXCEL_DIR, excelDirLocation, excelDir);
+		buildDir(excelDirUrl, excelDir);
 	}
 
-	public Resource getExcelDirLocation() {
-		return excelDirLocation;
+	public URL getExcelDirUrl() {
+		return excelDirUrl;
 	}
 
-	public void setExcelDirLocation(Resource excelDirLocation) {
-		ConfigHelper.excelDirLocation = excelDirLocation;
-		ConfigHelper.excelDir = getFile(excelDirLocation);
+	public void setExcelDirUrl(URL excelDirUrl) {
+		ConfigHelper.excelDirUrl = excelDirUrl;
+		ConfigHelper.excelDir = excelDirUrl.getFile();
 		//
-		buildDir(DEFAULT_EXCEL_DIR, excelDirLocation, null);
+		buildDir(excelDirUrl, null);
 	}
 
 	// --------------------------------------------------------
@@ -525,7 +495,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	public static void setLog4jConfigFile(String log4jConfigFile) {
 		ConfigHelper.log4jConfigFile = log4jConfigFile;
-		ConfigHelper.log4jConfigLocation = null;
+		ConfigHelper.log4jConfigUrl = null;
 		//
 		int pos = log4jConfigFile.indexOf("log4j2");
 		// log4j
@@ -546,13 +516,13 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 * 
 	 * @return
 	 */
-	public static Resource getLog4jConfigLocation() {
-		return log4jConfigLocation;
+	public static URL getLog4jConfigUrl() {
+		return log4jConfigUrl;
 	}
 
-	public static void setLog4jConfigLocation(Resource log4jConfigLocation) throws Exception {
-		ConfigHelper.log4jConfigLocation = log4jConfigLocation;
-		ConfigHelper.log4jConfigFile = getFile(log4jConfigLocation);
+	public static void setLog4jConfigUrl(URL log4jConfigUrl) throws Exception {
+		ConfigHelper.log4jConfigUrl = log4jConfigUrl;
+		ConfigHelper.log4jConfigFile = log4jConfigUrl.getFile();
 		//
 		int pos = log4jConfigFile.indexOf("log4j2");
 		// log4j
@@ -562,7 +532,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		} else {
 			// log4j2
 			LoggerContext context = (LoggerContext) LogManager.getContext(false);
-			context.setConfigLocation(log4jConfigLocation.getURI());
+			context.setConfigLocation(log4jConfigUrl.toURI());
 			LOGGER.info("Using Log4j2");
 		}
 	}
@@ -574,20 +544,20 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	public static void setInputDir(String inputDir) {
 		ConfigHelper.inputDir = inputDir;
-		ConfigHelper.inputDirLocation = null;
+		ConfigHelper.inputDirUrl = null;
 		//
-		buildDir(DEFAULT_INPUT_DIR, inputDirLocation, inputDir);
+		buildDir(inputDirUrl, inputDir);
 	}
 
-	public Resource getInputDirLocation() {
-		return inputDirLocation;
+	public URL getInputDirUrl() {
+		return inputDirUrl;
 	}
 
-	public void setInputDirLocation(Resource inputDirLocation) {
-		ConfigHelper.inputDirLocation = inputDirLocation;
-		ConfigHelper.inputDir = getFile(inputDirLocation);
+	public void setInputDirUrl(URL inputDirUrl) {
+		ConfigHelper.inputDirUrl = inputDirUrl;
+		ConfigHelper.inputDir = inputDirUrl.getFile();
 		//
-		buildDir(DEFAULT_INPUT_DIR, inputDirLocation, null);
+		buildDir(inputDirUrl, null);
 	}
 
 	// --------------------------------------------------------
@@ -597,20 +567,20 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	public static void setOutputDir(String outputDir) {
 		ConfigHelper.outputDir = outputDir;
-		ConfigHelper.outputDirLocation = null;
+		ConfigHelper.outputDirUrl = null;
 		//
-		buildDir(DEFAULT_OUTPUT_DIR, outputDirLocation, outputDir);
+		buildDir(outputDirUrl, outputDir);
 	}
 
-	public Resource getOutputDirLocation() {
-		return outputDirLocation;
+	public URL getOutputDirUrl() {
+		return outputDirUrl;
 	}
 
-	public void setOutputDirLocation(Resource outputDirLocation) {
-		ConfigHelper.outputDirLocation = outputDirLocation;
-		ConfigHelper.outputDir = getFile(outputDirLocation);
+	public void setOutputDirUrl(URL outputDirUrl) {
+		ConfigHelper.outputDirUrl = outputDirUrl;
+		ConfigHelper.outputDir = outputDirUrl.getFile();
 		//
-		buildDir(DEFAULT_OUTPUT_DIR, outputDirLocation, null);
+		buildDir(outputDirUrl, null);
 	}
 
 	// --------------------------------------------------------
@@ -620,20 +590,20 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	public static void setDownloadDir(String downloadDir) {
 		ConfigHelper.downloadDir = downloadDir;
-		ConfigHelper.downloadDirLocation = null;
+		ConfigHelper.downloadDirUrl = null;
 		//
-		buildDir(DEFAULT_DOWNLOAD_DIR, downloadDirLocation, downloadDir);
+		buildDir(downloadDirUrl, downloadDir);
 	}
 
-	public Resource getDownloadDirLocation() {
-		return downloadDirLocation;
+	public URL getDownloadUrl() {
+		return downloadDirUrl;
 	}
 
-	public void setDownloadDirLocation(Resource downloadDirLocation) {
-		ConfigHelper.downloadDirLocation = downloadDirLocation;
-		ConfigHelper.downloadDir = getFile(downloadDirLocation);
+	public void setDownloadDirUrl(URL downloadDirUrl) {
+		ConfigHelper.downloadDirUrl = downloadDirUrl;
+		ConfigHelper.downloadDir = downloadDirUrl.getFile();
 		//
-		buildDir(DEFAULT_DOWNLOAD_DIR, downloadDirLocation, null);
+		buildDir(downloadDirUrl, null);
 	}
 
 	// --------------------------------------------------------
@@ -643,20 +613,20 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	public static void setUploadDir(String uploadDir) {
 		ConfigHelper.uploadDir = uploadDir;
-		ConfigHelper.uploadDirLocation = null;
+		ConfigHelper.uploadDirUrl = null;
 		//
-		buildDir(DEFAULT_UPLOAD_DIR, uploadDirLocation, uploadDir);
+		buildDir(uploadDirUrl, uploadDir);
 	}
 
-	public Resource getUploadDirLocation() {
-		return uploadDirLocation;
+	public URL getUploadDirUrl() {
+		return uploadDirUrl;
 	}
 
-	public void setUploadDirLocation(Resource uploadDirLocation) {
-		ConfigHelper.uploadDirLocation = uploadDirLocation;
-		ConfigHelper.uploadDir = getFile(uploadDirLocation);
+	public void setUploadDirUrl(URL uploadDirUrl) {
+		ConfigHelper.uploadDirUrl = uploadDirUrl;
+		ConfigHelper.uploadDir = uploadDirUrl.getFile();
 		//
-		buildDir(DEFAULT_UPLOAD_DIR, uploadDirLocation, null);
+		buildDir(uploadDirUrl, null);
 	}
 
 	// --------------------------------------------------------
@@ -664,8 +634,6 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	/**
 	 * 建構
 	 * 
-	 * @param firstBuild
-	 *            是否第一次建構
 	 * @param assignFile
 	 *            指定檔案
 	 */
@@ -673,11 +641,11 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		try {
 			buildConfigurationBuilder(assignFile);
 			if (configurationBuilder == null) {
-				if (staticBuild) {
+				if (buildWithStatic) {
 					return;
 				} else {
-					LOGGER.error("Can not find configLocation: "
-							+ (assignFile != null ? assignFile : configurationLocation));
+					LOGGER.error(
+							"Can not find configLocation: " + (assignFile != null ? assignFile : configurationUrl));
 					return;
 				}
 			}
@@ -720,23 +688,22 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	}
 
 	/**
-	 * 建構factory
+	 * 建構builder
 	 * 
 	 * @param assignFile
-	 * @return
 	 */
 	protected static void buildConfigurationBuilder(String assignFile) {
 		//
 		try {
 			// 當沒使用spring注入時,或指定設定檔
-			if (configurationLocation == null || assignFile != null) {
+			if (configurationUrl == null || assignFile != null) {
 				String fileName = (assignFile != null ? assignFile : DEFAULT_CONFIGURATION_FILE);
 				File file = new File(fileName);
 				if (file.exists()) {
 					configurationBuilder = new DefaultConfigurationBuilder();
 					configurationBuilder.setFile(file);
 					//
-					if (staticBuild) {
+					if (buildWithStatic) {
 						LOGGER.info("Initialization of file [" + fileName + "]");
 					} else {
 						LOGGER.info("Reinitialization of file [" + fileName + "]");
@@ -759,11 +726,9 @@ public final class ConfigHelper extends BaseHelperSupporter {
 			else {
 				// file:src/test/config/etc/configuration.xml
 				// src/test/config/etc/configuration.xml
-				URL url = configurationLocation.getURL();
-				LOGGER.info("Reinitialize with Spring [" + (url != null ? url.getFile() : null) + "]");
-
-				if (url != null) {
-					configurationBuilder = new DefaultConfigurationBuilder(url);
+				if (configurationUrl != null) {
+					configurationBuilder = new DefaultConfigurationBuilder(configurationUrl);
+					LOGGER.info("Reinitialize with Spring [" + configurationUrl.getFile() + "]");
 				}
 			}
 		} catch (Exception ex) {
@@ -777,11 +742,11 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 * @param defaultDir
 	 * @param resource
 	 */
-	protected static void buildDir(String defaultDir, Resource resource, String assignDir) {
+	protected static void buildDir(URL url, String assignDir) {
 		try {
 			// 當沒使用spring注入時,或指定目錄
-			if (resource == null || assignDir != null) {
-				File dir = new File(assignDir != null ? assignDir : defaultDir);
+			if (url == null || assignDir != null) {
+				File dir = new File(assignDir);
 				FileHelper.md(dir);
 			}
 			// 使用spring注入時
@@ -789,21 +754,21 @@ public final class ConfigHelper extends BaseHelperSupporter {
 				// web
 				// /WEB-INF/xml
 				// /custom/output
-				if (resource instanceof ServletContextResource) {
-					ServletContextResource recource = (ServletContextResource) resource;
-					// 1./cms/WEB-INF/xml
-					// 2./cms/custom/input
-					FileHelper.md(recource.getFile().getAbsolutePath());
-				}
+
+				// TODO in web
+				// if (resource instanceof ServletContextResource) {
+				// ServletContextResource recource = (ServletContextResource)
+				// resource;
+				// // 1./cms/WEB-INF/xml
+				// // 2./cms/custom/input
+				// FileHelper.md(recource.getFile().getAbsolutePath());
+				// }
 				// file:xml
 				// xml
 				// custom/input
-				else {
-					URL url = resource.getURL();
-					if (url != null) {
-						FileHelper.md(url.getFile());
-					}
-				}
+				// else {
+				FileHelper.md(url.getFile());
+				// }
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -819,108 +784,33 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		return true;
 	}
 
-	// public static void setDebug(boolean debug) {
-	// ConfigHelper.debug = debug;
-	// }
-
-	// protected void clearCache() {
-	// getPropertyCache.clear();
-	// configurationsAtCache.clear();
-	// configurationAtCache.clear();
-	// getListCache.clear();
-	// getMapCache.clear();
-	// }
-
 	public static CombinedConfiguration getConfiguration() {
 		return configuration;
 	}
 
 	public static boolean isEmpty() {
-		// try {
-		// return configurationBuilder.getConfiguration().isEmpty();
 		return configuration.isEmpty();
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return false;
 	}
 
 	public static boolean containsKey(String key) {
-		// try {
-		// return configurationBuilder.getConfiguration().containsKey(key);
 		return configuration.containsKey(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return false;
 	}
 
 	public static void addProperty(String key, Object value) {
-		// try {
-		// configurationBuilder.getConfiguration().addProperty(key, value);
 		configuration.addProperty(key, value);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
 	}
 
 	public static void setProperty(String key, Object value) {
-		// try {
-		// configurationBuilder.getConfiguration().setProperty(key, value);
 		configuration.setProperty(key, value);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
 	}
 
 	public static void clearProperty(String key) {
-		// try {
-		// configurationBuilder.getConfiguration().clearProperty(key);
 		configuration.clearProperty(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
 	}
 
 	public static Object getProperty(String key) {
-		// return getPropertyAndCache(key);
-		// try {
-		// return configurationBuilder.getConfiguration().getProperty(key);
 		return configuration.getProperty(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
-
-	// #fix: 當找不到時, 會太慢, ok
-	// @SuppressWarnings("unchecked")
-	// public static <T> T getPropertyAndCache(String key) {
-	// T result = null;
-	// try {
-	// getPropertyCache.lockInterruptibly();
-	// try {
-	// if (getPropertyCache.isNotNullValue(key)) {
-	// result = (T) getPropertyCache.get(key);
-	// if (result == null) {
-	// try {
-	// result = (T) configuration.getProperty(key);
-	// } catch (Exception ex) {
-	// // ex.printStackTrace();
-	// }
-	// getPropertyCache.put(key, result);
-	// }
-	// }
-	// } catch (Exception ex) {
-	// ex.printStackTrace();
-	// } finally {
-	// getPropertyCache.unlock();
-	// }
-	// } catch (InterruptedException ex) {
-	// ex.printStackTrace();
-	// }
-	// return result;
-	// }
 
 	@SuppressWarnings("rawtypes")
 	public static Iterator getKeys(String prefix) {
@@ -935,306 +825,108 @@ public final class ConfigHelper extends BaseHelperSupporter {
 
 	@SuppressWarnings("rawtypes")
 	public static Iterator getKeys() {
-		// try {
-		// return configurationBuilder.getConfiguration().getKeys();
 		return configuration.getKeys();
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
 
 	public static Properties getProperties(String key) {
-		// try {
-		// return
-		// configurationBuilder.getConfiguration().getProperties(key);
 		return configuration.getProperties(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
 
 	public static boolean getBoolean(String key) {
-		// try {
-		// return factory.getConfiguration().getBoolean(key);
 		return configuration.getBoolean(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return false;
 	}
 
 	public static boolean getBoolean(String key, boolean defaultValue) {
-		// try {
-		// return factory.getConfiguration().getBoolean(key, defaultValue);
 		return configuration.getBoolean(key, defaultValue);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return false;
 	}
 
 	public static byte getByte(String key) {
-		// try {
-		// return configurationBuilder.getConfiguration().getByte(key);
 		return configuration.getByte(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return 0;
 	}
 
 	public static byte getByte(String key, byte defaultValue) {
-		// try {
-		// return configurationBuilder.getConfiguration().getByte(key,
-		// defaultValue);
 		return configuration.getByte(key, defaultValue);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return 0;
 	}
 
 	public static short getShort(String key) {
-		// try {
-		// return configurationBuilder.getConfiguration().getShort(key);
 		return configuration.getShort(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return 0;
 	}
 
 	public static short getShort(String key, short defaultValue) {
-		// try {
-		// return configurationBuilder.getConfiguration().getShort(key,
-		// defaultValue);
 		return configuration.getShort(key, defaultValue);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return 0;
 	}
 
 	public static int getInt(String key) {
-		// try {
-		// return configurationBuilder.getConfiguration().getInt(key);
 		return configuration.getInt(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return 0;
 	}
 
 	public static int getInt(String key, int defaultValue) {
-		// try {
-		// return configurationBuilder.getConfiguration().getInt(key,
-		// defaultValue);
 		return configuration.getInt(key, defaultValue);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return 0;
 	}
 
 	public static long getLong(String key) {
-		// try {
-		// return configurationBuilder.getConfiguration().getLong(key);
 		return configuration.getLong(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return 0L;
 	}
 
 	public static long getLong(String key, long defaultValue) {
-		// try {
-		// return configurationBuilder.getConfiguration().getLong(key,
-		// defaultValue);
 		return configuration.getLong(key, defaultValue);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return 0L;
 	}
 
 	public static float getFloat(String key) {
-		// try {
-		// return configurationBuilder.getConfiguration().getFloat(key);
 		return configuration.getFloat(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return 0f;
 	}
 
 	public static float getFloat(String key, float defaultValue) {
-		// try {
-		// return configurationBuilder.getConfiguration().getFloat(key,
-		// defaultValue);
 		return configuration.getFloat(key, defaultValue);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return 0f;
 	}
 
 	public static double getDouble(String key) {
-		// try {
-		// return configurationBuilder.getConfiguration().getDouble(key);
 		return configuration.getDouble(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return 0d;
 	}
 
 	public static double getDouble(String key, double defaultValue) {
-		// try {
 		return configuration.getDouble(key, defaultValue);
-		// return configurationBuilder.getConfiguration().getDouble(key,
-		// defaultValue);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return 0d;
 	}
 
 	public static BigDecimal getBigDecimal(String key) {
-		// try {
-		// return
-		// configurationBuilder.getConfiguration().getBigDecimal(key);
 		return configuration.getBigDecimal(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
 
 	public static BigDecimal getBigDecimal(String key, BigDecimal defaultValue) {
-		// try {
-		// return configurationBuilder.getConfiguration().getBigDecimal(key,
-		// defaultValue);
 		return configuration.getBigDecimal(key, defaultValue);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
 
 	public static BigInteger getBigInteger(String key) {
-		// try {
-		// return
-		// configurationBuilder.getConfiguration().getBigInteger(key);
 		return configuration.getBigInteger(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
 
 	public static BigInteger getBigInteger(String key, BigInteger defaultValue) {
-		// try {
-		// return configurationBuilder.getConfiguration().getBigInteger(key,
-		// defaultValue);
 		return configuration.getBigInteger(key, defaultValue);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
 
 	public static String getString(String key) {
-		// try {
-		// return factory.getConfiguration().getString(key);
 		return configuration.getString(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
 
 	public static String getString(String key, String defaultValue) {
-		// try {
-		// return factory.getConfiguration().getString(key, defaultValue);
 		return configuration.getString(key, defaultValue);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
 
 	public static String[] getStringArray(String key) {
-		// try {
-		// return
-		// configurationBuilder.getConfiguration().getStringArray(key);
 		return configuration.getStringArray(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	public static List<Object> getList(String key) {
-		// try {
-		// return configurationBuilder.getConfiguration().getList(key);
 		return configuration.getList(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	public static List<Object> getList(String key, List<String> defaultValue) {
-		// try {
-		// return configurationBuilder.getConfiguration().getList(key,
-		// defaultValue);
 		return configuration.getList(key, defaultValue);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
 
-	// // 當不存在時,傳回空集合
-	// @SuppressWarnings("unchecked")
-	// public static List<String> getListAndCache(String key) {
-	// List<String> result = null;
-	// try {
-	// getListCacheLock.lock();
-	// result = getListCache.get(key);
-	// if (result == null) {
-	// try {
-	// result = configuration.getList(key);
-	// } catch (Exception ex) {
-	// // ex.printStackTrace();
-	// }
-	// // 找不到時,會放入一個empty object,之後會用此來判斷
-	// if (result != null) {
-	// getListCache.put(key, result);
-	// } else {
-	// result = new LinkedList<String>();
-	// getListCache.put(key, CollectionHelper.EMPTY_LIST);
-	// }
-	//
-	// }
-	// // by address
-	// else if (result == CollectionHelper.EMPTY_LIST) {
-	// result = new LinkedList<String>();
-	// }
-	// } catch (Exception ex) {
-	// // ex.printStackTrace();
-	// } finally {
-	// getListCacheLock.unlock();
-	// }
-	// return result;
-	// }
-
 	public static Map<String, String> getMap(String key) {
-		// return getMapAndCache(key);
 		Map<String, String> result = null;
 		StringBuilder sb = new StringBuilder();
 		sb.append(key);
@@ -1262,234 +954,57 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		return result;
 	}
 
-	// 當不存在時,傳回空集合
-	// @SuppressWarnings("unchecked")
-	// public static Map<String, String> getMapAndCache(String key) {
-	// Map<String, String> result = null;
-	// try {
-	// getMapCacheLock.lock();
-	// result = getMapCache.get(key);
-	// if (result == null) {
-	// try {
-	// StringBuilder sb = new StringBuilder();
-	// sb.append(key);
-	// sb.append(".entry");
-	// // System.out.println(sb);
-	// List<HierarchicalConfiguration> list = configurationsAt(sb
-	// .toString());
-	// // System.out.println(list.size());
-	// if (!list.isEmpty()) {
-	// result = new LinkedHashMap<String, String>();
-	// for (HierarchicalConfiguration node : list) {
-	// String nodeKey = node.getString("key");
-	// String nodeValue = node.getString("value");
-	// // System.out.println(nodeKey+" "+nodeValue);
-	// result.put(nodeKey, nodeValue);
-	// }
-	// }
-	// } catch (Exception ex) {
-	// // ex.printStackTrace();
-	// }
-	// // 找不到時,會放入一個empty object,之後會用此來判斷
-	// if (result != null) {
-	// getMapCache.put(key, result);
-	// } else {
-	// result = new LinkedHashMap<String, String>();
-	// getMapCache.put(key, CollectionHelper.EMPTY_MAP);
-	// }
-	// }
-	// // by address
-	// else if (result == CollectionHelper.EMPTY_MAP) {
-	// result = new LinkedHashMap<String, String>();
-	// }
-	// } catch (Exception ex) {
-	// // ex.printStackTrace();
-	// } finally {
-	// getMapCacheLock.unlock();
-	// }
-	// return result;
-	// }
-
 	@SuppressWarnings("unchecked")
 	public static List<HierarchicalConfiguration> configurationsAt(String key) {
-
-		// try {
-		// return ((CombinedConfiguration) configurationBuilder
-		// .getConfiguration()).configurationsAt(key);
 		return configuration.configurationsAt(key);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 	}
-
-	// // 當不存在時,傳回空集合
-	// public static List<HierarchicalConfiguration> configurationsAtAndCache(
-	// String key) {
-	// List<HierarchicalConfiguration> result = null;
-	// try {
-	// configurationsAtCacheLock.lock();
-	// result = configurationsAtCache.get(key);
-	// if (result == null) {
-	// // 找不到時,會傳回一個empty list
-	// try {
-	// result = configuration.configurationsAt(key);
-	// } catch (Exception ex) {
-	// // ex.printStackTrace();
-	// }
-	// if (result != null) {
-	// configurationsAtCache.put(key, result);
-	// } else {
-	// result = new LinkedList<HierarchicalConfiguration>();
-	// configurationsAtCache.put(key, CollectionHelper.EMPTY_LIST);
-	// }
-	// } else if (result == CollectionHelper.EMPTY_LIST) {
-	// result = new LinkedList<HierarchicalConfiguration>();
-	// }
-	// } catch (Exception ex) {
-	// // ex.printStackTrace();
-	// } finally {
-	// configurationsAtCacheLock.unlock();
-	// }
-	// return result;
-	// }
 
 	public static SubnodeConfiguration configurationAt(String key) {
 		return configurationAt(key, false);
 	}
 
 	public static SubnodeConfiguration configurationAt(String key, boolean supportUpdates) {
-		// return configuration.configurationAt(key, supportUpdates);
-
-		// try {
-		// return ((CombinedConfiguration) configurationBuilder
-		// .getConfiguration()).configurationAt(key, supportUpdates);
 		return configuration.configurationAt(key, supportUpdates);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// return null;
 
 	}
-
-	// // #fix: 當找不到時, 會太慢, ok
-	// public static SubnodeConfiguration configurationAtAndCache(String key) {
-	// SubnodeConfiguration result = null;
-	// try {
-	// configurationAtCacheLock.lock();
-	// result = configurationAtCache.get(key);
-	// if (result == null) {
-	// try {
-	// // 當找不到時會有ex
-	// result = configuration.configurationAt(key);
-	// } catch (Exception ex) {
-	// // ex.printStackTrace();
-	// }
-	// // 找不到時,會放入一個empty object,之後會用此來判斷null
-	// configurationAtCache.put(key, (result != null ? result
-	// : EMPTY_SUBNODE_CONFIGURATION));
-	// }
-	// // by address
-	// else if (result == EMPTY_SUBNODE_CONFIGURATION) {
-	// result = null;
-	// }
-	// } catch (Exception ex) {
-	// // ex.printStackTrace();
-	// } finally {
-	// configurationAtCacheLock.unlock();
-	// }
-	// return result;
-	// }
-
-	// public static class NullSubnodeConfiguration extends SubnodeConfiguration
-	// {
-	//
-	// private static final long serialVersionUID = -2113995032437300282L;
-	//
-	// public NullSubnodeConfiguration() {
-	// super(new HierarchicalConfiguration(),
-	// new DefaultConfigurationNode());
-	// }
-	// }
 
 	public static boolean isChecksum() {
 		return getBoolean(CHECKSUM, false);
 	}
 
-	// public static void setChecksum(boolean checksum) {
-	// ConfigHelper.checksum = checksum;
-	// }
-
 	public static ChecksumType getChecksumType() {
 		return EnumHelper.valueOf(ChecksumType.class, getString(CHECKSUM_TYPE, null));
 	}
-
-	// public static void setChecksumType(ChecksumType checksumType) {
-	// ConfigHelper.checksumType = checksumType;
-	// }
 
 	public static String getChecksumKey() {
 		return getString(CHECKSUM_KEY, "");
 	}
 
-	// public static void setChecksumKey(String checksumKey) {
-	// ConfigHelper.checksumKey = checksumKey;
-	// }
-
 	public static boolean isSerialize() {
 		return getBoolean(SERIALIZE, false);
 	}
-
-	// public static void setSerialize(boolean serialize) {
-	// ConfigHelper.serialize = serialize;
-	// }
 
 	public static SerializeType getSerializeType() {
 		return EnumHelper.valueOf(SerializeType.class, getString(SERIALIZE_TYPE, null));
 	}
 
-	// public static void setSerializeType(SerializeType serializeType) {
-	// ConfigHelper.serializeType = serializeType;
-	// }
-
 	public static boolean isSecurity() {
 		return getBoolean(SECURITY, false);
 	}
-
-	// public static void setSecurity(boolean security) {
-	// ConfigHelper.security = security;
-	// }
 
 	public static SecurityType getSecurityType() {
 		return EnumHelper.valueOf(SecurityType.class, getString(SECURITY_TYPE, null));
 	}
 
-	// public static void setSecurityType(SecurityType securityType) {
-	// ConfigHelper.securityType = securityType;
-	// }
-
 	public static String getSecurityKey() {
 		return getString(SECURITY_KEY, "");
 	}
-
-	// public static void setSecurityKey(String securityKey) {
-	// ConfigHelper.securityKey = securityKey;
-	// }
 
 	public static boolean isCompress() {
 		return getBoolean(COMPRESS, false);
 	}
 
-	// public static void setCompress(boolean compress) {
-	// ConfigHelper.compress = compress;
-	// }
-
 	public static CompressType getCompressType() {
 		return EnumHelper.valueOf(CompressType.class, getString(COMPRESS_TYPE, null));
 	}
-
-	// public static void setCompressType(CompressType compressType) {
-	// ConfigHelper.compressType = compressType;
-	// }
-
 }

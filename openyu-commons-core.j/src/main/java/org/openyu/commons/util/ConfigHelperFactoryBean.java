@@ -14,28 +14,29 @@ public final class ConfigHelperFactoryBean extends BaseFactoryBeanSupporter<Conf
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(ConfigHelperFactoryBean.class);
 
-	public static final String CONFIGURATION_LOCATION = "configurationLocation";
+	public static final String CONFIGURATION_RESOURCE = "configurationResource";
 
 	/**
 	 * 預設設定檔
 	 * 
 	 * file:src/test/config/etc/configuration.xml
 	 */
-	public static final String DEFAULT_CONFIGURATION_LOCATION = "file:" + ConfigHelper.DEFAULT_CONFIGURATION_FILE;
+	public static final String DEFAULT_CONFIGURATION_RESOURCE = "file:" + ConfigHelper.DEFAULT_CONFIGURATION_FILE;
 
-	public static final String JSON_DIR_LOCATION = "jsonDirLocation";
+	//
+	public static final String JSON_DIR_RESOURCE = "jsonDirResource";
 
 	/**
 	 * 預設json目錄
 	 * 
 	 * src/test/config/json
 	 */
-	public static final String DEFAULT_JSON_DIR_LOCATION = "file:" + ConfigHelper.DEFAULT_JSON_DIR;
+	public static final String DEFAULT_JSON_DIR_RESOURCE = "file:" + ConfigHelper.DEFAULT_JSON_DIR;
 
 	/**
 	 * 所有屬性
 	 */
-	public static final String[] ALL_PROPERTIES = { CONFIGURATION_LOCATION, JSON_DIR_LOCATION };
+	public static final String[] ALL_PROPERTIES = { CONFIGURATION_RESOURCE, JSON_DIR_RESOURCE };
 
 	public ConfigHelperFactoryBean() {
 	}
@@ -50,13 +51,13 @@ public final class ConfigHelperFactoryBean extends BaseFactoryBeanSupporter<Conf
 			/**
 			 * extendedProperties
 			 */
-			UrlResource configurationLocation = new UrlResource(
-					extendedProperties.getString(CONFIGURATION_LOCATION, DEFAULT_CONFIGURATION_LOCATION));
-			ConfigHelper.setConfigurationLocation(configurationLocation);
+			UrlResource configurationResource = new UrlResource(
+					extendedProperties.getString(CONFIGURATION_RESOURCE, DEFAULT_CONFIGURATION_RESOURCE));
+			ConfigHelper.setConfigurationUrl(configurationResource.getURL());
 			//
-			UrlResource jsonDirLocation = new UrlResource(
-					extendedProperties.getString(JSON_DIR_LOCATION, DEFAULT_JSON_DIR_LOCATION));
-			ConfigHelper.setJsonDirLocation(jsonDirLocation);
+			UrlResource jsonDirResource = new UrlResource(
+					extendedProperties.getString(JSON_DIR_RESOURCE, DEFAULT_JSON_DIR_RESOURCE));
+			ConfigHelper.setJsonDirUrl(jsonDirResource.getURL());
 			// TODO
 
 		} catch (Exception e) {
