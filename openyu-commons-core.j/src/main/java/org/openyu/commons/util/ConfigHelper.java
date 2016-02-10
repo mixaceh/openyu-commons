@@ -48,6 +48,8 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	public final static String DEFAULT_CONFIG_DIR = "src" + File.separator + "test" + File.separator + "config";
 
 	/**
+	 * apache configuration file
+	 * 
 	 * 預設設定檔檔名
 	 * 
 	 * configuration.xml
@@ -104,7 +106,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 * 
 	 * src/test/config/key
 	 */
-	private final static String DEFAULT_KEY_DIR = DEFAULT_CONFIG_DIR + File.separator + "key";
+	public final static String DEFAULT_KEY_DIR = DEFAULT_CONFIG_DIR + File.separator + "key";
 
 	/**
 	 * key目錄
@@ -122,7 +124,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 * 
 	 * src/test/config/ser
 	 */
-	private final static String DEFAULT_SER_DIR = DEFAULT_CONFIG_DIR + File.separator + "ser";
+	public final static String DEFAULT_SER_DIR = DEFAULT_CONFIG_DIR + File.separator + "ser";
 
 	/**
 	 * ser目錄
@@ -140,7 +142,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 * 
 	 * src/test/config/xml
 	 */
-	private final static String DEFAULT_XML_DIR = DEFAULT_CONFIG_DIR + File.separator + "xml";
+	public final static String DEFAULT_XML_DIR = DEFAULT_CONFIG_DIR + File.separator + "xml";
 
 	/**
 	 * xml目錄
@@ -158,7 +160,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 * 
 	 * src/test/config/excel
 	 */
-	private final static String DEFAULT_EXCEL_DIR = DEFAULT_CONFIG_DIR + File.separator + "excel";
+	public final static String DEFAULT_EXCEL_DIR = DEFAULT_CONFIG_DIR + File.separator + "excel";
 
 	/**
 	 * excel目錄
@@ -176,21 +178,21 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 * 
 	 * log4j.properties
 	 */
-	private final static String DEFAULT_LOG4J_CONFIG_FILE_NAME = "log4j.properties";
+	public final static String DEFAULT_LOG4J_CONFIG_FILE_NAME = "log4j.properties";
 
 	/**
 	 * 預設Log4j2設定檔檔名, 支援 XML, JSON, YAML, or properties format
 	 * 
 	 * log4j2.xml
 	 */
-	private final static String DEFAULT_LOG4J2_CONFIG_FILE_NAME = "log4j2.xml";
+	public final static String DEFAULT_LOG4J2_CONFIG_FILE_NAME = "log4j2.xml";
 
 	/**
 	 * 預設log4j設定檔
 	 * 
 	 * log4j.properties
 	 */
-	private final static String DEFAULT_LOG4J_CONFIG_FILE = DEFAULT_LOG4J_CONFIG_FILE_NAME;
+	public final static String DEFAULT_LOG4J_CONFIG_FILE = DEFAULT_LOG4J_CONFIG_FILE_NAME;
 
 	/**
 	 * log4j設定檔
@@ -217,7 +219,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 * 
 	 * custom/input
 	 */
-	private final static String DEFAULT_INPUT_DIR = DEFAULT_CUSTOM_DIR + File.separator + "input";
+	public final static String DEFAULT_INPUT_DIR = DEFAULT_CUSTOM_DIR + File.separator + "input";
 
 	/**
 	 * input目錄
@@ -235,7 +237,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	 * 
 	 * custom/output
 	 */
-	private final static String DEFAULT_OUTPUT_DIR = DEFAULT_CUSTOM_DIR + File.separator + "output";
+	public final static String DEFAULT_OUTPUT_DIR = DEFAULT_CUSTOM_DIR + File.separator + "output";
 
 	/**
 	 * output目錄
@@ -251,7 +253,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	/**
 	 * 預設download目錄
 	 */
-	private final static String DEFAULT_DOWNLOAD_DIR = DEFAULT_CUSTOM_DIR + File.separator + "download";
+	public final static String DEFAULT_DOWNLOAD_DIR = DEFAULT_CUSTOM_DIR + File.separator + "download";
 
 	/**
 	 * download目錄
@@ -267,7 +269,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 	/**
 	 * 預設upload目錄
 	 */
-	private final static String DEFAULT_UPLOAD_DIR = DEFAULT_CUSTOM_DIR + File.separator + "upload";
+	public final static String DEFAULT_UPLOAD_DIR = DEFAULT_CUSTOM_DIR + File.separator + "upload";
 
 	/**
 	 * upload目錄
@@ -408,11 +410,11 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		buildDir(keyDirUrl, keyDir);
 	}
 
-	public URL getKeyDirUrl() {
+	public static URL getKeyDirUrl() {
 		return keyDirUrl;
 	}
 
-	public void setKeyDirUrl(URL keyDirUrl) {
+	public static void setKeyDirUrl(URL keyDirUrl) {
 		ConfigHelper.keyDirUrl = keyDirUrl;
 		ConfigHelper.keyDir = keyDirUrl.getFile();
 		//
@@ -431,11 +433,11 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		buildDir(serDirUrl, serDir);
 	}
 
-	public URL getSerDirUrl() {
+	public static URL getSerDirUrl() {
 		return serDirUrl;
 	}
 
-	public void setSerDirUrl(URL serDirUrl) {
+	public static void setSerDirUrl(URL serDirUrl) {
 		ConfigHelper.serDirUrl = serDirUrl;
 		ConfigHelper.serDir = serDirUrl.getFile();
 		//
@@ -477,11 +479,11 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		buildDir(excelDirUrl, excelDir);
 	}
 
-	public URL getExcelDirUrl() {
+	public static URL getExcelDirUrl() {
 		return excelDirUrl;
 	}
 
-	public void setExcelDirUrl(URL excelDirUrl) {
+	public static void setExcelDirUrl(URL excelDirUrl) {
 		ConfigHelper.excelDirUrl = excelDirUrl;
 		ConfigHelper.excelDir = excelDirUrl.getFile();
 		//
@@ -549,11 +551,11 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		buildDir(inputDirUrl, inputDir);
 	}
 
-	public URL getInputDirUrl() {
+	public static URL getInputDirUrl() {
 		return inputDirUrl;
 	}
 
-	public void setInputDirUrl(URL inputDirUrl) {
+	public static void setInputDirUrl(URL inputDirUrl) {
 		ConfigHelper.inputDirUrl = inputDirUrl;
 		ConfigHelper.inputDir = inputDirUrl.getFile();
 		//
@@ -572,11 +574,11 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		buildDir(outputDirUrl, outputDir);
 	}
 
-	public URL getOutputDirUrl() {
+	public static URL getOutputDirUrl() {
 		return outputDirUrl;
 	}
 
-	public void setOutputDirUrl(URL outputDirUrl) {
+	public static void setOutputDirUrl(URL outputDirUrl) {
 		ConfigHelper.outputDirUrl = outputDirUrl;
 		ConfigHelper.outputDir = outputDirUrl.getFile();
 		//
@@ -595,11 +597,11 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		buildDir(downloadDirUrl, downloadDir);
 	}
 
-	public URL getDownloadUrl() {
+	public static URL getDownloadUrl() {
 		return downloadDirUrl;
 	}
 
-	public void setDownloadDirUrl(URL downloadDirUrl) {
+	public static void setDownloadDirUrl(URL downloadDirUrl) {
 		ConfigHelper.downloadDirUrl = downloadDirUrl;
 		ConfigHelper.downloadDir = downloadDirUrl.getFile();
 		//
@@ -618,11 +620,11 @@ public final class ConfigHelper extends BaseHelperSupporter {
 		buildDir(uploadDirUrl, uploadDir);
 	}
 
-	public URL getUploadDirUrl() {
+	public static URL getUploadDirUrl() {
 		return uploadDirUrl;
 	}
 
-	public void setUploadDirUrl(URL uploadDirUrl) {
+	public static void setUploadDirUrl(URL uploadDirUrl) {
 		ConfigHelper.uploadDirUrl = uploadDirUrl;
 		ConfigHelper.uploadDir = uploadDirUrl.getFile();
 		//
@@ -704,9 +706,9 @@ public final class ConfigHelper extends BaseHelperSupporter {
 					configurationBuilder.setFile(file);
 					//
 					if (buildWithStatic) {
-						LOGGER.info("Initialization of file [" + fileName + "]");
+						LOGGER.info("Initialization of file[" + fileName + "]");
 					} else {
-						LOGGER.info("Reinitialization of file [" + fileName + "]");
+						LOGGER.info("Reinitialization of file[" + fileName + "]");
 					}
 				} else {
 					// 當在web下,會出現src\test\config\etc\configuration.xml File does
@@ -728,7 +730,7 @@ public final class ConfigHelper extends BaseHelperSupporter {
 				// src/test/config/etc/configuration.xml
 				if (configurationUrl != null) {
 					configurationBuilder = new DefaultConfigurationBuilder(configurationUrl);
-					LOGGER.info("Reinitialize with Spring [" + configurationUrl.getFile() + "]");
+					LOGGER.info("Reinitialize of file[" + configurationUrl.getFile() + "]");
 				}
 			}
 		} catch (Exception ex) {

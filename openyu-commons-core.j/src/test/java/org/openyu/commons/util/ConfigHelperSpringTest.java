@@ -21,8 +21,6 @@ import org.openyu.commons.lang.ClassHelper;
  */
 public class ConfigHelperSpringTest extends BaseTestSupporter {
 
-	private static ConfigHelper configHelper;
-
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
@@ -30,7 +28,7 @@ public class ConfigHelperSpringTest extends BaseTestSupporter {
 				"applicationContext-bean.xml",//
 		});
 
-		configHelper = (ConfigHelper) applicationContext.getBean("configHelper");
+		applicationContext.getBean("configHelper");//null
 	}
 
 	@Test
@@ -135,6 +133,9 @@ public class ConfigHelperSpringTest extends BaseTestSupporter {
 		System.out.println(ConfigHelper.getSerDir());
 		System.out.println(ConfigHelper.getXmlDir());
 		System.out.println(ConfigHelper.getExcelDir());
+		// /log4j2.xml ->
+		// /D:/dev/openyu7/trunk/openyu-commons.j/openyu-commons-core.j/target/test-classes/log4j2.xml
+		System.out.println(ConfigHelper.getLog4jConfigFile());
 		//
 		System.out.println(ConfigHelper.getInputDir());
 		System.out.println(ConfigHelper.getOutputDir());
