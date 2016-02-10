@@ -30,7 +30,7 @@ import org.openyu.commons.security.SecurityType;
  * 
  * 2.直接使用static方法取值
  * 
- * 3.可利用spring重新給設定檔路徑configurationLocation
+ * 3.可利用spring重新給設定檔路徑configurationResource
  */
 public final class ConfigHelper extends BaseHelperSupporter {
 
