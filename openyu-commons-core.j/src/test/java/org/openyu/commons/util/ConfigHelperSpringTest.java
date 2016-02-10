@@ -126,8 +126,6 @@ public class ConfigHelperSpringTest extends BaseTestSupporter {
 		// }
 		//
 		System.out.println("getXmlDir(): " + ConfigHelper.getXmlDir());
-		//
-		assertNotNull(result);
 	}
 
 	@Test
