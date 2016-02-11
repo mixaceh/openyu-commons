@@ -1,4 +1,4 @@
-package org.openyu.commons.entity.useraype;
+package org.openyu.commons.entity.usertype;
 
 import java.sql.Types;
 import java.util.LinkedHashSet;
@@ -7,17 +7,17 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.openyu.commons.enumz.EnumHelper;
-import org.openyu.commons.hibernate.useraype.supporter.BaseUserTypeSupporter;
+import org.openyu.commons.hibernate.usertype.supporter.BaseUserTypeSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 
 /**
- * Set<String>
+ * Set<Integer>
  */
-public class StringSetUserType extends BaseUserTypeSupporter {
+public class IntegerSetUserType extends BaseUserTypeSupporter {
 
 	private static final long serialVersionUID = -2066924784420555409L;
 
-	public StringSetUserType() {
+	public IntegerSetUserType() {
 		// --------------------------------------------------
 		// 最新版本,目前用1,若將來有新版本
 		// 可用其他版號,如:VolType._2
@@ -48,7 +48,7 @@ public class StringSetUserType extends BaseUserTypeSupporter {
 			return result;
 		}
 		//
-		Set<String> src = (Set<String>) value;
+		Set<Integer> src = (Set<Integer>) value;
 		StringBuilder dest = new StringBuilder();
 		// vol
 		dest.append(assembleVol(getVolType()));
@@ -65,11 +65,11 @@ public class StringSetUserType extends BaseUserTypeSupporter {
 	 * @param src
 	 * @return
 	 */
-	public String assembleBy_1(Set<String> src) {
+	public String assembleBy_1(Set<Integer> src) {
 		StringBuilder result = new StringBuilder();
 		//
 		result.append(src.size());
-		for (String value : src) {
+		for (Integer value : src) {
 			result.append(OBJECT_SPLITTER);
 			// value
 			result.append(toString(value));// e0
@@ -86,7 +86,7 @@ public class StringSetUserType extends BaseUserTypeSupporter {
 	 */
 	@SuppressWarnings("unchecked")
 	public <R, T, O> R unmarshal(T value, O owner, SessionImplementor session) {
-		Set<String> result = new LinkedHashSet<String>();
+		Set<Integer> result = new LinkedHashSet<Integer>();
 		//
 		if (!(value instanceof String)) {
 			return (R) result;
@@ -111,8 +111,8 @@ public class StringSetUserType extends BaseUserTypeSupporter {
 		return (R) result;
 	}
 
-	public Set<String> disassembleBy_1(StringBuilder src) {
-		Set<String> result = new LinkedHashSet<String>();
+	public Set<Integer> disassembleBy_1(StringBuilder src) {
+		Set<Integer> result = new LinkedHashSet<Integer>();
 		if (src == null) {
 			return result;
 		}
@@ -128,7 +128,7 @@ public class StringSetUserType extends BaseUserTypeSupporter {
 		//
 		for (int i = 0; i < size; i++)// 1
 		{
-			String value = toObject(values, idx++, String.class);
+			Integer value = toObject(values, idx++, Integer.class);
 			result.add(value);
 		}
 		return result;

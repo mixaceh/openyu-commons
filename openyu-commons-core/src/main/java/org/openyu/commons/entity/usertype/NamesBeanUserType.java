@@ -1,4 +1,4 @@
-package org.openyu.commons.entity.useraype;
+package org.openyu.commons.entity.usertype;
 
 import java.sql.Types;
 import java.util.LinkedHashSet;
@@ -10,7 +10,7 @@ import org.hibernate.engine.spi.SessionImplementor;
 import org.openyu.commons.bean.LocaleNameBean;
 import org.openyu.commons.bean.supporter.LocaleNameBeanSupporter;
 import org.openyu.commons.enumz.EnumHelper;
-import org.openyu.commons.hibernate.useraype.supporter.BaseUserTypeSupporter;
+import org.openyu.commons.hibernate.usertype.supporter.BaseUserTypeSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 
 public class NamesBeanUserType extends BaseUserTypeSupporter {

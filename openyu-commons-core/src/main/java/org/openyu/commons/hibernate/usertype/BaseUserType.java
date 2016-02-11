@@ -1,4 +1,4 @@
-package org.openyu.commons.hibernate.useraype;
+package org.openyu.commons.hibernate.usertype;
 
 import java.io.Serializable;
 

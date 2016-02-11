@@ -1,28 +1,28 @@
-package org.openyu.commons.entity.useraype;
+package org.openyu.commons.entity.usertype;
 
 import static org.junit.Assert.*;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.junit.Test;
-import org.openyu.commons.entity.useraype.StringListUserType;
+import org.openyu.commons.entity.usertype.IntegerStringUserType;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
-public class StringListUserTypeTest extends BaseTestSupporter {
+public class IntegerStringUserTypeTest extends BaseTestSupporter {
 
-	private static StringListUserType userType = new StringListUserType();
+	private static IntegerStringUserType userType = new IntegerStringUserType();
 
 	@Test
-	// 1000000 times: 1062 mills.
-	// 1000000 times: 1078 mills.
-	// 1000000 times: 1134 mills.
+	// 1000000 times: 1597 mills.
+	// 1000000 times: 1619 mills.
+	// 1000000 times: 1511 mills.
 	// verified
 	public void marshal() {
-		List<String> value = new LinkedList<String>();
-		value.add("aaa");
-		value.add("bbb");
-		value.add("ccc");
+		Map<Integer, String> value = new LinkedHashMap<Integer, String>();
+		value.put(1, "aaa");
+		value.put(2, "bbb");
+		value.put(3, "ccc");
 		//
 		String result = null;
 		//
@@ -38,18 +38,18 @@ public class StringListUserTypeTest extends BaseTestSupporter {
 		// 1
 		System.out.println(result);
 		//
-		assertEquals("♥1♠3♦aaa♦bbb♦ccc", result);
+		assertEquals("♥1♠3♦1♣aaa♦2♣bbb♦3♣ccc", result);
 	}
 
 	@Test
-	// 1000000 times: 4149 mills.
-	// 1000000 times: 4643 mills.
-	// 1000000 times: 4221 mills.
+	// 1000000 times: 10301 mills.
+	// 1000000 times: 9702 mills.
+	// 1000000 times: 9543 mills.
 	// verified
 	public void unmarshal() {
-		String value = "♥1♠3♦aaa♦bbb♦ccc";
+		String value = "♥1♠3♦1♣aaa♦2♣bbb♦3♣ccc";
 		//
-		List<String> result = new LinkedList<String>();
+		Map<Integer, String> result = new LinkedHashMap<Integer, String>();
 		//
 		int count = 1000000;
 

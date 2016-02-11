@@ -1,6 +1,6 @@
 package org.openyu.commons.entity.bridge;
 
-import org.openyu.commons.entity.useraype.AuditEntityUserType;
+import org.openyu.commons.entity.usertype.AuditEntityUserType;
 import org.openyu.commons.hibernate.search.bridge.supporter.BaseStringBridgeSupporter;
 
 //--------------------------------------------------

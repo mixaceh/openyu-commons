@@ -1,23 +1,21 @@
-package org.openyu.commons.entity.useraype;
+package org.openyu.commons.entity.usertype;
 
 import java.sql.Types;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.openyu.commons.entity.AuditEntity;
+import org.openyu.commons.entity.supporter.AuditEntitySupporter;
 import org.openyu.commons.enumz.EnumHelper;
-import org.openyu.commons.hibernate.useraype.supporter.BaseUserTypeSupporter;
+import org.openyu.commons.hibernate.usertype.supporter.BaseUserTypeSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 
-/**
- * Set<Integer>
- */
-public class IntegerSetUserType extends BaseUserTypeSupporter {
+public class AuditEntityUserType extends BaseUserTypeSupporter {
 
 	private static final long serialVersionUID = -2066924784420555409L;
 
-	public IntegerSetUserType() {
+	public AuditEntityUserType() {
 		// --------------------------------------------------
 		// 最新版本,目前用1,若將來有新版本
 		// 可用其他版號,如:VolType._2
@@ -32,7 +30,7 @@ public class IntegerSetUserType extends BaseUserTypeSupporter {
 
 	@Override
 	public Class<?> returnedClass() {
-		return Set.class;
+		return AuditEntitySupporter.class;
 	}
 
 	// --------------------------------------------------
@@ -44,18 +42,19 @@ public class IntegerSetUserType extends BaseUserTypeSupporter {
 	@SuppressWarnings("unchecked")
 	public <R, T> R marshal(T value, SessionImplementor session) {
 		R result = null;
-		if (!(value instanceof Set)) {
+		if (!(value instanceof AuditEntity)) {
 			return result;
 		}
 		//
-		Set<Integer> src = (Set<Integer>) value;
 		StringBuilder dest = new StringBuilder();
+		AuditEntity src = (AuditEntity) value;
 		// vol
 		dest.append(assembleVol(getVolType()));
 		// v1
 		dest.append(assembleBy_1(src));
 		//
 		result = (R) dest.toString();
+		//
 		return result;
 	}
 
@@ -65,28 +64,29 @@ public class IntegerSetUserType extends BaseUserTypeSupporter {
 	 * @param src
 	 * @return
 	 */
-	public String assembleBy_1(Set<Integer> src) {
+	public String assembleBy_1(AuditEntity src) {
 		StringBuilder result = new StringBuilder();
 		//
-		result.append(src.size());
-		for (Integer value : src) {
-			result.append(OBJECT_SPLITTER);
-			// value
-			result.append(toString(value));// e0
-		}
+		result.append(toString(src.getCreateUser()));// 0
+		result.append(SPLITTER);
+		result.append(toString(src.getCreateDate()));// 1
+		result.append(SPLITTER);
+		result.append(toString(src.getModifiedUser()));// 2
+		result.append(SPLITTER);
+		result.append(toString(src.getModifiedDate()));// 3
 		//
 		return result.toString();
 	}
 
 	// --------------------------------------------------
-	// disassemble
-	// --------------------------------------------------
+
 	/**
-	 * 反欄位組成物件
+	 * 由欄位反組成物件
 	 */
 	@SuppressWarnings("unchecked")
 	public <R, T, O> R unmarshal(T value, O owner, SessionImplementor session) {
-		Set<Integer> result = new LinkedHashSet<Integer>();
+		// 預設傳回空物件,非null
+		AuditEntity result = new AuditEntitySupporter();
 		//
 		if (!(value instanceof String)) {
 			return (R) result;
@@ -111,26 +111,26 @@ public class IntegerSetUserType extends BaseUserTypeSupporter {
 		return (R) result;
 	}
 
-	public Set<Integer> disassembleBy_1(StringBuilder src) {
-		Set<Integer> result = new LinkedHashSet<Integer>();
+	public AuditEntity disassembleBy_1(StringBuilder src) {
+		AuditEntity result = new AuditEntitySupporter();
+		//
 		if (src == null) {
 			return result;
 		}
 		//
+		// 不用這個, //改用StringUtils.splitPreserveAllTokens
+		// String[] values = src.toString().split(SPLITTER);
 		String[] values = StringUtils.splitPreserveAllTokens(src.toString(),
-				OBJECT_SPLITTER);
+				SPLITTER);
 		if (ArrayHelper.isEmpty(values)) {
 			return result;
 		}
 		//
 		int idx = 0;
-		int size = toObject(values, idx++, int.class);// 0
-		//
-		for (int i = 0; i < size; i++)// 1
-		{
-			Integer value = toObject(values, idx++, Integer.class);
-			result.add(value);
-		}
+		result.setCreateUser(toObject(values, idx++, String.class));// 0
+		result.setCreateDate(toObject(values, idx++, Date.class));// 1
+		result.setModifiedUser(toObject(values, idx++, String.class));// 2
+		result.setModifiedDate(toObject(values, idx++, Date.class));// 3
 		return result;
 	}
 }

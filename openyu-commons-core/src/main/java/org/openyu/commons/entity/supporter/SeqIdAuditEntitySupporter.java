@@ -45,7 +45,7 @@ public abstract class SeqIdAuditEntitySupporter extends SeqEntitySupporter imple
 		this.id.setId(id);
 	}
 
-	@Type(type = "org.openyu.commons.entity.userType.AuditEntityUserType")
+	@Type(type = "org.openyu.commons.entity.usertype.AuditEntityUserType")
 	@Column(name = "audit", length = 570)
 	@Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
 	@FieldBridge(impl = AuditEntityBridge.class)

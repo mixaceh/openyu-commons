@@ -1,4 +1,4 @@
-package org.openyu.commons.entity.useraype;
+package org.openyu.commons.entity.usertype;
 
 import static org.junit.Assert.*;
 
@@ -9,7 +9,7 @@ import java.util.Set;
 import org.junit.Test;
 import org.openyu.commons.entity.LocaleNameEntity;
 import org.openyu.commons.entity.supporter.LocaleNameEntitySupporter;
-import org.openyu.commons.entity.useraype.NamesEntityUserType;
+import org.openyu.commons.entity.usertype.NamesEntityUserType;
 
 public class NamesEntityUserTypeTest {
 

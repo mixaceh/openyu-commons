@@ -1,23 +1,23 @@
-package org.openyu.commons.entity.useraype;
+package org.openyu.commons.entity.usertype;
 
 import java.sql.Types;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedHashSet;
+import java.util.Locale;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.openyu.commons.entity.LocaleNameEntity;
+import org.openyu.commons.entity.supporter.LocaleNameEntitySupporter;
 import org.openyu.commons.enumz.EnumHelper;
-import org.openyu.commons.hibernate.useraype.supporter.BaseUserTypeSupporter;
+import org.openyu.commons.hibernate.usertype.supporter.BaseUserTypeSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 
-/**
- * Map<Integer,String>
- */
-public class IntegerStringUserType extends BaseUserTypeSupporter {
+public class NamesEntityUserType extends BaseUserTypeSupporter {
 
-	private static final long serialVersionUID = -1446482401777717340L;
+	private static final long serialVersionUID = -2066924784420555409L;
 
-	public IntegerStringUserType() {
+	public NamesEntityUserType() {
 		// --------------------------------------------------
 		// 最新版本,目前用1,若將來有新版本
 		// 可用其他版號,如:VolType._2
@@ -32,7 +32,7 @@ public class IntegerStringUserType extends BaseUserTypeSupporter {
 
 	@Override
 	public Class<?> returnedClass() {
-		return Map.class;
+		return Set.class;
 	}
 
 	// --------------------------------------------------
@@ -44,12 +44,13 @@ public class IntegerStringUserType extends BaseUserTypeSupporter {
 	@SuppressWarnings("unchecked")
 	public <R, T> R marshal(T value, SessionImplementor session) {
 		R result = null;
-		if (!(value instanceof Map)) {
+		if (!(value instanceof Set)) {
 			return result;
 		}
 		//
-		Map<Integer, String> src = (Map<Integer, String>) value;
 		StringBuilder dest = new StringBuilder();
+		@SuppressWarnings("rawtypes")
+		Set<LocaleNameEntity> src = (Set) value;
 		// vol
 		dest.append(assembleVol(getVolType()));
 		// v1
@@ -62,22 +63,20 @@ public class IntegerStringUserType extends BaseUserTypeSupporter {
 	/**
 	 * v1 由物件組成欄位
 	 * 
+	 * 2♦zh_TW♣測試角色♦en_US♣Test Role
+	 * 
 	 * @param src
 	 * @return
 	 */
-	public String assembleBy_1(Map<Integer, String> src) {
+	public String assembleBy_1(Set<LocaleNameEntity> src) {
 		StringBuilder result = new StringBuilder();
-		//
-		result.append(src.size());
-		for (Map.Entry<Integer, String> entry : src.entrySet()) {
+		result.append((src != null ? src.size() : 0));// 0
+		for (LocaleNameEntity entry : src) {
 			result.append(OBJECT_SPLITTER);
-			// key
-			result.append(toString(entry.getKey()));// e0
+			result.append(toString(entry.getLocale()));// e0
 			result.append(ENTRY_SPLITTER);
-			// value
-			result.append(toString(entry.getValue()));// e1
+			result.append(toString(entry.getName()));// e1
 		}
-		//
 		return result.toString();
 	}
 
@@ -85,11 +84,12 @@ public class IntegerStringUserType extends BaseUserTypeSupporter {
 	// disassemble
 	// --------------------------------------------------
 	/**
-	 * 反欄位組成物件
+	 * 由欄位反組成物件
 	 */
 	@SuppressWarnings("unchecked")
 	public <R, T, O> R unmarshal(T value, O owner, SessionImplementor session) {
-		Map<Integer, String> result = new LinkedHashMap<Integer, String>();
+		// 預設傳回空物件,非null
+		Set<LocaleNameEntity> result = new LinkedHashSet<LocaleNameEntity>();
 		//
 		if (!(value instanceof String)) {
 			return (R) result;
@@ -114,8 +114,11 @@ public class IntegerStringUserType extends BaseUserTypeSupporter {
 		return (R) result;
 	}
 
-	public Map<Integer, String> disassembleBy_1(StringBuilder src) {
-		Map<Integer, String> result = new LinkedHashMap<Integer, String>();
+	/**
+	 * v1 由欄位反組成物件
+	 */
+	public Set<LocaleNameEntity> disassembleBy_1(StringBuilder src) {
+		Set<LocaleNameEntity> result = new LinkedHashSet<LocaleNameEntity>();
 		if (src == null) {
 			return result;
 		}
@@ -127,10 +130,9 @@ public class IntegerStringUserType extends BaseUserTypeSupporter {
 		}
 		//
 		int idx = 0;
-		int size = toObject(values, idx++, int.class);// 0
+		int size = toObject(values, idx++, int.class);
 		//
-		for (int i = 0; i < size; i++)// 1
-		{
+		for (int i = 0; i < size; i++) {
 			String eValue = ArrayHelper.get(values, idx++);
 			String[] entryValues = StringUtils.splitPreserveAllTokens(eValue,
 					ENTRY_SPLITTER);
@@ -138,9 +140,11 @@ public class IntegerStringUserType extends BaseUserTypeSupporter {
 				continue;
 			}
 			int edx = 0;
-			Integer key = toObject(entryValues, edx++, Integer.class);
-			String value = toObject(entryValues, edx++, String.class);
-			result.put(key, value);
+			LocaleNameEntity entry = new LocaleNameEntitySupporter();
+			//
+			entry.setLocale(toObject(entryValues, edx++, Locale.class));// e0
+			entry.setName(toObject(entryValues, edx++, String.class));// e1
+			result.add(entry);
 		}
 		return result;
 	}

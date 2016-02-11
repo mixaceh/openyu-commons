@@ -1,21 +1,23 @@
-package org.openyu.commons.entity.useraype;
+package org.openyu.commons.entity.usertype;
 
 import java.sql.Types;
-import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.engine.spi.SessionImplementor;
-import org.openyu.commons.entity.AuditEntity;
-import org.openyu.commons.entity.supporter.AuditEntitySupporter;
 import org.openyu.commons.enumz.EnumHelper;
-import org.openyu.commons.hibernate.useraype.supporter.BaseUserTypeSupporter;
+import org.openyu.commons.hibernate.usertype.supporter.BaseUserTypeSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 
-public class AuditEntityUserType extends BaseUserTypeSupporter {
+/**
+ * Map<String,Integer>
+ */
+public class StringIntegerUserType extends BaseUserTypeSupporter {
 
-	private static final long serialVersionUID = -2066924784420555409L;
+	private static final long serialVersionUID = -5602424317661880211L;
 
-	public AuditEntityUserType() {
+	public StringIntegerUserType() {
 		// --------------------------------------------------
 		// 最新版本,目前用1,若將來有新版本
 		// 可用其他版號,如:VolType._2
@@ -30,7 +32,7 @@ public class AuditEntityUserType extends BaseUserTypeSupporter {
 
 	@Override
 	public Class<?> returnedClass() {
-		return AuditEntitySupporter.class;
+		return Map.class;
 	}
 
 	// --------------------------------------------------
@@ -42,19 +44,18 @@ public class AuditEntityUserType extends BaseUserTypeSupporter {
 	@SuppressWarnings("unchecked")
 	public <R, T> R marshal(T value, SessionImplementor session) {
 		R result = null;
-		if (!(value instanceof AuditEntity)) {
+		if (!(value instanceof Map)) {
 			return result;
 		}
 		//
+		Map<String, Integer> src = (Map<String, Integer>) value;
 		StringBuilder dest = new StringBuilder();
-		AuditEntity src = (AuditEntity) value;
 		// vol
 		dest.append(assembleVol(getVolType()));
 		// v1
 		dest.append(assembleBy_1(src));
 		//
 		result = (R) dest.toString();
-		//
 		return result;
 	}
 
@@ -64,29 +65,31 @@ public class AuditEntityUserType extends BaseUserTypeSupporter {
 	 * @param src
 	 * @return
 	 */
-	public String assembleBy_1(AuditEntity src) {
+	public String assembleBy_1(Map<String, Integer> src) {
 		StringBuilder result = new StringBuilder();
 		//
-		result.append(toString(src.getCreateUser()));// 0
-		result.append(SPLITTER);
-		result.append(toString(src.getCreateDate()));// 1
-		result.append(SPLITTER);
-		result.append(toString(src.getModifiedUser()));// 2
-		result.append(SPLITTER);
-		result.append(toString(src.getModifiedDate()));// 3
+		result.append(src.size());
+		for (Map.Entry<String, Integer> entry : src.entrySet()) {
+			result.append(OBJECT_SPLITTER);
+			// key
+			result.append(toString(entry.getKey()));// e0
+			result.append(ENTRY_SPLITTER);
+			// value
+			result.append(toString(entry.getValue()));// e1
+		}
 		//
 		return result.toString();
 	}
 
 	// --------------------------------------------------
-
+	// disassemble
+	// --------------------------------------------------
 	/**
-	 * 由欄位反組成物件
+	 * 反欄位組成物件
 	 */
 	@SuppressWarnings("unchecked")
 	public <R, T, O> R unmarshal(T value, O owner, SessionImplementor session) {
-		// 預設傳回空物件,非null
-		AuditEntity result = new AuditEntitySupporter();
+		Map<String, Integer> result = new LinkedHashMap<String, Integer>();
 		//
 		if (!(value instanceof String)) {
 			return (R) result;
@@ -111,26 +114,34 @@ public class AuditEntityUserType extends BaseUserTypeSupporter {
 		return (R) result;
 	}
 
-	public AuditEntity disassembleBy_1(StringBuilder src) {
-		AuditEntity result = new AuditEntitySupporter();
-		//
+	public Map<String, Integer> disassembleBy_1(StringBuilder src) {
+		Map<String, Integer> result = new LinkedHashMap<String, Integer>();
 		if (src == null) {
 			return result;
 		}
 		//
-		// 不用這個, //改用StringUtils.splitPreserveAllTokens
-		// String[] values = src.toString().split(SPLITTER);
 		String[] values = StringUtils.splitPreserveAllTokens(src.toString(),
-				SPLITTER);
+				OBJECT_SPLITTER);
 		if (ArrayHelper.isEmpty(values)) {
 			return result;
 		}
 		//
 		int idx = 0;
-		result.setCreateUser(toObject(values, idx++, String.class));// 0
-		result.setCreateDate(toObject(values, idx++, Date.class));// 1
-		result.setModifiedUser(toObject(values, idx++, String.class));// 2
-		result.setModifiedDate(toObject(values, idx++, Date.class));// 3
+		int size = toObject(values, idx++, int.class);// 0
+		//
+		for (int i = 0; i < size; i++)// 1
+		{
+			String eValue = ArrayHelper.get(values, idx++);
+			String[] entryValues = StringUtils.splitPreserveAllTokens(eValue,
+					ENTRY_SPLITTER);
+			if (ArrayHelper.isEmpty(entryValues)) {
+				continue;
+			}
+			int edx = 0;
+			String key = toObject(entryValues, edx++, String.class);
+			Integer value = toObject(entryValues, edx++, Integer.class);
+			result.put(key, value);
+		}
 		return result;
 	}
 }

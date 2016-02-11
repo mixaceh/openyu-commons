@@ -1,4 +1,4 @@
-package org.openyu.commons.entity.useraype;
+package org.openyu.commons.entity.usertype;
 
 import static org.junit.Assert.*;
 
@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
-import org.openyu.commons.entity.useraype.IntegerListUserType;
+import org.openyu.commons.entity.usertype.IntegerListUserType;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
 public class IntegerListUserTypeTest extends BaseTestSupporter {

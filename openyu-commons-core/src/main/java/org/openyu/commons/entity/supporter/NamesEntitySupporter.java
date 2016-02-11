@@ -36,7 +36,7 @@ public class NamesEntitySupporter extends BaseEntitySupporter implements NamesEn
 	public NamesEntitySupporter() {
 	}
 
-	@Type(type = "org.openyu.commons.entity.userType.NamesEntityUserType")
+	@Type(type = "org.openyu.commons.entity.usertype.NamesEntityUserType")
 	@Column(name = "names", length = 2048)
 	@Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
 	@FieldBridge(impl = NamesEntityBridge.class)

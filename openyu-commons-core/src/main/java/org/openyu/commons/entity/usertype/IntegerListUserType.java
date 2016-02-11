@@ -1,4 +1,4 @@
-package org.openyu.commons.entity.useraype;
+package org.openyu.commons.entity.usertype;
 
 import java.sql.Types;
 import java.util.LinkedList;
@@ -7,17 +7,17 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.openyu.commons.enumz.EnumHelper;
-import org.openyu.commons.hibernate.useraype.supporter.BaseUserTypeSupporter;
+import org.openyu.commons.hibernate.usertype.supporter.BaseUserTypeSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 
 /**
- * List<String>
+ * List<Integer>
  */
-public class StringListUserType extends BaseUserTypeSupporter {
+public class IntegerListUserType extends BaseUserTypeSupporter {
 
 	private static final long serialVersionUID = -2066924784420555409L;
 
-	public StringListUserType() {
+	public IntegerListUserType() {
 		// --------------------------------------------------
 		// 最新版本,目前用1,若將來有新版本
 		// 可用其他版號,如:VolType._2
@@ -48,7 +48,7 @@ public class StringListUserType extends BaseUserTypeSupporter {
 			return result;
 		}
 		//
-		List<String> src = (List<String>) value;
+		List<Integer> src = (List<Integer>) value;
 		StringBuilder dest = new StringBuilder();
 		// vol
 		dest.append(assembleVol(getVolType()));
@@ -65,11 +65,11 @@ public class StringListUserType extends BaseUserTypeSupporter {
 	 * @param src
 	 * @return
 	 */
-	public String assembleBy_1(List<String> src) {
+	public String assembleBy_1(List<Integer> src) {
 		StringBuilder result = new StringBuilder();
 		//
 		result.append(src.size());
-		for (String value : src) {
+		for (Integer value : src) {
 			result.append(OBJECT_SPLITTER);
 			// value
 			result.append(toString(value));// e0
@@ -86,7 +86,7 @@ public class StringListUserType extends BaseUserTypeSupporter {
 	 */
 	@SuppressWarnings("unchecked")
 	public <R, T, O> R unmarshal(T value, O owner, SessionImplementor session) {
-		List<String> result = new LinkedList<String>();
+		List<Integer> result = new LinkedList<Integer>();
 		//
 		if (!(value instanceof String)) {
 			return (R) result;
@@ -111,8 +111,8 @@ public class StringListUserType extends BaseUserTypeSupporter {
 		return (R) result;
 	}
 
-	public List<String> disassembleBy_1(StringBuilder src) {
-		List<String> result = new LinkedList<String>();
+	public List<Integer> disassembleBy_1(StringBuilder src) {
+		List<Integer> result = new LinkedList<Integer>();
 		if (src == null) {
 			return result;
 		}
@@ -128,7 +128,7 @@ public class StringListUserType extends BaseUserTypeSupporter {
 		//
 		for (int i = 0; i < size; i++)// 1
 		{
-			String value = toObject(values, idx++, String.class);
+			Integer value = toObject(values, idx++, Integer.class);
 			result.add(value);
 		}
 		return result;

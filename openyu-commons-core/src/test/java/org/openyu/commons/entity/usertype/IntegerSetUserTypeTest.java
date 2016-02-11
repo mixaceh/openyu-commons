@@ -1,27 +1,28 @@
-package org.openyu.commons.entity.useraype;
+package org.openyu.commons.entity.usertype;
 
 import static org.junit.Assert.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.junit.Test;
-import org.openyu.commons.entity.useraype.IntegerIntegerUserType;
+import org.openyu.commons.entity.usertype.IntegerSetUserType;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
-public class IntegerIntegerUserTypeTest extends BaseTestSupporter {
+public class IntegerSetUserTypeTest extends BaseTestSupporter {
 
-	private static IntegerIntegerUserType userType = new IntegerIntegerUserType();
+	private static IntegerSetUserType userType = new IntegerSetUserType();
 
 	@Test
-	// 1000000 times: 1597 mills.
-	// 1000000 times: 1619 mills.
-	// 1000000 times: 1511 mills.
+	// 1000000 times: 1062 mills.
+	// 1000000 times: 1078 mills.
+	// 1000000 times: 1134 mills.
 	// verified
 	public void marshal() {
-		Map<Integer, Integer> value = new LinkedHashMap<Integer, Integer>();
-		value.put(1, 111);
-		value.put(2, 222);
-		value.put(3, 333);
+		Set<Integer> value = new LinkedHashSet<Integer>();
+		value.add(111);
+		value.add(222);
+		value.add(333);
 		//
 		String result = null;
 		//
@@ -37,18 +38,18 @@ public class IntegerIntegerUserTypeTest extends BaseTestSupporter {
 		// 1
 		System.out.println(result);
 		//
-		assertEquals("♥1♠3♦1♣111♦2♣222♦3♣333", result);
+		assertEquals("♥1♠3♦111♦222♦333", result);
 	}
 
 	@Test
-	// 1000000 times: 10301 mills.
-	// 1000000 times: 9702 mills.
-	// 1000000 times: 9543 mills.
+	// 1000000 times: 4149 mills.
+	// 1000000 times: 4643 mills.
+	// 1000000 times: 4221 mills.
 	// verified
 	public void unmarshal() {
-		String value = "♥1♠3♦1♣111♦2♣222♦3♣333";
+		String value = "♥1♠3♦111♦222♦333";
 		//
-		Map<Integer, Integer> result = new LinkedHashMap<Integer, Integer>();
+		Set<Integer> result = new LinkedHashSet<Integer>();
 		//
 		int count = 1000000;
 
