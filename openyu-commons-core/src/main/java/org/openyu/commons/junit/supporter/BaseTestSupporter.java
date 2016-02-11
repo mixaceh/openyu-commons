@@ -488,7 +488,11 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 				// when abstract bean will throw exception
 				// so set bean="abstract bean"
 				bean = applicationContext.getBean(beanNames[i]);
-				className = bean.getClass().getSimpleName();
+				if (bean == null) {
+					className = "NULL CLASS";
+				} else {
+					className = bean.getClass().getSimpleName();
+				}
 			} catch (Exception ex) {
 				className = "ABSTRACT CLASS";
 			}
