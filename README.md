@@ -1,1 +1,1 @@
-# OpenYu Commons Java
+# OpenYu Commons
