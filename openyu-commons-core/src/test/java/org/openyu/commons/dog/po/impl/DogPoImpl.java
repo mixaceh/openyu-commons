@@ -117,7 +117,7 @@ public class DogPoImpl extends BaseEntitySupporter implements SeqEntity, NamesEn
 		this.valid = valid;
 	}
 
-	@Type(type = "org.openyu.commons.entity.userType.NamesEntityUserType")
+	@Type(type = "org.openyu.commons.entity.usertype.NamesEntityUserType")
 	@Column(name = "names", length = 2048)
 	@Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
 	@FieldBridge(impl = NamesEntityBridge.class)
@@ -190,7 +190,7 @@ public class DogPoImpl extends BaseEntitySupporter implements SeqEntity, NamesEn
 		return result;
 	}
 
-	@Type(type = "org.openyu.commons.entity.userType.AuditEntityUserType")
+	@Type(type = "org.openyu.commons.entity.usertype.AuditEntityUserType")
 	@Column(name = "audit", length = 570)
 	@Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
 	@FieldBridge(impl = AuditEntityBridge.class)

@@ -1,6 +1,6 @@
 package org.openyu.commons.entity.bridge;
 
-import org.openyu.commons.entity.userType.IntegerSetUserType;
+import org.openyu.commons.entity.useraype.IntegerSetUserType;
 import org.openyu.commons.hibernate.search.bridge.supporter.BaseStringBridgeSupporter;
 
 //--------------------------------------------------

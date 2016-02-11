@@ -1,4 +1,4 @@
-package org.openyu.commons.entity.userType;
+package org.openyu.commons.entity.useraype;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,7 @@ import java.util.Date;
 import org.junit.Test;
 import org.openyu.commons.entity.AuditEntity;
 import org.openyu.commons.entity.supporter.AuditEntitySupporter;
+import org.openyu.commons.entity.useraype.AuditEntityUserType;
 
 public class AuditEntityUserTypeTest {
 

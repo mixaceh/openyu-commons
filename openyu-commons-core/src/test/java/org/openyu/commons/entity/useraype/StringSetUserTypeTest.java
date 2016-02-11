@@ -1,17 +1,16 @@
-package org.openyu.commons.entity.userType;
+package org.openyu.commons.entity.useraype;
 
 import static org.junit.Assert.*;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import java.util.LinkedHashSet;
+import java.util.Set;
 import org.junit.Test;
-
+import org.openyu.commons.entity.useraype.StringSetUserType;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
-public class IntegerListUserTypeTest extends BaseTestSupporter {
+public class StringSetUserTypeTest extends BaseTestSupporter {
 
-	private static IntegerListUserType userType = new IntegerListUserType();
+	private static StringSetUserType userType = new StringSetUserType();
 
 	@Test
 	// 1000000 times: 1062 mills.
@@ -19,10 +18,10 @@ public class IntegerListUserTypeTest extends BaseTestSupporter {
 	// 1000000 times: 1134 mills.
 	// verified
 	public void marshal() {
-		List<Integer> value = new LinkedList<Integer>();
-		value.add(111);
-		value.add(222);
-		value.add(333);
+		Set<String> value = new LinkedHashSet<String>();
+		value.add("aaa");
+		value.add("bbb");
+		value.add("ccc");
 		//
 		String result = null;
 		//
@@ -38,7 +37,7 @@ public class IntegerListUserTypeTest extends BaseTestSupporter {
 		// 1
 		System.out.println(result);
 		//
-		assertEquals("♥1♠3♦111♦222♦333", result);
+		assertEquals("♥1♠3♦aaa♦bbb♦ccc", result);
 	}
 
 	@Test
@@ -47,9 +46,9 @@ public class IntegerListUserTypeTest extends BaseTestSupporter {
 	// 1000000 times: 4221 mills.
 	// verified
 	public void unmarshal() {
-		String value = "♥1♠3♦111♦222♦333";
+		String value = "♥1♠3♦aaa♦bbb♦ccc";
 		//
-		List<Integer> result = new LinkedList<Integer>();
+		Set<String> result = new LinkedHashSet<String>();
 		//
 		int count = 1000000;
 

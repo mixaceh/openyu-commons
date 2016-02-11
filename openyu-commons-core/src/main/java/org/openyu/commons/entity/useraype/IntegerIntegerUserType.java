@@ -1,4 +1,4 @@
-package org.openyu.commons.entity.userType;
+package org.openyu.commons.entity.useraype;
 
 import java.sql.Types;
 import java.util.LinkedHashMap;
@@ -7,17 +7,17 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.openyu.commons.enumz.EnumHelper;
-import org.openyu.commons.hibernate.userType.supporter.BaseUserTypeSupporter;
+import org.openyu.commons.hibernate.useraype.supporter.BaseUserTypeSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 
 /**
- * Map<Integer,String>
+ * Map<Integer,Integer>
  */
-public class IntegerStringUserType extends BaseUserTypeSupporter {
+public class IntegerIntegerUserType extends BaseUserTypeSupporter {
 
-	private static final long serialVersionUID = -1446482401777717340L;
+	private static final long serialVersionUID = 5752667824511695576L;
 
-	public IntegerStringUserType() {
+	public IntegerIntegerUserType() {
 		// --------------------------------------------------
 		// 最新版本,目前用1,若將來有新版本
 		// 可用其他版號,如:VolType._2
@@ -48,7 +48,7 @@ public class IntegerStringUserType extends BaseUserTypeSupporter {
 			return result;
 		}
 		//
-		Map<Integer, String> src = (Map<Integer, String>) value;
+		Map<Integer, Integer> src = (Map<Integer, Integer>) value;
 		StringBuilder dest = new StringBuilder();
 		// vol
 		dest.append(assembleVol(getVolType()));
@@ -65,11 +65,11 @@ public class IntegerStringUserType extends BaseUserTypeSupporter {
 	 * @param src
 	 * @return
 	 */
-	public String assembleBy_1(Map<Integer, String> src) {
+	public String assembleBy_1(Map<Integer, Integer> src) {
 		StringBuilder result = new StringBuilder();
 		//
 		result.append(src.size());
-		for (Map.Entry<Integer, String> entry : src.entrySet()) {
+		for (Map.Entry<Integer, Integer> entry : src.entrySet()) {
 			result.append(OBJECT_SPLITTER);
 			// key
 			result.append(toString(entry.getKey()));// e0
@@ -89,7 +89,7 @@ public class IntegerStringUserType extends BaseUserTypeSupporter {
 	 */
 	@SuppressWarnings("unchecked")
 	public <R, T, O> R unmarshal(T value, O owner, SessionImplementor session) {
-		Map<Integer, String> result = new LinkedHashMap<Integer, String>();
+		Map<Integer, Integer> result = new LinkedHashMap<Integer, Integer>();
 		//
 		if (!(value instanceof String)) {
 			return (R) result;
@@ -114,8 +114,8 @@ public class IntegerStringUserType extends BaseUserTypeSupporter {
 		return (R) result;
 	}
 
-	public Map<Integer, String> disassembleBy_1(StringBuilder src) {
-		Map<Integer, String> result = new LinkedHashMap<Integer, String>();
+	public Map<Integer, Integer> disassembleBy_1(StringBuilder src) {
+		Map<Integer, Integer> result = new LinkedHashMap<Integer, Integer>();
 		if (src == null) {
 			return result;
 		}
@@ -139,7 +139,7 @@ public class IntegerStringUserType extends BaseUserTypeSupporter {
 			}
 			int edx = 0;
 			Integer key = toObject(entryValues, edx++, Integer.class);
-			String value = toObject(entryValues, edx++, String.class);
+			Integer value = toObject(entryValues, edx++, Integer.class);
 			result.put(key, value);
 		}
 		return result;

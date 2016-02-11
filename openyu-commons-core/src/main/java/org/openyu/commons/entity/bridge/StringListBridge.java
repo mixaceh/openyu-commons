@@ -1,6 +1,6 @@
 package org.openyu.commons.entity.bridge;
 
-import org.openyu.commons.entity.userType.StringListUserType;
+import org.openyu.commons.entity.useraype.StringListUserType;
 import org.openyu.commons.hibernate.search.bridge.supporter.BaseStringBridgeSupporter;
 
 //--------------------------------------------------

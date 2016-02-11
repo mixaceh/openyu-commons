@@ -1,4 +1,4 @@
-package org.openyu.commons.entity.userType;
+package org.openyu.commons.entity.useraype;
 
 import java.sql.Types;
 import java.util.LinkedHashSet;
@@ -7,17 +7,17 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.engine.spi.SessionImplementor;
-import org.openyu.commons.entity.LocaleNameEntity;
-import org.openyu.commons.entity.supporter.LocaleNameEntitySupporter;
+import org.openyu.commons.bean.LocaleNameBean;
+import org.openyu.commons.bean.supporter.LocaleNameBeanSupporter;
 import org.openyu.commons.enumz.EnumHelper;
-import org.openyu.commons.hibernate.userType.supporter.BaseUserTypeSupporter;
+import org.openyu.commons.hibernate.useraype.supporter.BaseUserTypeSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 
-public class NamesEntityUserType extends BaseUserTypeSupporter {
+public class NamesBeanUserType extends BaseUserTypeSupporter {
 
 	private static final long serialVersionUID = -2066924784420555409L;
 
-	public NamesEntityUserType() {
+	public NamesBeanUserType() {
 		// --------------------------------------------------
 		// 最新版本,目前用1,若將來有新版本
 		// 可用其他版號,如:VolType._2
@@ -50,7 +50,7 @@ public class NamesEntityUserType extends BaseUserTypeSupporter {
 		//
 		StringBuilder dest = new StringBuilder();
 		@SuppressWarnings("rawtypes")
-		Set<LocaleNameEntity> src = (Set) value;
+		Set<LocaleNameBean> src = (Set) value;
 		// vol
 		dest.append(assembleVol(getVolType()));
 		// v1
@@ -68,10 +68,10 @@ public class NamesEntityUserType extends BaseUserTypeSupporter {
 	 * @param src
 	 * @return
 	 */
-	public String assembleBy_1(Set<LocaleNameEntity> src) {
+	public String assembleBy_1(Set<LocaleNameBean> src) {
 		StringBuilder result = new StringBuilder();
 		result.append((src != null ? src.size() : 0));// 0
-		for (LocaleNameEntity entry : src) {
+		for (LocaleNameBean entry : src) {
 			result.append(OBJECT_SPLITTER);
 			result.append(toString(entry.getLocale()));// e0
 			result.append(ENTRY_SPLITTER);
@@ -89,7 +89,7 @@ public class NamesEntityUserType extends BaseUserTypeSupporter {
 	@SuppressWarnings("unchecked")
 	public <R, T, O> R unmarshal(T value, O owner, SessionImplementor session) {
 		// 預設傳回空物件,非null
-		Set<LocaleNameEntity> result = new LinkedHashSet<LocaleNameEntity>();
+		Set<LocaleNameBean> result = new LinkedHashSet<LocaleNameBean>();
 		//
 		if (!(value instanceof String)) {
 			return (R) result;
@@ -116,9 +116,11 @@ public class NamesEntityUserType extends BaseUserTypeSupporter {
 
 	/**
 	 * v1 由欄位反組成物件
+	 * 
+	 * 2♦zh_TW♣測試角色♦en_US♣Test Role
 	 */
-	public Set<LocaleNameEntity> disassembleBy_1(StringBuilder src) {
-		Set<LocaleNameEntity> result = new LinkedHashSet<LocaleNameEntity>();
+	public Set<LocaleNameBean> disassembleBy_1(StringBuilder src) {
+		Set<LocaleNameBean> result = new LinkedHashSet<LocaleNameBean>();
 		if (src == null) {
 			return result;
 		}
@@ -133,17 +135,19 @@ public class NamesEntityUserType extends BaseUserTypeSupporter {
 		int size = toObject(values, idx++, int.class);
 		//
 		for (int i = 0; i < size; i++) {
+			// zh_TW♣測試角色
 			String eValue = ArrayHelper.get(values, idx++);
 			String[] entryValues = StringUtils.splitPreserveAllTokens(eValue,
 					ENTRY_SPLITTER);
 			if (ArrayHelper.isEmpty(entryValues)) {
 				continue;
 			}
-			int edx = 0;
-			LocaleNameEntity entry = new LocaleNameEntitySupporter();
 			//
+			int edx = 0;
+			LocaleNameBean entry = new LocaleNameBeanSupporter();
 			entry.setLocale(toObject(entryValues, edx++, Locale.class));// e0
 			entry.setName(toObject(entryValues, edx++, String.class));// e1
+			//
 			result.add(entry);
 		}
 		return result;

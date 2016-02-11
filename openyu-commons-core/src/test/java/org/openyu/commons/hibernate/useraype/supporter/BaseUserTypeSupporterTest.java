@@ -1,4 +1,4 @@
-package org.openyu.commons.hibernate.userType.supporter;
+package org.openyu.commons.hibernate.useraype.supporter;
 
 import static org.junit.Assert.*;
 
@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.junit.Test;
-import org.openyu.commons.hibernate.userType.supporter.BaseUserTypeSupporter;
+import org.openyu.commons.hibernate.useraype.supporter.BaseUserTypeSupporter;
 
 public class BaseUserTypeSupporterTest {
 

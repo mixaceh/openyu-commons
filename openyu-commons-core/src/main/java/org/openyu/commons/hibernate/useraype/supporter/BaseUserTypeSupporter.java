@@ -1,4 +1,4 @@
-package org.openyu.commons.hibernate.userType.supporter;
+package org.openyu.commons.hibernate.useraype.supporter;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
@@ -22,7 +22,7 @@ import org.openyu.commons.enumz.IntEnum;
 import org.openyu.commons.enumz.LongEnum;
 import org.openyu.commons.enumz.ShortEnum;
 import org.openyu.commons.enumz.StringEnum;
-import org.openyu.commons.hibernate.userType.BaseUserType;
+import org.openyu.commons.hibernate.useraype.BaseUserType;
 import org.openyu.commons.lang.ArrayHelper;
 import org.openyu.commons.lang.BooleanHelper;
 import org.openyu.commons.lang.CharHelper;

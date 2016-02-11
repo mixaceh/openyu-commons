@@ -1,17 +1,17 @@
-package org.openyu.commons.entity.userType;
+package org.openyu.commons.entity.useraype;
 
 import static org.junit.Assert.*;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Test;
-
+import org.openyu.commons.entity.useraype.IntegerListUserType;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
-public class IntegerSetUserTypeTest extends BaseTestSupporter {
+public class IntegerListUserTypeTest extends BaseTestSupporter {
 
-	private static IntegerSetUserType userType = new IntegerSetUserType();
+	private static IntegerListUserType userType = new IntegerListUserType();
 
 	@Test
 	// 1000000 times: 1062 mills.
@@ -19,7 +19,7 @@ public class IntegerSetUserTypeTest extends BaseTestSupporter {
 	// 1000000 times: 1134 mills.
 	// verified
 	public void marshal() {
-		Set<Integer> value = new LinkedHashSet<Integer>();
+		List<Integer> value = new LinkedList<Integer>();
 		value.add(111);
 		value.add(222);
 		value.add(333);
@@ -49,7 +49,7 @@ public class IntegerSetUserTypeTest extends BaseTestSupporter {
 	public void unmarshal() {
 		String value = "♥1♠3♦111♦222♦333";
 		//
-		Set<Integer> result = new LinkedHashSet<Integer>();
+		List<Integer> result = new LinkedList<Integer>();
 		//
 		int count = 1000000;
 

@@ -1,4 +1,4 @@
-package org.openyu.commons.entity.userType;
+package org.openyu.commons.entity.useraype;
 
 import static org.junit.Assert.*;
 
@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Test;
-
+import org.openyu.commons.entity.useraype.IntegerStringUserType;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
 public class IntegerStringUserTypeTest extends BaseTestSupporter {

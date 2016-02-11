@@ -1,23 +1,23 @@
-package org.openyu.commons.entity.userType;
+package org.openyu.commons.entity.useraype;
 
 import java.sql.Types;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.openyu.commons.enumz.EnumHelper;
-import org.openyu.commons.hibernate.userType.supporter.BaseUserTypeSupporter;
+import org.openyu.commons.hibernate.useraype.supporter.BaseUserTypeSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 
 /**
- * Map<String,Integer>
+ * List<Integer>
  */
-public class StringIntegerUserType extends BaseUserTypeSupporter {
+public class IntegerListUserType extends BaseUserTypeSupporter {
 
-	private static final long serialVersionUID = -5602424317661880211L;
+	private static final long serialVersionUID = -2066924784420555409L;
 
-	public StringIntegerUserType() {
+	public IntegerListUserType() {
 		// --------------------------------------------------
 		// 最新版本,目前用1,若將來有新版本
 		// 可用其他版號,如:VolType._2
@@ -32,7 +32,7 @@ public class StringIntegerUserType extends BaseUserTypeSupporter {
 
 	@Override
 	public Class<?> returnedClass() {
-		return Map.class;
+		return List.class;
 	}
 
 	// --------------------------------------------------
@@ -44,11 +44,11 @@ public class StringIntegerUserType extends BaseUserTypeSupporter {
 	@SuppressWarnings("unchecked")
 	public <R, T> R marshal(T value, SessionImplementor session) {
 		R result = null;
-		if (!(value instanceof Map)) {
+		if (!(value instanceof List)) {
 			return result;
 		}
 		//
-		Map<String, Integer> src = (Map<String, Integer>) value;
+		List<Integer> src = (List<Integer>) value;
 		StringBuilder dest = new StringBuilder();
 		// vol
 		dest.append(assembleVol(getVolType()));
@@ -65,17 +65,14 @@ public class StringIntegerUserType extends BaseUserTypeSupporter {
 	 * @param src
 	 * @return
 	 */
-	public String assembleBy_1(Map<String, Integer> src) {
+	public String assembleBy_1(List<Integer> src) {
 		StringBuilder result = new StringBuilder();
 		//
 		result.append(src.size());
-		for (Map.Entry<String, Integer> entry : src.entrySet()) {
+		for (Integer value : src) {
 			result.append(OBJECT_SPLITTER);
-			// key
-			result.append(toString(entry.getKey()));// e0
-			result.append(ENTRY_SPLITTER);
 			// value
-			result.append(toString(entry.getValue()));// e1
+			result.append(toString(value));// e0
 		}
 		//
 		return result.toString();
@@ -89,7 +86,7 @@ public class StringIntegerUserType extends BaseUserTypeSupporter {
 	 */
 	@SuppressWarnings("unchecked")
 	public <R, T, O> R unmarshal(T value, O owner, SessionImplementor session) {
-		Map<String, Integer> result = new LinkedHashMap<String, Integer>();
+		List<Integer> result = new LinkedList<Integer>();
 		//
 		if (!(value instanceof String)) {
 			return (R) result;
@@ -114,8 +111,8 @@ public class StringIntegerUserType extends BaseUserTypeSupporter {
 		return (R) result;
 	}
 
-	public Map<String, Integer> disassembleBy_1(StringBuilder src) {
-		Map<String, Integer> result = new LinkedHashMap<String, Integer>();
+	public List<Integer> disassembleBy_1(StringBuilder src) {
+		List<Integer> result = new LinkedList<Integer>();
 		if (src == null) {
 			return result;
 		}
@@ -131,16 +128,8 @@ public class StringIntegerUserType extends BaseUserTypeSupporter {
 		//
 		for (int i = 0; i < size; i++)// 1
 		{
-			String eValue = ArrayHelper.get(values, idx++);
-			String[] entryValues = StringUtils.splitPreserveAllTokens(eValue,
-					ENTRY_SPLITTER);
-			if (ArrayHelper.isEmpty(entryValues)) {
-				continue;
-			}
-			int edx = 0;
-			String key = toObject(entryValues, edx++, String.class);
-			Integer value = toObject(entryValues, edx++, Integer.class);
-			result.put(key, value);
+			Integer value = toObject(values, idx++, Integer.class);
+			result.add(value);
 		}
 		return result;
 	}
