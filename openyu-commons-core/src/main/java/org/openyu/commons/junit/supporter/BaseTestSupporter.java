@@ -498,6 +498,7 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 			}
 
 			StringBuilder msg = new StringBuilder(MessageFormat.format(MSG_PATTERN, (i + 1), className, beanNames[i]));
+			
 			// 不是抽象類別
 			// if (!abstractBean) {
 			// System.out.println(msg);// 顯示黑色
