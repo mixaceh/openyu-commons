@@ -134,10 +134,10 @@ public abstract class CommonDaoSupporter extends BaseDaoSupporter implements Com
 	 * @param entityClass
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> List<T> find(Class<?> entityClass) {
-		List<T> result = new LinkedList<T>();
+	public <E> List<E> find(Class<?> entityClass) {
+		List<E> result = new LinkedList<E>();
 		try {
-			result = (List<T>) hibernateTemplate.loadAll(entityClass);
+			result = (List<E>) hibernateTemplate.loadAll(entityClass);
 		} catch (Exception ex) {
 			throw new CommonDaoException(ex);
 		}
