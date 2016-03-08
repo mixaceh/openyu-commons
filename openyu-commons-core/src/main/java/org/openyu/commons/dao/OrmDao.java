@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * ORM Dao
+ * Generic Dao
  */
 public interface OrmDao extends BaseDao {
 

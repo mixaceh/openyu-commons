@@ -1,5 +1,6 @@
 package org.openyu.commons.service.supporter;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -378,9 +379,16 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 	 * 
 	 * @param e
 	 */
+	@Override
 	@LogTx
 	public <T> Serializable insert(T entity) {
 		return commonDao.insert(entity);
+	}
+
+	@Override
+	@LogTx
+	public <T> Serializable insert(T entity, String modifiedUser) {
+		return commonDao.insert(entity, modifiedUser);
 	}
 
 	/**
@@ -402,9 +410,16 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 	 * 
 	 * @param e
 	 */
+	@Override
 	@LogTx
 	public <T> int update(T entity) {
 		return commonDao.update(entity);
+	}
+
+	@Override
+	@LogTx
+	public <T> int update(T entity, String modifiedUser) {
+		return commonDao.update(entity, modifiedUser);
 	}
 
 	/**
@@ -426,9 +441,40 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 	 * 
 	 * @param e
 	 */
+	@Override
 	@LogTx
 	public <T> int delete(T entity) {
 		return commonDao.delete(entity);
+	}
+
+	@Override
+	@LogTx
+	public <T> int delete(T entity, String modifiedUser) {
+		return commonDao.delete(entity, modifiedUser);
+	}
+
+	@Override
+	@LogTx
+	public <T> T delete(Class<?> entityClass, Serializable seq) {
+		return commonDao.delete(entityClass, seq);
+	}
+
+	@Override
+	@LogTx
+	public <T> T delete(Class<?> entityClass, Serializable seq, String modifiedUser) {
+		return commonDao.delete(entityClass, seq, modifiedUser);
+	}
+
+	@Override
+	@LogTx
+	public <E> List<E> delete(Class<?> entityClass, Collection<Serializable> seqs) {
+		return commonDao.delete(entityClass, seqs);
+	}
+
+	@Override
+	@LogTx
+	public <E> List<E> delete(Class<?> entityClass, Collection<Serializable> seqs, String modifiedUser) {
+		return commonDao.delete(entityClass, seqs, modifiedUser);
 	}
 
 	/**
@@ -537,4 +583,30 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 		}
 		return result;
 	}
+
+	@Override
+	public long rowCount(Class<?> entityClass) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean reindex(Class<?> entityClass) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <T> boolean reindex(T entity) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <E> InputStream write(Collection<E> list) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <E> List<E> read(InputStream inputStream) {
+		throw new UnsupportedOperationException();
+	}
+
 }
