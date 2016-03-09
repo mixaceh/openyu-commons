@@ -185,38 +185,34 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		assertCollectionEquals(list, result);
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
 	@Test
-	// kryoCacheFactory
-	// round: 0.70, GC: 38
+	// round: 13.41 [+- 7.02], round.block: 12.19 [+- 7.03], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 7, GC.time: 0.16, time.total: 25.34, time.warmup: 0.00,
+	// time.bench: 25.34
+
 	public void kryo() {
 		List<String> value = mockLinkedList();
 		byte[] result = null;
 		//
-		int count = 500;
-		for (int i = 0; i < count; i++) {
-			result = SerializeHelper.kryo(value);
-		}
+		result = SerializeHelper.kryo(value);
 		//
 		System.out.println(result.length + " ," + result);// 307,235 bytes
 		System.out.println(new String(result));
 	}
 
-	@SuppressWarnings("unchecked")
-	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
 	@Test
-	// kryoCacheFactory
-	// round: 0.55, GC: 35
+	// round: 17.04 [+- 6.43], round.block: 12.27 [+- 6.47], round.gc: 0.00 [+-
+	// 0.01], GC.calls: 9, GC.time: 0.41, time.total: 28.43, time.warmup: 0.00,
+	// time.bench: 28.43
 	public void dekryo() {
 		List<String> list = mockLinkedList();
 		byte[] value = SerializeHelper.kryo(list);
 
 		List<String> result = null;
 		//
-		int count = 500;
-		for (int i = 0; i < count; i++) {
-			result = SerializeHelper.dekryo(value, LinkedList.class);
-		}
+		result = SerializeHelper.dekryo(value, LinkedList.class);
 		//
 		System.out.println(result);
 		assertCollectionEquals(list, result);

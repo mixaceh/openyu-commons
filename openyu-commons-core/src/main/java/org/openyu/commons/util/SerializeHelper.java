@@ -9,6 +9,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.LinkedList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,10 +109,6 @@ public final class SerializeHelper extends BaseHelperSupporter {
 
 	}
 
-	public static byte[] serialize(Object value) {
-		return serialize((Serializable) value);
-	}
-
 	/**
 	 * jdk 序列化
 	 * 
@@ -120,7 +117,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] serialize(Serializable value) {
+	public static byte[] serialize(Object value) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -140,10 +137,6 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
-	public static boolean serialize(Object value, OutputStream outputStream) {
-		return serialize((Serializable) value, outputStream);
-	}
-
 	/**
 	 * jdk 序列化
 	 * 
@@ -153,7 +146,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean serialize(Serializable value, OutputStream outputStream) {
+	public static boolean serialize(Object value, OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -232,7 +225,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] fst(Serializable value) {
+	public static byte[] fst(Object value) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -261,7 +254,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean fst(Serializable value, OutputStream outputStream) {
+	public static boolean fst(Object value, OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -462,7 +455,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] jgroup(Serializable value) {
+	public static byte[] jgroup(Object value) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -507,7 +500,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] kryo(Serializable value) {
+	public static byte[] kryo(Object value) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -536,7 +529,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean kryo(final Serializable value, final OutputStream outputStream) {
+	public static boolean kryo(Object value, OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -556,10 +549,6 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		}
 		//
 		return result;
-	}
-
-	public static byte[] kryo(Object value) {
-		return kryo((Serializable) value);
 	}
 
 	/**
@@ -598,11 +587,11 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param clazz
 	 * @return
 	 */
-	public static <T> T dekryo(final InputStream inputStream, final Class<T> clazz) {
+	public static <T> T dekryo(InputStream inputStream, Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
-		AssertHelper.notNull(inputStream, "The Class must not be null");
+		AssertHelper.notNull(clazz, "The Class must not be null");
 		//
 		Kryo kryo = null;
 		Input in = null;
@@ -627,7 +616,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] jackson(Serializable value) {
+	public static byte[] jackson(Object value) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -656,7 +645,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean jackson(final Serializable value, final OutputStream outputStream) {
+	public static boolean jackson(final Object value, final OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -712,7 +701,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param clazz
 	 * @return
 	 */
-	public static <T> T dejackson(final InputStream inputStream, final Class<T> clazz) {
+	public static <T> T dejackson(InputStream inputStream, Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -765,7 +754,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] smile(Serializable value) {
+	public static byte[] smile(Object value) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -794,7 +783,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean smile(final Serializable value, final OutputStream outputStream) {
+	public static boolean smile(Object value, OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -850,7 +839,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param clazz
 	 * @return
 	 */
-	public static <T> T desmile(final InputStream inputStream, final Class<T> clazz) {
+	public static <T> T desmile(InputStream inputStream, Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -876,7 +865,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] smileJaxrs(Serializable value) {
+	public static byte[] smileJaxrs(Object value) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -905,7 +894,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean smileJaxrs(final Serializable value, final OutputStream outputStream) {
+	public static boolean smileJaxrs(Object value, OutputStream outputStream) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -961,7 +950,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T desmileJaxrs(final InputStream inputStream, final Class<T> clazz) {
+	public static <T> T desmileJaxrs(InputStream inputStream, Class<T> clazz) {
 		T result = null;
 		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
@@ -979,7 +968,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
-	public static byte[] serializeWithProcessor(final Serializable value) {
+	public static byte[] serializeWithProcessor(final Object value) {
 		byte[] result = new byte[0];
 		//
 		result = (byte[]) serializeProcessorCacheFactory.execute(new CacheCallback<SerializeProcessor>() {

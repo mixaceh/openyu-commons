@@ -53,7 +53,7 @@ public interface SerializeProcessor extends BaseProcessor {
 	 * @param value
 	 * @return
 	 */
-	byte[] serialize(String serializeTypeValue, Serializable value);
+	byte[] serialize(String serializeTypeValue, Object value);
 
 	/**
 	 * 序列化
@@ -64,7 +64,7 @@ public interface SerializeProcessor extends BaseProcessor {
 	 * @param value
 	 * @return
 	 */
-	byte[] serialize(int serializeTypeValue, Serializable value);
+	byte[] serialize(int serializeTypeValue, Object value);
 
 	/**
 	 * 序列化
@@ -72,7 +72,7 @@ public interface SerializeProcessor extends BaseProcessor {
 	 * @param value
 	 * @return
 	 */
-	byte[] serialize(Serializable value);
+	byte[] serialize(Object value);
 
 	/**
 	 * 反序列化

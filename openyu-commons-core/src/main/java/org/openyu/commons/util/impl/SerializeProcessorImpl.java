@@ -116,7 +116,7 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements Se
 	 * @param value
 	 * @return
 	 */
-	public byte[] serialize(String serializeTypeValue, Serializable value) {
+	public byte[] serialize(String serializeTypeValue, Object value) {
 		SerializeType serializeType = EnumHelper.valueOf(SerializeType.class, serializeTypeValue);
 		AssertHelper.notNull(serializeType, "The SerializeType must not be null");
 		this.serializeType = serializeType;
@@ -132,7 +132,7 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements Se
 	 * @param value
 	 * @return
 	 */
-	public byte[] serialize(int serializeTypeValue, Serializable value) {
+	public byte[] serialize(int serializeTypeValue, Object value) {
 		SerializeType serializeType = EnumHelper.valueOf(SerializeType.class, serializeTypeValue);
 		AssertHelper.notNull(serializeType, "The SerializeType must not be null");
 		this.serializeType = serializeType;
@@ -145,7 +145,7 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements Se
 	 * @param value
 	 * @return
 	 */
-	public byte[] serialize(Serializable value) {
+	public byte[] serialize(Object value) {
 		byte[] result = new byte[0];
 		//
 		if (!serialize) {
