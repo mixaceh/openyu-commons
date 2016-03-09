@@ -645,7 +645,6 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * byte[] -> object
 	 * 
 	 * @param value
-	 * @param clazz
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
