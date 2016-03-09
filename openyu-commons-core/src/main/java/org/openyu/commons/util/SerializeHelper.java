@@ -545,7 +545,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			IoHelper.close((OutputStream) out);
+			IoHelper.close(out);
 		}
 		//
 		return result;
@@ -602,9 +602,69 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			IoHelper.close((InputStream) in);
+			IoHelper.close(in);
 		}
 		//
+		return result;
+	}
+
+	/**
+	 * kryo 序列化
+	 * 
+	 * object -> byte[]
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static byte[] kryoWriteClass(Object value) {
+		byte[] result = new byte[0];
+		//
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		Kryo kryo = null;
+		ByteArrayOutputStream baos = null;
+		Output out = null;
+		try {
+			kryo = new Kryo();
+			baos = new ByteArrayOutputStream();
+			out = new Output(baos);
+			kryo.writeClassAndObject(out, value);
+			result = out.toBytes();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			IoHelper.close(baos);
+			IoHelper.close(out);
+		}
+		return result;
+	}
+
+	/**
+	 * kryo 反序列化
+	 * 
+	 * byte[] -> object
+	 * 
+	 * @param value
+	 * @param clazz
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T dekryoReadClass(byte[] value) {
+		T result = null;
+		//
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		Kryo kryo = null;
+		Input in = null;
+		try {
+			kryo = new Kryo();
+			in = new Input(value);
+			result = (T) kryo.readClassAndObject(in);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			IoHelper.close(in);
+		}
 		return result;
 	}
 
