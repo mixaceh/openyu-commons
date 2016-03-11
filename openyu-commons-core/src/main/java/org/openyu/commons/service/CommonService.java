@@ -4,9 +4,9 @@ import org.openyu.commons.service.event.BeanListener;
 import org.openyu.commons.util.concurrent.MapCache;
 
 /**
- * ORM+JDBC共用服務
+ * Jdbc+Generic服務
  */
-public interface CommonService extends JdbcService, OrmService {
+public interface CommonService extends JdbcService, GenericService {
 	/**
 	 * 存放共用的beans,當多緒時,物件需注意資料同步
 	 * 

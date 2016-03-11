@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Generic Dao
  */
-public interface OrmDao extends BaseDao {
+public interface GenericDao extends BaseDao {
 
 	// ------------------------------------
 	// oo find(select)

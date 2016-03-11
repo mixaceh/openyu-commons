@@ -3,7 +3,7 @@ package org.openyu.commons.dao;
 /**
  * Xml Dao
  */
-public interface XmlDao extends OrmDao
+public interface XmlDao extends GenericDao
 {
 
 }

@@ -1,10 +1,10 @@
 package org.openyu.commons.dao;
 
 /**
- * ORM+JDBC Dao
+ * 通用Dao
  * 
- * OjDao 改為 CommonDao, 通用Dao
+ * JdbcDao+GenericDao
  */
-public interface CommonDao extends JdbcDao, OrmDao {
+public interface CommonDao extends JdbcDao, GenericDao {
 
 }
