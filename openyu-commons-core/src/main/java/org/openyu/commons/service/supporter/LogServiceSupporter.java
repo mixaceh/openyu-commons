@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -586,27 +587,98 @@ public abstract class LogServiceSupporter extends BaseServiceSupporter implement
 
 	@Override
 	public long rowCount(Class<?> entityClass) {
-		throw new UnsupportedOperationException();
+		return commonDao.rowCount(entityClass);
 	}
 
-	@Override
-	public boolean reindex(Class<?> entityClass) {
-		throw new UnsupportedOperationException();
-	}
+	// ------------------------------------------------------------
 
-	@Override
-	public <T> boolean reindex(T entity) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public <E> InputStream write(Collection<E> list) {
-		throw new UnsupportedOperationException();
+		return commonDao.write(list);
 	}
 
-	@Override
 	public <E> List<E> read(InputStream inputStream) {
-		throw new UnsupportedOperationException();
+		return commonDao.read(inputStream);
+	}
+
+	public boolean reindex(Class<?> entityClass) {
+		return commonDao.reindex(entityClass);
+	}
+
+	public <T> boolean reindex(T entity) {
+		return commonDao.reindex(entity);
+	}
+
+	// ------------------------------------------------------------
+	public <E> List<E> find(String sqlString, String[] paramNames, Object[] values, String[] columnAliases,
+			Object[] types) {
+		return commonDao.find(sqlString, paramNames, values, columnAliases, types);
+	}
+
+	public <E> List<E> find(String sqlString, String[] paramNames, Object[] values, Map<String, Object> scalars) {
+		return commonDao.find(sqlString, paramNames, values, scalars);
+	}
+
+	public <E> List<E> find(String sqlString, Map<String, Object> params, Map<String, Object> scalars) {
+		return commonDao.find(sqlString, params, scalars);
+	}
+
+	public int insert(String sqlString, String[] paramNames, Object[] values) {
+		return commonDao.insert(sqlString, paramNames, values);
+	}
+
+	@LogTx
+	public int insert(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
+		return commonDao.insert(sqlString, paramNames, values, modifiedUser);
+	}
+
+	@LogTx
+	public int insert(String sqlString, Map<String, Object> params) {
+		return commonDao.insert(sqlString, params);
+	}
+
+	@LogTx
+	public int insert(String sqlString, Map<String, Object> params, String modifiedUser) {
+		return commonDao.insert(sqlString, params, modifiedUser);
+	}
+
+	@LogTx
+	public int update(String sqlString, String[] paramNames, Object[] values) {
+		return commonDao.update(sqlString, paramNames, values);
+	}
+
+	@LogTx
+	public int update(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
+		return commonDao.update(sqlString, paramNames, values, modifiedUser);
+	}
+
+	@LogTx
+	public int update(String sqlString, Map<String, Object> params) {
+		return commonDao.update(sqlString, params);
+	}
+
+	@LogTx
+	public int update(String sqlString, Map<String, Object> params, String modifiedUser) {
+		return commonDao.update(sqlString, params, modifiedUser);
+	}
+
+	@LogTx
+	public int delete(String sqlString, String[] paramNames, Object[] values) {
+		return commonDao.delete(sqlString, paramNames, values);
+	}
+
+	@LogTx
+	public int delete(String sqlString, String[] paramNames, Object[] values, String modifiedUser) {
+		return commonDao.delete(sqlString, paramNames, values, modifiedUser);
+	}
+
+	@LogTx
+	public int delete(String sqlString, Map<String, Object> params) {
+		return commonDao.delete(sqlString, params);
+	}
+
+	@LogTx
+	public int delete(String sqlString, Map<String, Object> params, String modifiedUser) {
+		return commonDao.delete(sqlString, params, modifiedUser);
 	}
 
 }
