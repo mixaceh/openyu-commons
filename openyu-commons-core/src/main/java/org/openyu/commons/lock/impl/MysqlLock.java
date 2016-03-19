@@ -9,12 +9,12 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.sql.DataSource;
 
 import org.apache.commons.lang.exception.NestableRuntimeException;
-import org.openyu.commons.lock.supporter.DistLockSupporter;
+import org.openyu.commons.lock.supporter.DistributedLockSupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.support.JdbcUtils;
 
-public class MysqlLock extends DistLockSupporter {
+public class MysqlLock extends DistributedLockSupporter {
 
 	private static final long serialVersionUID = -323114105619677559L;
 

@@ -9,6 +9,6 @@ import org.openyu.commons.model.BaseModel;
  *
  * 分散式鎖
  */
-public interface DistLock extends BaseModel, Lock {
+public interface DistributedLock extends BaseModel, Lock {
 
 }

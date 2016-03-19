@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Transactional("distTx ")
-public @interface DistTx {
+@Transactional("distributedTx ")
+public @interface DistributedTx {
 
 }
