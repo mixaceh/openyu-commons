@@ -7,6 +7,11 @@ import java.lang.annotation.Target;
 
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Database Log Tx
+ *
+ * Database 日誌交易
+ */
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Transactional("logTx")

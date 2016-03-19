@@ -7,6 +7,12 @@ import java.lang.annotation.Target;
 
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 
+ * Database Common Tx
+ * 
+ * Database 通用交易
+ */
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Transactional("commonTx")

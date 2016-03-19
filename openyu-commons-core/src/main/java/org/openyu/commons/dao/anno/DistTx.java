@@ -7,9 +7,15 @@ import java.lang.annotation.Target;
 
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 
+ * Database Distributed Tx
+ * 
+ * Database 分散式交易
+ */
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Transactional("distributedTx ")
-public @interface DistributedTx {
+@Transactional("distTx ")
+public @interface DistTx {
 
 }
