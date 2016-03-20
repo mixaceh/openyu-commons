@@ -12,7 +12,7 @@
 
 	<bean
 		id="logDataSourceTarget"
-		class="org.openyu.commons.commons.dbcp.impl.BasicDataSourceFactoryBean"
+		class="org.openyu.commons.commons.dbcp2.impl.BasicDataSourceFactoryBean"
 		parent="baseFactoryBeanSupporter">
 		<property
 			name="configLocation"

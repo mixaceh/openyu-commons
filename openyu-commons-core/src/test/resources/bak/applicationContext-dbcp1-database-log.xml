@@ -11,60 +11,58 @@
              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
 	<bean
-		id="commonDataSourceTarget"
-		class="org.openyu.commons.commons.dbcp2.impl.BasicDataSourceFactoryBean"
+		id="logDataSourceTarget"
+		class="org.openyu.commons.commons.dbcp.impl.BasicDataSourceFactoryBean"
 		parent="baseFactoryBeanSupporter">
 		<property
 			name="configLocation"
-			value="file:src/test/config/etc/dbcp.properties" />
+			value="file:src/test/config/etc/dbcp-log.properties" />
 	</bean>
 
 	<bean
-		id="commonDataSource"
+		id="logDataSource"
 		class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy"
-		p:targetDataSource-ref="commonDataSourceTarget" />
+		p:targetDataSource-ref="logDataSourceTarget" />
 
 	<bean
-		id="commonSessionFactory"
+		id="logSessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property
-			name="dataSource"
-			ref="commonDataSource" />
-		<property
 			name="configLocation"
-			value="file:src/test/config/etc/hibernate.cfg.xml" />
+			value="file:src/test/config/etc/hibernate-log.cfg.xml" />
+		<property
+			name="dataSource"
+			ref="logDataSource" />
 		<property name="packagesToScan">
 			<list>
-				<value>org.openyu.commons.cat.po.impl</value>
-				<value>org.openyu.commons.dog.po.impl</value>
+				<value>org.openyu.commons.cat.log.impl</value>
 			</list>
 		</property>
 	</bean>
 
 	<bean
-		id="commonHibernateTemplate"
+		id="logHibernateTemplate"
 		class="org.springframework.orm.hibernate4.HibernateTemplate"
-		p:sessionFactory-ref="commonSessionFactory" />
-
-	<!--  
-	<bean id="hibernateInterceptor" class="org.springframework.orm.hibernate3.HibernateInterceptor">
+		p:sessionFactory-ref="logSessionFactory" />
+	
+	<!--
+	<bean id="logHibernateInterceptor" class="org.springframework.orm.hibernate3.HibernateInterceptor">
 		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
+			<ref bean="logSessionFactory" />
 		</property>
 	</bean>
 	-->
 
 	<!-- Hibernate transaction manager -->
 	<bean
-		id="commonTx"
+		id="logTx"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
-		p:sessionFactory-ref="commonSessionFactory">
-	</bean>
-
-	<!-- use @CommonTx insteadof commonTxAdvice
+		p:sessionFactory-ref="logSessionFactory" />
+		
+	<!-- use @LogTx insteadof logTxAdvice
 	<tx:advice
-		id="commonTxAdvice"
-		transaction-manager="commonTx">
+		id="logTxAdvice"
+		transaction-manager="logTx">
 		<tx:attributes>
 			<tx:method
 				name="find*"
@@ -97,6 +95,11 @@
 				propagation="REQUIRED"
 				read-only="false" />
 			<tx:method
+				name="record*"
+				rollback-for="java.lang.Exception"
+				propagation="REQUIRED"
+				read-only="false" />
+			<tx:method
 				name="offer*"
 				rollback-for="java.lang.Exception"
 				propagation="REQUIRED"
@@ -105,27 +108,19 @@
 	</tx:advice>
 	-->
 
-	<tx:annotation-driven transaction-manager="commonTx" />
-
-	<!-- dao supporter, use sessionFactory
-	<bean
-		id="commonDaoSupporter"
-		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
-		p:sessionFactory-ref="sessionFactory" />
-	-->
+	<tx:annotation-driven transaction-manager="logTx" />
 	
 	<!-- dao supporter -->
 	<bean
-		id="commonDaoSupporter"
+		id="logDaoSupporter"
 		class="org.openyu.commons.dao.supporter.CommonDaoSupporter"
 		abstract="true"
-		p:hibernateTemplate-ref="commonHibernateTemplate" />
+		p:hibernateTemplate-ref="logHibernateTemplate" />
 
 	<!-- service supporter -->
 	<bean
-		id="commonServiceSupporter"
-		class="org.openyu.commons.service.supporter.CommonServiceSupporter"
-		parent="baseServiceSupporter"
-		abstract="true" />
-
+		id="logServiceSupporter"
+		class="org.openyu.commons.service.supporter.LogServiceSupporter"
+		abstract="true"
+		parent="baseServiceSupporter" />
 </beans>
