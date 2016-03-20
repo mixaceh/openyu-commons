@@ -13,7 +13,11 @@
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		-->
 
+		<!--  
 		<property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>
+		-->
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
 		<!-- spring + hibernate 
 		java.lang.UnsupportedOperationException: Not supported by BasicDataSource 
 		at org.apache.commons.dbcp.BasicDataSource.getConnection(BasicDataSource.java:1062)
@@ -23,7 +27,10 @@
 		<property name="hibernate.connection.password"></property>
 		-->
 		
+		<!--  
 		<property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
+		-->
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		
 		<property name="hibernate.connection.isolation">2</property>
 
@@ -84,7 +91,7 @@
 		<!-- hibernate 4 -->
 		<property name="hibernate.search.lucene_version">LUCENE_CURRENT</property>
 		<property name="hibernate.search.default.directory_provider">filesystem</property>
-		<property name="hibernate.search.default.indexBase">search</property>
+		<property name="hibernate.search.default.indexBase">search-log</property>
 		<property name="javax.persistence.validation.mode">none</property>
 
 	</session-factory>

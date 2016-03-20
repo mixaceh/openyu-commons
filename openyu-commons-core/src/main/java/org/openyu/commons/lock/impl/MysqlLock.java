@@ -10,27 +10,27 @@ import javax.sql.DataSource;
 
 import org.apache.commons.lang.exception.NestableRuntimeException;
 import org.openyu.commons.lock.supporter.DistributedLockSupporter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.support.JdbcUtils;
 
 public class MysqlLock extends DistributedLockSupporter {
 
 	private static final long serialVersionUID = -323114105619677559L;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MysqlLock.class);
-
-	private String name;
-
 	private DataSource dataSource;
 
-	private final AtomicReference<Connection> connection;
+	/**
+	 * 鎖的名稱
+	 */
+	private String name;
 
-	public MysqlLock(DataSource dataSource, String name) {
+	private final AtomicReference<Connection> connection = new AtomicReference<Connection>();
+
+	private int timeout;
+
+	public MysqlLock(DataSource dataSource, String name, int timeout) {
 		this.dataSource = dataSource;
 		this.name = name;
-		//
-		this.connection = new AtomicReference<Connection>();
+		this.timeout = timeout;
 	}
 
 	public DataSource getDataSource() {
@@ -49,79 +49,101 @@ public class MysqlLock extends DistributedLockSupporter {
 		this.name = name;
 	}
 
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+
 	@Override
 	protected void doLock() {
-		doTryLock(Integer.MAX_VALUE, TimeUnit.SECONDS);
+		// doTryLock(Integer.MAX_VALUE, TimeUnit.SECONDS);
+		doTryLock(this.timeout, TimeUnit.SECONDS);
 	}
 
 	@Override
 	protected void doLockInterruptibly() {
-		doTryLock(Integer.MAX_VALUE, TimeUnit.SECONDS);
+		// doTryLock(Integer.MAX_VALUE, TimeUnit.SECONDS);
+		doTryLock(this.timeout, TimeUnit.SECONDS);
 	}
 
 	@Override
 	protected boolean doTryLock() {
-		return doTryLock(0, TimeUnit.SECONDS);
+		// return doTryLock(0, TimeUnit.SECONDS);
+		return doTryLock(this.timeout, TimeUnit.SECONDS);
 	}
 
 	@Override
 	protected boolean doTryLock(long timeout, TimeUnit unit) {
-		Integer r = null;
+		boolean reuslt = false;
+		//
+		Integer locked = null;
 		ResultSet rs = null;
 		PreparedStatement ps = null;
 		try {
-			this.connection.set(this.dataSource.getConnection());
-			ps = this.connection.get().prepareStatement("SELECT GET_LOCK(?, ?)");
+			// get conn from pool
+			Connection conn = this.dataSource.getConnection();
+			this.connection.set(conn);
+			//
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT GET_LOCK(?, ?)");
+			//
+			ps = this.connection.get().prepareStatement(sql.toString());
 			ps.setString(1, this.name);
-			ps.setInt(2, (int) TimeUnit.SECONDS.convert(timeout, unit));
+			//
+			int lockTimeout = (int) TimeUnit.SECONDS.convert(timeout, unit);
+			ps.setInt(2, lockTimeout);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				r = rs.getInt(1);
-				if (rs.wasNull())
-					r = null;
+				locked = rs.getInt(1);
+				if (rs.wasNull()) {
+					locked = null;
+				}
 			}
-			//
-			LOGGER.info("lock, name: {}, result: {}", this.name, r);
 		} catch (Exception e) {
-			throw new NestableRuntimeException("failed to lock, name: " + this.name, e);
+			throw new NestableRuntimeException(e);
 		} finally {
 			JdbcUtils.closeResultSet(rs);
 			JdbcUtils.closeStatement(ps);
 		}
-		final boolean succeed = (r != null && r == 1);
-		return succeed;
+		reuslt = (locked != null && locked == 1);
+		//
+		return reuslt;
 	}
 
 	@Override
 	protected void doUnlock() {
-		Integer r = null;
+		Integer released = null;
+		Connection conn = null;
 		ResultSet rs = null;
 		PreparedStatement ps = null;
 		try {
+			// sql
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT RELEASE_LOCK(?)");
 			//
-			ps = this.connection.get().prepareStatement("SELECT RELEASE_LOCK(?)");
+			conn = this.connection.get();
+			ps = conn.prepareStatement(sql.toString());
 			ps.setString(1, this.name);
+			//
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				r = rs.getInt(1);
-				if (rs.wasNull())
-					r = null;
+				released = rs.getInt(1);
+				if (rs.wasNull()) {
+					released = null;
+				}
 			}
-
-			//
-			if (r == null) {
-				LOGGER.warn("lock does NOT exist, name: {}", this.name);
-			} else if (r == 0) {
-				LOGGER.warn("lock was NOT accquired by current thread, name: {}", this.name);
-			}
-			//
-			LOGGER.info("unlock, name: {}, result: {}", this.name, r);
 		} catch (Exception e) {
-			throw new NestableRuntimeException("failed to unlock, name: " + this.name, e);
+			throw new NestableRuntimeException(e);
 		} finally {
 			JdbcUtils.closeResultSet(rs);
 			JdbcUtils.closeStatement(ps);
-			JdbcUtils.closeConnection(this.connection.getAndSet(null));
+			// JdbcUtils.closeConnection(this.connection.getAndSet(null));
+			this.connection.set(null);
+			// conn return to pool
+			JdbcUtils.closeConnection(conn);
 		}
 	}
 }

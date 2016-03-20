@@ -6,14 +6,17 @@
 <hibernate-configuration>
 	<session-factory>
 		<!--  
-		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/commons</property>
 		<property name="hibernate.connection.username">root</property>
 		<property name="hibernate.connection.password">1111</property>
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		-->
 
+		<!--  
 		<property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>
+		-->
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
 		<!-- spring + hibernate 
 		java.lang.UnsupportedOperationException: Not supported by BasicDataSource 
 		at org.apache.commons.dbcp.BasicDataSource.getConnection(BasicDataSource.java:1062)
@@ -23,7 +26,10 @@
 		<property name="hibernate.connection.password"></property>
 		-->
 		
+		<!--  
 		<property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
+		-->
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		
 		<property name="hibernate.connection.isolation">2</property>
 

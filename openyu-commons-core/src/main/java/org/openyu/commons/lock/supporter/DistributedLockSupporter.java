@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.commons.lang.exception.NestableRuntimeException;
 import org.openyu.commons.lock.DistributedLock;
 import org.openyu.commons.model.supporter.BaseModelSupporter;
 import org.slf4j.Logger;
@@ -41,8 +40,7 @@ public abstract class DistributedLockSupporter extends BaseModelSupporter implem
 			doLock();
 			locked = true;
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during lock()").toString(), e);
-			throw new NestableRuntimeException(e);
+			throw e;
 		} finally {
 			if (!locked) {
 				this.lock.unlock();
@@ -62,8 +60,7 @@ public abstract class DistributedLockSupporter extends BaseModelSupporter implem
 			doLockInterruptibly();
 			locked = true;
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during lockInterruptibly()").toString(), e);
-			throw new NestableRuntimeException(e);
+			throw e;
 		} finally {
 			if (!locked) {
 				this.lock.unlock();
@@ -84,8 +81,7 @@ public abstract class DistributedLockSupporter extends BaseModelSupporter implem
 		try {
 			locked = doTryLock();
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during tryLock()").toString(), e);
-			throw new NestableRuntimeException(e);
+			throw e;
 		} finally {
 			if (!locked) {
 				this.lock.unlock();
@@ -110,8 +106,7 @@ public abstract class DistributedLockSupporter extends BaseModelSupporter implem
 				succeed = doTryLock(timeout, TimeUnit.NANOSECONDS);
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during tryLock()").toString(), e);
-			throw new NestableRuntimeException(e);
+			throw e;
 		} finally {
 			if (!succeed) {
 				this.lock.unlock();
@@ -131,6 +126,8 @@ public abstract class DistributedLockSupporter extends BaseModelSupporter implem
 		//
 		try {
 			doUnlock();
+		} catch (Exception e) {
+			throw e;
 		} finally {
 			this.lock.unlock();
 		}
