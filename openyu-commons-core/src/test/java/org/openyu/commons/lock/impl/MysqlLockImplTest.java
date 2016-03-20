@@ -12,18 +12,20 @@ import org.junit.Test;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.lock.DistributedLock;
+import org.openyu.commons.lock.MysqlLock;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
-public class MysqlLockTest extends BaseTestSupporter {
+public class MysqlLockImplTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
 	private static DataSource commonDataSource;
+
 	private AtomicInteger counter = new AtomicInteger(0);
 
 	@BeforeClass
@@ -61,11 +63,8 @@ public class MysqlLockTest extends BaseTestSupporter {
 	// time.bench: 4.66
 	public void lock() {
 		// maxActive=10
-		DistributedLock lock = new MysqlLock(commonDataSource, "aaa" + NumberHelper.randomInt(10), 5);
-		//
+		MysqlLock lock = new MysqlLockImpl(commonDataSource, "aaa" + NumberHelper.randomInt(10), 30);
 		lock.lock();
-		// boolean locked = lock.tryLock(5, TimeUnit.SECONDS);
-		// System.out.println(locked);
 		try {
 			System.out.println(
 					"T[" + Thread.currentThread().getId() + "] " + counter.incrementAndGet() + ": do something...");
@@ -74,6 +73,27 @@ public class MysqlLockTest extends BaseTestSupporter {
 			e.printStackTrace();
 		} finally {
 			lock.unlock();
+		}
+	}
+
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 50, warmupRounds = 0, concurrency = 25)
+	public void lockInterruptibly() {
+		// maxActive=10
+		MysqlLock lock = new MysqlLockImpl(commonDataSource, "aaa" + NumberHelper.randomInt(10), 30);
+		try {
+			lock.lockInterruptibly();
+			try {
+				System.out.println(
+						"T[" + Thread.currentThread().getId() + "] " + counter.incrementAndGet() + ": do something...");
+				ThreadHelper.sleep(500);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				lock.unlock();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 }

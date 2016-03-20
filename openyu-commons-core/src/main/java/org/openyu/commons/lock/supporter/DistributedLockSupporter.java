@@ -4,28 +4,17 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.openyu.commons.lock.DistributedLock;
 import org.openyu.commons.model.supporter.BaseModelSupporter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class DistributedLockSupporter extends BaseModelSupporter implements DistributedLock {
 
 	private static final long serialVersionUID = -160364842817139388L;
 
-	private static final transient Logger LOGGER = LoggerFactory.getLogger(DistributedLockSupporter.class);
-
-	protected final ReentrantLock lock = new ReentrantLock();
+	protected transient final ReentrantLock lock = new ReentrantLock();
 
 	public DistributedLockSupporter() {
-	}
-
-	public boolean isLocked() {
-		return this.lock.isLocked();
-	}
-
-	public boolean isHeldByCurrentThread() {
-		return this.lock.isHeldByCurrentThread();
 	}
 
 	@Override
@@ -93,11 +82,12 @@ public abstract class DistributedLockSupporter extends BaseModelSupporter implem
 	@Override
 	public boolean tryLock(long timeout, TimeUnit unit) throws InterruptedException {
 		final long mark = System.nanoTime();
-		if (!this.lock.tryLock(timeout, unit))
+		if (!this.lock.tryLock(timeout, unit)) {
 			return false;
-		if (this.lock.getHoldCount() > 1)
+		}
+		if (this.lock.getHoldCount() > 1) {
 			return true;
-
+		}
 		//
 		boolean succeed = false;
 		try {
@@ -148,4 +138,9 @@ public abstract class DistributedLockSupporter extends BaseModelSupporter implem
 
 	protected abstract void doUnlock();
 
+	public String toString() {
+		ToStringBuilder builder = new ToStringBuilder(this);
+		builder.append("lock", lock);
+		return builder.toString();
+	}
 }
