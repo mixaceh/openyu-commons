@@ -16,7 +16,7 @@
 		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
 	-->
 	<context:annotation-config />
-	<aop:aspectj-autoproxy proxy-target-class="true" />	
+	<aop:aspectj-autoproxy proxy-target-class="false" />	
 
 	<!-- service -->
 	<import

@@ -11,7 +11,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.NumberHelper;
-import org.openyu.commons.lock.DistributedLock;
 import org.openyu.commons.lock.MysqlLock;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -62,7 +61,7 @@ public class MysqlLockImplTest extends BaseTestSupporter {
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 4.67, time.warmup: 0.01,
 	// time.bench: 4.66
 	public void lock() {
-		// maxActive=10
+		// maxTotal=10
 		MysqlLock lock = new MysqlLockImpl(commonDataSource, "aaa" + NumberHelper.randomInt(10), 30);
 		lock.lock();
 		try {
@@ -79,7 +78,7 @@ public class MysqlLockImplTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 50, warmupRounds = 0, concurrency = 25)
 	public void lockInterruptibly() {
-		// maxActive=10
+		// maxTotal=10
 		MysqlLock lock = new MysqlLockImpl(commonDataSource, "aaa" + NumberHelper.randomInt(10), 30);
 		try {
 			lock.lockInterruptibly();
