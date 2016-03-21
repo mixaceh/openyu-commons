@@ -7,8 +7,10 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Properties;
 
 import org.junit.After;
@@ -104,8 +106,7 @@ public class FileHelperTest {
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
 
 		System.out.println(result);
-		assertEquals("/D:/dev/openyu7/trunk/openyu-commons.j/openyu-commons-core.j/src/",
-				result.getFile());
+		assertEquals("/D:/dev/openyu7/trunk/openyu-commons.j/openyu-commons-core.j/src/", result.getFile());
 		//
 		result = FileHelper.toUrl("scr123");
 		System.out.println(result);
@@ -113,8 +114,7 @@ public class FileHelperTest {
 		//
 		result = FileHelper.toUrl(new File("src/test/config/etc/config.xml"));
 		System.out.println(result);
-		assertEquals(
-				"/D:/dev/openyu7/trunk/openyu-commons.j/openyu-commons-core.j/src/test/config/etc/config.xml",
+		assertEquals("/D:/dev/openyu7/trunk/openyu-commons.j/openyu-commons-core.j/src/test/config/etc/config.xml",
 				result.getFile());
 		//
 		result = FileHelper.toUrl((String) null);
@@ -130,8 +130,7 @@ public class FileHelperTest {
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
 			// file:/D:/dev/openyu/trunk/openyu-commons-core.j/src/
-			result = FileHelper
-					.toFile("file:/D:/dev/openyu/trunk/openyu-commons-core.j/src");
+			result = FileHelper.toFile("file:/D:/dev/openyu/trunk/openyu-commons-core.j/src");
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -144,11 +143,9 @@ public class FileHelperTest {
 		System.out.println("getAbsolutePath: " + result.getAbsolutePath());// D:\dev\openyu\trunk\openyu-commons-core.j\src
 		System.out.println("getCanonicalPath: " + result.getCanonicalPath());// D:\dev\openyu\trunk\openyu-commons-core.j\src
 
-		assertEquals("D:\\dev\\openyu\\trunk\\openyu-commons-core.j\\src",
-				result.toString());
+		assertEquals("D:\\dev\\openyu\\trunk\\openyu-commons-core.j\\src", result.toString());
 		//
-		result = FileHelper
-				.toFile("file:/D:/dev/openyu/trunk/openyu-commons-core.j/src123");
+		result = FileHelper.toFile("file:/D:/dev/openyu/trunk/openyu-commons-core.j/src123");
 		System.out.println(result);
 		assertNotNull(result);
 		//
@@ -174,9 +171,7 @@ public class FileHelperTest {
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
 
 		System.out.println(result);
-		assertEquals(
-				"D:\\dev\\openyu\\trunk\\openyu-commons-core.j\\src\\org\\openyu\\commons\\io",
-				result);
+		assertEquals("D:\\dev\\openyu\\trunk\\openyu-commons-core.j\\src\\org\\openyu\\commons\\io", result);
 	}
 
 	@Test
@@ -210,8 +205,7 @@ public class FileHelperTest {
 		//
 		// file:/D:/dev/openyu/trunk/openyu-commons-core.j/target/test-classes/log4j.properties
 		System.out.println(result);
-		assertEquals(
-				"/D:/dev/openyu/trunk/openyu-commons-core.j/target/test-classes/log4j.properties",
+		assertEquals("/D:/dev/openyu/trunk/openyu-commons-core.j/target/test-classes/log4j.properties",
 				result.getFile());
 
 		// 少了個 "/"
@@ -236,9 +230,7 @@ public class FileHelperTest {
 		//
 		// /D:/dev/openyu/trunk/openyu-commons-core.j/target/test-classes/log4j.properties
 		System.out.println(result);
-		assertEquals(
-				"/D:/dev/openyu/trunk/openyu-commons-core.j/target/test-classes/log4j.properties",
-				result);
+		assertEquals("/D:/dev/openyu/trunk/openyu-commons-core.j/target/test-classes/log4j.properties", result);
 
 		// 少了個 "/"
 		value = "log4j.properties";
@@ -601,12 +593,25 @@ public class FileHelperTest {
 		count = 1;// 100w
 		beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			decryptDirResult = FileHelper.decryptDir(value, assignKey,
-					algorithm);
+			decryptDirResult = FileHelper.decryptDir(value, assignKey, algorithm);
 		}
 		end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
 
 		System.out.println(decryptDirResult.getBaseDir());
+	}
+
+	@Test
+	public void file() throws Exception {
+		File file = new File(".html");
+		if (file.exists()) {
+			String type = Files.probeContentType(file.toPath());
+			System.out.println(type);
+		} else {
+			// mock file
+			System.out.println("create file: " + file.getPath());
+			FileOutputStream out = new FileOutputStream(file);
+			out.close();
+		}
 	}
 }
