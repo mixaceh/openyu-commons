@@ -30,6 +30,18 @@ public interface ThreadService extends BaseService {
 
 	void setQueueCapacity(int queueCapacity);
 
+	boolean isWaitForTasksToCompleteOnShutdown();
+
+	void setWaitForTasksToCompleteOnShutdown(boolean waitForTasksToCompleteOnShutdown);
+
+	boolean isAllowCoreThreadTimeOut();
+
+	void setAllowCoreThreadTimeOut(boolean allowCoreThreadTimeOut);
+
+	boolean isDaemon();
+
+	void setDaemon(boolean daemon);
+
 	/**
 	 * 提交 Callable, 有傳回值
 	 * 

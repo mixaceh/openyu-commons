@@ -42,6 +42,12 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 
 	private int queueCapacity = 8;
 
+	private boolean waitForTasksToCompleteOnShutdown;
+
+	private boolean allowCoreThreadTimeOut;
+
+	private boolean daemon;
+
 	private transient ThreadPoolTaskExecutor taskExecutors[];
 
 	private transient AtomicInteger counter = new AtomicInteger(0);
@@ -203,6 +209,36 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 	}
 
 	@Override
+	public boolean isWaitForTasksToCompleteOnShutdown() {
+		return waitForTasksToCompleteOnShutdown;
+	}
+
+	@Override
+	public void setWaitForTasksToCompleteOnShutdown(boolean waitForTasksToCompleteOnShutdown) {
+		this.waitForTasksToCompleteOnShutdown = waitForTasksToCompleteOnShutdown;
+	}
+
+	@Override
+	public boolean isAllowCoreThreadTimeOut() {
+		return allowCoreThreadTimeOut;
+	}
+
+	@Override
+	public void setAllowCoreThreadTimeOut(boolean allowCoreThreadTimeOut) {
+		this.allowCoreThreadTimeOut = allowCoreThreadTimeOut;
+	}
+
+	@Override
+	public boolean isDaemon() {
+		return daemon;
+	}
+
+	@Override
+	public void setDaemon(boolean daemon) {
+		this.daemon = daemon;
+	}
+
+	@Override
 	public <T> Future<T> submit(Callable<T> task) {
 		ThreadPoolTaskExecutor executor = nextExecutor();
 		//
@@ -291,6 +327,9 @@ public class ThreadServiceImpl extends BaseServiceSupporter implements ThreadSer
 				}
 				//
 				executor.setKeepAliveSeconds(keepAliveSeconds);
+				executor.setWaitForTasksToCompleteOnShutdown(waitForTasksToCompleteOnShutdown);
+				executor.setAllowCoreThreadTimeOut(allowCoreThreadTimeOut);
+				executor.setDaemon(daemon);
 				executor.initialize();
 				//
 				taskExecutors[i] = executor;

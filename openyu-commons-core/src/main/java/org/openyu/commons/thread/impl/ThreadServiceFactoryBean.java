@@ -40,11 +40,23 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 
 	public static final int DEFAULT_QUEUE_CAPACITY = 8;
 
+	//
+	public static final String WAIT_FOR_TASKS_TO_COMPLETE_ON_SHUTDOWN = "waitForTasksToCompleteOnShutdown";
+
+	public static final boolean DEFAULT_WAIT_FOR_TASKS_TO_COMPLETE_ON_SHUTDOWN = false;
+
+	public static final String ALLOW_CORE_THREAD_TIMEOUT = "allowCoreThreadTimeOut";
+
+	public static final boolean DEFAULT_ALLOW_CORE_THREAD_TIMEOUT = false;
+
+	public static final String DAEMON = "daemon";
+
+	public static final boolean DEFAULT_DAEMON = false;
 	/**
 	 * 所有屬性
 	 */
 	public static final String[] ALL_PROPERTIES = { MAX_EXECUTOR_SIZE, CORE_POOL_SIZE, KEEP_ALIVE_SECONDS,
-			MAX_POOL_SIZE, QUEUE_CAPACITY };
+			MAX_POOL_SIZE, QUEUE_CAPACITY, WAIT_FOR_TASKS_TO_COMPLETE_ON_SHUTDOWN, ALLOW_CORE_THREAD_TIMEOUT, DAEMON };
 
 	public ThreadServiceFactoryBean() {
 	}
@@ -72,7 +84,10 @@ public final class ThreadServiceFactoryBean<T extends ThreadService>
 			result.setKeepAliveSeconds(extendedProperties.getInt(KEEP_ALIVE_SECONDS, DEFAULT_KEEP_ALIVE_SECONDS));
 			result.setMaxPoolSize(extendedProperties.getInt(MAX_POOL_SIZE, DEFAULT_MAX_POOL_SIZE));
 			result.setQueueCapacity(extendedProperties.getInt(QUEUE_CAPACITY, DEFAULT_QUEUE_CAPACITY));
-
+			//
+			result.setWaitForTasksToCompleteOnShutdown(extendedProperties.getBoolean(WAIT_FOR_TASKS_TO_COMPLETE_ON_SHUTDOWN, DEFAULT_WAIT_FOR_TASKS_TO_COMPLETE_ON_SHUTDOWN));
+			result.setAllowCoreThreadTimeOut(extendedProperties.getBoolean(ALLOW_CORE_THREAD_TIMEOUT, DEFAULT_ALLOW_CORE_THREAD_TIMEOUT));
+			result.setDaemon(extendedProperties.getBoolean(DAEMON, DEFAULT_DAEMON));
 			/**
 			 * injectiion
 			 */
