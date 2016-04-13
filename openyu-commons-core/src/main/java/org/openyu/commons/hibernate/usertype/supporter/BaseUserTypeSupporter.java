@@ -33,10 +33,14 @@ import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.util.LocaleHelper;
 import org.openyu.commons.util.concurrent.MapCache;
 import org.openyu.commons.util.concurrent.impl.MapCacheImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseUserTypeSupporter implements BaseUserType, Supporter {
 
 	private static final long serialVersionUID = 1468584587910633195L;
+
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(BaseUserTypeSupporter.class);
 
 	/**
 	 * 版本號分割 ♥
@@ -127,12 +131,10 @@ public abstract class BaseUserTypeSupporter implements BaseUserType, Supporter {
 	 */
 	// 從JDBC的ResultSet中獲取到資料，然後返回為相應的類型。
 	// 其中names包含了要映射的欄位的名稱。
-	public Object nullSafeGet(ResultSet rs, String[] names,
-			SessionImplementor session, Object owner)
+	public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner)
 			throws HibernateException, SQLException {
 		// String value = (String) Hibernate.STRING.nullSafeGet(rs, names[0]);
-		String value = StandardBasicTypes.STRING.nullSafeGet(rs, names[0],
-				session);
+		String value = StandardBasicTypes.STRING.nullSafeGet(rs, names[0], session);
 		Object result = unmarshal(value, owner, session);
 		return result;
 	}
@@ -142,14 +144,13 @@ public abstract class BaseUserTypeSupporter implements BaseUserType, Supporter {
 	 */
 	// 這個方法將在資料保存時使用。本方法可以使用PreparedStatement將資料寫入對應的資料庫欄位中。
 	// 其中的value表示的是要寫入的值。index表示的是在statement的參數中的index.
-	public void nullSafeSet(PreparedStatement st, Object target, int index,
-			SessionImplementor session) throws HibernateException, SQLException {
+	public void nullSafeSet(PreparedStatement st, Object target, int index, SessionImplementor session)
+			throws HibernateException, SQLException {
 		Object value = marshal(target, session);
 		StandardBasicTypes.STRING.nullSafeSet(st, value, index, session);
 	}
 
-	public Object assemble(Serializable arg0, Object arg1)
-			throws HibernateException {
+	public Object assemble(Serializable arg0, Object arg1) throws HibernateException {
 		return null;
 	}
 
@@ -161,8 +162,7 @@ public abstract class BaseUserTypeSupporter implements BaseUserType, Supporter {
 		return 0;
 	}
 
-	public Object replace(Object original, Object target, Object owner)
-			throws HibernateException {
+	public Object replace(Object original, Object target, Object owner) throws HibernateException {
 		return original;
 	}
 
@@ -198,8 +198,7 @@ public abstract class BaseUserTypeSupporter implements BaseUserType, Supporter {
 		int result = 0;
 		//
 		int volLength = VOL_SPLITTER.length();
-		if (value != null && value.length() > volLength
-				&& value.substring(0, volLength).equals(VOL_SPLITTER)) {
+		if (value != null && value.length() > volLength && value.substring(0, volLength).equals(VOL_SPLITTER)) {
 			int pos = value.indexOf(SPLITTER);
 			if (pos > 0) {
 				String vol = value.substring(volLength, pos);
@@ -328,36 +327,28 @@ public abstract class BaseUserTypeSupporter implements BaseUserType, Supporter {
 		return result;
 	}
 
-	protected <T extends Enum<T>> T toEnumByByte(String[] values, int index,
-			Class<T> enumType) {
+	protected <T extends Enum<T>> T toEnumByByte(String[] values, int index, Class<T> enumType) {
 		byte byteValue = toObject(ArrayHelper.get(values, index), byte.class);
 		return EnumHelper.valueOf(enumType, byteValue);
 	}
 
-	protected <T extends Enum<T>> T toEnumByInt(String[] values, int index,
-			Class<T> enumType) {
+	protected <T extends Enum<T>> T toEnumByInt(String[] values, int index, Class<T> enumType) {
 		int intValue = toObject(ArrayHelper.get(values, index), int.class);
 		return EnumHelper.valueOf(enumType, intValue);
 	}
 
-	protected <T extends Enum<T>> T toEnumByBouble(String[] values, int index,
-			Class<T> enumType) {
-		double doubleValue = toObject(ArrayHelper.get(values, index),
-				double.class);
+	protected <T extends Enum<T>> T toEnumByBouble(String[] values, int index, Class<T> enumType) {
+		double doubleValue = toObject(ArrayHelper.get(values, index), double.class);
 		return EnumHelper.valueOf(enumType, doubleValue);
 	}
 
-	protected <T extends Enum<T>> T toEnumByString(String[] values, int index,
-			Class<T> enumType) {
-		String stringValue = toObject(ArrayHelper.get(values, index),
-				String.class);
+	protected <T extends Enum<T>> T toEnumByString(String[] values, int index, Class<T> enumType) {
+		String stringValue = toObject(ArrayHelper.get(values, index), String.class);
 		return EnumHelper.valueOf(enumType, stringValue);
 	}
 
-	protected <T extends Enum<T>> T toEnumByName(String[] values, int index,
-			Class<T> enumType) {
-		String stringValue = toObject(ArrayHelper.get(values, index),
-				String.class);
+	protected <T extends Enum<T>> T toEnumByName(String[] values, int index, Class<T> enumType) {
+		String stringValue = toObject(ArrayHelper.get(values, index), String.class);
 		return EnumHelper.nameOf(enumType, stringValue);
 	}
 
@@ -438,18 +429,17 @@ public abstract class BaseUserTypeSupporter implements BaseUserType, Supporter {
 				if (valueOfIntCache.isNotNullValue(key)) {
 					result = (T) valueOfIntCache.get(key);
 					if (result == null) {
-						result = EnumHelper.valueOf(enumType,
-								toObject(value, int.class));
+						result = EnumHelper.valueOf(enumType, toObject(value, int.class));
 						valueOfIntCache.put(key, result);
 					}
 				}
-			} catch (Exception ex) {
-				ex.printStackTrace();
+			} catch (Exception e) {
+				LOGGER.error(new StringBuilder("Exception encountered during intValueOf()").toString(), e);
 			} finally {
 				valueOfIntCache.unlock();
 			}
-		} catch (InterruptedException ex) {
-			ex.printStackTrace();
+		} catch (InterruptedException e) {
+			LOGGER.error(new StringBuilder("Exception encountered during intValueOf()").toString(), e);
 		}
 		return result;
 	}

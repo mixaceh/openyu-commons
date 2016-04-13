@@ -495,6 +495,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	/**
 	 * kryo 序列化
 	 * 
+	 * 不會把class資訊一同序列化
+	 * 
 	 * object -> byte[]
 	 * 
 	 * @param value
@@ -522,6 +524,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 
 	/**
 	 * keyo 序列化
+	 * 
+	 * 不會把class資訊一同序列化
 	 * 
 	 * object -> byte[]
 	 * 
@@ -554,6 +558,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	/**
 	 * kryo 反序列化
 	 * 
+	 * 需指定反序列化class
+	 * 
 	 * byte[] -> object
 	 * 
 	 * @param value
@@ -580,6 +586,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 
 	/**
 	 * kryo 反序列化
+	 * 
+	 * 需指定反序列化class
 	 * 
 	 * byte[] -> object
 	 * 
@@ -611,6 +619,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	/**
 	 * kryo 序列化
 	 * 
+	 * 也會把class資訊一同序列化
+	 * 
 	 * object -> byte[]
 	 * 
 	 * @param value
@@ -641,6 +651,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 
 	/**
 	 * kryo 反序列化
+	 * 
+	 * 也會把class資訊一同反序列化, 不需指定反序列化class
 	 * 
 	 * byte[] -> object
 	 * 
