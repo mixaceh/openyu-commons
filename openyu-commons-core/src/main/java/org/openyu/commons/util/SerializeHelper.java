@@ -492,6 +492,10 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
+	public static byte[] kryo(Object value) {
+		return kryo(value, 4096);
+	}
+
 	/**
 	 * kryo 序列化
 	 * 
@@ -502,7 +506,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] kryo(Object value) {
+	public static byte[] kryo(Object value, int bufferSize) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -510,16 +514,20 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		ByteArrayOutputStream baos = null;
 		try {
 			baos = new ByteArrayOutputStream();
-			boolean serialized = kryo(value, baos);
+			boolean serialized = kryo(value, baos, bufferSize);
 			if (serialized) {
 				result = baos.toByteArray();
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		} finally {
 			IoHelper.close(baos);
 		}
 		return result;
+	}
+
+	public static boolean kryo(Object value, OutputStream out) {
+		return kryo(value, out, 4096);
 	}
 
 	/**
@@ -530,26 +538,27 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * object -> byte[]
 	 * 
 	 * @param value
-	 * @param outputStream
+	 * @param out
 	 * @return
 	 */
-	public static boolean kryo(Object value, OutputStream outputStream) {
+	public static boolean kryo(Object value, OutputStream out, int bufferSize) {
 		boolean result = false;
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
-		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
+		AssertHelper.notNull(out, "The OutputStream must not be null");
 		//
 		Kryo kryo = null;
-		Output out = null;
+		Output output = null;
 		try {
 			kryo = new Kryo();
-			out = new Output(outputStream);
-			kryo.writeObject(out, value);
+			output = new Output(out, bufferSize);
+			kryo.writeObject(output, value);
+			output.flush();
 			result = true;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		} finally {
-			IoHelper.close(out);
+			IoHelper.close(output);
 		}
 		//
 		return result;
@@ -577,7 +586,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			bais = new ByteArrayInputStream(value);
 			result = (T) dekryo(bais, clazz);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		} finally {
 			IoHelper.close(bais);
 		}
@@ -591,26 +600,26 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 
 	 * byte[] -> object
 	 * 
-	 * @param inputStream
+	 * @param in
 	 * @param clazz
 	 * @return
 	 */
-	public static <T> T dekryo(InputStream inputStream, Class<T> clazz) {
+	public static <T> T dekryo(InputStream in, Class<T> clazz) {
 		T result = null;
 		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
+		AssertHelper.notNull(in, "The InputStream must not be null");
 		AssertHelper.notNull(clazz, "The Class must not be null");
 		//
 		Kryo kryo = null;
-		Input in = null;
+		Input input = null;
 		try {
 			kryo = new Kryo();
-			in = new Input(inputStream);
-			result = kryo.readObject(in, clazz);
+			input = new Input(in);
+			result = kryo.readObject(input, clazz);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		} finally {
-			IoHelper.close(in);
+			IoHelper.close(input);
 		}
 		//
 		return result;
@@ -633,18 +642,19 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		//
 		Kryo kryo = null;
 		ByteArrayOutputStream baos = null;
-		Output out = null;
+		Output output = null;
 		try {
 			kryo = new Kryo();
 			baos = new ByteArrayOutputStream();
-			out = new Output(baos);
-			kryo.writeClassAndObject(out, value);
-			result = out.toBytes();
+			output = new Output(baos);
+			kryo.writeClassAndObject(output, value);
+			output.flush();
+			result = output.toBytes();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
 			IoHelper.close(baos);
-			IoHelper.close(out);
+			IoHelper.close(output);
 		}
 		return result;
 	}
@@ -666,15 +676,15 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		Kryo kryo = null;
-		Input in = null;
+		Input input = null;
 		try {
 			kryo = new Kryo();
-			in = new Input(value);
-			result = (T) kryo.readClassAndObject(in);
+			input = new Input(value);
+			result = (T) kryo.readClassAndObject(input);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			IoHelper.close(in);
+			IoHelper.close(input);
 		}
 		return result;
 	}

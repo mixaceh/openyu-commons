@@ -3,6 +3,7 @@ package org.openyu.commons.util;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -190,19 +191,30 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		assertCollectionEquals(list, result);
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 1, concurrency = 1)
 	@Test
 	// round: 13.41 [+- 7.02], round.block: 12.19 [+- 7.03], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 7, GC.time: 0.16, time.total: 25.34, time.warmup: 0.00,
 	// time.bench: 25.34
-
 	public void kryo() {
 		List<String> value = mockLinkedList();
 		byte[] result = null;
 		//
 		result = SerializeHelper.kryo(value);
 		//
-		System.out.println(result.length + " ," + result);// 307,235 bytes
+		System.out.println(result.length + " ," + result);// 307235
+		System.out.println(new String(result));
+	}
+
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	@Test
+	public void kryoWithBufferSize() {
+		List<String> value = mockLinkedList();
+		byte[] result = null;
+		//
+		result = SerializeHelper.kryo(value, 102400);
+		//
+		System.out.println(result.length + " ," + result);// 307235
 		System.out.println(new String(result));
 	}
 
@@ -238,7 +250,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		// IoHelper.close(baos);
 		//
 		byte[] result = SerializeHelper.kryoWriteClass(value);
-		System.out.println(result.length + ", " + result);
+		System.out.println(result.length + ", " + result);// 5
 	}
 
 	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
@@ -260,6 +272,9 @@ public class SerializeHelperTest extends BaseTestSupporter {
 
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 1, concurrency = 1)
 	@Test
+	// round: 1.01 [+- 0.10], round.block: 0.03 [+- 0.01], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 3, GC.time: 0.01, time.total: 1.02, time.warmup: 0.01,
+	// time.bench: 1.02
 	public void dekryoReadClass() {
 		String value = "abc";
 		// //
@@ -278,6 +293,22 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		byte[] result = SerializeHelper.kryoWriteClass(value);
 		value = SerializeHelper.dekryoReadClass(result);
 		System.out.println(value);
+	}
+
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 1, concurrency = 1)
+	@Test
+	// round: 1.01 [+- 0.10], round.block: 0.03 [+- 0.01], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 3, GC.time: 0.01, time.total: 1.02, time.warmup: 0.01,
+	// time.bench: 1.02
+	public void dekryoReadClassWithList() {
+		List<String> list = new ArrayList<String>();
+		list.add("aaa");
+		list.add("bbb");
+		byte[] value = SerializeHelper.kryoWriteClass(list);
+		System.out.println(value.length);
+		//
+		List<String> result = SerializeHelper.dekryoReadClass(value);
+		System.out.println(result);
 	}
 
 	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
