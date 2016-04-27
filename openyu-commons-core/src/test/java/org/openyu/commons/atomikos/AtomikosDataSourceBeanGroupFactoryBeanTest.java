@@ -24,7 +24,7 @@ public class AtomikosDataSourceBeanGroupFactoryBeanTest extends BaseTestSupporte
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/atomikos/testContext-atomikos.xml",//
+				"org/openyu/commons/atomikos/testContext-atomikos-group.xml",//
 
 		});
 		atomikosDataSourceBeans = applicationContext.getBean("atomikosDataSourceBeanGroupFactoryBean", AtomikosDataSourceBean[].class);

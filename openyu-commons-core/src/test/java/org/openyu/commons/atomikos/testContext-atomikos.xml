@@ -53,7 +53,7 @@
 			<value>10</value>
 		</property>
 		<property name="minPoolSize">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<property name="testQuery">
 			<value>SELECT 1</value>
@@ -61,21 +61,66 @@
 		<property name="maxIdleTime">
 			<value>60</value>
 		</property>
+		<property name="borrowConnectionTimeout">
+			<value>60</value>
+		</property>
+	</bean>
+
+	<bean
+		id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property
+			name="dataSource"
+			ref="dataSource" />
+	</bean>
+
+
+	<bean
+		id="userTransactionService"
+		class="com.atomikos.icatch.config.UserTransactionServiceImp"
+		init-method="init"
+		destroy-method="shutdownForce">
+		<constructor-arg>
+			<props>
+				<prop key="com.atomikos.icatch.service">com.atomikos.icatch.standalone.UserTransactionServiceFactory
+				</prop>
+				<prop key="com.atomikos.icatch.output_dir">./log</prop>
+				<prop key="com.atomikos.icatch.log_base_dir">./log</prop>
+				<prop key="com.atomikos.icatch.log_base_name">atomikos</prop>
+				<prop key="com.atomikos.icatch.max_actives">10</prop>
+				<prop key="com.atomikos.icatch.default_jta_timeout">300000</prop>
+				<prop key="com.atomikos.icatch.max_timeout">300000</prop>
+				<prop key="com.atomikos.icatch.console_log_level">INFO</prop>
+			</props>
+		</constructor-arg>
+		<!--  
+		<property name="initialLogAdministrators">
+			<list>
+				<ref bean="localLogAdministrator" />
+			</list>
+		</property>
+		-->
 	</bean>
 
 	<bean
 		id="userTransactionManager"
 		init-method="init"
 		destroy-method="close"
-		class="com.atomikos.icatch.jta.UserTransactionManager">
+		class="com.atomikos.icatch.jta.UserTransactionManager"
+		depends-on="userTransactionService">
+		 <!-- IMPORTANT: disable startup because the userTransactionService above does this -->
+		<property
+			name="startupTransactionService"
+			value="false" />
 		<property
 			name="forceShutdown"
-			value="true" />
+			value="false" />
 	</bean>
 
 	<bean
 		id="userTransactionImp"
-		class="com.atomikos.icatch.jta.UserTransactionImp">
+		class="com.atomikos.icatch.jta.UserTransactionImp"
+		depends-on="userTransactionService">
 		<property
 			name="transactionTimeout"
 			value="300" />
@@ -83,7 +128,8 @@
 
 	<bean
 		id="jtaTransactionManager"
-		class="org.springframework.transaction.jta.JtaTransactionManager">
+		class="org.springframework.transaction.jta.JtaTransactionManager"
+		depends-on="userTransactionService,userTransactionManager,userTransactionImp">
 		<property
 			name="transactionManager"
 			ref="userTransactionManager" />
@@ -95,9 +141,7 @@
 			value="true" />
 	</bean>
 
-	<tx:annotation-driven
-		proxy-target-class="true"
-		transaction-manager="jtaTransactionManager" />	
+	<tx:annotation-driven transaction-manager="jtaTransactionManager" />	
 
 	<!-- factory -->
 	<bean
@@ -108,24 +152,5 @@
 			name="configLocation"
 			value="file:src/test/config/etc/atomikos.properties" />
 	</bean>
-
-	<bean
-		id="jdbcTemplate"
-		class="org.springframework.jdbc.core.JdbcTemplate">
-		<property
-			name="dataSource"
-			ref="dataSource" />
-	</bean>
-	
-	<!-- group -->
-	<bean
-		id="atomikosDataSourceBeanGroupFactoryBean"
-		class="org.openyu.commons.atomikos.AtomikosDataSourceBeanGroupFactoryBean"
-		parent="baseFactoryBeanSupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/atomikosX.properties" />
-	</bean>
-
 
 </beans>

@@ -96,7 +96,7 @@ public abstract class AtomikosDataSourceBeanFactorySupporter<T> extends BaseFact
 					extendedProperties.getString(XA_DATA_SOURCE_CLASSNAME, DEFAULT_XA_DATA_SOURCE_CLASSNAME));
 			//
 			String url = nextUrl(extendedProperties.getString(URL, DEFAULT_URL), i);
-			LOGGER.info("URL: " + url);
+			LOGGER.info("[" + result.getUniqueResourceName() + "] " + url);
 			//
 			Properties xaProperties = new Properties();
 			xaProperties.put(URL, url);
