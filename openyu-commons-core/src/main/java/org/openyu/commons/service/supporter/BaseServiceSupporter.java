@@ -321,11 +321,6 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 		AssertHelper.notNull(actions, new StringBuilder().append("The ServiceCallbacks must not be null").toString());
 		//
 		boolean result = false;
-
-		// for (ServiceCallback action : actions) {
-		// result &= addServiceCallback(action);
-		// }
-
 		int length = classNames.length;
 		for (int i = 0; i < length; i++) {
 			ServiceCallback buff = addServiceCallback(classNames[i], actions[i]);

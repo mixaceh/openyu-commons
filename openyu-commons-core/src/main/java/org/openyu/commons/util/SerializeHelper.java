@@ -9,7 +9,6 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.util.LinkedList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +57,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 序列化處理器
 	 */
 	private static SoftReferenceCacheFactory<SerializeProcessor> serializeProcessorCacheFactory;
+
+	public static final int BUFFER_SIZE = 4096;
 
 	static {
 		new Static();
@@ -118,10 +119,9 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static byte[] serialize(Object value) {
-		byte[] result = new byte[0];
-		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
+		byte[] result = new byte[0];
 		ByteArrayOutputStream baos = null;
 		try {
 			baos = new ByteArrayOutputStream();
@@ -129,8 +129,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			if (serialized) {
 				result = baos.toByteArray();
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during serialize()").toString(), e);
 		} finally {
 			IoHelper.close(baos);
 		}
@@ -143,24 +143,23 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * object -> byte[]
 	 * 
 	 * @param value
-	 * @param outputStream
+	 * @param out
 	 * @return
 	 */
-	public static boolean serialize(Object value, OutputStream outputStream) {
-		boolean result = false;
-		//
+	public static boolean serialize(Object value, OutputStream out) {
 		AssertHelper.notNull(value, "The Value must not be null");
-		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
+		AssertHelper.notNull(out, "The OutputStream must not be null");
 		//
-		ObjectOutput out = null;
+		boolean result = false;
+		ObjectOutput output = null;
 		try {
-			out = new ObjectOutputStream(outputStream);
-			out.writeObject(value);
+			output = new ObjectOutputStream(out);
+			output.writeObject(value);
 			result = true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during serialize()").toString(), e);
 		} finally {
-			IoHelper.close(out);
+			IoHelper.close(output);
 		}
 		return result;
 	}
@@ -175,16 +174,15 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T deserialize(byte[] value) {
-		T result = null;
-		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
+		T result = null;
 		ByteArrayInputStream bais = null;
 		try {
 			bais = new ByteArrayInputStream(value);
 			result = (T) deserialize(bais);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during deserialize()").toString(), e);
 		} finally {
 			IoHelper.close(bais);
 		}
@@ -196,23 +194,22 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 
 	 * inputStream -> object
 	 * 
-	 * @param inputStream
+	 * @param in
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T deserialize(InputStream inputStream) {
+	public static <T> T deserialize(InputStream in) {
+		AssertHelper.notNull(in, "The InputStream must not be null");
+		//
 		T result = null;
-		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
-		//
-		ObjectInput in = null;
+		ObjectInput input = null;
 		try {
-			in = new ObjectInputStream(inputStream);
-			result = (T) in.readObject();
-		} catch (Exception ex) {
-			ex.printStackTrace();
+			input = new ObjectInputStream(in);
+			result = (T) input.readObject();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during deserialize()").toString(), e);
 		} finally {
-			IoHelper.close(in);
+			IoHelper.close(input);
 		}
 		return result;
 	}
@@ -237,8 +234,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			if (serialized) {
 				result = baos.toByteArray();
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during fst()").toString(), e);
 		} finally {
 			IoHelper.close(baos);
 		}
@@ -251,24 +248,23 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * object -> byte[]
 	 * 
 	 * @param value
-	 * @param outputStream
+	 * @param out
 	 * @return
 	 */
-	public static boolean fst(Object value, OutputStream outputStream) {
-		boolean result = false;
-		//
+	public static boolean fst(Object value, OutputStream out) {
 		AssertHelper.notNull(value, "The Value must not be null");
-		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
+		AssertHelper.notNull(out, "The OutputStream must not be null");
 		//
-		FSTObjectOutput out = null;
+		boolean result = false;
+		ObjectOutput output = null;
 		try {
-			out = new FSTObjectOutput(outputStream);
-			out.writeObject(value);
+			output = new FSTObjectOutput(out);
+			output.writeObject(value);
 			result = true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during fst()").toString(), e);
 		} finally {
-			IoHelper.close((ObjectOutput) out);
+			IoHelper.close(output);
 		}
 		return result;
 	}
@@ -282,16 +278,15 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static <T> T defst(byte[] value) {
-		T result = null;
-		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
+		T result = null;
 		ByteArrayInputStream bais = null;
 		try {
 			bais = new ByteArrayInputStream(value);
 			result = defst(bais);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during defst()").toString(), e);
 		} finally {
 			IoHelper.close(bais);
 		}
@@ -303,23 +298,22 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 
 	 * byte[] -> object
 	 * 
-	 * @param inputStream
+	 * @param in
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T defst(InputStream inputStream) {
+	public static <T> T defst(InputStream in) {
+		AssertHelper.notNull(in, "The InputStream must not be null");
+		//
 		T result = null;
-		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
-		//
-		FSTObjectInput in = null;
+		ObjectInput input = null;
 		try {
-			in = new FSTObjectInput(inputStream);
-			result = (T) in.readObject();
-		} catch (Exception ex) {
-			ex.printStackTrace();
+			input = new FSTObjectInput(in);
+			result = (T) input.readObject();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during defst()").toString(), e);
 		} finally {
-			IoHelper.close((ObjectInput) in);
+			IoHelper.close(input);
 		}
 		return result;
 	}
@@ -336,10 +330,9 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static byte[] ___fst2(Serializable value) {
-		byte[] result = new byte[0];
-		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
+		byte[] result = new byte[0];
 		ByteArrayOutputStream baos = null;
 		try {
 			baos = new ByteArrayOutputStream();
@@ -347,8 +340,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			if (serialized) {
 				result = baos.toByteArray();
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during ___fst2()").toString(), e);
 		} finally {
 			IoHelper.close(baos);
 		}
@@ -368,18 +361,17 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static boolean ___fst2(Serializable value, OutputStream outputStream) {
-		boolean result = false;
-		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
 		//
+		boolean result = false;
 		FSTObjectOutput out = null;
 		try {
 			out = fstConfiguration.getObjectOutput(outputStream);
 			out.writeObject(value);
 			result = true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during ___fst2()").toString(), e);
 		} finally {
 			try {
 				if (out != null) {
@@ -404,16 +396,15 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static <T> T ___defst2(byte[] value) {
-		T result = null;
-		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
+		T result = null;
 		ByteArrayInputStream bais = null;
 		try {
 			bais = new ByteArrayInputStream(value);
 			result = ___defst2(bais);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during ___defst2()").toString(), e);
 		} finally {
 			IoHelper.close(bais);
 		}
@@ -430,16 +421,15 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T ___defst2(InputStream inputStream) {
-		T result = null;
-		//
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
 		//
+		T result = null;
 		FSTObjectInput in = null;
 		try {
 			in = fstConfiguration.getObjectInput(inputStream);
 			result = (T) in.readObject();
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during ___defst2()").toString(), e);
 		} finally {
 			// DON'T: in.close(); here prevents reuse and will result in an
 			// exception
@@ -456,14 +446,13 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static byte[] jgroup(Object value) {
-		byte[] result = new byte[0];
-		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
+		byte[] result = new byte[0];
 		try {
 			result = Util.objectToByteBuffer(value);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during jgroup()").toString(), e);
 		} finally {
 		}
 		return result;
@@ -485,15 +474,15 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		//
 		try {
 			result = (T) Util.objectFromByteBuffer(value);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during dejgroup()").toString(), e);
 		} finally {
 		}
 		return result;
 	}
 
 	public static byte[] kryo(Object value) {
-		return kryo(value, 4096);
+		return kryo(value, BUFFER_SIZE);
 	}
 
 	/**
@@ -507,10 +496,9 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static byte[] kryo(Object value, int bufferSize) {
-		byte[] result = new byte[0];
-		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
+		byte[] result = new byte[0];
 		ByteArrayOutputStream baos = null;
 		try {
 			baos = new ByteArrayOutputStream();
@@ -518,8 +506,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			if (serialized) {
 				result = baos.toByteArray();
 			}
-		} catch (Exception ex) {
-			// ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during kryo()").toString(), e);
 		} finally {
 			IoHelper.close(baos);
 		}
@@ -527,7 +515,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	}
 
 	public static boolean kryo(Object value, OutputStream out) {
-		return kryo(value, out, 4096);
+		return kryo(value, out, BUFFER_SIZE);
 	}
 
 	/**
@@ -555,8 +543,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			kryo.writeObject(output, value);
 			output.flush();
 			result = true;
-		} catch (Exception ex) {
-			// ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during kryo()").toString(), e);
 		} finally {
 			IoHelper.close(output);
 		}
@@ -585,8 +573,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		try {
 			bais = new ByteArrayInputStream(value);
 			result = (T) dekryo(bais, clazz);
-		} catch (Exception ex) {
-			// ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during dekryo()").toString(), e);
 		} finally {
 			IoHelper.close(bais);
 		}
@@ -616,8 +604,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			kryo = new Kryo();
 			input = new Input(in);
 			result = kryo.readObject(input, clazz);
-		} catch (Exception ex) {
-			// ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during dekryo()").toString(), e);
 		} finally {
 			IoHelper.close(input);
 		}

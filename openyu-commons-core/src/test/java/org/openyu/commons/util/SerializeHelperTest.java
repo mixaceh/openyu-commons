@@ -13,10 +13,8 @@ import org.junit.Test;
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-import org.openyu.commons.io.IoHelper;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
 public class SerializeHelperTest extends BaseTestSupporter {
@@ -32,55 +30,40 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		return result;
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
 	@Test
-	public void getInstance() {
-		// SerializeHelper.getInstance();
-		List<String> value = mockLinkedList();
-		SerializeHelper.serialize(value);
-	}
-
-	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
-	@Test
-	// round: 1.29, GC: 80
+	// round: 33.15 [+- 17.92], round.block: 30.93 [+- 17.82], round.gc: 0.00
+	// [+- 0.00], GC.calls: 10, GC.time: 0.39, time.total: 68.19, time.warmup:
+	// 0.02, time.bench: 68.17
 	public void serialize() {
 		List<String> value = mockLinkedList();
 		byte[] result = null;
 		//
-		int count = 500;
-		for (int i = 0; i < count; i++) {
-			result = SerializeHelper.serialize(value);
-		}
-		//
+		result = SerializeHelper.serialize(value);
 		System.out.println(result.length + " ," + result);// 614,486 bytes
 		System.out.println(new String(result));
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 1, concurrency = 1)
 	@Test(expected = IllegalArgumentException.class)
 	public void serializeException() {
 		List<String> value = mockLinkedList();
 		//
-		int count = 500;
-		for (int i = 0; i < count; i++) {
-			SerializeHelper.serialize(value, null);
-		}
+		SerializeHelper.serialize(value, null);
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
 	@Test
-	// round: 1.14, GC: 77
+	// round: 13.68 [+- 6.63], round.block: 11.31 [+- 6.57], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 12, GC.time: 0.47, time.total: 25.20, time.warmup: 0.00,
+	// time.bench: 25.20
 	public void deserialize() {
 		List<String> list = mockLinkedList();
 		byte[] value = SerializeHelper.serialize(list);
 
 		List<String> result = null;
 		//
-		int count = 500;
-		for (int i = 0; i < count; i++) {
-			result = SerializeHelper.deserialize(value);
-		}
-		//
+		result = SerializeHelper.deserialize(value);
 		System.out.println(result);
 		assertCollectionEquals(list, result);
 	}
@@ -93,10 +76,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		LinkedList<String> value = mockLinkedList();
 		byte[] result = null;
 		//
-		int count = 500;
-		for (int i = 0; i < count; i++) {
-			result = SerializeHelper.___fst2(value);
-		}
+		result = SerializeHelper.___fst2(value);
 		//
 		System.out.println(result.length + " ," + result);// 307,239 bytes
 		System.out.println(new String(result));
@@ -112,10 +92,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 
 		List<String> result = null;
 		//
-		int count = 500;
-		for (int i = 0; i < count; i++) {
-			result = SerializeHelper.___defst2(value);
-		}
+		result = SerializeHelper.___defst2(value);
 		//
 		System.out.println(result);
 		assertCollectionEquals(list, result);
@@ -129,10 +106,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		LinkedList<String> value = mockLinkedList();
 		byte[] result = null;
 		//
-		int count = 500;
-		for (int i = 0; i < count; i++) {
-			result = SerializeHelper.fst(value);
-		}
+		result = SerializeHelper.fst(value);
 		//
 		System.out.println(result.length + " ," + result);// 307,239 bytes
 		System.out.println(new String(result));
@@ -148,10 +122,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 
 		List<String> result = null;
 		//
-		int count = 500;
-		for (int i = 0; i < count; i++) {
-			result = SerializeHelper.defst(value);
-		}
+		result = SerializeHelper.defst(value);
 		//
 		System.out.println(result);
 		assertCollectionEquals(list, result);

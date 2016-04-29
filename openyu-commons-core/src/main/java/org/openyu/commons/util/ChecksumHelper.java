@@ -117,13 +117,16 @@ public final class ChecksumHelper extends BaseHelperSupporter {
 	}
 
 	public static long crc32(final byte[] value) {
-		long result = 0;
-		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
-		Checksum checksum = new CRC32();
-		checksum.update(value, 0, value.length);
-		result = checksum.getValue();
+		long result = 0;
+		try {
+			Checksum checksum = new CRC32();
+			checksum.update(value, 0, value.length);
+			result = checksum.getValue();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during crc32()").toString(), e);
+		}
 		//
 		return result;
 	}
@@ -131,14 +134,13 @@ public final class ChecksumHelper extends BaseHelperSupporter {
 	/**
 	 * crc32
 	 * 
-	 * @param inputStream
+	 * @param in
 	 * @return
 	 */
-	public static long crc32(InputStream inputStream) {
+	public static long crc32(InputStream in) {
+		AssertHelper.notNull(in, "The InputStream must not be null");
+		//
 		long result = 0;
-		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
-		//
 		try {
 			Checksum checksum = new CRC32();
 			// int read = 0;
@@ -148,11 +150,11 @@ public final class ChecksumHelper extends BaseHelperSupporter {
 			// }
 			// result = checksum.getValue();
 
-			byte[] value = IoHelper.read(inputStream);
+			byte[] value = IoHelper.read(in);
 			checksum.update(value, 0, value.length);
 			result = checksum.getValue();
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during crc32()").toString(), e);
 		}
 		return result;
 	}
@@ -246,16 +248,15 @@ public final class ChecksumHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static long adler32(byte[] value) {
-		long result = 0;
-		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
+		long result = 0;
 		try {
 			Checksum checksum = new Adler32();
 			checksum.update(value, 0, value.length);
 			result = checksum.getValue();
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during adler32()").toString(), e);
 		}
 		return result;
 	}
@@ -263,13 +264,13 @@ public final class ChecksumHelper extends BaseHelperSupporter {
 	/**
 	 * adler32
 	 * 
-	 * @param inputStream
+	 * @param in
 	 * @return
 	 */
-	public static long adler32(InputStream inputStream) {
-		long result = 0;
+	public static long adler32(InputStream in) {
+		AssertHelper.notNull(in, "The InputStream must not be null");
 		//
-		AssertHelper.notNull(inputStream, "The InputStream must not be null");
+		long result = 0;
 		try {
 			Checksum checksum = new Adler32();
 			// int read = 0;
@@ -280,11 +281,11 @@ public final class ChecksumHelper extends BaseHelperSupporter {
 			// }
 			// result = checksum.getValue();
 
-			byte[] buff = IoHelper.read(inputStream);
+			byte[] buff = IoHelper.read(in);
 			checksum.update(buff, 0, buff.length);
 			result = checksum.getValue();
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during adler32()").toString(), e);
 		}
 		return result;
 	}
@@ -350,200 +351,22 @@ public final class ChecksumHelper extends BaseHelperSupporter {
 		return EncodingHelper.encodeHex(ByteHelper.toByteArray(adler32(in)));
 	}
 
+	/**
+	 * 使用檢查碼處理器, ChecksumProcessor
+	 * 
+	 * @param value
+	 * @return
+	 */
 	public static long checksumWithProcessor(final byte[] value) {
 		long result = 0;
 		//
-		Long retObj = (Long) checksumProcessorCacheFactory.execute(new CacheCallback<ChecksumProcessor>() {
+		Long object = (Long) checksumProcessorCacheFactory.execute(new CacheCallback<ChecksumProcessor>() {
 			public Object doInAction(ChecksumProcessor obj) throws CacheException {
 				return obj.checksum(value);
 			}
 		});
-		result = NumberHelper.safeGet(retObj);
+		result = NumberHelper.safeGet(object);
 		//
 		return result;
 	}
-
-	// refactor to Checksumable
-	// /**
-	// * 檢查碼
-	// *
-	// * @param checksumTypeValue
-	// * 檢查碼類別
-	// * @see ChecksumType
-	// * @param values
-	// * @param assignKey
-	// * @return
-	// */
-	// public static long execute(String checksumTypeValue, byte[] values,
-	// String assignKey) {
-	// ChecksumType checksumType = EnumHelper.valueOf(ChecksumType.class,
-	// checksumTypeValue);
-	// return execute(checksumType, values, assignKey);
-	// }
-	//
-	// /**
-	// * 檢查碼
-	// *
-	// * @param checksumTypeValue
-	// * 檢查碼類別
-	// * @see ChecksumType
-	// * @param values
-	// * @param assignKey
-	// * @return
-	// */
-	// public static long execute(int checksumTypeValue, byte[] values,
-	// String assignKey) {
-	// ChecksumType checksumType = EnumHelper.valueOf(ChecksumType.class,
-	// checksumTypeValue);
-	// return execute(checksumType, values, assignKey);
-	// }
-	//
-	// /**
-	// * 檢查碼
-	// *
-	// * @param checksumType
-	// * 檢查碼類別
-	// * @see ChecksumType
-	// * @param values
-	// * @param assignKey
-	// * @return
-	// */
-	// public static long execute(ChecksumType checksumType, byte[] values,
-	// String assignKey) {
-	// long result = 0;
-	// //
-	// if (checksumType == null) {
-	// throw new IllegalArgumentException(
-	// "The ChecksumType must not be null");
-	// }
-	// //
-	// switch (checksumType) {
-	// case CRC32: {
-	// byte[] buff = values;
-	// if (assignKey != null) {
-	// buff = ArrayHelper.add(buff, ByteHelper.toByteArray(assignKey));
-	// }
-	// result = crc32(buff);
-	// break;
-	//
-	// }
-	// case ADLER32: {
-	// byte[] buff = values;
-	// if (assignKey != null) {
-	// buff = ArrayHelper.add(buff, ByteHelper.toByteArray(assignKey));
-	// }
-	// result = adler32(buff);
-	// break;
-	// }
-	// default: {
-	// throw new UnsupportedOperationException(
-	// "The ChecksumType is not unsupported" + checksumType);
-	// }
-	// }
-	// //
-	// return result;
-	// }
-	//
-	// /**
-	// * as a byte[]
-	// *
-	// * @param checksumTypeValue
-	// * 檢查碼類別
-	// * @see ChecksumType
-	// * @param values
-	// * @param assignKey
-	// * @return
-	// */
-	// public static byte[] executeAsBytes(String checksumTypeValue,
-	// byte[] values, String assignKey) {
-	// ChecksumType checksumType = EnumHelper.valueOf(ChecksumType.class,
-	// checksumTypeValue);
-	// return ByteHelper.toByteArray(execute(checksumType, values, assignKey));
-	// }
-	//
-	// /**
-	// * as a byte[]
-	// *
-	// * @param checksumTypeValue
-	// * 檢查碼類別
-	// * @see ChecksumType
-	// * @param values
-	// * @param assignKey
-	// * @return
-	// */
-	// public static byte[] executeAsBytes(int checksumTypeValue, byte[] values,
-	// String assignKey) {
-	// ChecksumType checksumType = EnumHelper.valueOf(ChecksumType.class,
-	// checksumTypeValue);
-	// return ByteHelper.toByteArray(execute(checksumType, values, assignKey));
-	// }
-	//
-	// /**
-	// * as a byte[]
-	// *
-	// * @param checksumType
-	// * 檢查碼類別
-	// * @see ChecksumType
-	// * @param values
-	// * @param assignKey
-	// * @return
-	// */
-	// public static byte[] executeAsBytes(ChecksumType checksumType,
-	// byte[] values, String assignKey) {
-	// return ByteHelper.toByteArray(execute(checksumType, values, assignKey));
-	// }
-	//
-	// /**
-	// * as a hex string
-	// *
-	// * @param checksumTypeValue
-	// * 檢查碼類別
-	// * @see ChecksumType
-	// * @param values
-	// * @param assignKey
-	// * @return
-	// */
-	// public static String executeAsHex(String checksumTypeValue, byte[]
-	// values,
-	// String assignKey) {
-	// ChecksumType checksumType = EnumHelper.valueOf(ChecksumType.class,
-	// checksumTypeValue);
-	// return EncodingHelper.encodeHex(ByteHelper.toByteArray(execute(
-	// checksumType, values, assignKey)));
-	// }
-	//
-	// /**
-	// * as a hex string
-	// *
-	// * @param checksumTypeValue
-	// * 檢查碼類別
-	// * @see ChecksumType
-	// * @param values
-	// * @param assignKey
-	// * @return
-	// */
-	// public static String executeAsHex(int checksumTypeValue, byte[] values,
-	// String assignKey) {
-	// ChecksumType checksumType = EnumHelper.valueOf(ChecksumType.class,
-	// checksumTypeValue);
-	// return EncodingHelper.encodeHex(ByteHelper.toByteArray(execute(
-	// checksumType, values, assignKey)));
-	// }
-	//
-	// /**
-	// * as a hex string
-	// *
-	// * @param checksumType
-	// * 檢查碼類別
-	// * @see ChecksumType
-	// * @param values
-	// * @param assignKey
-	// * @return
-	// */
-	// public static String executeAsHex(ChecksumType checksumType, byte[]
-	// values,
-	// String assignKey) {
-	// return EncodingHelper.encodeHex(ByteHelper.toByteArray(execute(
-	// checksumType, values, assignKey)));
-	// }
 }
