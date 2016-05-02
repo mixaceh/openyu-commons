@@ -530,11 +530,10 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static boolean kryo(Object value, OutputStream out, int bufferSize) {
-		boolean result = false;
-		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		AssertHelper.notNull(out, "The OutputStream must not be null");
 		//
+		boolean result = false;
 		Kryo kryo = null;
 		Output output = null;
 		try {
@@ -552,6 +551,10 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
+	public static <T> T dekryo(byte[] value, Class<?> clazz) {
+		return dekryo(value, BUFFER_SIZE, clazz);
+	}
+
 	/**
 	 * kryo 反序列化
 	 * 
@@ -560,19 +563,19 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * byte[] -> object
 	 * 
 	 * @param value
+	 * @param bufferSize
 	 * @param clazz
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T dekryo(byte[] value, Class<?> clazz) {
-		T result = null;
-		//
+	public static <T> T dekryo(byte[] value, int bufferSize, Class<?> clazz) {
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
+		T result = null;
 		ByteArrayInputStream bais = null;
 		try {
 			bais = new ByteArrayInputStream(value);
-			result = (T) dekryo(bais, clazz);
+			result = (T) dekryo(bais, bufferSize, clazz);
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during dekryo()").toString(), e);
 		} finally {
@@ -593,16 +596,31 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static <T> T dekryo(InputStream in, Class<T> clazz) {
-		T result = null;
-		//
+		return dekryo(in, BUFFER_SIZE, clazz);
+	}
+
+	/**
+	 * kryo 反序列化
+	 * 
+	 * 需指定反序列化class
+	 * 
+	 * byte[] -> object
+	 * 
+	 * @param in
+	 * @param bufferSize
+	 * @param clazz
+	 * @return
+	 */
+	public static <T> T dekryo(InputStream in, int bufferSize, Class<T> clazz) {
 		AssertHelper.notNull(in, "The InputStream must not be null");
 		AssertHelper.notNull(clazz, "The Class must not be null");
 		//
+		T result = null;
 		Kryo kryo = null;
 		Input input = null;
 		try {
 			kryo = new Kryo();
-			input = new Input(in);
+			input = new Input(in, bufferSize);
 			result = kryo.readObject(input, clazz);
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during dekryo()").toString(), e);
@@ -624,26 +642,70 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static byte[] kryoWriteClass(Object value) {
-		byte[] result = new byte[0];
-		//
+		return kryoWriteClass(value, BUFFER_SIZE);
+	}
+
+	/**
+	 * kryo 序列化
+	 * 
+	 * 也會把class資訊一同序列化
+	 * 
+	 * object -> byte[]
+	 * 
+	 * @param value
+	 * @param bufferSize
+	 * @return
+	 */
+	public static byte[] kryoWriteClass(Object value, int bufferSize) {
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
-		Kryo kryo = null;
+		byte[] result = new byte[0];
 		ByteArrayOutputStream baos = null;
+		try {
+			baos = new ByteArrayOutputStream();
+			boolean serialized = kryoWriteClass(value, baos, bufferSize);
+			if (serialized) {
+				result = baos.toByteArray();
+			}
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during kryoWriteClass()").toString(), e);
+		} finally {
+			IoHelper.close(baos);
+		}
+		return result;
+	}
+
+	/**
+	 * kryo 序列化
+	 * 
+	 * 也會把class資訊一同序列化
+	 * 
+	 * object -> byte[]
+	 * 
+	 * @param value
+	 * @param out
+	 * @param bufferSize
+	 * @return
+	 */
+	public static boolean kryoWriteClass(Object value, OutputStream out, int bufferSize) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		AssertHelper.notNull(out, "The OutputStream must not be null");
+		//
+		boolean result = false;
+		Kryo kryo = null;
 		Output output = null;
 		try {
 			kryo = new Kryo();
-			baos = new ByteArrayOutputStream();
-			output = new Output(baos);
+			output = new Output(out, bufferSize);
 			kryo.writeClassAndObject(output, value);
 			output.flush();
-			result = output.toBytes();
-		} catch (Exception ex) {
-			ex.printStackTrace();
+			result = true;
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during kryoWriteClass()").toString(), e);
 		} finally {
-			IoHelper.close(baos);
 			IoHelper.close(output);
 		}
+		//
 		return result;
 	}
 
