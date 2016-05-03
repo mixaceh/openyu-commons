@@ -16,6 +16,9 @@
 	<bean
 		id="kryoRedisSerializer"
 		class="org.openyu.commons.redis.KryoRedisSerializer" />
+	<bean
+		id="jdkRedisSerializer"
+		class="org.openyu.commons.redis.JdkRedisSerializer" />
 		
 	<!-- common 
 	<bean

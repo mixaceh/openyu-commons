@@ -14,12 +14,12 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
-public class KryoRedisSerializerTest extends BaseTestSupporter {
+public class JdkRedisSerializerTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static KryoRedisSerializer kryoRedisSerializer = new KryoRedisSerializer();
+	private static JdkRedisSerializer jdkRedisSerializer = new JdkRedisSerializer();
 
 	public static LinkedList<String> mockLinkedList() {
 		LinkedList<String> result = new LinkedList<String>();
@@ -38,7 +38,7 @@ public class KryoRedisSerializerTest extends BaseTestSupporter {
 		String value = "abc";
 		byte[] result = null;
 		//
-		result = kryoRedisSerializer.serialize(value);
+		result = jdkRedisSerializer.serialize(value);
 		//
 		System.out.println(result.length + " ," + result);// 5
 	}
@@ -52,7 +52,7 @@ public class KryoRedisSerializerTest extends BaseTestSupporter {
 		LinkedList<String> value = mockLinkedList();
 		byte[] result = null;
 		//
-		result = kryoRedisSerializer.serialize(value);
+		result = jdkRedisSerializer.serialize(value);
 		//
 		System.out.println(result.length);// 307257
 	}
@@ -64,10 +64,10 @@ public class KryoRedisSerializerTest extends BaseTestSupporter {
 	// time.bench: 0.95
 	public void deserialize() {
 		Date date = new Date();
-		byte[] value = kryoRedisSerializer.serialize(date);
+		byte[] value = jdkRedisSerializer.serialize(date);
 		Date result = null;
 		//
-		result = (Date) kryoRedisSerializer.deserialize(value);
+		result = (Date) jdkRedisSerializer.deserialize(value);
 		//
 		System.out.println(result);
 		assertEquals(date, result);
@@ -81,12 +81,13 @@ public class KryoRedisSerializerTest extends BaseTestSupporter {
 	// time.bench: 1.08
 	public void deserializeWithList() {
 		LinkedList<String> list = mockLinkedList();
-		byte[] value = kryoRedisSerializer.serialize(list);
+		byte[] value = jdkRedisSerializer.serialize(list);
 		List<String> result = null;
 		//
-		result = (List<String>) kryoRedisSerializer.deserialize(value);
+		result = (List<String>) jdkRedisSerializer.deserialize(value);
 		//
 		System.out.println(result.size());
 		assertCollectionEquals(list, result);
 	}
+
 }

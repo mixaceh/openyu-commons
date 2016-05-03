@@ -313,7 +313,7 @@ public final class ByteHelper extends BaseHelperSupporter {
 	 */
 	public static byte[] toByteArray(Serializable value) {
 		// jdk 序列化
-		return SerializeHelper.serialize(value);
+		return SerializeHelper.jdk(value);
 	}
 
 	/**
@@ -329,7 +329,7 @@ public final class ByteHelper extends BaseHelperSupporter {
 	 */
 	public static byte[] toByteArray(SerializeType serializeType, Serializable value) {
 		// jdk 序列化
-		return SerializeHelper.serialize(value);
+		return SerializeHelper.jdk(value);
 	}
 
 	// -------------------------------------------------------
@@ -547,7 +547,7 @@ public final class ByteHelper extends BaseHelperSupporter {
 	 */
 	public static <T> T toObject(byte[] value) {
 		// jdk 反序列化
-		return SerializeHelper.deserialize(value);
+		return SerializeHelper.dejdk(value);
 	}
 
 	// -------------------------------------------------------

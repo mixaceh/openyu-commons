@@ -891,7 +891,7 @@ public final class SecurityHelper extends BaseHelperSupporter {
 			buff.append(".key");
 			//
 			out = IoHelper.createOutputStream(buff.toString());
-			boolean serialized = SerializeHelper.serialize(value, out);
+			boolean serialized = SerializeHelper.jdk(value, out);
 			if (serialized) {
 				result = buff.toString();
 			}
@@ -920,7 +920,7 @@ public final class SecurityHelper extends BaseHelperSupporter {
 			buff.append(".key");
 			//
 			out = IoHelper.createOutputStream(buff.toString());
-			boolean serialized = SerializeHelper.serialize(value, out);
+			boolean serialized = SerializeHelper.jdk(value, out);
 			if (serialized) {
 				result = buff.toString();
 			}
@@ -948,7 +948,7 @@ public final class SecurityHelper extends BaseHelperSupporter {
 			buff.append(".key");
 			//
 			in = IoHelper.createInputStream(buff.toString());
-			result = SerializeHelper.deserialize(in);
+			result = SerializeHelper.dejdk(in);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -973,7 +973,7 @@ public final class SecurityHelper extends BaseHelperSupporter {
 			buff.append(".key");
 			//
 			in = IoHelper.createInputStream(buff.toString());
-			result = SerializeHelper.deserialize(in);
+			result = SerializeHelper.dejdk(in);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {

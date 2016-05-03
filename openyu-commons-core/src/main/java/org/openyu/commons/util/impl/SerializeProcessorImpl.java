@@ -160,7 +160,7 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements Se
 			break;
 		}
 		case JDK: {
-			result = SerializeHelper.serialize(value);
+			result = SerializeHelper.jdk(value);
 			break;
 		}
 		case FST: {
@@ -277,7 +277,7 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements Se
 			break;
 		}
 		case JDK: {
-			result = SerializeHelper.deserialize(value);
+			result = SerializeHelper.dejdk(value);
 			break;
 		}
 		case FST: {

@@ -118,19 +118,19 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] serialize(Object value) {
+	public static byte[] jdk(Object value) {
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		byte[] result = new byte[0];
 		ByteArrayOutputStream baos = null;
 		try {
 			baos = new ByteArrayOutputStream();
-			boolean serialized = serialize(value, baos);
+			boolean serialized = jdk(value, baos);
 			if (serialized) {
 				result = baos.toByteArray();
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during serialize()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during jdk()").toString(), e);
 		} finally {
 			IoHelper.close(baos);
 		}
@@ -146,7 +146,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param out
 	 * @return
 	 */
-	public static boolean serialize(Object value, OutputStream out) {
+	public static boolean jdk(Object value, OutputStream out) {
 		AssertHelper.notNull(value, "The Value must not be null");
 		AssertHelper.notNull(out, "The OutputStream must not be null");
 		//
@@ -155,9 +155,10 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		try {
 			output = new ObjectOutputStream(out);
 			output.writeObject(value);
+			output.flush();
 			result = true;
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during serialize()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during jdk()").toString(), e);
 		} finally {
 			IoHelper.close(output);
 		}
@@ -173,16 +174,16 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T deserialize(byte[] value) {
+	public static <T> T dejdk(byte[] value) {
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		T result = null;
 		ByteArrayInputStream bais = null;
 		try {
 			bais = new ByteArrayInputStream(value);
-			result = (T) deserialize(bais);
+			result = (T) dejdk(bais);
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during deserialize()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during dejdk()").toString(), e);
 		} finally {
 			IoHelper.close(bais);
 		}
@@ -198,7 +199,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T deserialize(InputStream in) {
+	public static <T> T dejdk(InputStream in) {
 		AssertHelper.notNull(in, "The InputStream must not be null");
 		//
 		T result = null;
@@ -207,111 +208,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			input = new ObjectInputStream(in);
 			result = (T) input.readObject();
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during deserialize()").toString(), e);
-		} finally {
-			IoHelper.close(input);
-		}
-		return result;
-	}
-
-	/**
-	 * fst 序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static byte[] fst(Object value) {
-		byte[] result = new byte[0];
-		//
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		ByteArrayOutputStream baos = null;
-		try {
-			baos = new ByteArrayOutputStream();
-			boolean serialized = fst(value, baos);
-			if (serialized) {
-				result = baos.toByteArray();
-			}
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during fst()").toString(), e);
-		} finally {
-			IoHelper.close(baos);
-		}
-		return result;
-	}
-
-	/**
-	 * fst 序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @param out
-	 * @return
-	 */
-	public static boolean fst(Object value, OutputStream out) {
-		AssertHelper.notNull(value, "The Value must not be null");
-		AssertHelper.notNull(out, "The OutputStream must not be null");
-		//
-		boolean result = false;
-		ObjectOutput output = null;
-		try {
-			output = new FSTObjectOutput(out);
-			output.writeObject(value);
-			result = true;
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during fst()").toString(), e);
-		} finally {
-			IoHelper.close(output);
-		}
-		return result;
-	}
-
-	/**
-	 * fst 反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static <T> T defst(byte[] value) {
-		AssertHelper.notNull(value, "The Value must not be null");
-		//
-		T result = null;
-		ByteArrayInputStream bais = null;
-		try {
-			bais = new ByteArrayInputStream(value);
-			result = defst(bais);
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during defst()").toString(), e);
-		} finally {
-			IoHelper.close(bais);
-		}
-		return result;
-	}
-
-	/**
-	 * fst 反序列化
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param in
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T defst(InputStream in) {
-		AssertHelper.notNull(in, "The InputStream must not be null");
-		//
-		T result = null;
-		ObjectInput input = null;
-		try {
-			input = new FSTObjectInput(in);
-			result = (T) input.readObject();
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during defst()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during dejdk()").toString(), e);
 		} finally {
 			IoHelper.close(input);
 		}
@@ -433,6 +330,111 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		} finally {
 			// DON'T: in.close(); here prevents reuse and will result in an
 			// exception
+		}
+		return result;
+	}
+
+	/**
+	 * fst 序列化
+	 * 
+	 * object -> byte[]
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static byte[] fst(Object value) {
+		byte[] result = new byte[0];
+		//
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		ByteArrayOutputStream baos = null;
+		try {
+			baos = new ByteArrayOutputStream();
+			boolean serialized = fst(value, baos);
+			if (serialized) {
+				result = baos.toByteArray();
+			}
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during fst()").toString(), e);
+		} finally {
+			IoHelper.close(baos);
+		}
+		return result;
+	}
+
+	/**
+	 * fst 序列化
+	 * 
+	 * object -> byte[]
+	 * 
+	 * @param value
+	 * @param out
+	 * @return
+	 */
+	public static boolean fst(Object value, OutputStream out) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		AssertHelper.notNull(out, "The OutputStream must not be null");
+		//
+		boolean result = false;
+		ObjectOutput output = null;
+		try {
+			output = new FSTObjectOutput(out);
+			output.writeObject(value);
+			output.flush();
+			result = true;
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during fst()").toString(), e);
+		} finally {
+			IoHelper.close(output);
+		}
+		return result;
+	}
+
+	/**
+	 * fst 反序列化
+	 * 
+	 * byte[] -> object
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static <T> T defst(byte[] value) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		T result = null;
+		ByteArrayInputStream bais = null;
+		try {
+			bais = new ByteArrayInputStream(value);
+			result = defst(bais);
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during defst()").toString(), e);
+		} finally {
+			IoHelper.close(bais);
+		}
+		return result;
+	}
+
+	/**
+	 * fst 反序列化
+	 * 
+	 * byte[] -> object
+	 * 
+	 * @param in
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T defst(InputStream in) {
+		AssertHelper.notNull(in, "The InputStream must not be null");
+		//
+		T result = null;
+		ObjectInput input = null;
+		try {
+			input = new FSTObjectInput(in);
+			result = (T) input.readObject();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during defst()").toString(), e);
+		} finally {
+			IoHelper.close(input);
 		}
 		return result;
 	}
