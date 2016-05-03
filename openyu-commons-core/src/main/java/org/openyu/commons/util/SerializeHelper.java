@@ -719,20 +719,75 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> T dekryoReadClass(byte[] value) {
-		T result = null;
-		//
+		return dekryoReadClass(value, BUFFER_SIZE);
+	}
+
+	/**
+	 * kryo 反序列化
+	 * 
+	 * 也會把class資訊一同反序列化, 不需指定反序列化class
+	 * 
+	 * byte[] -> object
+	 * 
+	 * @param value
+	 * @param bufferSize
+	 * @return
+	 */
+	public static <T> T dekryoReadClass(byte[] value, int bufferSize) {
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
+		T result = null;
+		ByteArrayInputStream bais = null;
+		try {
+			bais = new ByteArrayInputStream(value);
+			result = dekryoReadClass(bais, bufferSize);
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during dekryoReadClass()").toString(), e);
+		} finally {
+			IoHelper.close(bais);
+		}
+		return result;
+	}
+
+	/**
+	 * kryo 反序列化
+	 * 
+	 * 也會把class資訊一同反序列化, 不需指定反序列化class
+	 * 
+	 * byte[] -> object
+	 * 
+	 * @param in
+	 * @return
+	 */
+	public static <T> T dekryoReadClass(InputStream in) {
+		return dekryoReadClass(in, BUFFER_SIZE);
+	}
+
+	/**
+	 * kryo 反序列化
+	 * 
+	 * 也會把class資訊一同反序列化, 不需指定反序列化class
+	 * 
+	 * byte[] -> object
+	 * 
+	 * @param in
+	 * @param bufferSize
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T dekryoReadClass(InputStream in, int bufferSize) {
+		AssertHelper.notNull(in, "The InputStream must not be null");
+		//
+		T result = null;
 		Kryo kryo = null;
 		Input input = null;
 		try {
 			kryo = new Kryo();
-			input = new Input(value);
+			input = new Input(in, bufferSize);
 			result = (T) kryo.readClassAndObject(input);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during dekryoReadClass()").toString(), e);
 		} finally {
 			IoHelper.close(input);
 		}
@@ -759,8 +814,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			if (serialized) {
 				result = baos.toByteArray();
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during jackson()").toString(), e);
 		} finally {
 			IoHelper.close(baos);
 		}
@@ -788,8 +843,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			byte[] buff = mapper.writeValueAsBytes(value);
 			outputStream.write(buff);
 			result = true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during jackson()").toString(), e);
 		} finally {
 		}
 		//
@@ -815,8 +870,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		try {
 			bais = new ByteArrayInputStream(value);
 			result = (T) dejackson(bais, clazz);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during dejackson()").toString(), e);
 		} finally {
 			IoHelper.close(bais);
 		}
@@ -842,8 +897,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		try {
 			mapper = new ObjectMapper();
 			result = mapper.readValue(inputStream, clazz);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during dejackson()").toString(), e);
 		} finally {
 		}
 		//

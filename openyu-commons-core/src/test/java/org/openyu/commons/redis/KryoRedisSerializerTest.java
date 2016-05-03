@@ -1,7 +1,6 @@
 package org.openyu.commons.redis;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -23,8 +22,12 @@ public class KryoRedisSerializerTest extends BaseTestSupporter {
 
 	private static KryoRedisSerializer kryoRedisSerializer = new KryoRedisSerializer();
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+	public static LinkedList<String> mockLinkedList() {
+		LinkedList<String> result = new LinkedList<String>();
+		result.add("TEST_STRING");
+		result.add("測試字串");
+		result.add(new String(new byte[307200]));// 300k
+		return result;
 	}
 
 	@Test
@@ -41,16 +44,50 @@ public class KryoRedisSerializerTest extends BaseTestSupporter {
 		System.out.println(result.length + " ," + result);// 5
 	}
 
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	// round: 0.96 [+- 0.10], round.block: 0.06 [+- 0.02], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 5, GC.time: 0.04, time.total: 1.00, time.warmup: 0.00,
+	// time.bench: 1.00
+	public void serializeWithList() {
+		LinkedList<String> value = mockLinkedList();
+		byte[] result = null;
+		//
+		result = kryoRedisSerializer.serialize(value);
+		//
+		System.out.println(result.length);// 307257
+	}
+
 	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
 	@Test
+	// round: 0.94 [+- 0.09], round.block: 0.05 [+- 0.01], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 3, GC.time: 0.01, time.total: 0.96, time.warmup: 0.01,
+	// time.bench: 0.95
 	public void deserialize() {
-		Date value = new Date();
-		byte[] result = kryoRedisSerializer.serialize(value);
-		Date deValue = null;
+		Date date = new Date();
+		byte[] value = kryoRedisSerializer.serialize(date);
+		Date result = null;
 		//
-		deValue = (Date) kryoRedisSerializer.deserialize(result);
+		result = (Date) kryoRedisSerializer.deserialize(value);
 		//
-		System.out.println(deValue);
-		assertEquals(value, deValue);
+		System.out.println(result);
+		assertEquals(date, result);
+	}
+
+	@SuppressWarnings("unchecked")
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	@Test
+	// round: 1.03 [+- 0.10], round.block: 0.11 [+- 0.02], round.gc: 0.00 [+-
+	// 0.00], GC.calls: 7, GC.time: 0.04, time.total: 1.08, time.warmup: 0.00,
+	// time.bench: 1.08
+	public void deserializeWithList() {
+		LinkedList<String> list = mockLinkedList();
+		byte[] value = kryoRedisSerializer.serialize(list);
+		List<String> result = null;
+		//
+		result = (List<String>) kryoRedisSerializer.deserialize(value);
+		//
+		System.out.println(result.size());
+		assertCollectionEquals(list, result);
 	}
 }

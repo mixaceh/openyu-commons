@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
+import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1191,31 +1192,35 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 字串轉碼
 	 *
-	 * @param vaule
+	 * @param value
 	 * @param charsetName
 	 * @return
 	 */
-	public static String encodeString(String vaule, String charsetName) {
+	public static String encodeString(String value, String charsetName) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		AssertHelper.notNull(charsetName, "The CharsetName must not be null");
+		//
 		String result = null;
-		if (vaule != null && charsetName != null) {
-
-			try {
-				result = new String(vaule.getBytes(charsetName), charsetName);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
+		try {
+			result = new String(value.getBytes(charsetName), charsetName);
+		} catch (Exception e) {
+			LOGGER.error(new StringBuilder("Exception encountered during encodeString()").toString(), e);
 		}
 		return result;
 	}
 
 	// 2011/07/21
 	public static boolean isNumeric(String value) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		boolean result = false;
 		try {
 			Double.parseDouble(value);
-		} catch (Exception ex) {
-			return false;
+			result = true;
+		} catch (Exception e) {
+			result = false;
 		}
-		return true;
+		return result;
 
 	}
 
