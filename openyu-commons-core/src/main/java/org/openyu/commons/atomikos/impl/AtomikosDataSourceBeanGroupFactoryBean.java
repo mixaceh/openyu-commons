@@ -1,5 +1,6 @@
-package org.openyu.commons.atomikos;
+package org.openyu.commons.atomikos.impl;
 
+import org.openyu.commons.atomikos.supporter.AtomikosDataSourceBeanFactorySupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,14 @@ public final class AtomikosDataSourceBeanGroupFactoryBean
 	private AtomikosDataSourceBean[] atomikosDataSourceBeans;
 
 	public AtomikosDataSourceBeanGroupFactoryBean() {
+	}
+
+	public AtomikosDataSourceBean[] getAtomikosDataSourceBeans() {
+		return atomikosDataSourceBeans;
+	}
+
+	public void setAtomikosDataSourceBeans(AtomikosDataSourceBean[] atomikosDataSourceBeans) {
+		this.atomikosDataSourceBeans = atomikosDataSourceBeans;
 	}
 
 	/**
@@ -106,7 +115,12 @@ public final class AtomikosDataSourceBeanGroupFactoryBean
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		this.atomikosDataSourceBeans = createAtomikosDataSourceBeans();
+		if (atomikosDataSourceBeans != null) {
+			LOGGER.info(new StringBuilder().append("Inject from setAtomikosDataSourceBeans()").toString());
+		} else {
+			LOGGER.info(new StringBuilder().append("Using createAtomikosDataSourceBeans()").toString());
+			this.atomikosDataSourceBeans = createAtomikosDataSourceBeans();
+		}
 	}
 
 	/**

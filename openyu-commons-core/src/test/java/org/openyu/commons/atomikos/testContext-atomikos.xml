@@ -55,8 +55,13 @@
 		<property name="minPoolSize">
 			<value>2</value>
 		</property>
+		<!--  
 		<property name="testQuery">
 			<value>SELECT 1</value>
+		</property>
+		-->
+		<property name="maxLifetime">
+			<value>180</value>
 		</property>
 		<property name="maxIdleTime">
 			<value>60</value>
@@ -73,7 +78,6 @@
 			name="dataSource"
 			ref="dataSource" />
 	</bean>
-
 
 	<bean
 		id="userTransactionService"
@@ -93,13 +97,6 @@
 				<prop key="com.atomikos.icatch.console_log_level">INFO</prop>
 			</props>
 		</constructor-arg>
-		<!--  
-		<property name="initialLogAdministrators">
-			<list>
-				<ref bean="localLogAdministrator" />
-			</list>
-		</property>
-		-->
 	</bean>
 
 	<bean
@@ -127,7 +124,7 @@
 	</bean>
 
 	<bean
-		id="jtaTransactionManager"
+		id="jtaTx"
 		class="org.springframework.transaction.jta.JtaTransactionManager"
 		depends-on="userTransactionService,userTransactionManager,userTransactionImp">
 		<property
@@ -141,12 +138,12 @@
 			value="true" />
 	</bean>
 
-	<tx:annotation-driven transaction-manager="jtaTransactionManager" />	
+	<tx:annotation-driven transaction-manager="jtaTx" />	
 
 	<!-- factory -->
 	<bean
 		id="atomikosDataSourceBeanFactoryBean"
-		class="org.openyu.commons.atomikos.AtomikosDataSourceBeanFactoryBean"
+		class="org.openyu.commons.atomikos.impl.AtomikosDataSourceBeanFactoryBean"
 		parent="baseFactoryBeanSupporter">
 		<property
 			name="configLocation"

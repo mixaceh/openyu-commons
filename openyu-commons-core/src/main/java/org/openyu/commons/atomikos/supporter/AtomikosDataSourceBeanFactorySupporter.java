@@ -1,4 +1,4 @@
-package org.openyu.commons.atomikos;
+package org.openyu.commons.atomikos.supporter;
 
 import java.util.Properties;
 
@@ -47,6 +47,10 @@ public abstract class AtomikosDataSourceBeanFactorySupporter<T> extends BaseFact
 	public static final String TEST_QUERY = "testQuery";
 
 	public static final String DEFAULT_TEST_QUERY = null;
+
+	public static final String MAX_LIFE_TIME = "maxLifetime";
+
+	public static final int DEFAULT_MAX_LIFE_TIME = 0;
 
 	public static final String MAX_IDLE_TIME = "maxIdleTime";
 
@@ -107,6 +111,7 @@ public abstract class AtomikosDataSourceBeanFactorySupporter<T> extends BaseFact
 			result.setMaxPoolSize(extendedProperties.getInt(MAX_POOL_SIZE, DEFAULT_MAX_POOL_SIZE));
 			result.setMinPoolSize(extendedProperties.getInt(MIN_POOL_SIZE, DEFAULT_MIN_POOL_SIZE));
 			result.setTestQuery(extendedProperties.getString(TEST_QUERY, DEFAULT_TEST_QUERY));
+			result.setMaxLifetime(extendedProperties.getInt(MAX_LIFE_TIME, DEFAULT_MAX_LIFE_TIME));
 			result.setMaxIdleTime(extendedProperties.getInt(MAX_IDLE_TIME, DEFAULT_MAX_IDLE_TIME));
 			//
 			result.setBorrowConnectionTimeout(

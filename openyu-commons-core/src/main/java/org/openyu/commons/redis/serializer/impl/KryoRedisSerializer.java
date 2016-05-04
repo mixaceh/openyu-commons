@@ -1,13 +1,13 @@
-package org.openyu.commons.redis;
+package org.openyu.commons.redis.serializer.impl;
 
-import org.openyu.commons.redis.supporter.BaseRedisSerializerSupporter;
+import org.openyu.commons.redis.serializer.supporter.BaseRedisSerializerSupporter;
 import org.openyu.commons.util.SerializeHelper;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
-public class JdkRedisSerializer extends BaseRedisSerializerSupporter<Object> implements RedisSerializer<Object> {
+public class KryoRedisSerializer extends BaseRedisSerializerSupporter<Object> implements RedisSerializer<Object> {
 
-	public JdkRedisSerializer() {
+	public KryoRedisSerializer() {
 
 	}
 
@@ -16,7 +16,7 @@ public class JdkRedisSerializer extends BaseRedisSerializerSupporter<Object> imp
 		if (value == null) {
 			return null;
 		}
-		return SerializeHelper.jdk(value);
+		return SerializeHelper.kryoWriteClass(value);
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class JdkRedisSerializer extends BaseRedisSerializerSupporter<Object> imp
 		if (bytes == null) {
 			return null;
 		}
-		return SerializeHelper.dejdk(bytes);
+		return SerializeHelper.dekryoReadClass(bytes);
 	}
 
 }

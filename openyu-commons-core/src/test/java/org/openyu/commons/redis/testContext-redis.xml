@@ -15,14 +15,13 @@
 		class="org.springframework.data.redis.serializer.StringRedisSerializer" />
 	<bean
 		id="kryoRedisSerializer"
-		class="org.openyu.commons.redis.KryoRedisSerializer" />
+		class="org.openyu.commons.redis.serializer.impl.KryoRedisSerializer" />
 	<bean
 		id="jdkRedisSerializer"
-		class="org.openyu.commons.redis.JdkRedisSerializer" />
-		
-	<!-- common 
+		class="org.openyu.commons.redis.serializer.impl.JdkRedisSerializer" />
+
 	<bean
-		id="commonJedisPoolConfig"
+		id="jedisPoolConfig"
 		class="redis.clients.jedis.JedisPoolConfig"
 		p:maxTotal="10"
 		p:minIdle="1"
@@ -31,42 +30,20 @@
 		p:testOnReturn="true" />
 
 	<bean
-		id="commonJedisConnectionFactory"
+		id="jedisConnectionFactory"
 		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
 		p:hostName="${redis.ip}"
 		p:port="${redis.port}"
 		p:password="${redis.password}"
 		p:database="${redis.database}"
-		p:poolConfig-ref="commonJedisPoolConfig" />
+		p:poolConfig-ref="jedisPoolConfig" />
 
 	<bean
-		id="commonRedisTemplate"
+		id="redisTemplate"
 		class="org.springframework.data.redis.core.RedisTemplate"
-		p:connection-factory-ref="commonJedisConnectionFactory"
+		p:connection-factory-ref="jedisConnectionFactory"
 		p:defaultSerializer-ref="kryoRedisSerializer"
-		p:keySerializer-ref="stringRedisSerializer" />
+		p:keySerializer-ref="kryoRedisSerializer" />
 
-	<bean
-		id="commonCacheManagerTarget"
-		class="org.springframework.data.redis.cache.RedisCacheManager"
-		c:redisOperations-ref="commonRedisTemplate"
-		p:defaultExpiration="${redis.defaultExpiration}" />
-
-	<bean
-		id="commonCacheManager"
-		class="org.springframework.cache.support.CompositeCacheManager">
-		<property name="cacheManagers">
-			<list>
-				<ref bean="commonCacheManagerTarget" />
-			</list>
-		</property>
-		<property
-			name="fallbackToNoOpCache"
-			value="true" />
-	</bean>
-
-	<cache:annotation-driven cache-manager="commonCacheManager" />
-	-->	
-	
 
 </beans>

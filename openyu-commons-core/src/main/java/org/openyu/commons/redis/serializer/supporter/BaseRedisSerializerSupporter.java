@@ -1,7 +1,7 @@
-package org.openyu.commons.redis.supporter;
+package org.openyu.commons.redis.serializer.supporter;
 
 import org.openyu.commons.mark.Supporter;
-import org.openyu.commons.redis.BaseRedisSerializer;
+import org.openyu.commons.redis.serializer.BaseRedisSerializer;
 
 public abstract class BaseRedisSerializerSupporter<T> implements BaseRedisSerializer<T>, Supporter {
 

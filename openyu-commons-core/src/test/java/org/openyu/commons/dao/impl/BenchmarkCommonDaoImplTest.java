@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.hibernate.type.StandardBasicTypes;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openyu.commons.dao.CommonDao;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 import org.openyu.commons.lang.ByteHelper;
@@ -28,7 +29,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class BenchmarkCommonDaoImplTest extends BaseTestSupporter {
 
-	private static CommonDaoImpl commonDaoImpl;
+	private static CommonDao commonDao;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -36,13 +37,13 @@ public class BenchmarkCommonDaoImplTest extends BaseTestSupporter {
 				"applicationContext-init.xml", //
 				"org/openyu/commons/dao/testContext-dao.xml",//
 		});
-		commonDaoImpl = (CommonDaoImpl) applicationContext.getBean("commonDaoImpl");
+		commonDao = (CommonDao) applicationContext.getBean("commonDao");
 	}
 
 	@Test
-	public void commonDaoImpl() {
-		System.out.println(commonDaoImpl);
-		assertNotNull(commonDaoImpl);
+	public void commonDao() {
+		System.out.println(commonDao);
+		assertNotNull(commonDao);
 	}
 
 	// ---------------------------------------------------
@@ -561,7 +562,7 @@ public class BenchmarkCommonDaoImplTest extends BaseTestSupporter {
 									params.put("seq", seq);
 									params.put("id", newId);
 									params.put("info", new String(buff));
-									int inserted = commonDaoImpl.insert(sql.toString(), params);
+									int inserted = commonDao.insert(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + inserted);
 									//
@@ -643,7 +644,7 @@ public class BenchmarkCommonDaoImplTest extends BaseTestSupporter {
 									scalars.put("id", StandardBasicTypes.STRING);
 									scalars.put("info", StandardBasicTypes.STRING);
 									//
-									List<Object[]> list = commonDaoImpl.find(sql.toString(), params, scalars);
+									List<Object[]> list = commonDao.find(sql.toString(), params, scalars);
 									//
 									seq = 0;
 									String id = null;
@@ -732,7 +733,7 @@ public class BenchmarkCommonDaoImplTest extends BaseTestSupporter {
 									Map<String, Object> params = new LinkedHashMap<String, Object>();
 									params.put("seq", seq);
 									params.put("info", new String(buff));
-									int updated = commonDaoImpl.update(sql.toString(), params);
+									int updated = commonDao.update(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + updated);
 									//
@@ -806,7 +807,7 @@ public class BenchmarkCommonDaoImplTest extends BaseTestSupporter {
 									// params
 									Map<String, Object> params = new LinkedHashMap<String, Object>();
 									params.put("seq", seq);
-									int deleted = commonDaoImpl.delete(sql.toString(), params);
+									int deleted = commonDao.delete(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + deleted);
 									//

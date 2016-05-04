@@ -1,4 +1,4 @@
-package org.openyu.commons.redis;
+package org.openyu.commons.redis.serializer;
 
 import org.springframework.data.redis.serializer.RedisSerializer;
 

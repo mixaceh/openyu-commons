@@ -1,4 +1,4 @@
-package org.openyu.commons.atomikos;
+package org.openyu.commons.atomikos.impl;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -13,35 +13,39 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class AtomikosDataSourceBeanFactoryBeanTest extends BaseTestSupporter {
+public class AtomikosDataSourceBeanGroupFactoryBeanTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static AtomikosDataSourceBean atomikosDataSourceBean;
+	private static AtomikosDataSourceBean[] atomikosDataSourceBeans;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/atomikos/testContext-atomikos.xml",//
+				"org/openyu/commons/atomikos/testContext-atomikos-group.xml",//
 
 		});
-		atomikosDataSourceBean = applicationContext.getBean("atomikosDataSourceBeanFactoryBean", AtomikosDataSourceBean.class);
+		atomikosDataSourceBeans = applicationContext.getBean("atomikosDataSourceBeanGroupFactoryBean", AtomikosDataSourceBean[].class);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void atomikosDataSourceBean() {
-		System.out.println(atomikosDataSourceBean);
-		assertNotNull(atomikosDataSourceBean);
+	public void atomikosDataSourceBeans() throws Exception {
+		System.out.println(atomikosDataSourceBeans);
+		assertNotNull(atomikosDataSourceBeans);
+		//
+		for (AtomikosDataSourceBean dataSource : atomikosDataSourceBeans) {
+			System.out.println(dataSource.getConnection());
+		}
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void close() {
-		System.out.println(atomikosDataSourceBean);
-		assertNotNull(atomikosDataSourceBean);
+		System.out.println(atomikosDataSourceBeans);
+		assertNotNull(atomikosDataSourceBeans);
 		applicationContext.close();
 		// 多次,不會丟出ex
 		applicationContext.close();
@@ -50,8 +54,8 @@ public class AtomikosDataSourceBeanFactoryBeanTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void refresh() {
-		System.out.println(atomikosDataSourceBean);
-		assertNotNull(atomikosDataSourceBean);
+		System.out.println(atomikosDataSourceBeans);
+		assertNotNull(atomikosDataSourceBeans);
 		applicationContext.refresh();
 		// 多次,不會丟出ex
 		applicationContext.refresh();

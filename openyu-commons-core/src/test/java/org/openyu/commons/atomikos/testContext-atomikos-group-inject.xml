@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	
+	<!-- group -->
+	<bean
+		id="dataSource"
+		class="com.atomikos.jdbc.AtomikosDataSourceBean"
+		init-method="init"
+		destroy-method="close">
+		<property name="uniqueResourceName">
+			<value>dataSource</value>
+		</property>
+		<property name="xaDataSourceClassName">
+			<value>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</value>
+		</property>
+		<property name="xaProperties">
+			<props>
+				<!--  
+				<prop key="databaseName">commons</prop>
+				<prop key="serverName">127.0.0.1</prop>
+				<prop key="port">9001</prop>
+				-->
+				<prop key="user">root</prop>
+				<prop key="password">1111</prop>
+				<prop key="url">jdbc:mysql://127.0.0.1:3306/commons?useUnicode=yes&amp;characterEncoding=UTF-8
+				</prop>
+			</props>
+		</property>
+		<property name="maxPoolSize">
+			<value>10</value>
+		</property>
+		<property name="minPoolSize">
+			<value>2</value>
+		</property>
+		<!--  
+		<property name="testQuery">
+			<value>SELECT 1</value>
+		</property>
+		-->
+		<property name="maxLifetime">
+			<value>180</value>
+		</property>
+		<property name="maxIdleTime">
+			<value>60</value>
+		</property>
+		<property name="borrowConnectionTimeout">
+			<value>60</value>
+		</property>
+	</bean>
+
+
+	<bean
+		id="dataSource2"
+		class="com.atomikos.jdbc.AtomikosDataSourceBean"
+		init-method="init"
+		destroy-method="close">
+		<property name="uniqueResourceName">
+			<value>dataSource2</value>
+		</property>
+		<property name="xaDataSourceClassName">
+			<value>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</value>
+		</property>
+		<property name="xaProperties">
+			<props>
+				<!--  
+				<prop key="databaseName">commons</prop>
+				<prop key="serverName">127.0.0.1</prop>
+				<prop key="port">9001</prop>
+				-->
+				<prop key="user">root</prop>
+				<prop key="password">1111</prop>
+				<prop key="url">jdbc:mysql://127.0.0.1:3306/commons?useUnicode=yes&amp;characterEncoding=UTF-8
+				</prop>
+			</props>
+		</property>
+		<property name="maxPoolSize">
+			<value>10</value>
+		</property>
+		<property name="minPoolSize">
+			<value>2</value>
+		</property>
+		<!--  
+		<property name="testQuery">
+			<value>SELECT 1</value>
+		</property>
+		-->
+		<property name="maxLifetime">
+			<value>180</value>
+		</property>
+		<property name="maxIdleTime">
+			<value>60</value>
+		</property>
+		<property name="borrowConnectionTimeout">
+			<value>60</value>
+		</property>
+	</bean>
+
+	<bean
+		id="atomikosDataSourceBeanGroupFactoryBean"
+		class="org.openyu.commons.atomikos.impl.AtomikosDataSourceBeanGroupFactoryBean"
+		parent="baseFactoryBeanSupporter">
+		<property name="atomikosDataSourceBeans">
+			<array>
+				<ref bean="dataSource" />
+				<ref bean="dataSource2" />
+			</array>
+		</property>
+	</bean>
+
+</beans>

@@ -12,7 +12,7 @@
 
 	<bean
 		id="commonDataSourceTarget"
-		class="org.openyu.commons.commons.dbcp.BasicDataSourceFactoryBean"
+		class="org.openyu.commons.commons.dbcp.impl.BasicDataSourceFactoryBean"
 		parent="baseFactoryBeanSupporter">
 		<property
 			name="configLocation"

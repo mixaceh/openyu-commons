@@ -1,5 +1,6 @@
-package org.openyu.commons.atomikos;
+package org.openyu.commons.atomikos.impl;
 
+import org.openyu.commons.atomikos.supporter.AtomikosDataSourceBeanFactorySupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

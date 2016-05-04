@@ -1,4 +1,4 @@
-package org.openyu.commons.redis;
+package org.openyu.commons.redis.serializer.impl;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,13 +13,14 @@ import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
+import org.openyu.commons.redis.serializer.impl.KryoRedisSerializer;
 
-public class JdkRedisSerializerTest extends BaseTestSupporter {
+public class KryoRedisSerializerTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static JdkRedisSerializer jdkRedisSerializer = new JdkRedisSerializer();
+	private static KryoRedisSerializer kryoRedisSerializer = new KryoRedisSerializer();
 
 	public static LinkedList<String> mockLinkedList() {
 		LinkedList<String> result = new LinkedList<String>();
@@ -38,7 +39,7 @@ public class JdkRedisSerializerTest extends BaseTestSupporter {
 		String value = "abc";
 		byte[] result = null;
 		//
-		result = jdkRedisSerializer.serialize(value);
+		result = kryoRedisSerializer.serialize(value);
 		//
 		System.out.println(result.length + " ," + result);// 5
 	}
@@ -52,7 +53,7 @@ public class JdkRedisSerializerTest extends BaseTestSupporter {
 		LinkedList<String> value = mockLinkedList();
 		byte[] result = null;
 		//
-		result = jdkRedisSerializer.serialize(value);
+		result = kryoRedisSerializer.serialize(value);
 		//
 		System.out.println(result.length);// 307257
 	}
@@ -64,10 +65,10 @@ public class JdkRedisSerializerTest extends BaseTestSupporter {
 	// time.bench: 0.95
 	public void deserialize() {
 		Date date = new Date();
-		byte[] value = jdkRedisSerializer.serialize(date);
+		byte[] value = kryoRedisSerializer.serialize(date);
 		Date result = null;
 		//
-		result = (Date) jdkRedisSerializer.deserialize(value);
+		result = (Date) kryoRedisSerializer.deserialize(value);
 		//
 		System.out.println(result);
 		assertEquals(date, result);
@@ -81,13 +82,12 @@ public class JdkRedisSerializerTest extends BaseTestSupporter {
 	// time.bench: 1.08
 	public void deserializeWithList() {
 		LinkedList<String> list = mockLinkedList();
-		byte[] value = jdkRedisSerializer.serialize(list);
+		byte[] value = kryoRedisSerializer.serialize(list);
 		List<String> result = null;
 		//
-		result = (List<String>) jdkRedisSerializer.deserialize(value);
+		result = (List<String>) kryoRedisSerializer.deserialize(value);
 		//
 		System.out.println(result.size());
 		assertCollectionEquals(list, result);
 	}
-
 }
