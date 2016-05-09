@@ -2,6 +2,7 @@ package org.openyu.commons.redis;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,12 +20,23 @@ import org.openyu.commons.redis.serializer.impl.JdkRedisSerializer;
 import org.openyu.commons.redis.serializer.impl.KryoRedisSerializer;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+
+import redis.clients.jedis.JedisPoolConfig;
 
 public class BenchmarkRedisTest extends BaseTestSupporter {
 
 	private static KryoRedisSerializer kryoRedisSerializer;
 
 	private static JdkRedisSerializer jdkRedisSerializer;
+
+	private static JedisPoolConfig jedisPoolConfig;
+
+	private static JedisConnectionFactory jedisConnectionFactory;
+
+	private static RedisTemplate redisTemplate;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -36,6 +48,9 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 		//
 		kryoRedisSerializer = (KryoRedisSerializer) applicationContext.getBean("kryoRedisSerializer");
 		jdkRedisSerializer = (JdkRedisSerializer) applicationContext.getBean("jdkRedisSerializer");
+		jedisPoolConfig = (JedisPoolConfig) applicationContext.getBean("jedisPoolConfig");
+		jedisConnectionFactory = (JedisConnectionFactory) applicationContext.getBean("jedisConnectionFactory");
+		redisTemplate = (RedisTemplate) applicationContext.getBean("redisTemplate");
 	}
 
 	public static class BeanTest extends BenchmarkRedisTest {
@@ -50,6 +65,26 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 			System.out.println(jdkRedisSerializer);
 			assertNotNull(jdkRedisSerializer);
 		}
+
+		@Test
+		public void jedisPoolConfig() {
+			System.out.println(jedisPoolConfig);
+			assertNotNull(jedisPoolConfig);
+		}
+
+		@Test
+		public void jedisConnectionFactory() {
+			System.out.println(jedisConnectionFactory);
+			assertNotNull(jedisConnectionFactory);
+			//
+			System.out.println(jedisConnectionFactory.getConnection());
+		}
+
+		@Test
+		public void redisTemplate() {
+			System.out.println(redisTemplate);
+			assertNotNull(redisTemplate);
+		}
 	}
 
 	// ---------------------------------------------------
@@ -58,17 +93,9 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 	public static class OptimizedTest extends BenchmarkRedisTest {
 
 		@Test
-		// insert: 10000 rows, 102400000 bytes / 29690 ms. = 3448.97 BYTES/MS,
-		// 3368.14 K/S, 3.29 MB/S
-
-		// 2015/10/09
-		// insert: 10000 rows, 102628000 bytes / 82989 ms. = 1236.65 BYTES/MS,
-		// 1207.66 K/S, 1.18 MB/S
-
-		// 2015/11/12
-		// 10000 rows, 102628000 bytes / 62640 ms. = 1638.38 BYTES/MS, 1599.98
-		// K/S, 1.56 MB/S
-		public void insert() throws Exception {
+		// 10000 rows, 102628000 bytes / 19510 ms. = 5260.28 BYTES/MS, 5136.99
+		// K/S, 5.02 MB/S
+		public void set() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
@@ -85,6 +112,7 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 				final String userId = "TEST_USER_" + i;
 				service.submit(new Runnable() {
 					//
+					@SuppressWarnings("unchecked")
 					public void run() {
 						try {
 							//
@@ -92,24 +120,24 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("insert into TEST_BENCHMARK (seq, id, info) ");
-									sql.append("values (:seq, :id, :info)");
+									sql.append(userId);
 
 									long seq = seqCounter.getAndIncrement();
 									// 0_0
 									String newId = userId + "_" + i;
-									// params
-									Object[] params = new Object[] { seq, newId, new String(buff) };
-									int inserted = jdbcTemplate.update(sql.toString(), params);
-
-									System.out.println("I[" + userId + "] R[" + i + "], " + inserted);
 									//
-									if (inserted > 0) {
-										timesCounter.incrementAndGet();
-										byteCounter.addAndGet(ByteHelper.toByteArray(seq).length);
-										byteCounter.addAndGet(ByteHelper.toByteArray(newId).length);
-										byteCounter.addAndGet(buff.length);
-									}
+									TestBenchmark value = new TestBenchmark();
+									value.setSeq(seq);
+									value.setId(newId);
+									value.setInfo(new String(buff));
+									//
+									redisTemplate.opsForValue().set(String.valueOf(seq), value);
+									System.out.println("I[" + userId + "] R[" + i + "]");
+									//
+									timesCounter.incrementAndGet();
+									byteCounter.addAndGet(ByteHelper.toByteArray(seq).length);
+									byteCounter.addAndGet(ByteHelper.toByteArray(newId).length);
+									byteCounter.addAndGet(buff.length);
 									//
 									ThreadHelper.sleep(50);
 								} catch (Exception ex) {
@@ -135,17 +163,9 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 		}
 
 		@Test
-		// 10000 rows, 102400000 bytes / 20454 ms. = 5006.36 BYTES/MS,
-		// 4889.02 K/S, 4.77 MB/S
-
-		// 2015/10/09 nb
-		// 10000 rows, 183460321 bytes / 25246 ms. = 7266.91 BYTES/MS,
-		// 7096.59 K/S, 6.93 MB/S
-
-		// 2015/10/12 pc
-		// 10000 rows, 183473056 bytes / 16079 ms. = 11410.73 BYTES/MS, 11143.29
-		// K/S, 10.88 MB/S
-		public void select() throws Exception {
+		// 10000 rows, 183456704 bytes / 21263 ms. = 8627.98 BYTES/MS, 8425.76
+		// K/S, 8.23 MB/S
+		public void get() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
 			final int LENGTH_OF_BYTES = 10 * 1024;// 10k
@@ -168,21 +188,16 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 							for (int i = 0; i < NUM_OF_TIMES; i++) {
 								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								try {
-									StringBuilder sql = new StringBuilder();
-									sql.append("select seq, id, info from TEST_BENCHMARK ");
-									sql.append("where seq=:seq");
-
 									long seq = seqCounter.getAndIncrement();
-									// params
-									Object[] params = new Object[] { seq };
-									List<TestBenchmark> list = jdbcTemplate.query(sql.toString(), params,
-											new TestBenchmarkRowMapper());
+
+									TestBenchmark value = (TestBenchmark) redisTemplate.opsForValue()
+											.get(String.valueOf(seq));
 									//
 									seq = 0;
 									String id = null;
 									String info = null;
-									if (list.size() > 0) {
-										TestBenchmark row = list.get(0);
+									if (value != null) {
+										TestBenchmark row = value;
 										seq = row.getSeq();
 										id = row.getId();
 										info = row.getInfo();
@@ -359,5 +374,47 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 			//
 			printResult(beg, byteCounter, timesCounter);
 		}
+	}
+
+	/**
+	 * bean
+	 */
+	protected static class TestBenchmark implements Serializable {
+
+		private static final long serialVersionUID = 3859603353500064626L;
+
+		private long seq;
+
+		private String id;
+
+		private String info;
+
+		public TestBenchmark() {
+		}
+
+		public long getSeq() {
+			return seq;
+		}
+
+		public void setSeq(long seq) {
+			this.seq = seq;
+		}
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		public String getInfo() {
+			return info;
+		}
+
+		public void setInfo(String info) {
+			this.info = info;
+		}
+
 	}
 }

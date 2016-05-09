@@ -32,10 +32,10 @@
 	<bean
 		id="jedisConnectionFactory"
 		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-		p:hostName="${redis.ip}"
-		p:port="${redis.port}"
-		p:password="${redis.password}"
-		p:database="${redis.database}"
+		p:hostName="127.0.0.1"
+		p:port="6379"
+		p:password=""
+		p:database="0"
 		p:poolConfig-ref="jedisPoolConfig" />
 
 	<bean
@@ -43,7 +43,7 @@
 		class="org.springframework.data.redis.core.RedisTemplate"
 		p:connection-factory-ref="jedisConnectionFactory"
 		p:defaultSerializer-ref="kryoRedisSerializer"
-		p:keySerializer-ref="kryoRedisSerializer" />
+		p:keySerializer-ref="stringRedisSerializer" />
 
 
 </beans>

@@ -21,7 +21,6 @@ import org.junit.Test;
 import org.openyu.commons.commons.dbcp.BenchmarkDbcpTest;
 import org.openyu.commons.lang.ArrayHelper;
 import org.openyu.commons.lang.ByteHelper;
-import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -191,25 +190,6 @@ public class BenchmarkDatabaseTestSupporter extends BaseTestSupporter {
 			}
 		} catch (Exception ex) {
 		}
-	}
-
-	/**
-	 * 印出結果
-	 * 
-	 * @param beg
-	 * @param byteCounter
-	 * @param timesCounter
-	 */
-	protected static void printResult(long beg, AtomicLong byteCounter, AtomicLong timesCounter) {
-		long end = System.currentTimeMillis();
-		long dur = (end - beg);
-		double result = NumberHelper.round(byteCounter.get() / (double) dur, 2);
-		double kresult = NumberHelper.round((byteCounter.get() / (double) 1024) / (dur / (double) 1000), 2);
-		double mbresult = NumberHelper
-				.round((byteCounter.get() / (double) 1024 / (double) 1024) / (dur / (double) 1000), 2);
-		//
-		System.out.println(timesCounter.get() + " rows, " + byteCounter.get() + " bytes / " + dur + " ms. = " + result
-				+ " BYTES/MS, " + kresult + " K/S, " + mbresult + " MB/S");
 	}
 
 	// ---------------------------------------------------
