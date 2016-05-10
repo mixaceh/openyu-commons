@@ -235,12 +235,8 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 		}
 
 		@Test
-		// update: 10000 rows, 102400000 bytes / 34485 ms. = 2969.41 BYTES/MS,
-		// 2899.81 K/S, 2.83 MB/S
-
-		// 2015/10/09
-		// update: 10000 rows, 102400000 bytes / 124789 ms. = 820.59 BYTES/MS,
-		// 801.35 K/S, 0.78 MB/S
+		// 10000 rows, 102400000 bytes / 16412 ms. = 6239.34 BYTES/MS, 6093.1
+		// K/S, 5.95 MB/S
 		public void update() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -258,6 +254,7 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 				final String userId = "TEST_USER_" + i;
 				service.submit(new Runnable() {
 					//
+					@SuppressWarnings("unchecked")
 					public void run() {
 						try {
 							//
@@ -267,21 +264,20 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 								buff = ArrayHelper.add(prefix,
 										ByteHelper.getByteArray(buff, 0, buff.length - prefix.length));
 								try {
-									StringBuilder sql = new StringBuilder();
-									sql.append("update TEST_BENCHMARK set info=:info ");
-									sql.append("where seq=:seq");
 
 									long seq = seqCounter.getAndIncrement();
-									// params
-									Object[] params = new Object[] { new String(buff), seq };
-									int updated = jdbcTemplate.update(sql.toString(), params);
+									String newId = userId + "_" + i;
 
-									System.out.println("I[" + userId + "] R[" + i + "], " + updated);
+									TestBenchmark value = new TestBenchmark();
+									value.setSeq(seq);
+									value.setId(newId);
+									value.setInfo(new String(buff));
 									//
-									if (updated > 0) {
-										timesCounter.incrementAndGet();
-										byteCounter.addAndGet(buff.length);
-									}
+									redisTemplate.opsForValue().set(String.valueOf(seq), value);
+									//
+									System.out.println("I[" + userId + "] R[" + i + "]");
+									timesCounter.incrementAndGet();
+									byteCounter.addAndGet(buff.length);
 									//
 									ThreadHelper.sleep(50);
 								} catch (Exception ex) {
@@ -307,12 +303,8 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 		}
 
 		@Test
-		// delete: 10000 rows, 102400000 bytes / 18315 ms. = 5591.05 BYTES/MS,
-		// 5460.01 K/S, 5.33 MB/S
-
-		// 2015/10/09
-		// delete: 10000 rows, 102400000 bytes / 26270 ms. = 3897.98 BYTES/MS,
-		// 3806.62 K/S, 3.72 MB/S
+		// 10000 rows, 102400000 bytes / 17920 ms. = 5714.29 BYTES/MS, 5580.36
+		// K/S, 5.45 MB/S
 		public void delete() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -330,27 +322,20 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 				final String userId = "TEST_USER_" + i;
 				service.submit(new Runnable() {
 					//
+					@SuppressWarnings("unchecked")
 					public void run() {
 						try {
 							//
 							for (int i = 0; i < NUM_OF_TIMES; i++) {
 								byte[] buff = ByteHelper.randomByteArray(LENGTH_OF_BYTES);
 								try {
-									StringBuilder sql = new StringBuilder();
-									sql.append("delete from TEST_BENCHMARK ");
-									sql.append("where seq=:seq");
 
 									long seq = seqCounter.getAndIncrement();
-									// params
-									Object[] params = new Object[] { seq };
-									int deleted = jdbcTemplate.update(sql.toString(), params);
-
-									System.out.println("I[" + userId + "] R[" + i + "], " + deleted);
+									redisTemplate.delete(String.valueOf(seq));
 									//
-									if (deleted > 0) {
-										timesCounter.incrementAndGet();
-										byteCounter.addAndGet(buff.length);
-									}
+									System.out.println("I[" + userId + "] R[" + i + "]");
+									timesCounter.incrementAndGet();
+									byteCounter.addAndGet(buff.length);
 									//
 									ThreadHelper.sleep(50);
 								} catch (Exception ex) {
