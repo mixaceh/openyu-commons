@@ -88,10 +88,8 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 	@Test
 	public void reflectionFactory() throws Exception {
 		@SuppressWarnings("unchecked")
-		Constructor<ClassWithExpensiveConstructor> silentConstructor = ReflectionFactory
-				.getReflectionFactory().newConstructorForSerialization(
-						ClassWithExpensiveConstructor.class,
-						Object.class.getConstructor());
+		Constructor<ClassWithExpensiveConstructor> silentConstructor = ReflectionFactory.getReflectionFactory()
+				.newConstructorForSerialization(ClassWithExpensiveConstructor.class, Object.class.getConstructor());
 		silentConstructor.setAccessible(true);
 		assertEquals(0, silentConstructor.newInstance().getValue());
 	}
@@ -123,8 +121,7 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 		place(c1, address);
 		place(c2, address + containerSize);
 		Container newC1 = (Container) read(Container.class, address);
-		Container newC2 = (Container) read(Container.class, address
-				+ containerSize);
+		Container newC2 = (Container) read(Container.class, address + containerSize);
 		assertEquals(c1, newC1);
 		assertEquals(c2, newC2);
 	}
@@ -144,13 +141,11 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 	@Test
 	public void strangeReflectionFactory() throws Exception {
 		@SuppressWarnings("unchecked")
-		Constructor<ClassWithExpensiveConstructor> silentConstructor = ReflectionFactory
-				.getReflectionFactory().newConstructorForSerialization(
-						ClassWithExpensiveConstructor.class,
+		Constructor<ClassWithExpensiveConstructor> silentConstructor = ReflectionFactory.getReflectionFactory()
+				.newConstructorForSerialization(ClassWithExpensiveConstructor.class,
 						OtherClass.class.getDeclaredConstructor());
 		silentConstructor.setAccessible(true);
-		ClassWithExpensiveConstructor instance = silentConstructor
-				.newInstance();
+		ClassWithExpensiveConstructor instance = silentConstructor.newInstance();
 		assertEquals(10, instance.getValue());
 		assertEquals(ClassWithExpensiveConstructor.class, instance.getClass());
 		assertEquals(Object.class, instance.getClass().getSuperclass());
@@ -202,11 +197,9 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 				if (!Modifier.isStatic(f.getModifiers())) {
 					long offset = unsafe.objectFieldOffset(f);
 					if (f.getType() == long.class) {
-						unsafe.putLong(address + offset,
-								unsafe.getLong(o, offset));
+						unsafe.putLong(address + offset, unsafe.getLong(o, offset));
 					} else if (f.getType() == int.class) {
-						unsafe.putInt(address + offset,
-								unsafe.getInt(o, offset));
+						unsafe.putInt(address + offset, unsafe.getInt(o, offset));
 					} else {
 						throw new UnsupportedOperationException();
 					}
@@ -224,11 +217,9 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 				if (!Modifier.isStatic(f.getModifiers())) {
 					long offset = unsafe.objectFieldOffset(f);
 					if (f.getType() == long.class) {
-						unsafe.putLong(instance, offset,
-								unsafe.getLong(address + offset));
+						unsafe.putLong(instance, offset, unsafe.getLong(address + offset));
 					} else if (f.getType() == int.class) {
-						unsafe.putInt(instance, offset,
-								unsafe.getInt(address + offset));
+						unsafe.putInt(instance, offset, unsafe.getInt(address + offset));
 					} else {
 						throw new UnsupportedOperationException();
 					}
@@ -399,7 +390,8 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 		buf = new byte[] { 0, 0, 1, 1 };
 		result = UnsafeHelper.putByteArray(result, result.length, buf);
 		System.out.println("length: " + result.length);// 20
-		// 97, 98, 99, 100, 101, 102, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 0, 0, 1, 1
+		// 97, 98, 99, 100, 101, 102, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 0,
+		// 0, 1, 1
 		SystemHelper.println(result);
 	}
 
@@ -460,7 +452,7 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 		assertEquals(24, result);
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	@Test
 	// #issue:
 	// 1000000 times: 287 mills.
@@ -472,13 +464,17 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 	public void sizeOfObject() throws Exception {
 		long result = 0;
 		//
-		final int COUNT = 1000;
-		for (int i = 0; i < COUNT; i++) {
-			result = UnsafeHelper.sizeOf(new Container(1, 1L));
-		}
+		result = UnsafeHelper.sizeOf(new Container(1, 1L));
 		//
 		System.out.println(result);
 		assertEquals(24, result);
+		//
+		result = UnsafeHelper.sizeOf(new A());
+		System.out.println(result);
+		//
+		result = UnsafeHelper.sizeOf(new B());
+		System.out.println(result);
+
 	}
 
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
@@ -496,4 +492,12 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 		unsafe.putLong(address + 4, 67890L);
 		System.out.println(unsafe.getLong(address + 4));
 	}
+
+	public class A {
+	}
+	
+	public class B {
+		private B b;
+	}
+
 }
