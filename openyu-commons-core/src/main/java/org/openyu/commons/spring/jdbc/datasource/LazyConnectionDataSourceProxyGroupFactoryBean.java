@@ -44,7 +44,6 @@ public class LazyConnectionDataSourceProxyGroupFactoryBean
 		//
 		LazyConnectionDataSourceProxy[] result = null;
 		try {
-			//
 			result = new LazyConnectionDataSourceProxy[dataSources.length];
 			for (int i = 0; i < dataSources.length; i++) {
 				DataSource targetDataSource = dataSources[i];
