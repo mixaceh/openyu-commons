@@ -39,7 +39,14 @@ public class JedisPoolConfigGroupFactoryBean extends BaseFactoryBeanSupporter<Je
 	private JedisPoolConfig[] jedisPoolConfigs;
 
 	public JedisPoolConfigGroupFactoryBean() {
+	}
 
+	public JedisPoolConfig[] getJedisPoolConfigs() {
+		return jedisPoolConfigs;
+	}
+
+	public void setJedisPoolConfigs(JedisPoolConfig[] jedisPoolConfigs) {
+		this.jedisPoolConfigs = jedisPoolConfigs;
 	}
 
 	/**
@@ -125,7 +132,12 @@ public class JedisPoolConfigGroupFactoryBean extends BaseFactoryBeanSupporter<Je
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		this.jedisPoolConfigs = createJedisPoolConfigs();
+		if (this.jedisPoolConfigs != null) {
+			LOGGER.info(new StringBuilder().append("Inject from setJedisPoolConfigs()").toString());
+		} else {
+			LOGGER.info(new StringBuilder().append("Using createJedisPoolConfigs()").toString());
+			this.jedisPoolConfigs = createJedisPoolConfigs();
+		}
 	}
 
 	/**

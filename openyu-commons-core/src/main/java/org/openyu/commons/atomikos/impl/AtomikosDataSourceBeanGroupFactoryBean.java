@@ -115,7 +115,7 @@ public final class AtomikosDataSourceBeanGroupFactoryBean
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		if (atomikosDataSourceBeans != null) {
+		if (this.atomikosDataSourceBeans != null) {
 			LOGGER.info(new StringBuilder().append("Inject from setAtomikosDataSourceBeans()").toString());
 		} else {
 			LOGGER.info(new StringBuilder().append("Using createAtomikosDataSourceBeans()").toString());

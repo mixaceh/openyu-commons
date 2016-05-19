@@ -13,7 +13,7 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class AtomikosDataSourceBeanGroupInjectFactoryBeanTest extends BaseTestSupporter {
+public class AtomikosDataSourceBeanGroupFactoryBeanInjectTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
