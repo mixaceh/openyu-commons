@@ -112,7 +112,7 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 	 * 
 	 * @return
 	 */
-	protected BasicDataSource createBasicDataSource(int i) throws Exception {
+	protected BasicDataSource createBasicDataSource(int index) throws Exception {
 		BasicDataSource result = null;
 		try {
 			result = new BasicDataSource();
@@ -122,8 +122,8 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 			 */
 			// i=0, jdbc:hsqldb:hsql://localhost:9001/commons
 			// i=1, jdbc:hsqldb:hsql://localhost:9001/commons_2
-			String url = nextUrl(extendedProperties.getString(URL, DEFAULT_URL), i);
-			LOGGER.info("URL: " + url);
+			String url = nextUrl(extendedProperties.getString(URL, DEFAULT_URL), index);
+			LOGGER.info("[" + index + "] " + url);
 			result.setUrl(url);
 			//
 			result.setDriverClassName(extendedProperties.getString(DRIVER_CLASSNAME, DEFAULT_DRIVER_CLASSNAME));

@@ -42,12 +42,13 @@ public final class AtomikosDataSourceBeanGroupFactoryBean
 	protected AtomikosDataSourceBean[] createAtomikosDataSourceBeans() throws Exception {
 		AtomikosDataSourceBean[] result = null;
 		try {
-			result = new AtomikosDataSourceBean[extendedProperties.getInt(MAX_DATA_SOURCE_SIZE,
-					DEFAULT_MAX_DATA_SOURCE_SIZE)];
+			int maxDataSourceSize=extendedProperties.getInt(MAX_DATA_SOURCE_SIZE,
+					DEFAULT_MAX_DATA_SOURCE_SIZE);
+			result = new AtomikosDataSourceBean[maxDataSourceSize];
 			//
-			for (int i = 0; i < result.length; i++) {
-				AtomikosDataSourceBean dataSource = createAtomikosDataSourceBean(i);
-				result[i] = dataSource;
+			for (int index = 0; index < maxDataSourceSize; index++) {
+				AtomikosDataSourceBean dataSource = createAtomikosDataSourceBean(index);
+				result[index] = dataSource;
 			}
 
 		} catch (Exception e) {

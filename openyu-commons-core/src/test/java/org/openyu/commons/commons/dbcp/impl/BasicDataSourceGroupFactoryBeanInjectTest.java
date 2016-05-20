@@ -13,7 +13,7 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BasicDataSourceGroupFactoryBeanTest extends BaseTestSupporter {
+public class BasicDataSourceGroupFactoryBeanInjectTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
@@ -24,7 +24,7 @@ public class BasicDataSourceGroupFactoryBeanTest extends BaseTestSupporter {
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/commons/dbcp/testContext-dbcp-group.xml",//
+				"org/openyu/commons/commons/dbcp/testContext-dbcp-group-inject.xml",//
 
 		});
 		basicDataSources = applicationContext.getBean("basicDataSourceGroupFactoryBean", BasicDataSource[].class);

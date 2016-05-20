@@ -83,7 +83,7 @@ public abstract class AtomikosDataSourceBeanFactorySupporter<T> extends BaseFact
 	 * @return
 	 * @throws Exception
 	 */
-	protected AtomikosDataSourceBean createAtomikosDataSourceBean(int i) throws Exception {
+	protected AtomikosDataSourceBean createAtomikosDataSourceBean(int index) throws Exception {
 		AtomikosDataSourceBean result = null;
 		try {
 			result = new AtomikosDataSourceBean();
@@ -95,11 +95,11 @@ public abstract class AtomikosDataSourceBeanFactorySupporter<T> extends BaseFact
 			// i=1, jdbc:hsqldb:hsql://localhost:9001/commons_2
 			result.setUniqueResourceName(
 					extendedProperties.getString(UNIQUE_RESOURCE_NAME, DEFAULT_UNIQUE_RESOURCE_NAME)
-							+ (i < 1 ? "" : "_" + (i + 1)));
+							+ (index < 1 ? "" : "_" + (index + 1)));
 			result.setXaDataSourceClassName(
 					extendedProperties.getString(XA_DATA_SOURCE_CLASSNAME, DEFAULT_XA_DATA_SOURCE_CLASSNAME));
 			//
-			String url = nextUrl(extendedProperties.getString(URL, DEFAULT_URL), i);
+			String url = nextUrl(extendedProperties.getString(URL, DEFAULT_URL), index);
 			LOGGER.info("[" + result.getUniqueResourceName() + "] " + url);
 			//
 			Properties xaProperties = new Properties();
