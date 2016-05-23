@@ -8,8 +8,7 @@
 	xsi:schemaLocation="
              http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 			 http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
-	
-	<!-- group -->
+
 	<bean
 		id="jedisPoolConfig"
 		class="redis.clients.jedis.JedisPoolConfig"
@@ -28,6 +27,7 @@
 		p:testOnBorrow="false"
 		p:testOnReturn="false" />
 
+	<!-- group -->
 	<bean
 		id="jedisPoolConfigGroupFactoryBean"
 		class="org.openyu.commons.redis.impl.JedisPoolConfigGroupFactoryBean"

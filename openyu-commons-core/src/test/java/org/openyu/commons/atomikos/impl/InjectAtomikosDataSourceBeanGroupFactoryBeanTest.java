@@ -1,42 +1,42 @@
-package org.openyu.commons.commons.dbcp.impl;
+package org.openyu.commons.atomikos.impl;
 
 import static org.junit.Assert.assertNotNull;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
+import com.atomikos.jdbc.AtomikosDataSourceBean;
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BasicDataSourceGroupFactoryBeanInjectTest extends BaseTestSupporter {
+public class InjectAtomikosDataSourceBeanGroupFactoryBeanTest extends BaseTestSupporter {
 
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static BasicDataSource[] basicDataSources;
+	private static AtomikosDataSourceBean[] atomikosDataSourceBeans;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/commons/dbcp/testContext-dbcp-group-inject.xml",//
+				"org/openyu/commons/atomikos/testContext-inject-atomikos-group.xml",//
 
 		});
-		basicDataSources = applicationContext.getBean("basicDataSourceGroupFactoryBean", BasicDataSource[].class);
+		atomikosDataSourceBeans = applicationContext.getBean("atomikosDataSourceBeanGroupFactoryBean", AtomikosDataSourceBean[].class);
 	}
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
-	public void basicDataSources() throws Exception {
-		System.out.println(basicDataSources);
-		assertNotNull(basicDataSources);
+	public void atomikosDataSourceBeans() throws Exception {
+		System.out.println(atomikosDataSourceBeans);
+		assertNotNull(atomikosDataSourceBeans);
 		//
-		for (BasicDataSource dataSource : basicDataSources) {
+		for (AtomikosDataSourceBean dataSource : atomikosDataSourceBeans) {
 			System.out.println(dataSource.getConnection());
 		}
 	}
@@ -44,8 +44,8 @@ public class BasicDataSourceGroupFactoryBeanInjectTest extends BaseTestSupporter
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void close() {
-		System.out.println(basicDataSources);
-		assertNotNull(basicDataSources);
+		System.out.println(atomikosDataSourceBeans);
+		assertNotNull(atomikosDataSourceBeans);
 		applicationContext.close();
 		// 多次,不會丟出ex
 		applicationContext.close();
@@ -54,8 +54,8 @@ public class BasicDataSourceGroupFactoryBeanInjectTest extends BaseTestSupporter
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void refresh() {
-		System.out.println(basicDataSources);
-		assertNotNull(basicDataSources);
+		System.out.println(atomikosDataSourceBeans);
+		assertNotNull(atomikosDataSourceBeans);
 		applicationContext.refresh();
 		// 多次,不會丟出ex
 		applicationContext.refresh();

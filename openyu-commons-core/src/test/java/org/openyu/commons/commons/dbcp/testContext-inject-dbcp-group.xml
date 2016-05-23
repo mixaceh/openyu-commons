@@ -142,6 +142,8 @@
 			name="poolPreparedStatements"
 			value="false" />
 	</bean>
+	
+	<!-- group -->
 	<bean
 		id="basicDataSourceGroupFactoryBean"
 		class="org.openyu.commons.commons.dbcp.impl.BasicDataSourceGroupFactoryBean"
