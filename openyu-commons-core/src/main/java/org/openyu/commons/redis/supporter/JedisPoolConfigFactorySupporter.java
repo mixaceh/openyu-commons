@@ -8,7 +8,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 public abstract class JedisPoolConfigFactorySupporter<T> extends BaseFactoryBeanSupporter<T> {
 
-	private static final long serialVersionUID = 8998082529227210243L;
+	private static final long serialVersionUID = -3115943094433243928L;
 
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(JedisPoolConfigFactorySupporter.class);
 
@@ -31,6 +31,12 @@ public abstract class JedisPoolConfigFactorySupporter<T> extends BaseFactoryBean
 	public static final String TEST_ON_RETURN = "testOnReturn";
 
 	public static final boolean DEFAULT_TEST_ON_RETURN = false;
+
+	/**
+	 * 所有屬性
+	 */
+	public static final String[] ALL_PROPERTIES = { MAX_TOTAL, MIN_IDLE, MAX_WAIT_MILLIS, TEST_ON_BORROW,
+			TEST_ON_RETURN };
 
 	public JedisPoolConfigFactorySupporter() {
 	}

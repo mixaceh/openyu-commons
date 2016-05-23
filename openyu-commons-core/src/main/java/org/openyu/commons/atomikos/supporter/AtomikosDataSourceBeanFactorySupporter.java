@@ -73,6 +73,13 @@ public abstract class AtomikosDataSourceBeanFactorySupporter<T> extends BaseFact
 
 	public static final int DEFAULT_LOGIN_TIMEOUT = 0;
 
+	/**
+	 * 所有屬性
+	 */
+	public static final String[] ALL_PROPERTIES = { URL, UNIQUE_RESOURCE_NAME, XA_DATA_SOURCE_CLASSNAME, USER, PASSWORD,
+			MAX_POOL_SIZE, MIN_POOL_SIZE, TEST_QUERY, MAX_LIFE_TIME, MAX_IDLE_TIME, BORROW_CONNECTION_TIMEOUT,
+			REAP_TIMEOUT, MAINTENANCE_INTERVAL, LOGIN_TIMEOUT };
+
 	public AtomikosDataSourceBeanFactorySupporter() {
 
 	}
