@@ -174,6 +174,11 @@ public abstract class AtomikosDataSourceBeanFactorySupporter<T> extends BaseFact
 		return result.toString();
 	}
 
+	/**
+	 * 關閉
+	 *
+	 * @return
+	 */
 	protected abstract AtomikosDataSourceBean shutdownAtomikosDataSourceBean() throws Exception;
 
 }

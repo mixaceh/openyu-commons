@@ -9,6 +9,22 @@
              http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 			 http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
 
+	<bean
+		id="testConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property
+			name="order"
+			value="1" />
+		<property
+			name="ignoreUnresolvablePlaceholders"
+			value="true" />
+		<property name="locations">
+			<list>
+				<value>file:src/test/config/etc/redis.properties</value>
+			</list>
+		</property>
+	</bean>
+	
 	<!-- serializer-->
 	<bean
 		id="stringRedisSerializer"
@@ -26,8 +42,8 @@
 		p:maxTotal="10"
 		p:minIdle="1"
 		p:maxWaitMillis="60000"
-		p:testOnBorrow="true"
-		p:testOnReturn="true" />
+		p:testOnBorrow="false"
+		p:testOnReturn="false" />
 
 	<bean
 		id="jedisConnectionFactory"
@@ -45,5 +61,14 @@
 		p:defaultSerializer-ref="kryoRedisSerializer"
 		p:keySerializer-ref="stringRedisSerializer" />
 
-
+	<!-- factory -->
+	<bean
+		id="jedisPoolConfigFactoryBean"
+		class="org.openyu.commons.redis.impl.JedisPoolConfigFactoryBean"
+		parent="baseFactoryBeanSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/redis.properties" />
+	</bean>
+	
 </beans>
