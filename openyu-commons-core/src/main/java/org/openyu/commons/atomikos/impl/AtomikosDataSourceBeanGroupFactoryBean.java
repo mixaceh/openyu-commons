@@ -45,9 +45,9 @@ public final class AtomikosDataSourceBeanGroupFactoryBean
 			int maxDataSourceSize = extendedProperties.getInt(MAX_DATA_SOURCE_SIZE, DEFAULT_MAX_DATA_SOURCE_SIZE);
 			result = new AtomikosDataSourceBean[maxDataSourceSize];
 			//
-			for (int index = 0; index < maxDataSourceSize; index++) {
-				AtomikosDataSourceBean dataSource = createAtomikosDataSourceBean(index);
-				result[index] = dataSource;
+			for (int i = 0; i < maxDataSourceSize; i++) {
+				AtomikosDataSourceBean dataSource = createAtomikosDataSourceBean(i);
+				result[i] = dataSource;
 			}
 
 		} catch (Exception e) {

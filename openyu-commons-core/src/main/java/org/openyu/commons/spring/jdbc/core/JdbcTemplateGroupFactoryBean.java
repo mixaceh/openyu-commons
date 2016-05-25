@@ -9,28 +9,40 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class JdbcTemplateGroupFactoryBean
-		extends BaseFactoryBeanSupporter<JdbcTemplate[]> {
+public class JdbcTemplateGroupFactoryBean extends BaseFactoryBeanSupporter<JdbcTemplate[]> {
 
 	private static final long serialVersionUID = 1560497754167571755L;
 
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(JdbcTemplateGroupFactoryBean.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(JdbcTemplateGroupFactoryBean.class);
 
-	private DataSource[] targetDataSources;
+	private DataSource[] dataSources;
 
 	private JdbcTemplate[] jdbcTemplates;
 
-	public JdbcTemplateGroupFactoryBean(DataSource[] targetDataSources) {
-		this.targetDataSources = targetDataSources;
+	public JdbcTemplateGroupFactoryBean(DataSource[] dataSources) {
+		this.dataSources = dataSources;
 	}
 
 	public JdbcTemplateGroupFactoryBean() {
+		this(null);
 	}
 
-	public void setTargetDataSources(DataSource[] targetDataSources) {
-		AssertHelper.notNull(targetDataSources, "The TargetDataSources must not be null");
-		this.targetDataSources = targetDataSources;
+	public DataSource[] getDataSources() {
+		return dataSources;
+	}
+
+	public void setDataSources(DataSource[] dataSources) {
+		AssertHelper.notNull(dataSources, "The DataSources must not be null");
+		//
+		this.dataSources = dataSources;
+	}
+
+	public JdbcTemplate[] getJdbcTemplates() {
+		return jdbcTemplates;
+	}
+
+	public void setJdbcTemplates(JdbcTemplate[] jdbcTemplates) {
+		this.jdbcTemplates = jdbcTemplates;
 	}
 
 	/**
@@ -38,24 +50,19 @@ public class JdbcTemplateGroupFactoryBean
 	 * 
 	 * @return
 	 */
-	protected JdbcTemplate[] createJdbcTemplates(DataSource[] dataSources)
-			throws Exception {
+	protected JdbcTemplate[] createJdbcTemplates(DataSource[] dataSources) throws Exception {
 		AssertHelper.notNull(dataSources, "The DataSources must not be null");
 		//
 		JdbcTemplate[] result = null;
 		try {
-			//
-			result = new JdbcTemplate[dataSources.length];
-			for (int i = 0; i < dataSources.length; i++) {
-				DataSource targetDataSource = dataSources[i];
-				JdbcTemplate jdbcTemplate = new JdbcTemplate(
-						targetDataSource);
+			int size = dataSources.length;
+			result = new JdbcTemplate[size];
+			for (int i = 0; i < size; i++) {
+				JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSources[i]);
 				result[i] = jdbcTemplate;
 			}
 		} catch (Exception e) {
-			LOGGER.error(
-					new StringBuilder("Exception encountered during createJdbcTemplates()").toString(),
-					e);
+			LOGGER.error(new StringBuilder("Exception encountered during createJdbcTemplates()").toString(), e);
 			try {
 				result = (JdbcTemplate[]) shutdownJdbcTemplates();
 			} catch (Exception sie) {
@@ -83,8 +90,7 @@ public class JdbcTemplateGroupFactoryBean
 				this.jdbcTemplates = null;
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during shutdownJdbcTemplates()")
-					.toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during shutdownJdbcTemplates()").toString(), e);
 			throw e;
 		}
 		return this.jdbcTemplates;
@@ -99,11 +105,10 @@ public class JdbcTemplateGroupFactoryBean
 		try {
 			if (this.jdbcTemplates != null) {
 				this.jdbcTemplates = shutdownJdbcTemplates();
-				this.jdbcTemplates = createJdbcTemplates(this.targetDataSources);
+				this.jdbcTemplates = createJdbcTemplates(this.dataSources);
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during restartJdbcTemplates()")
-					.toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during restartJdbcTemplates()").toString(), e);
 			throw e;
 		}
 		return this.jdbcTemplates;
@@ -114,7 +119,14 @@ public class JdbcTemplateGroupFactoryBean
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		this.jdbcTemplates = createJdbcTemplates(this.targetDataSources);
+		if (this.jdbcTemplates != null) {
+			LOGGER.info(new StringBuilder().append("Inject from setJdbcTemplates()").toString());
+		} else {
+			AssertHelper.notNull(this.dataSources, "Property 'dataSources' is required");
+			//
+			LOGGER.info(new StringBuilder().append("Using createJdbcTemplates()").toString());
+			this.jdbcTemplates = createJdbcTemplates(this.dataSources);
+		}
 	}
 
 	/**
@@ -140,8 +152,7 @@ public class JdbcTemplateGroupFactoryBean
 
 	@Override
 	public Class<?> getObjectType() {
-		return ((this.jdbcTemplates != null) ? this.jdbcTemplates.getClass()
-				: BasicDataSource[].class);
+		return ((this.jdbcTemplates != null) ? this.jdbcTemplates.getClass() : JdbcTemplate[].class);
 	}
 
 	@Override

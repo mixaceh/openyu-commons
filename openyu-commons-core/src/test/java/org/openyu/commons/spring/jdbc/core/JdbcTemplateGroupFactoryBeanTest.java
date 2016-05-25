@@ -24,7 +24,7 @@ public class JdbcTemplateGroupFactoryBeanTest extends BaseTestSupporter {
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/spring/jdbc/core/testContext-core.xml",//
+				"org/openyu/commons/spring/jdbc/core/testContext-core-group.xml",//
 
 		});
 		jdbcTemplates = applicationContext.getBean("jdbcTemplateGroupFactoryBean",
@@ -37,8 +37,8 @@ public class JdbcTemplateGroupFactoryBeanTest extends BaseTestSupporter {
 		System.out.println(jdbcTemplates);
 		assertNotNull(jdbcTemplates);
 		//
-		for (JdbcTemplate e : jdbcTemplates) {
-			System.out.println(e.getDataSource().getConnection());
+		for (JdbcTemplate jdbcTemplate : jdbcTemplates) {
+			System.out.println(jdbcTemplate.getDataSource().getConnection());
 		}
 	}
 

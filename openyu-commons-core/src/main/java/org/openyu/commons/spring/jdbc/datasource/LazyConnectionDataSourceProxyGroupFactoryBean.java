@@ -2,7 +2,6 @@ package org.openyu.commons.spring.jdbc.datasource;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.openyu.commons.service.supporter.BaseFactoryBeanSupporter;
 import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
@@ -17,20 +16,34 @@ public class LazyConnectionDataSourceProxyGroupFactoryBean
 	private static final transient Logger LOGGER = LoggerFactory
 			.getLogger(LazyConnectionDataSourceProxyGroupFactoryBean.class);
 
-	private DataSource[] targetDataSources;
+	private DataSource[] dataSources;
 
 	private LazyConnectionDataSourceProxy[] lazyConnectionDataSourceProxys;
 
-	public LazyConnectionDataSourceProxyGroupFactoryBean(DataSource[] targetDataSources) {
-		this.targetDataSources = targetDataSources;
+	public LazyConnectionDataSourceProxyGroupFactoryBean(DataSource[] dataSources) {
+		this.dataSources = dataSources;
 	}
 
 	public LazyConnectionDataSourceProxyGroupFactoryBean() {
+		this(null);
 	}
 
-	public void setTargetDataSources(DataSource[] targetDataSources) {
-		AssertHelper.notNull(targetDataSources, "The TargetDataSources must not be null");
-		this.targetDataSources = targetDataSources;
+	public DataSource[] getDataSources() {
+		return dataSources;
+	}
+
+	public void setDataSources(DataSource[] dataSources) {
+		AssertHelper.notNull(dataSources, "The DataSources must not be null");
+		//
+		this.dataSources = dataSources;
+	}
+
+	public LazyConnectionDataSourceProxy[] getLazyConnectionDataSourceProxys() {
+		return lazyConnectionDataSourceProxys;
+	}
+
+	public void setLazyConnectionDataSourceProxys(LazyConnectionDataSourceProxy[] lazyConnectionDataSourceProxys) {
+		this.lazyConnectionDataSourceProxys = lazyConnectionDataSourceProxys;
 	}
 
 	/**
@@ -44,11 +57,11 @@ public class LazyConnectionDataSourceProxyGroupFactoryBean
 		//
 		LazyConnectionDataSourceProxy[] result = null;
 		try {
-			result = new LazyConnectionDataSourceProxy[dataSources.length];
-			for (int i = 0; i < dataSources.length; i++) {
-				DataSource targetDataSource = dataSources[i];
+			int size = dataSources.length;
+			result = new LazyConnectionDataSourceProxy[size];
+			for (int i = 0; i < size; i++) {
 				LazyConnectionDataSourceProxy lazyConnectionDataSourceProxy = new LazyConnectionDataSourceProxy(
-						targetDataSource);
+						dataSources[i]);
 				result[i] = lazyConnectionDataSourceProxy;
 			}
 		} catch (Exception e) {
@@ -98,7 +111,7 @@ public class LazyConnectionDataSourceProxyGroupFactoryBean
 		try {
 			if (this.lazyConnectionDataSourceProxys != null) {
 				this.lazyConnectionDataSourceProxys = shutdownLazyConnectionDataSourceProxys();
-				this.lazyConnectionDataSourceProxys = createLazyConnectionDataSourceProxys(this.targetDataSources);
+				this.lazyConnectionDataSourceProxys = createLazyConnectionDataSourceProxys(this.dataSources);
 			}
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during restartLazyConnectionDataSourceProxys()")
@@ -113,7 +126,14 @@ public class LazyConnectionDataSourceProxyGroupFactoryBean
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		this.lazyConnectionDataSourceProxys = createLazyConnectionDataSourceProxys(this.targetDataSources);
+		if (this.lazyConnectionDataSourceProxys != null) {
+			LOGGER.info(new StringBuilder().append("Inject from setLazyConnectionDataSourceProxys()").toString());
+		} else {
+			AssertHelper.notNull(this.dataSources, "Property 'dataSources' is required");
+			//
+			LOGGER.info(new StringBuilder().append("Using createLazyConnectionDataSourceProxys()").toString());
+			this.lazyConnectionDataSourceProxys = createLazyConnectionDataSourceProxys(this.dataSources);
+		}
 	}
 
 	/**
@@ -140,7 +160,7 @@ public class LazyConnectionDataSourceProxyGroupFactoryBean
 	@Override
 	public Class<?> getObjectType() {
 		return ((this.lazyConnectionDataSourceProxys != null) ? this.lazyConnectionDataSourceProxys.getClass()
-				: BasicDataSource[].class);
+				: LazyConnectionDataSourceProxy[].class);
 	}
 
 	@Override

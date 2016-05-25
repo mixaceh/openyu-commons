@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<!-- group -->
+	<bean
+		id="basicDataSourceGroupFactoryBean"
+		class="org.openyu.commons.commons.dbcp.impl.BasicDataSourceGroupFactoryBean"
+		parent="baseFactoryBeanSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/dbcp.properties" />
+	</bean>
+
+	<bean
+		id="jdbcTemplateGroupFactoryBean"
+		class="org.openyu.commons.spring.jdbc.core.JdbcTemplateGroupFactoryBean"
+		parent="baseFactoryBeanSupporter">
+		<!--  
+		c:dataSources-ref="basicDataSourceGroupFactoryBean">
+		-->
+		<property
+			name="dataSources"
+			ref="basicDataSourceGroupFactoryBean" />
+	</bean>
+</beans>

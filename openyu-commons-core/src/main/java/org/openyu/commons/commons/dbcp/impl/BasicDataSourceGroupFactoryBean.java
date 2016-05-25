@@ -42,9 +42,9 @@ public final class BasicDataSourceGroupFactoryBean extends BasicDataSourceFactor
 			int maxDataSourceSize = extendedProperties.getInt(MAX_DATA_SOURCE_SIZE, DEFAULT_MAX_DATA_SOURCE_SIZE);
 			result = new BasicDataSource[maxDataSourceSize];
 			//
-			for (int index = 0; index < maxDataSourceSize; index++) {
-				BasicDataSource dataSource = createBasicDataSource(index);
-				result[index] = dataSource;
+			for (int i = 0; i < maxDataSourceSize; i++) {
+				BasicDataSource dataSource = createBasicDataSource(i);
+				result[i] = dataSource;
 			}
 
 		} catch (Exception e) {

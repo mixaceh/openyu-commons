@@ -24,7 +24,7 @@ public class LazyConnectionDataSourceProxyGroupFactoryBeanTest extends BaseTestS
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/spring/jdbc/datasource/testContext-datasource.xml",//
+				"org/openyu/commons/spring/jdbc/datasource/testContext-datasource-group.xml",//
 
 		});
 		lazyConnectionDataSourceProxys = applicationContext.getBean("lazyConnectionDataSourceProxyGroupFactoryBean",
@@ -37,8 +37,8 @@ public class LazyConnectionDataSourceProxyGroupFactoryBeanTest extends BaseTestS
 		System.out.println(lazyConnectionDataSourceProxys);
 		assertNotNull(lazyConnectionDataSourceProxys);
 		//
-		for (LazyConnectionDataSourceProxy e : lazyConnectionDataSourceProxys) {
-			System.out.println(e.getTargetDataSource().getConnection());
+		for (LazyConnectionDataSourceProxy lazyConnectionDataSourceProxy : lazyConnectionDataSourceProxys) {
+			System.out.println(lazyConnectionDataSourceProxy.getTargetDataSource().getConnection());
 		}
 	}
 

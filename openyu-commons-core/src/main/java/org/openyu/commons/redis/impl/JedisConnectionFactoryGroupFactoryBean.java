@@ -15,9 +15,9 @@ public class JedisConnectionFactoryGroupFactoryBean
 	private static transient final Logger LOGGER = LoggerFactory
 			.getLogger(JedisConnectionFactoryGroupFactoryBean.class);
 
-	private JedisConnectionFactory[] jedisConnectionFactorys;
-
 	private JedisPoolConfig[] jedisPoolConfigs;
+	
+	private JedisConnectionFactory[] jedisConnectionFactorys;
 
 	public JedisConnectionFactoryGroupFactoryBean(JedisPoolConfig[] jedisPoolConfigs) {
 		this.jedisPoolConfigs = jedisPoolConfigs;
