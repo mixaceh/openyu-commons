@@ -30,7 +30,7 @@ public class JedisPoolConfigGroupFactoryBean extends JedisPoolConfigFactorySuppo
 	}
 
 	/**
-	 * 建立多個JedisPoolConfig
+	 * 建立
 	 * 
 	 * @return
 	 * @throws Exception

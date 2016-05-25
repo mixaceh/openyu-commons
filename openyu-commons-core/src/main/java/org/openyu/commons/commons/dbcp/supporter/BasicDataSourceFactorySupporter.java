@@ -108,9 +108,11 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 	}
 
 	/**
-	 * 建構
+	 * 建立
 	 * 
+	 * @param index
 	 * @return
+	 * @throws Exception
 	 */
 	protected BasicDataSource createBasicDataSource(int index) throws Exception {
 		BasicDataSource result = null;

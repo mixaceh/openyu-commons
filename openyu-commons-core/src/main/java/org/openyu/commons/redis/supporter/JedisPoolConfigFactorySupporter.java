@@ -42,7 +42,7 @@ public abstract class JedisPoolConfigFactorySupporter<T> extends BaseFactoryBean
 	}
 
 	/**
-	 * 建立多個JedisPoolConfig
+	 * 建立
 	 * 
 	 * @return
 	 * @throws Exception

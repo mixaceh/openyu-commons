@@ -32,16 +32,17 @@ public final class BasicDataSourceGroupFactoryBean extends BasicDataSourceFactor
 	}
 
 	/**
-	 * 建構
+	 * 建立
 	 * 
 	 * @return
 	 */
 	protected BasicDataSource[] createBasicDataSources() throws Exception {
 		BasicDataSource[] result = null;
 		try {
-			result = new BasicDataSource[extendedProperties.getInt(MAX_DATA_SOURCE_SIZE, DEFAULT_MAX_DATA_SOURCE_SIZE)];
+			int maxDataSourceSize = extendedProperties.getInt(MAX_DATA_SOURCE_SIZE, DEFAULT_MAX_DATA_SOURCE_SIZE);
+			result = new BasicDataSource[maxDataSourceSize];
 			//
-			for (int index = 0; index < result.length; index++) {
+			for (int index = 0; index < maxDataSourceSize; index++) {
 				BasicDataSource dataSource = createBasicDataSource(index);
 				result[index] = dataSource;
 			}
