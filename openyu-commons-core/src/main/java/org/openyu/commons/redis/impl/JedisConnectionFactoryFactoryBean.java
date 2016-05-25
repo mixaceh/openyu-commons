@@ -35,6 +35,7 @@ public class JedisConnectionFactoryFactoryBean extends JedisConnectionFactoryFac
 			if (this.jedisConnectionFactory != null) {
 				JedisConnectionFactory oldInstance = this.jedisConnectionFactory;
 				// oldInstance.close();
+				oldInstance.destroy();
 				//
 				this.jedisConnectionFactory = null;
 			}

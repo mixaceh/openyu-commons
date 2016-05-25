@@ -39,4 +39,35 @@
 			</array>
 		</property>
 	</bean>
+
+	<bean
+		id="jedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		p:hostName="127.0.0.1"
+		p:port="6379"
+		p:password=""
+		p:database="0"
+		p:poolConfig-ref="jedisPoolConfig" />
+
+	<bean
+		id="jedisConnectionFactory2"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		p:hostName="127.0.0.1"
+		p:port="6379"
+		p:password=""
+		p:database="0"
+		p:poolConfig-ref="jedisPoolConfig2" />
+
+	<!-- group -->
+	<bean
+		id="jedisConnectionFactoryGroupFactoryBean"
+		class="org.openyu.commons.redis.impl.JedisConnectionFactoryGroupFactoryBean"
+		parent="baseFactoryBeanSupporter">
+		<property name="jedisConnectionFactorys">
+			<array>
+				<ref bean="jedisConnectionFactory" />
+				<ref bean="jedisConnectionFactory2" />
+			</array>
+		</property>
+	</bean>
 </beans>

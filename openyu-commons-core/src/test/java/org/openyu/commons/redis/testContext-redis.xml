@@ -70,5 +70,14 @@
 			name="configLocation"
 			value="file:src/test/config/etc/redis.properties" />
 	</bean>
-	
+
+	<bean
+		id="jedisConnectionFactoryFactoryBean"
+		class="org.openyu.commons.redis.impl.JedisConnectionFactoryFactoryBean"
+		parent="baseFactoryBeanSupporter"
+		c:jedisPoolConfig-ref="jedisPoolConfigFactoryBean">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/redis.properties" />
+	</bean>
 </beans>

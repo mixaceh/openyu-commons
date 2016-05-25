@@ -11,9 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openyu.commons.dao.CommonDao;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
-import org.openyu.commons.junit.supporter.BenchmarkDatabaseTestSupporter;
 import org.openyu.commons.lang.ArrayHelper;
 import org.openyu.commons.lang.ByteHelper;
 import org.openyu.commons.redis.serializer.impl.JdkRedisSerializer;
@@ -22,7 +20,6 @@ import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 
 import redis.clients.jedis.JedisPoolConfig;
 
