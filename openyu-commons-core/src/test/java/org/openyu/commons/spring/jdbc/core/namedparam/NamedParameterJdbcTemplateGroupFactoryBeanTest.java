@@ -24,7 +24,7 @@ public class NamedParameterJdbcTemplateGroupFactoryBeanTest extends BaseTestSupp
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/spring/jdbc/core/namedparam/testContext-namedparam.xml",//
+				"org/openyu/commons/spring/jdbc/core/namedparam/testContext-namedparam-group.xml",//
 
 		});
 		namedParameterJdbcTemplates = applicationContext.getBean("namedParameterJdbcTemplateGroupFactoryBean",
@@ -37,8 +37,8 @@ public class NamedParameterJdbcTemplateGroupFactoryBeanTest extends BaseTestSupp
 		System.out.println(namedParameterJdbcTemplates);
 		assertNotNull(namedParameterJdbcTemplates);
 		//
-		for (NamedParameterJdbcTemplate e : namedParameterJdbcTemplates) {
-			System.out.println(e.getJdbcOperations());
+		for (NamedParameterJdbcTemplate namedParameterJdbcTemplate : namedParameterJdbcTemplates) {
+			System.out.println(namedParameterJdbcTemplate.getJdbcOperations());
 		}
 	}
 

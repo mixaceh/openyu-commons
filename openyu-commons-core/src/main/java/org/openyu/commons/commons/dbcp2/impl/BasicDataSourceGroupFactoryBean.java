@@ -23,17 +23,26 @@ public final class BasicDataSourceGroupFactoryBean extends BasicDataSourceFactor
 	public BasicDataSourceGroupFactoryBean() {
 	}
 
+	public BasicDataSource[] getBasicDataSources() {
+		return basicDataSources;
+	}
+
+	public void setBasicDataSources(BasicDataSource[] basicDataSources) {
+		this.basicDataSources = basicDataSources;
+	}
+
 	/**
-	 * 建構
+	 * 建立
 	 * 
 	 * @return
 	 */
 	protected BasicDataSource[] createBasicDataSources() throws Exception {
 		BasicDataSource[] result = null;
 		try {
-			result = new BasicDataSource[extendedProperties.getInt(MAX_DATA_SOURCE_SIZE, DEFAULT_MAX_DATA_SOURCE_SIZE)];
+			int maxDataSourceSize = extendedProperties.getInt(MAX_DATA_SOURCE_SIZE, DEFAULT_MAX_DATA_SOURCE_SIZE);
+			result = new BasicDataSource[maxDataSourceSize];
 			//
-			for (int i = 0; i < result.length; i++) {
+			for (int i = 0; i < maxDataSourceSize; i++) {
 				BasicDataSource dataSource = createBasicDataSource(i);
 				result[i] = dataSource;
 			}
@@ -100,7 +109,12 @@ public final class BasicDataSourceGroupFactoryBean extends BasicDataSourceFactor
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		this.basicDataSources = createBasicDataSources();
+		if (this.basicDataSources != null) {
+			LOGGER.info(new StringBuilder().append("Inject from setBasicDataSources()").toString());
+		} else {
+			LOGGER.info(new StringBuilder().append("Using createBasicDataSources()").toString());
+			this.basicDataSources = createBasicDataSources();
+		}
 	}
 
 	/**

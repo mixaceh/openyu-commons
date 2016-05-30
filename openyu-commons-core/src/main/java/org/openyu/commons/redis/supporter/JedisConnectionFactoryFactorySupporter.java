@@ -37,16 +37,24 @@ public abstract class JedisConnectionFactoryFactorySupporter<T> extends BaseFact
 	/**
 	 * 建立
 	 * 
-	 * @param index
+	 * i=0, port(6379)
+	 * 
+	 * i=1, port(6379)+i=6380
+	 * 
+	 * @param i
 	 * @param jedisPoolConfig
 	 * @return
 	 */
-	protected JedisConnectionFactory createJedisConnectionFactory(int index, JedisPoolConfig jedisPoolConfig) {
+	protected JedisConnectionFactory createJedisConnectionFactory(int i, JedisPoolConfig jedisPoolConfig)
+			throws Exception {
 		JedisConnectionFactory result = new JedisConnectionFactory();
-		result.setHostName(extendedProperties.getString(HOSTNAME, DEFAULT_HOSTNAME));
+		String hostName = extendedProperties.getString(HOSTNAME, DEFAULT_HOSTNAME);
 		//
 		int port = extendedProperties.getInt(PORT, DEFAULT_PORT);
-		port += index;
+		port += i;
+		LOGGER.info("redis[" + i + "]: " + hostName + ":" + port);
+		//
+		result.setHostName(hostName);
 		result.setPort(port);
 		//
 		result.setPassword(extendedProperties.getString(PASSWORD, DEFAULT_PASSWORD));

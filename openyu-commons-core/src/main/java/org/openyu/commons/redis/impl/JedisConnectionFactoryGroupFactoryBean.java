@@ -1,6 +1,7 @@
 package org.openyu.commons.redis.impl;
 
 import org.openyu.commons.redis.supporter.JedisConnectionFactoryFactorySupporter;
+import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -16,7 +17,7 @@ public class JedisConnectionFactoryGroupFactoryBean
 			.getLogger(JedisConnectionFactoryGroupFactoryBean.class);
 
 	private JedisPoolConfig[] jedisPoolConfigs;
-	
+
 	private JedisConnectionFactory[] jedisConnectionFactorys;
 
 	public JedisConnectionFactoryGroupFactoryBean(JedisPoolConfig[] jedisPoolConfigs) {
@@ -24,7 +25,17 @@ public class JedisConnectionFactoryGroupFactoryBean
 	}
 
 	public JedisConnectionFactoryGroupFactoryBean() {
-		this(new JedisPoolConfig[] { new JedisPoolConfig() });
+		this(null);
+	}
+
+	public JedisPoolConfig[] getJedisPoolConfigs() {
+		return jedisPoolConfigs;
+	}
+
+	public void setJedisPoolConfigs(JedisPoolConfig[] jedisPoolConfigs) {
+		AssertHelper.notNull(jedisPoolConfigs, "The JedisPoolConfigs must not be null");
+		//
+		this.jedisPoolConfigs = jedisPoolConfigs;
 	}
 
 	public JedisConnectionFactory[] getJedisConnectionFactorys() {
@@ -35,16 +46,16 @@ public class JedisConnectionFactoryGroupFactoryBean
 		this.jedisConnectionFactorys = jedisConnectionFactorys;
 	}
 
-	public JedisConnectionFactory[] createJedisConnectionFactorys() throws Exception {
+	public JedisConnectionFactory[] createJedisConnectionFactorys(JedisPoolConfig[] jedisPoolConfigs) throws Exception {
 		JedisConnectionFactory[] result = null;
 		try {
-			int size = this.jedisPoolConfigs.length;
+			int size = jedisPoolConfigs.length;
 			result = new JedisConnectionFactory[size];
 			//
-			for (int index = 0; index < size; index++) {
-				JedisConnectionFactory jedisConnectionFactory = createJedisConnectionFactory(index,
-						this.jedisPoolConfigs[index]);
-				result[index] = jedisConnectionFactory;
+			for (int i = 0; i < size; i++) {
+				JedisConnectionFactory jedisConnectionFactory = createJedisConnectionFactory(i,
+						jedisPoolConfigs[i]);
+				result[i] = jedisConnectionFactory;
 			}
 
 		} catch (Exception e) {
@@ -98,7 +109,7 @@ public class JedisConnectionFactoryGroupFactoryBean
 		try {
 			if (this.jedisConnectionFactorys != null) {
 				this.jedisConnectionFactorys = shutdownJedisConnectionFactorys();
-				this.jedisConnectionFactorys = createJedisConnectionFactorys();
+				this.jedisConnectionFactorys = createJedisConnectionFactorys(this.jedisPoolConfigs);
 			}
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during restartJedisConnectionFactorys()").toString(),
@@ -116,8 +127,10 @@ public class JedisConnectionFactoryGroupFactoryBean
 		if (this.jedisConnectionFactorys != null) {
 			LOGGER.info(new StringBuilder().append("Inject from setJedisConnectionFactorys()").toString());
 		} else {
+			AssertHelper.notNull(this.jedisPoolConfigs, "Property 'jedisPoolConfigs' is required");
+			//
 			LOGGER.info(new StringBuilder().append("Using createJedisConnectionFactorys()").toString());
-			this.jedisConnectionFactorys = createJedisConnectionFactorys();
+			this.jedisConnectionFactorys = createJedisConnectionFactorys(this.jedisPoolConfigs);
 		}
 	}
 

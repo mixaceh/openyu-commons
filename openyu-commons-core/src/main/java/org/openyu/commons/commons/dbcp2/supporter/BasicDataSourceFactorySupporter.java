@@ -11,7 +11,8 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBeanSupporter<T> {
 
-	private static final long serialVersionUID = -7843419748237271524L;
+
+	private static final long serialVersionUID = -6210590177807586233L;
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(BasicDataSourceFactorySupporter.class);
 
@@ -120,9 +121,15 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 	}
 
 	/**
-	 * 建構
+	 * 建立
 	 * 
+	 * i=0, jdbc:hsqldb:hsql://127.0.0.1:9001/commons
+	 * 
+	 * i=1, jdbc:hsqldb:hsql://127.0.0.1:9001/commons_2
+	 * 
+	 * @param i
 	 * @return
+	 * @throws Exception
 	 */
 	protected BasicDataSource createBasicDataSource(int i) throws Exception {
 		BasicDataSource result = null;
@@ -132,10 +139,8 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 			/**
 			 * extendedProperties
 			 */
-			// i=0, jdbc:hsqldb:hsql://localhost:9001/commons
-			// i=1, jdbc:hsqldb:hsql://localhost:9001/commons_2
 			String url = nextUrl(extendedProperties.getString(URL, DEFAULT_URL), i);
-			LOGGER.info("URL: " + url);
+			LOGGER.info("dbcp2[" + i + "]: " + url);
 			result.setUrl(url);
 			//
 			result.setDriverClassName(extendedProperties.getString(DRIVER_CLASSNAME, DEFAULT_DRIVER_CLASSNAME));
@@ -186,9 +191,9 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 	}
 
 	/**
-	 * jdbc:hsqldb:hsql://localhost:9001/commons
+	 * jdbc:hsqldb:hsql://127.0.0.1:9001/commons
 	 * 
-	 * jdbc:hsqldb:hsql://localhost:9001/commons_2
+	 * jdbc:hsqldb:hsql://127.0.0.1:9001/commons_2
 	 * 
 	 * @param url
 	 * @param i

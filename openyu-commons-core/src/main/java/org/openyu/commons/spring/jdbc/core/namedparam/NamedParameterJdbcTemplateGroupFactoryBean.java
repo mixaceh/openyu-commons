@@ -9,28 +9,33 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-public class NamedParameterJdbcTemplateGroupFactoryBean
-		extends BaseFactoryBeanSupporter<NamedParameterJdbcTemplate[]> {
+public class NamedParameterJdbcTemplateGroupFactoryBean extends BaseFactoryBeanSupporter<NamedParameterJdbcTemplate[]> {
 
 	private static final long serialVersionUID = 1560497754167571755L;
 
 	private static final transient Logger LOGGER = LoggerFactory
 			.getLogger(NamedParameterJdbcTemplateGroupFactoryBean.class);
 
-	private DataSource[] targetDataSources;
+	private DataSource[] dataSources;
 
 	private NamedParameterJdbcTemplate[] namedParameterJdbcTemplates;
 
-	public NamedParameterJdbcTemplateGroupFactoryBean(DataSource[] targetDataSources) {
-		this.targetDataSources = targetDataSources;
+	public NamedParameterJdbcTemplateGroupFactoryBean(DataSource[] dataSources) {
+		this.dataSources = dataSources;
 	}
 
 	public NamedParameterJdbcTemplateGroupFactoryBean() {
+		this(null);
 	}
 
-	public void setTargetDataSources(DataSource[] targetDataSources) {
-		AssertHelper.notNull(targetDataSources, "The TargetDataSources must not be null");
-		this.targetDataSources = targetDataSources;
+	public DataSource[] getDataSources() {
+		return dataSources;
+	}
+
+	public void setDataSources(DataSource[] dataSources) {
+		AssertHelper.notNull(dataSources, "The DataSources must not be null");
+		//
+		this.dataSources = dataSources;
 	}
 
 	/**
@@ -45,8 +50,9 @@ public class NamedParameterJdbcTemplateGroupFactoryBean
 		NamedParameterJdbcTemplate[] result = null;
 		try {
 			//
-			result = new NamedParameterJdbcTemplate[dataSources.length];
-			for (int i = 0; i < dataSources.length; i++) {
+			int size = dataSources.length;
+			result = new NamedParameterJdbcTemplate[size];
+			for (int i = 0; i < size; i++) {
 				DataSource targetDataSource = dataSources[i];
 				NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(
 						targetDataSource);
@@ -83,8 +89,9 @@ public class NamedParameterJdbcTemplateGroupFactoryBean
 				this.namedParameterJdbcTemplates = null;
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during shutdownNamedParameterJdbcTemplates()")
-					.toString(), e);
+			LOGGER.error(
+					new StringBuilder("Exception encountered during shutdownNamedParameterJdbcTemplates()").toString(),
+					e);
 			throw e;
 		}
 		return this.namedParameterJdbcTemplates;
@@ -99,11 +106,12 @@ public class NamedParameterJdbcTemplateGroupFactoryBean
 		try {
 			if (this.namedParameterJdbcTemplates != null) {
 				this.namedParameterJdbcTemplates = shutdownNamedParameterJdbcTemplates();
-				this.namedParameterJdbcTemplates = createNamedParameterJdbcTemplates(this.targetDataSources);
+				this.namedParameterJdbcTemplates = createNamedParameterJdbcTemplates(this.dataSources);
 			}
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during restartNamedParameterJdbcTemplates()")
-					.toString(), e);
+			LOGGER.error(
+					new StringBuilder("Exception encountered during restartNamedParameterJdbcTemplates()").toString(),
+					e);
 			throw e;
 		}
 		return this.namedParameterJdbcTemplates;
@@ -114,7 +122,14 @@ public class NamedParameterJdbcTemplateGroupFactoryBean
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		this.namedParameterJdbcTemplates = createNamedParameterJdbcTemplates(this.targetDataSources);
+		if (this.namedParameterJdbcTemplates != null) {
+			LOGGER.info(new StringBuilder().append("Inject from setnNmedParameterJdbcTemplates()").toString());
+		} else {
+			AssertHelper.notNull(this.dataSources, "Property 'dataSources' is required");
+			//
+			LOGGER.info(new StringBuilder().append("Using createNamedParameterJdbcTemplates()").toString());
+			this.namedParameterJdbcTemplates = createNamedParameterJdbcTemplates(this.dataSources);
+		}
 	}
 
 	/**

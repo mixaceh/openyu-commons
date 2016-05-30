@@ -47,7 +47,7 @@ public abstract class JedisPoolConfigFactorySupporter<T> extends BaseFactoryBean
 	 * @return
 	 * @throws Exception
 	 */
-	protected JedisPoolConfig createJedisPoolConfig(int index) throws Exception {
+	protected JedisPoolConfig createJedisPoolConfig(int i) throws Exception {
 		JedisPoolConfig result = null;
 		//
 		try {

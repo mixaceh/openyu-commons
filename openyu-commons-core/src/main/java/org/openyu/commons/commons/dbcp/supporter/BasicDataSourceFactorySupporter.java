@@ -110,6 +110,10 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 	/**
 	 * 建立
 	 * 
+	 * i=0, jdbc:hsqldb:hsql://127.0.0.1:9001/commons
+	 * 
+	 * i=1, jdbc:hsqldb:hsql://127.0.0.1:9001/commons_2
+	 * 
 	 * @param i
 	 * @return
 	 * @throws Exception
@@ -122,10 +126,8 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 			/**
 			 * extendedProperties
 			 */
-			// i=0, jdbc:hsqldb:hsql://localhost:9001/commons
-			// i=1, jdbc:hsqldb:hsql://localhost:9001/commons_2
 			String url = nextUrl(extendedProperties.getString(URL, DEFAULT_URL), i);
-			LOGGER.info("[" + i + "] " + url);
+			LOGGER.info("dbcp[" + i + "]: " + url);
 			result.setUrl(url);
 			//
 			result.setDriverClassName(extendedProperties.getString(DRIVER_CLASSNAME, DEFAULT_DRIVER_CLASSNAME));
@@ -169,9 +171,9 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 	}
 
 	/**
-	 * jdbc:hsqldb:hsql://localhost:9001/commons
+	 * jdbc:hsqldb:hsql://127.0.0.1:9001/commons
 	 * 
-	 * jdbc:hsqldb:hsql://localhost:9001/commons_2
+	 * jdbc:hsqldb:hsql://127.0.0.1:9001/commons_2
 	 * 
 	 * @param url
 	 * @param i

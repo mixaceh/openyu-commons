@@ -87,6 +87,11 @@ public abstract class AtomikosDataSourceBeanFactorySupporter<T> extends BaseFact
 	/**
 	 * 建構
 	 * 
+	 * i=0, jdbc:hsqldb:hsql://127.0.0.1:9001/commons
+	 * 
+	 * i=1, jdbc:hsqldb:hsql://127.0.0.1:9001/commons_2
+	 * 
+	 * @param i
 	 * @return
 	 * @throws Exception
 	 */
@@ -98,16 +103,14 @@ public abstract class AtomikosDataSourceBeanFactorySupporter<T> extends BaseFact
 			/**
 			 * extendedProperties
 			 */
-			// i=0, jdbc:hsqldb:hsql://localhost:9001/commons
-			// i=1, jdbc:hsqldb:hsql://localhost:9001/commons_2
-			result.setUniqueResourceName(
-					extendedProperties.getString(UNIQUE_RESOURCE_NAME, DEFAULT_UNIQUE_RESOURCE_NAME)
-							+ (i < 1 ? "" : "_" + (i + 1)));
+			String uniqueResourceName = extendedProperties.getString(UNIQUE_RESOURCE_NAME, DEFAULT_UNIQUE_RESOURCE_NAME)
+					+ (i < 1 ? "" : "_" + (i + 1));
+			String url = nextUrl(extendedProperties.getString(URL, DEFAULT_URL), i);
+			LOGGER.info("atomiko[" + i + "] {" + uniqueResourceName + "}: " + url);
+			//
+			result.setUniqueResourceName(uniqueResourceName);
 			result.setXaDataSourceClassName(
 					extendedProperties.getString(XA_DATA_SOURCE_CLASSNAME, DEFAULT_XA_DATA_SOURCE_CLASSNAME));
-			//
-			String url = nextUrl(extendedProperties.getString(URL, DEFAULT_URL), i);
-			LOGGER.info("[" + i + "] {" + result.getUniqueResourceName() + "} " + url);
 			//
 			Properties xaProperties = new Properties();
 			xaProperties.put(URL, url);

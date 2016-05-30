@@ -43,9 +43,9 @@ public class JedisPoolConfigGroupFactoryBean extends JedisPoolConfigFactorySuppo
 					DEFAULT_MAX_CONNECTION_FACTORY_SIZE);
 			result = new JedisPoolConfig[maxConnectionFactorySize];
 			//
-			for (int index = 0; index < maxConnectionFactorySize; index++) {
-				JedisPoolConfig poolConfig = createJedisPoolConfig(index);
-				result[index] = poolConfig;
+			for (int i = 0; i < maxConnectionFactorySize; i++) {
+				JedisPoolConfig poolConfig = createJedisPoolConfig(i);
+				result[i] = poolConfig;
 			}
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during createJedisPoolConfigs()").toString(), e);

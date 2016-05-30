@@ -2,7 +2,6 @@ package org.openyu.commons.spring.jdbc.core;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.openyu.commons.service.supporter.BaseFactoryBeanSupporter;
 import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
