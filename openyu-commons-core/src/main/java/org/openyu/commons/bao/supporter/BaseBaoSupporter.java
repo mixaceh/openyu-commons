@@ -6,8 +6,7 @@ import org.openyu.commons.service.supporter.BaseServiceSupporter;
 /**
  * Big Data Access Object
  */
-public abstract class BaseBaoSupporter extends BaseServiceSupporter implements
-		BaseBao {
+public abstract class BaseBaoSupporter extends BaseServiceSupporter implements BaseBao {
 
 	private static final long serialVersionUID = -1164210143803135010L;
 
@@ -33,7 +32,7 @@ public abstract class BaseBaoSupporter extends BaseServiceSupporter implements
 	/**
 	 * 檢查設置
 	 * 
-	 * @throws IllegalArgumentException
+	 * @throws Exception
 	 */
-	protected abstract void checkConfig() throws IllegalArgumentException;
+	protected abstract void checkConfig() throws Exception;
 }

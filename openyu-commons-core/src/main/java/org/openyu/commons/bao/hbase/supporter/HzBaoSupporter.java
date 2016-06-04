@@ -31,8 +31,7 @@ public class HzBaoSupporter extends BaseBaoSupporter implements HzBao {
 
 	private static final long serialVersionUID = 1099108265636854567L;
 
-	private static transient final Logger LOGGER = LoggerFactory
-			.getLogger(HzBaoSupporter.class);
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(HzBaoSupporter.class);
 
 	private HzTemplate hzTemplate;
 
@@ -42,22 +41,19 @@ public class HzBaoSupporter extends BaseBaoSupporter implements HzBao {
 	/**
 	 * 檢查設置
 	 * 
-	 * @throws IllegalArgumentException
+	 * @throws Exception
 	 */
-	protected final void checkConfig() {
+	protected final void checkConfig() throws Exception {
 		AssertHelper.notNull(hzTemplate, "The HzTemplate is required");
-		AssertHelper.notNull(this.hzTemplate.getHzSessionFactory(),
-				"The HzSessionFactory is required");
+		AssertHelper.notNull(this.hzTemplate.getHzSessionFactory(), "The HzSessionFactory is required");
 	}
 
 	public final HzSessionFactory getHzSessionFactory() {
-		return ((this.hzTemplate != null ? this.hzTemplate
-				.getHzSessionFactory() : null));
+		return ((this.hzTemplate != null ? this.hzTemplate.getHzSessionFactory() : null));
 	}
 
 	public final void setHzSessionFactory(HzSessionFactory hzSessionFactory) {
-		if ((this.hzTemplate == null)
-				|| (hzSessionFactory != this.hzTemplate.getHzSessionFactory()))
+		if ((this.hzTemplate == null) || (hzSessionFactory != this.hzTemplate.getHzSessionFactory()))
 			this.hzTemplate = createHzTemplate(hzSessionFactory);
 	}
 
@@ -139,8 +135,7 @@ public class HzBaoSupporter extends BaseBaoSupporter implements HzBao {
 		}
 	}
 
-	public void batch(String tableName, List<? extends Row> paramList,
-			Object[] paramArrayOfObject) {
+	public void batch(String tableName, List<? extends Row> paramList, Object[] paramArrayOfObject) {
 		try {
 			hzTemplate.batch(tableName, paramList, paramArrayOfObject);
 		} catch (Exception ex) {
@@ -188,11 +183,9 @@ public class HzBaoSupporter extends BaseBaoSupporter implements HzBao {
 		}
 	}
 
-	public ResultScanner getScanner(String tableName, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2) {
+	public ResultScanner getScanner(String tableName, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
 		try {
-			return hzTemplate.getScanner(tableName, paramArrayOfByte1,
-					paramArrayOfByte2);
+			return hzTemplate.getScanner(tableName, paramArrayOfByte1, paramArrayOfByte2);
 		} catch (Exception ex) {
 			throw new HzBaoException(ex);
 		}
@@ -214,13 +207,11 @@ public class HzBaoSupporter extends BaseBaoSupporter implements HzBao {
 		}
 	}
 
-	public boolean checkAndPut(String tableName, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, byte[] paramArrayOfByte3,
-			byte[] paramArrayOfByte4, Put paramPut) {
+	public boolean checkAndPut(String tableName, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2,
+			byte[] paramArrayOfByte3, byte[] paramArrayOfByte4, Put paramPut) {
 		try {
-			return hzTemplate.checkAndPut(tableName, paramArrayOfByte1,
-					paramArrayOfByte2, paramArrayOfByte3, paramArrayOfByte4,
-					paramPut);
+			return hzTemplate.checkAndPut(tableName, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3,
+					paramArrayOfByte4, paramPut);
 		} catch (Exception ex) {
 			throw new HzBaoException(ex);
 		}
@@ -242,13 +233,11 @@ public class HzBaoSupporter extends BaseBaoSupporter implements HzBao {
 		}
 	}
 
-	public boolean checkAndDelete(String tableName, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, byte[] paramArrayOfByte3,
-			byte[] paramArrayOfByte4, Delete paramDelete) {
+	public boolean checkAndDelete(String tableName, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2,
+			byte[] paramArrayOfByte3, byte[] paramArrayOfByte4, Delete paramDelete) {
 		try {
-			return hzTemplate.checkAndDelete(tableName, paramArrayOfByte1,
-					paramArrayOfByte2, paramArrayOfByte3, paramArrayOfByte4,
-					paramDelete);
+			return hzTemplate.checkAndDelete(tableName, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3,
+					paramArrayOfByte4, paramDelete);
 		} catch (Exception ex) {
 			throw new HzBaoException(ex);
 		}
@@ -262,34 +251,28 @@ public class HzBaoSupporter extends BaseBaoSupporter implements HzBao {
 		}
 	}
 
-	public <T extends CoprocessorProtocol> T coprocessorProxy(String tableName,
-			Class<T> paramClass, byte[] paramArrayOfByte) {
+	public <T extends CoprocessorProtocol> T coprocessorProxy(String tableName, Class<T> paramClass,
+			byte[] paramArrayOfByte) {
 		try {
-			return hzTemplate.coprocessorProxy(tableName, paramClass,
-					paramArrayOfByte);
+			return hzTemplate.coprocessorProxy(tableName, paramClass, paramArrayOfByte);
 		} catch (Exception ex) {
 			throw new HzBaoException(ex);
 		}
 	}
 
-	public <T extends CoprocessorProtocol, R> Map<byte[], R> coprocessorExec(
-			String tableName, Class<T> paramClass, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, Call<T, R> paramCall) {
+	public <T extends CoprocessorProtocol, R> Map<byte[], R> coprocessorExec(String tableName, Class<T> paramClass,
+			byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, Call<T, R> paramCall) {
 		try {
-			return hzTemplate.coprocessorExec(tableName, paramClass,
-					paramArrayOfByte1, paramArrayOfByte2, paramCall);
+			return hzTemplate.coprocessorExec(tableName, paramClass, paramArrayOfByte1, paramArrayOfByte2, paramCall);
 		} catch (Throwable ex) {
 			throw new HzBaoException(ex);
 		}
 	}
 
-	public <T extends CoprocessorProtocol, R> void coprocessorExec(
-			String tableName, Class<T> paramClass, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, Call<T, R> paramCall,
-			Callback<R> paramCallback) {
+	public <T extends CoprocessorProtocol, R> void coprocessorExec(String tableName, Class<T> paramClass,
+			byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, Call<T, R> paramCall, Callback<R> paramCallback) {
 		try {
-			hzTemplate.coprocessorExec(tableName, paramClass,
-					paramArrayOfByte1, paramArrayOfByte2, paramCall,
+			hzTemplate.coprocessorExec(tableName, paramClass, paramArrayOfByte1, paramArrayOfByte2, paramCall,
 					paramCallback);
 		} catch (Throwable ex) {
 			throw new HzBaoException(ex);
