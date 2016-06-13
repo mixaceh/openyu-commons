@@ -19,7 +19,7 @@ import org.openyu.commons.bao.BaseBao;
 /**
  * Hbase Zookeper Big Data Access Object
  */
-public interface HzBao extends BaseBao{
+public interface HzBao extends BaseBao {
 
 	boolean tableExists(String tableName);
 
@@ -31,8 +31,7 @@ public interface HzBao extends BaseBao{
 
 	boolean exists(String tableName, Get paramGet);
 
-	void batch(String tableName, List<? extends Row> paramList,
-			Object[] paramArrayOfObject);
+	void batch(String tableName, List<? extends Row> paramList, Object[] paramArrayOfObject);
 
 	Object[] batch(String tableName, List<? extends Row> paramList);
 
@@ -44,36 +43,30 @@ public interface HzBao extends BaseBao{
 
 	ResultScanner getScanner(String tableName, byte[] paramArrayOfByte);
 
-	ResultScanner getScanner(String tableName, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2);
+	ResultScanner getScanner(String tableName, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
 
 	void put(String tableName, Put paramPut);
 
 	void put(String tableName, List<Put> paramList);
 
-	boolean checkAndPut(String tableName, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, byte[] paramArrayOfByte3,
+	boolean checkAndPut(String tableName, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3,
 			byte[] paramArrayOfByte4, Put paramPut);
 
 	void delete(String tableName, Delete paramDelete);
 
 	void delete(String tableName, List<Delete> paramList);
 
-	boolean checkAndDelete(String tableName, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, byte[] paramArrayOfByte3,
-			byte[] paramArrayOfByte4, Delete paramDelete);
+	boolean checkAndDelete(String tableName, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2,
+			byte[] paramArrayOfByte3, byte[] paramArrayOfByte4, Delete paramDelete);
 
 	void mutateRow(String tableName, RowMutations paramRowMutations);
 
-	<T extends CoprocessorProtocol> T coprocessorProxy(String tableName,
-			Class<T> paramClass, byte[] paramArrayOfByte);
+	<T extends CoprocessorProtocol> T coprocessorProxy(String tableName, Class<T> paramClass, byte[] paramArrayOfByte);
 
-	<T extends CoprocessorProtocol, R> Map<byte[], R> coprocessorExec(
-			String tableName, Class<T> paramClass, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, Batch.Call<T, R> paramCall);
+	<T extends CoprocessorProtocol, R> Map<byte[], R> coprocessorExec(String tableName, Class<T> paramClass,
+			byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, Batch.Call<T, R> paramCall);
 
-	<T extends CoprocessorProtocol, R> void coprocessorExec(String tableName,
-			Class<T> paramClass, byte[] paramArrayOfByte1,
-			byte[] paramArrayOfByte2, Batch.Call<T, R> paramCall,
+	<T extends CoprocessorProtocol, R> void coprocessorExec(String tableName, Class<T> paramClass,
+			byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, Batch.Call<T, R> paramCall,
 			Batch.Callback<R> paramCallback);
 }
