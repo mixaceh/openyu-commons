@@ -32,9 +32,11 @@ public class BenchmarkAtomikosTest extends BenchmarkDatabaseTestSupporter {
 
 	public static class BeanTest extends BenchmarkAtomikosTest {
 		@Test
-		public void dataSource() {
+		public void dataSource() throws Exception {
 			System.out.println(dataSource);
 			assertNotNull(dataSource);
+			//
+			System.out.println(dataSource.getConnection());
 		}
 
 		@Test
@@ -53,6 +55,10 @@ public class BenchmarkAtomikosTest extends BenchmarkDatabaseTestSupporter {
 		// 2015/11/12
 		// 10000 rows, 102628000 bytes / 41593 ms. = 2467.43 BYTES/MS, 2409.6
 		// K/S, 2.35 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102628000 bytes / 30294 ms. = 3387.73 BYTES/MS, 3308.33
+		// K/S, 3.23 MB/S
 		public void insert() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -132,6 +138,10 @@ public class BenchmarkAtomikosTest extends BenchmarkDatabaseTestSupporter {
 		// 2015/10/12 pc
 		// 10000 rows, 183473056 bytes / 16079 ms. = 11410.73 BYTES/MS, 11143.29
 		// K/S, 10.88 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102628000 bytes / 16089 ms. = 6378.77 BYTES/MS, 6229.27
+		// K/S, 6.08 MB/S
 		public void select() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -157,7 +167,7 @@ public class BenchmarkAtomikosTest extends BenchmarkDatabaseTestSupporter {
 								try {
 									StringBuilder sql = new StringBuilder();
 									sql.append("select seq, id, info from TEST_BENCHMARK ");
-									sql.append("where seq=:seq");
+									sql.append("where seq=?");
 
 									long seq = seqCounter.getAndIncrement();
 									// params
@@ -213,6 +223,10 @@ public class BenchmarkAtomikosTest extends BenchmarkDatabaseTestSupporter {
 		// 2015/10/09
 		// update: 10000 rows, 102400000 bytes / 124789 ms. = 820.59 BYTES/MS,
 		// 801.35 K/S, 0.78 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102400000 bytes / 28557 ms. = 3585.81 BYTES/MS, 3501.77
+		// K/S, 3.42 MB/S
 		public void update() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -240,12 +254,13 @@ public class BenchmarkAtomikosTest extends BenchmarkDatabaseTestSupporter {
 										ByteHelper.getByteArray(buff, 0, buff.length - prefix.length));
 								try {
 									StringBuilder sql = new StringBuilder();
-									sql.append("update TEST_BENCHMARK set info=:info ");
-									sql.append("where seq=:seq");
+									sql.append("update TEST_BENCHMARK set info=? ");
+									sql.append("where seq=?");
 
 									long seq = seqCounter.getAndIncrement();
 									// params
-									Object[] params = new Object[] { new String(buff), seq };
+									String info = "UPDATE_" + new String(new byte[LENGTH_OF_BYTES - 7]);
+									Object[] params = new Object[] { info, seq };
 									int updated = jdbcTemplate.update(sql.toString(), params);
 
 									System.out.println("I[" + userId + "] R[" + i + "], " + updated);
@@ -285,6 +300,10 @@ public class BenchmarkAtomikosTest extends BenchmarkDatabaseTestSupporter {
 		// 2015/10/09
 		// delete: 10000 rows, 102400000 bytes / 26270 ms. = 3897.98 BYTES/MS,
 		// 3806.62 K/S, 3.72 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102400000 bytes / 18171 ms. = 5635.35 BYTES/MS, 5503.27
+		// K/S, 5.37 MB/S
 		public void delete() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -310,7 +329,7 @@ public class BenchmarkAtomikosTest extends BenchmarkDatabaseTestSupporter {
 								try {
 									StringBuilder sql = new StringBuilder();
 									sql.append("delete from TEST_BENCHMARK ");
-									sql.append("where seq=:seq");
+									sql.append("where seq=?");
 
 									long seq = seqCounter.getAndIncrement();
 									// params
