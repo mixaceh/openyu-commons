@@ -21,10 +21,10 @@ public class CommonsCoreServiceClientTest extends BaseTestSupporter
 //	{
 //		try
 //		{
-////			TTransport transport = new TSocket("localhost", 9090);
+////			TTransport transport = new TSocket("127.0.0.1", 9090);
 ////			TProtocol protocol = new TBinaryProtocol(transport);
 //
-//			TTransport transport = new TFramedTransport(new TSocket("localhost", 9090));
+//			TTransport transport = new TFramedTransport(new TSocket("127.0.0.1", 9090));
 //			TProtocol protocol = new TCompactProtocol(transport);
 //			CommonsCoreService.Client client = new CommonsCoreService.Client(protocol);
 //			transport.open();
@@ -52,8 +52,8 @@ public class CommonsCoreServiceClientTest extends BaseTestSupporter
 //	@Test
 //	public void mockBooleanHelper_toBoolean2() throws Exception
 //	{
-//		//localhost blocking: 34,54,68
-//		//localhost nonblocking: 180,250
+//		//127.0.0.1 blocking: 34,54,68
+//		//127.0.0.1 nonblocking: 180,250
 //		for (int i = 0; i < 500; i++)
 //		{
 //			Thread thread = new Thread(new Runnable()

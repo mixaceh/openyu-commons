@@ -58,6 +58,10 @@ public class BenchmarkBonecpTest extends BenchmarkDatabaseTestSupporter {
 		// 2015/10/09
 		// insert: 9852 rows, 101109085 bytes / 76971 ms. = 1313.6 BYTES/MS,
 		// 1282.81 K/S, 1.25 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102628000 bytes / 37148 ms. = 2762.68 BYTES/MS, 2697.93
+		// K/S, 2.63 MB/S
 		public void insert() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -131,6 +135,10 @@ public class BenchmarkBonecpTest extends BenchmarkDatabaseTestSupporter {
 		// 2015/10/09
 		// select: 10000 rows, 183460321 bytes / 25246 ms. = 7266.91 BYTES/MS,
 		// 7096.59 K/S, 6.93 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 183476301 bytes / 17972 ms. = 10209.01 BYTES/MS, 9969.73
+		// K/S, 9.74 MB/S
 		public void select() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -212,6 +220,10 @@ public class BenchmarkBonecpTest extends BenchmarkDatabaseTestSupporter {
 		// 2015/10/09
 		// update: 9279 rows, 95016960 bytes / 116153 ms. = 818.03 BYTES/MS,
 		// 798.86 K/S, 0.78 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102400000 bytes / 50817 ms. = 2015.07 BYTES/MS, 1967.85
+		// K/S, 1.92 MB/S
 		public void update() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -284,6 +296,10 @@ public class BenchmarkBonecpTest extends BenchmarkDatabaseTestSupporter {
 		// 2015/10/09
 		// delete: 10000 rows, 102400000 bytes / 31343 ms. = 3267.08 BYTES/MS,
 		// 3190.51 K/S, 3.12 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102400000 bytes / 17675 ms. = 5793.49 BYTES/MS, 5657.71
+		// K/S, 5.53 MB/S
 		public void delete() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;

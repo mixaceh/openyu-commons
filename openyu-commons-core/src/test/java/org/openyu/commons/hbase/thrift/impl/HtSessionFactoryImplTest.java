@@ -44,9 +44,9 @@ public class HtSessionFactoryImplTest {
 		htDataSource.setRetryNumber(3);
 		htDataSource.setRetryPauseMills(1000L);
 
-		// localhost
+		// 127.0.0.1
 		// htDataSource = new ThriftDataSourceImpl();
-		// htDataSource.setIp("localhost");
+		// htDataSource.setIp("127.0.0.1");
 		// htDataSource.setPort(9094);
 		// htDataSource.setTimeout(5000);
 		// htDataSource.setNonblocking(false);
@@ -116,7 +116,7 @@ public class HtSessionFactoryImplTest {
 		// PRD noblocking: 330-350
 
 		// DEV blocking: 430-450
-		// localhost blocking: 2000
+		// 127.0.0.1 blocking: 2000
 		for (int i = 0; i < 5; i++) {
 			Thread thread = new Thread(new Runnable() {
 				public void run() {

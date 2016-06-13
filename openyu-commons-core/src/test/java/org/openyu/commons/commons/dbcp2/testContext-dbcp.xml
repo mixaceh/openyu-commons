@@ -18,15 +18,14 @@
 			value="true" />
 		<property name="locations">
 			<list>
-				<value>file:src/test/config/etc/druid.properties</value>
+				<value>file:src/test/config/etc/dbcp2.properties</value>
 			</list>
 		</property>
 	</bean>
 
 	<bean
 		id="dataSource"
-		class="com.alibaba.druid.pool.DruidDataSource"
-		init-method="init"
+		class="org.apache.commons.dbcp2.BasicDataSource"
 		destroy-method="close"> 
         <!-- url、user、password -->
 		<property
@@ -47,20 +46,28 @@
 			name="minIdle"
 			value="1" />
 		<property
-			name="maxActive"
+			name="maxTotal"
 			value="10" />
 
-      <!-- 获取连接等待超时的时间 -->
 		<property
-			name="maxWait"
+			name="maxIdle"
+			value="3" />
+
+      <!-- 獲取連接等待超時的時間 -->
+		<property
+			name="maxWaitMillis"
 			value="60000" />
 
-      <!-- 间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+      <!-- 間隔多久才進行一次檢測，檢測需要關閉的空閒連接，單位是毫秒 -->
 		<property
 			name="timeBetweenEvictionRunsMillis"
 			value="60000" />
 
-      <!-- 一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property
+			name="numTestsPerEvictionRun"
+			value="3" />
+
+      <!-- 一個連接在池中最小生存的時間，單位是毫秒 -->
 		<property
 			name="minEvictableIdleTimeMillis"
 			value="300000" />
@@ -78,19 +85,10 @@
 			name="testOnReturn"
 			value="false" />
 
-      <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+      <!-- 打開PSCache，並且指定每個連接上PSCache的大小 -->
 		<property
 			name="poolPreparedStatements"
 			value="false" />
-		<property
-			name="maxPoolPreparedStatementPerConnectionSize"
-			value="50" />
-
-      <!-- 监控统计拦截的filters 
-		<property
-			name="filters"
-			value="stat" />
-		-->
 	</bean>
 
 	<bean
@@ -100,4 +98,15 @@
 			name="dataSource"
 			ref="dataSource" />
 	</bean>
+
+	<!-- factory -->
+	<bean
+		id="basicDataSourceFactoryBean"
+		class="org.openyu.commons.commons.dbcp2.impl.BasicDataSourceFactoryBean"
+		parent="baseFactoryBeanSupporter">
+		<property
+			name="configLocation"
+			value="file:src/test/config/etc/dbcp2.properties" />
+	</bean>
+
 </beans>

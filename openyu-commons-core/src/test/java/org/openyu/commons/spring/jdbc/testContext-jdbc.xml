@@ -13,7 +13,7 @@
         <!-- url、user、password -->
 		<property
 			name="url"
-			value="jdbc:hsqldb:hsql://localhost:9001/commons" />
+			value="jdbc:hsqldb:hsql://127.0.0.1:9001/commons" />
 		<property
 			name="username"
 			value="SA" />

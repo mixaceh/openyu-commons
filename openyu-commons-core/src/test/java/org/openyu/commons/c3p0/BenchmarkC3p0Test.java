@@ -32,9 +32,11 @@ public class BenchmarkC3p0Test extends BenchmarkDatabaseTestSupporter {
 
 	public static class BeanTest extends BenchmarkC3p0Test {
 		@Test
-		public void dataSource() {
+		public void dataSource() throws Exception {
 			System.out.println(dataSource);
 			assertNotNull(dataSource);
+			//
+			System.out.println(dataSource.getConnection());
 		}
 
 		@Test
@@ -56,6 +58,10 @@ public class BenchmarkC3p0Test extends BenchmarkDatabaseTestSupporter {
 		// 2015/10/09
 		// insert: 10000 rows, 102628000 bytes / 107223 ms. = 957.15 BYTES/MS,
 		// 934.71 K/S, 0.91 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102628000 bytes / 60079 ms. = 1708.22 BYTES/MS, 1668.18
+		// K/S, 1.63 MB/S
 		public void insert() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -129,6 +135,10 @@ public class BenchmarkC3p0Test extends BenchmarkDatabaseTestSupporter {
 		// 2015/10/09
 		// select: 10000 rows, 183460321 bytes / 25246 ms. = 7266.91 BYTES/MS,
 		// 7096.59 K/S, 6.93 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 183463445 bytes / 22457 ms. = 8169.54 BYTES/MS, 7978.07
+		// K/S, 7.79 MB/S
 		public void select() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -159,7 +169,8 @@ public class BenchmarkC3p0Test extends BenchmarkDatabaseTestSupporter {
 									long seq = seqCounter.getAndIncrement();
 									// params
 									Object[] params = new Object[] { seq };
-									List<TestBenchmark> list = jdbcTemplate.query(sql.toString(), params, new TestBenchmarkRowMapper());
+									List<TestBenchmark> list = jdbcTemplate.query(sql.toString(), params,
+											new TestBenchmarkRowMapper());
 									//
 									seq = 0;
 									String id = null;
@@ -209,6 +220,10 @@ public class BenchmarkC3p0Test extends BenchmarkDatabaseTestSupporter {
 		// 2015/10/09
 		// update: 102400000 bytes / 145604 ms. = 703.28 BYTES/MS, 686.79 K/S,
 		// 0.67 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102400000 bytes / 98868 ms. = 1035.72 BYTES/MS, 1011.45
+		// K/S, 0.99 MB/S
 		public void update() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -281,6 +296,10 @@ public class BenchmarkC3p0Test extends BenchmarkDatabaseTestSupporter {
 		// 2015/10/09
 		// delete: 102400000 bytes / 32887 ms. = 3113.69 BYTES/MS, 3040.72 K/S,
 		// 2.97 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102400000 bytes / 21684 ms. = 4722.38 BYTES/MS, 4611.7
+		// K/S, 4.5 MB/S
 		public void delete() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;

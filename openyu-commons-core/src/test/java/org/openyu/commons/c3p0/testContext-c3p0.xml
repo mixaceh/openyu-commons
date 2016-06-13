@@ -32,7 +32,7 @@
 			value="org.hsqldb.jdbcDriver" />
 		<property
 			name="jdbcUrl"
-			value="jdbc:hsqldb:hsql://localhost:9001/commons" />
+			value="jdbc:hsqldb:hsql://127.0.0.1:9001/commons" />
 		<property
 			name="user"
 			value="SA" />
@@ -52,7 +52,7 @@
 			value="10" />
 		<property
 			name="maxIdleTime"
-			value="1800" />
+			value="60" />
 	</bean>
 
 	<bean
