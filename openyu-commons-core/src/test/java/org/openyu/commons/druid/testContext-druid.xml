@@ -93,22 +93,6 @@
 		-->
 	</bean>
 
-	<!-- factory
-	<bean
-		id="blankServiceFactoryBean"
-		class="org.openyu.commons.blank.BlankServiceFactoryBean"
-		parent="baseServiceSupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/druid.properties" />
-		<property name="properties">
-			<props>
-				<prop key="aliveMills">180000</prop>
-			</props>
-		</property>
-	</bean>
-	-->
-
 	<bean
 		id="jdbcTemplate"
 		class="org.springframework.jdbc.core.JdbcTemplate">

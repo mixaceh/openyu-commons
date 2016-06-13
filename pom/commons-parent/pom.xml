@@ -2306,6 +2306,13 @@
 			<artifactId>redisson</artifactId>
 			<version>2.2.13</version>
 		</dependency>
+		
+		<!-- 2016/06/13 -->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>2.4.6</version>
+		</dependency>
 
 	</dependencies>
 

@@ -55,7 +55,7 @@ public class BenchmarkDatabaseTestSupporter extends BaseTestSupporter {
 		Connection result = null;
 		try {
 			Class.forName("net.sourceforge.jtds.jdbc.Driver");
-			result = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost:9001/commons", "SA", "");
+			result = DriverManager.getConnection("jdbc:hsqldb:hsql://127.0.0.1:9001/commons", "SA", "");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

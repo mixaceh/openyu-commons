@@ -3,7 +3,6 @@ package org.openyu.commons.redis;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;

@@ -54,22 +54,6 @@
 			name="maxIdleTime"
 			value="1800" />
 	</bean>
-	
-	<!-- factory
-	<bean
-		id="blankServiceFactoryBean"
-		class="org.openyu.commons.blank.BlankServiceFactoryBean"
-		parent="baseServiceSupporter">
-		<property
-			name="configLocation"
-			value="file:src/test/config/etc/c3p0.properties" />
-		<property name="properties">
-			<props>
-				<prop key="aliveMills">180000</prop>
-			</props>
-		</property>
-	</bean>
-	-->
 
 	<bean
 		id="jdbcTemplate"

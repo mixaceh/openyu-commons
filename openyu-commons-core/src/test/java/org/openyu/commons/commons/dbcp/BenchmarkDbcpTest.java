@@ -32,9 +32,11 @@ public class BenchmarkDbcpTest extends BenchmarkDatabaseTestSupporter {
 
 	public static class BeanTest extends BenchmarkDbcpTest {
 		@Test
-		public void dataSource() {
+		public void dataSource() throws Exception {
 			System.out.println(dataSource);
 			assertNotNull(dataSource);
+			//
+			System.out.println(dataSource.getConnection());
 		}
 
 		@Test
@@ -53,13 +55,17 @@ public class BenchmarkDbcpTest extends BenchmarkDatabaseTestSupporter {
 		// insert: 10000 rows, 102400000 bytes / 29690 ms. = 3448.97 BYTES/MS,
 		// 3368.14 K/S, 3.29 MB/S
 
-		// 2015/10/09
+		// 2015/10/09 nb
 		// insert: 10000 rows, 102628000 bytes / 82989 ms. = 1236.65 BYTES/MS,
 		// 1207.66 K/S, 1.18 MB/S
 
 		// 2015/11/12
 		// 10000 rows, 102628000 bytes / 62640 ms. = 1638.38 BYTES/MS, 1599.98
 		// K/S, 1.56 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102628000 bytes / 39808 ms. = 2578.07 BYTES/MS, 2517.65
+		// K/S, 2.46 MB/S
 		public void insert() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -137,6 +143,10 @@ public class BenchmarkDbcpTest extends BenchmarkDatabaseTestSupporter {
 		// 2015/10/12 pc
 		// 10000 rows, 183473056 bytes / 16079 ms. = 11410.73 BYTES/MS, 11143.29
 		// K/S, 10.88 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 183481296 bytes / 18162 ms. = 10102.48 BYTES/MS, 9865.71
+		// K/S, 9.63 MB/S
 		public void select() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -215,9 +225,13 @@ public class BenchmarkDbcpTest extends BenchmarkDatabaseTestSupporter {
 		// update: 10000 rows, 102400000 bytes / 34485 ms. = 2969.41 BYTES/MS,
 		// 2899.81 K/S, 2.83 MB/S
 
-		// 2015/10/09
+		// 2015/10/09 nb
 		// update: 10000 rows, 102400000 bytes / 124789 ms. = 820.59 BYTES/MS,
 		// 801.35 K/S, 0.78 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102400000 bytes / 49709 ms. = 2059.99 BYTES/MS, 2011.71
+		// K/S, 1.96 MB/S
 		public void update() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -287,9 +301,13 @@ public class BenchmarkDbcpTest extends BenchmarkDatabaseTestSupporter {
 		// delete: 10000 rows, 102400000 bytes / 18315 ms. = 5591.05 BYTES/MS,
 		// 5460.01 K/S, 5.33 MB/S
 
-		// 2015/10/09
+		// 2015/10/09 nb
 		// delete: 10000 rows, 102400000 bytes / 26270 ms. = 3897.98 BYTES/MS,
 		// 3806.62 K/S, 3.72 MB/S
+
+		// 2016/06/13 pc
+		// 10000 rows, 102400000 bytes / 18939 ms. = 5406.83 BYTES/MS, 5280.11
+		// K/S, 5.16 MB/S
 		public void delete() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;

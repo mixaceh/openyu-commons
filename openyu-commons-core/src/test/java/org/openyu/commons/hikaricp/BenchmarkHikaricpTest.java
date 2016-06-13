@@ -1,4 +1,4 @@
-package org.openyu.commons.bonecp;
+package org.openyu.commons.hikaricp;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -16,13 +16,13 @@ import org.openyu.commons.lang.ByteHelper;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class BenchmarkBonecpTest extends BenchmarkDatabaseTestSupporter {
+public class BenchmarkHikaricpTest extends BenchmarkDatabaseTestSupporter {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/bonecp/testContext-bonecp.xml",//
+				"org/openyu/commons/hikaricp/testContext-hikaricp.xml",//
 
 		});
 		// ---------------------------------------------------
@@ -30,7 +30,7 @@ public class BenchmarkBonecpTest extends BenchmarkDatabaseTestSupporter {
 		// ---------------------------------------------------
 	}
 
-	public static class BeanTest extends BenchmarkBonecpTest {
+	public static class BeanTest extends BenchmarkHikaricpTest {
 		@Test
 		public void dataSource() throws Exception {
 			System.out.println(dataSource);
@@ -49,15 +49,12 @@ public class BenchmarkBonecpTest extends BenchmarkDatabaseTestSupporter {
 	// ---------------------------------------------------
 	// optimized
 	// ---------------------------------------------------
-	public static class OptimizedTest extends BenchmarkBonecpTest {
+	public static class OptimizedTest extends BenchmarkHikaricpTest {
 
 		@Test
-		// insert: 10000 rows, 102400000 bytes / 29690 ms. = 3448.97 BYTES/MS,
-		// 3368.14 K/S, 3.29 MB/S
-
-		// 2015/10/09
-		// insert: 9852 rows, 101109085 bytes / 76971 ms. = 1313.6 BYTES/MS,
-		// 1282.81 K/S, 1.25 MB/S
+		// 2016/06/13 pc
+		// 10000 rows, 102628000 bytes / 36198 ms. = 2835.18 BYTES/MS, 2768.73
+		// K/S, 2.7 MB/S
 		public void insert() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -125,12 +122,9 @@ public class BenchmarkBonecpTest extends BenchmarkDatabaseTestSupporter {
 		}
 
 		@Test
-		// select: 10000 rows, 102400000 bytes / 20454 ms. = 5006.36 BYTES/MS,
-		// 4889.02 K/S, 4.77 MB/S
-
-		// 2015/10/09
-		// select: 10000 rows, 183460321 bytes / 25246 ms. = 7266.91 BYTES/MS,
-		// 7096.59 K/S, 6.93 MB/S
+		// 2016/06/13 pc
+		// 10000 rows, 183456978 bytes / 18303 ms. = 10023.33 BYTES/MS, 9788.41
+		// K/S, 9.56 MB/S
 		public void select() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -206,12 +200,9 @@ public class BenchmarkBonecpTest extends BenchmarkDatabaseTestSupporter {
 		}
 
 		@Test
-		// update: 10000 rows, 102400000 bytes / 34485 ms. = 2969.41 BYTES/MS,
-		// 2899.81 K/S, 2.83 MB/S
-
-		// 2015/10/09
-		// update: 9279 rows, 95016960 bytes / 116153 ms. = 818.03 BYTES/MS,
-		// 798.86 K/S, 0.78 MB/S
+		// 2016/06/13 pc
+		// 10000 rows, 102400000 bytes / 55457 ms. = 1846.48 BYTES/MS, 1803.2
+		// K/S, 1.76 MB/S
 		public void update() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -278,12 +269,9 @@ public class BenchmarkBonecpTest extends BenchmarkDatabaseTestSupporter {
 		}
 
 		@Test
-		// delete: 10000 rows, 102400000 bytes / 18315 ms. = 5591.05 BYTES/MS,
-		// 5460.01 K/S, 5.33 MB/S
-
-		// 2015/10/09
-		// delete: 10000 rows, 102400000 bytes / 31343 ms. = 3267.08 BYTES/MS,
-		// 3190.51 K/S, 3.12 MB/S
+		// 2016/06/13 pc
+		// 10000 rows, 102400000 bytes / 19059 ms. = 5372.79 BYTES/MS, 5246.86
+		// K/S, 5.12 MB/S
 		public void delete() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
