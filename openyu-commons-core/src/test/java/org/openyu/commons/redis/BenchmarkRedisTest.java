@@ -17,6 +17,7 @@ import org.openyu.commons.redis.serializer.impl.JdkRedisSerializer;
 import org.openyu.commons.redis.serializer.impl.KryoRedisSerializer;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.connection.jedis.JedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -73,7 +74,10 @@ public class BenchmarkRedisTest extends BaseTestSupporter {
 			System.out.println(jedisConnectionFactory);
 			assertNotNull(jedisConnectionFactory);
 			//
-			System.out.println(jedisConnectionFactory.getConnection());
+			JedisConnection connection = jedisConnectionFactory.getConnection();
+			System.out.println(connection);
+			System.out.println(connection.ping());
+			connection.close();
 		}
 
 		@Test
