@@ -26,6 +26,10 @@ public class StopWatch extends BaseModelSupporter {
 		this(enabled, null);
 	}
 
+	public StopWatch(Logger logger) {
+		this(true, logger);
+	}
+
 	public StopWatch() {
 		this(true, null);
 	}
@@ -104,35 +108,66 @@ public class StopWatch extends BaseModelSupporter {
 	}
 
 	public double getTotalTimeSeconds() {
-		return delegate.getTotalTimeSeconds();
+		if (enabled) {
+			return delegate.getTotalTimeSeconds();
+		}
+		return 0d;
 	}
 
 	public int getTaskCount() {
-		return delegate.getTaskCount();
+		if (enabled) {
+			return delegate.getTaskCount();
+		}
+		return 0;
 	}
 
 	public TaskInfo[] getTaskInfo() {
-		return delegate.getTaskInfo();
+		if (enabled) {
+			return delegate.getTaskInfo();
+		}
+		return null;
 	}
 
 	public String shortSummary() {
-		return delegate.shortSummary();
+		if (enabled) {
+			return delegate.shortSummary();
+		}
+		return null;
 	}
 
 	public String prettyPrint() {
-		return delegate.prettyPrint();
+		if (enabled) {
+			return delegate.prettyPrint();
+		}
+		return null;
 	}
 
 	public boolean equals(Object obj) {
-		return delegate.equals(obj);
+		if (enabled) {
+			return delegate.equals(obj);
+		}
+		return false;
 	}
 
 	public int hashCode() {
-		return delegate.hashCode();
+		if (enabled) {
+			return delegate.hashCode();
+		}
+		return 0;
 	}
 
 	public String toString() {
-		return delegate.toString();
+		if (enabled) {
+			return delegate.toString();
+		}
+		return this.toString();
 	}
+
+	// 無法抓到原始行數
+	// public void printResult() {
+	// if (enabled) {
+	// logger.info(prettyPrint());
+	// }
+	// }
 
 }
