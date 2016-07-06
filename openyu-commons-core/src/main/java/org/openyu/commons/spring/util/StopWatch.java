@@ -1,7 +1,6 @@
 package org.openyu.commons.spring.util;
 
 import org.openyu.commons.model.supporter.BaseModelSupporter;
-import org.slf4j.Logger;
 import org.springframework.util.StopWatch.TaskInfo;
 
 public class StopWatch extends BaseModelSupporter {
@@ -10,28 +9,17 @@ public class StopWatch extends BaseModelSupporter {
 
 	private boolean enabled;
 
-	private transient Logger logger;
-
 	private org.springframework.util.StopWatch delegate;
 
-	public StopWatch(boolean enabled, Logger logger) {
+	public StopWatch(boolean enabled) {
 		this.enabled = enabled;
-		if (enabled) {
-			this.logger = logger;
+		if (this.enabled) {
 			this.delegate = new org.springframework.util.StopWatch();
 		}
 	}
 
-	public StopWatch(boolean enabled) {
-		this(enabled, null);
-	}
-
-	public StopWatch(Logger logger) {
-		this(true, logger);
-	}
-
 	public StopWatch() {
-		this(true, null);
+		this(true);
 	}
 
 	public String getId() {
