@@ -1,4 +1,4 @@
-package org.openyu.commons.jbossts;
+package org.openyu.commons.bitronix;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -8,6 +8,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.sql.DataSource;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openyu.commons.junit.supporter.BenchmarkDatabaseTestSupporter;
@@ -15,22 +17,29 @@ import org.openyu.commons.lang.ArrayHelper;
 import org.openyu.commons.lang.ByteHelper;
 import org.openyu.commons.thread.ThreadHelper;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-public class BenchmarkJbossTsTest extends BenchmarkDatabaseTestSupporter {
+public class BenchmarkBitronixTest extends BenchmarkDatabaseTestSupporter {
 
+	protected static DataSource dataSource2;
+
+	protected static JdbcTemplate jdbcTemplate2;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/jbossts/testContext-jbossts.xml",//
+				"org/openyu/commons/bitronix/testContext-bitronix.xml",//
 
 		});
 		// ---------------------------------------------------
 		initialize();
 		// ---------------------------------------------------
+		dataSource2 = (DataSource) applicationContext.getBean("dataSource2");
+		jdbcTemplate2 = (JdbcTemplate) applicationContext.getBean("jdbcTemplate2");
 	}
 
-	public static class BeanTest extends BenchmarkJbossTsTest {
+	public static class BeanTest extends BenchmarkBitronixTest {
 		@Test
 		public void dataSource() throws Exception {
 			System.out.println(dataSource);
@@ -40,18 +49,35 @@ public class BenchmarkJbossTsTest extends BenchmarkDatabaseTestSupporter {
 		}
 
 		@Test
+		public void dataSource2() throws Exception {
+			System.out.println(dataSource2);
+			assertNotNull(dataSource2);
+			//
+			System.out.println(dataSource2.getConnection());
+		}
+
+		@Test
 		public void jdbcTemplate() {
 			System.out.println(jdbcTemplate);
 			assertNotNull(jdbcTemplate);
+		}
+
+		@Test
+		public void jdbcTemplate2() {
+			System.out.println(jdbcTemplate2);
+			assertNotNull(jdbcTemplate2);
 		}
 	}
 
 	// ---------------------------------------------------
 	// optimized
 	// ---------------------------------------------------
-	public static class OptimizedTest extends BenchmarkJbossTsTest {
+	public static class OptimizedTest extends BenchmarkBitronixTest {
 
 		@Test
+		// 2016/07/26 pc
+		// 10000 rows, 102628000 bytes / 51384 ms. = 1997.28 BYTES/MS, 1950.46
+		// K/S, 1.9 MB/S
 		public void insert() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -121,6 +147,9 @@ public class BenchmarkJbossTsTest extends BenchmarkDatabaseTestSupporter {
 		}
 
 		@Test
+		// 2016/07/26 pc
+		// 10000 rows, 102628000 bytes / 46064 ms. = 2227.94 BYTES/MS, 2175.73
+		// K/S, 2.12 MB/S
 		public void select() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -196,6 +225,9 @@ public class BenchmarkJbossTsTest extends BenchmarkDatabaseTestSupporter {
 		}
 
 		@Test
+		// 2016/07/26 pc
+		// 10000 rows, 102400000 bytes / 56351 ms. = 1817.18 BYTES/MS, 1774.59
+		// K/S, 1.73 MB/S
 		public void update() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
@@ -263,6 +295,9 @@ public class BenchmarkJbossTsTest extends BenchmarkDatabaseTestSupporter {
 		}
 
 		@Test
+		// 2016/07/26 pc
+		// 10000 rows, 102400000 bytes / 28171 ms. = 3634.94 BYTES/MS, 3549.75
+		// K/S, 3.47 MB/S
 		public void delete() throws Exception {
 			final int NUM_OF_THREADS = 100;
 			final int NUM_OF_TIMES = 100;
