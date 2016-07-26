@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+             http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+             ">
+
+	<bean
+		id="testConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property
+			name="order"
+			value="1" />
+		<property
+			name="ignoreUnresolvablePlaceholders"
+			value="true" />
+		<property name="locations">
+			<list>
+				<value>file:src/test/config/etc/jbossts.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+		id="systemPrereqs">
+		<property
+			name="targetObject"
+			value="#{@systemProperties}" />
+		<property
+			name="targetMethod"
+			value="putAll" />
+		<property name="arguments">
+			<util:properties>
+				<prop key="com.arjuna.ats.arjuna.coordinator.defaultTimeout">60</prop>
+				<prop key="com.arjuna.ats.arjuna.objectstore.objectStoreDir">tmp/jbosstm/tx/a</prop>
+				<prop key="ObjectStoreEnvironmentBean.objectStoreDir">tmp/jbosstm/tx/a</prop>
+			</util:properties>
+		</property>
+	</bean>
+
+	<bean
+		id="dataSourceProps"
+		class="java.util.Properties">
+		<constructor-arg>
+			<props>
+				<prop key="user">root</prop>
+				<prop key="password">root@neweggsso_admin</prop>
+				<prop key="DYNAMIC_CLASS">org.openyu.commons.jbossts.Mysql</prop>
+			</props>
+		</constructor-arg>
+	</bean>
+
+	<bean
+		id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>com.arjuna.ats.jdbc.TransactionalDriver</value>
+		</property>
+		<property
+			name="url"
+			value="jdbc:arjuna:mysql://10.16.211.102/commons?useUnicode=yes&amp;characterEncoding=UTF-8" />
+		<property name="connectionProperties">
+			<ref bean="dataSourceProps" />
+		</property>
+	</bean>
+
+	<bean
+		id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property
+			name="dataSource"
+			ref="dataSource" />
+	</bean>
+
+	<bean
+		id="jbossTransactionManager"
+		class="com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple">
+	</bean>
+
+	<bean
+		id="jbossUserTransaction"
+		class="com.arjuna.ats.internal.jta.transaction.arjunacore.UserTransactionImple" />
+
+	<!--  
+	<bean
+		class="com.arjuna.ats.jta.TransactionManager"
+		factory-method="transactionManager"
+		id="jbossTransactionManager"></bean>
+	<bean
+		class="com.arjuna.ats.jta.UserTransaction"
+		factory-method="userTransaction"
+		id="jbossUserTransaction"></bean>
+	-->	
+
+	<bean
+		id="jtaTx"
+		class="org.springframework.transaction.jta.JtaTransactionManager">
+		<property name="transactionManager">
+			<ref bean="jbossTransactionManager" />
+		</property>
+		<property name="userTransaction">
+			<ref bean="jbossUserTransaction" />
+		</property>
+		<property
+			name="allowCustomIsolationLevels"
+			value="true" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="jtaTx" />
+
+</beans>

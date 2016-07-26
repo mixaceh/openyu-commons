@@ -20,7 +20,7 @@ public class StopWatchTest extends BaseTestSupporter {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void start() {
-		StopWatch sw = new StopWatch(LOGGER);
+		StopWatch sw = new StopWatch();
 		sw.start("A Task");
 		ThreadHelper.sleep(1000);
 		sw.stop();
