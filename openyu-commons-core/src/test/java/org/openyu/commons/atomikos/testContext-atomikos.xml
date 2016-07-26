@@ -86,15 +86,19 @@
 		destroy-method="shutdownForce">
 		<constructor-arg>
 			<props>
+				<prop key="com.atomikos.icatch.tm_unique_name">userTransactionService</prop>
 				<prop key="com.atomikos.icatch.service">com.atomikos.icatch.standalone.UserTransactionServiceFactory
 				</prop>
 				<prop key="com.atomikos.icatch.output_dir">./log</prop>
 				<prop key="com.atomikos.icatch.log_base_dir">./log</prop>
 				<prop key="com.atomikos.icatch.log_base_name">atomikos</prop>
 				<prop key="com.atomikos.icatch.max_actives">10</prop>
-				<prop key="com.atomikos.icatch.default_jta_timeout">300000</prop>
-				<prop key="com.atomikos.icatch.max_timeout">300000</prop>
+				<prop key="com.atomikos.icatch.default_jta_timeout">600000</prop>
+				<prop key="com.atomikos.icatch.max_timeout">600000</prop>
 				<prop key="com.atomikos.icatch.console_log_level">INFO</prop>
+				<prop key="com.atomikos.icatch.serial_jta_transactions">false</prop>
+				<prop key="com.atomikos.icatch.rmi_export_class">PortableRemoteObject</prop>
+				<prop key="com.atomikos.icatch.threaded_2pc">true</prop>
 			</props>
 		</constructor-arg>
 	</bean>
@@ -120,7 +124,7 @@
 		depends-on="userTransactionService">
 		<property
 			name="transactionTimeout"
-			value="300" />
+			value="600" />
 	</bean>
 
 	<bean
