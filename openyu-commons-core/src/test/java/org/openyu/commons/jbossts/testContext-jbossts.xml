@@ -52,7 +52,7 @@
 		<constructor-arg>
 			<props>
 				<prop key="user">root</prop>
-				<prop key="password">root@neweggsso_admin</prop>
+				<prop key="password">1111</prop>
 				<prop key="DYNAMIC_CLASS">org.openyu.commons.jbossts.Mysql</prop>
 			</props>
 		</constructor-arg>
@@ -66,7 +66,7 @@
 		</property>
 		<property
 			name="url"
-			value="jdbc:arjuna:mysql://10.16.211.102/commons?useUnicode=yes&amp;characterEncoding=UTF-8" />
+			value="jdbc:arjuna:mysql://127.0.0.1/commons?useUnicode=yes&amp;characterEncoding=UTF-8" />
 		<property name="connectionProperties">
 			<ref bean="dataSourceProps" />
 		</property>
