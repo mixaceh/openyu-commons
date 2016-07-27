@@ -95,9 +95,6 @@
 			name="testQuery"
 			value="SELECT 1" />
 		<property
-			name="useTmJoin"
-			value="false" />
-		<property
 			name="maxIdleTime"
 			value="60" />
 		<property
