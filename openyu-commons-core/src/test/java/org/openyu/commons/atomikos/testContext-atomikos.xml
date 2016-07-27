@@ -86,7 +86,7 @@
 		destroy-method="shutdownForce">
 		<constructor-arg>
 			<props>
-				<prop key="com.atomikos.icatch.tm_unique_name">jtaTx</prop>
+				<prop key="com.atomikos.icatch.tm_unique_name">userTransactionService</prop>
 				<prop key="com.atomikos.icatch.service">com.atomikos.icatch.standalone.UserTransactionServiceFactory
 				</prop>
 				<prop key="com.atomikos.icatch.output_dir">./log</prop>

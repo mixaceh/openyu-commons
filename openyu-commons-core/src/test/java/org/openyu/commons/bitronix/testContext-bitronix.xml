@@ -54,13 +54,13 @@
 		<property name="driverProperties">
 			<props>
 				<prop key="user">root</prop>
-				<prop key="password">root@neweggsso_admin</prop>
+				<prop key="password">1111</prop>
 				<!--  
 				<prop key="serverName">127.0.0.1</prop>
 				<prop key="portNumber">3306</prop>
 				<prop key="databaseName">commons</prop>
 				-->
-				<prop key="url">jdbc:mysql://10.16.211.102:3306/commons?useUnicode=yes&amp;characterEncoding=UTF-8
+				<prop key="url">jdbc:mysql://127.0.0.1:3306/commons?useUnicode=yes&amp;characterEncoding=UTF-8
 				</prop>
 			</props>
 		</property>
@@ -95,18 +95,24 @@
 			name="testQuery"
 			value="SELECT 1" />
 		<property
+			name="useTmJoin"
+			value="false" />
+		<property
+			name="maxIdleTime"
+			value="60" />
+		<property
 			name="allowLocalTransactions"
 			value="true" />
 		<property name="driverProperties">
 			<props>
 				<prop key="user">root</prop>
-				<prop key="password">root@neweggsso_admin</prop>
+				<prop key="password">1111</prop>
 				<!--  
 				<prop key="serverName">127.0.0.1</prop>
 				<prop key="portNumber">3306</prop>
 				<prop key="databaseName">commons_2</prop>
 				-->
-				<prop key="url">jdbc:mysql://10.16.211.102:3306/commons_2?useUnicode=yes&amp;characterEncoding=UTF-8
+				<prop key="url">jdbc:mysql://127.0.0.1:3306/commons_2?useUnicode=yes&amp;characterEncoding=UTF-8
 				</prop>
 			</props>
 		</property>
@@ -156,6 +162,9 @@
 		<property
 			name="userTransaction"
 			ref="bitronixTransactionManager" />
+		<property
+			name="allowCustomIsolationLevels"
+			value="true" />
 	</bean>
 
 	<tx:annotation-driven transaction-manager="jtaTx" />
