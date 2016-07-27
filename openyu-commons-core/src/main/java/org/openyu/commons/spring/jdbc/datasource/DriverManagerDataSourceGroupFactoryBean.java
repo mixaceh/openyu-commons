@@ -158,7 +158,7 @@ public class DriverManagerDataSourceGroupFactoryBean extends BaseFactoryBeanSupp
 	}
 
 	/**
-	 * jdbc:mysql://10.16.211.102:3306/neweggsso_db?useUnicode=yes&
+	 * jdbc:mysql://127.0.0.1:3306/commons?useUnicode=yes&
 	 * characterEncoding=UTF-8
 	 * 
 	 * @param url
