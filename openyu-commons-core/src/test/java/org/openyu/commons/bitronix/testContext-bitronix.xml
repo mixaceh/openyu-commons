@@ -151,8 +151,7 @@
 
 	<bean
 		id="jtaTx"
-		class="org.springframework.transaction.jta.JtaTransactionManager"
-		primary="true">
+		class="org.springframework.transaction.jta.JtaTransactionManager">
 		<property
 			name="transactionManager"
 			ref="bitronixTransactionManager" />
