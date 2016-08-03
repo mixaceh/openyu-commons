@@ -11,15 +11,23 @@ public class StopWatch extends BaseModelSupporter {
 
 	private org.springframework.util.StopWatch delegate;
 
-	public StopWatch(boolean enabled) {
+	public StopWatch(String id, boolean enabled) {
 		this.enabled = enabled;
 		if (this.enabled) {
-			this.delegate = new org.springframework.util.StopWatch();
+			this.delegate = new org.springframework.util.StopWatch(id);
 		}
 	}
 
 	public StopWatch() {
-		this(true);
+		this("", true);
+	}
+
+	public StopWatch(String id) {
+		this(id, true);
+	}
+
+	public StopWatch(boolean enabled) {
+		this("", enabled);
 	}
 
 	public String getId() {
@@ -128,6 +136,12 @@ public class StopWatch extends BaseModelSupporter {
 			return delegate.prettyPrint();
 		}
 		return null;
+	}
+
+	public void printResult() {
+		if (enabled) {
+			System.out.println(prettyPrint());
+		}
 	}
 
 	public boolean equals(Object obj) {

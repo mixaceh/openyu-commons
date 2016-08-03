@@ -41,6 +41,7 @@ import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.lang.RuntimeHelper;
 import org.openyu.commons.lang.StringHelper;
 import org.openyu.commons.mark.Supporter;
+import org.openyu.commons.spring.util.StopWatch;
 import org.openyu.commons.util.AssertHelper;
 import org.openyu.commons.util.ByteUnit;
 import org.openyu.commons.util.CalendarHelper;
@@ -479,11 +480,14 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 		// 原本的記憶體
 		long memory = RuntimeHelper.usedMemory();
 		//
-		System.out.println("=========================================");
-		System.out.println("Spring beans");
-		System.out.println("=========================================");
+		StopWatch sw = new StopWatch("Spring beans");
+		// System.out.println("=========================================");
+		// System.out.println("Spring beans");
+		// System.out.println("=========================================");
 		for (int i = 0; i < beanNames.length; i++) {
 			String className = null;
+			String name = beanNames[i];
+			sw.start("#." + (i + 1) + " " + name);
 			Object bean = null;
 			try {
 				// when abstract bean will throw exception
@@ -497,9 +501,13 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 			} catch (Exception ex) {
 				className = "ABSTRACT CLASS";
 			}
+			sw.stop();
+			sw.printResult();
 
-			StringBuilder msg = new StringBuilder(MessageFormat.format(MSG_PATTERN, (i + 1), className, beanNames[i]));
-			
+			// StringBuilder msg = new
+			// StringBuilder(MessageFormat.format(MSG_PATTERN, (i + 1),
+			// className, beanNames[i]));
+
 			// 不是抽象類別
 			// if (!abstractBean) {
 			// System.out.println(msg);// 顯示黑色
@@ -507,7 +515,7 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 			// System.err.println(msg);// 顯示紅色
 			// }
 
-			System.out.println(msg);
+			// System.out.println(msg);
 			//
 			usedMemory = Math.max(usedMemory, (RuntimeHelper.usedMemory() - memory));
 		}
@@ -599,7 +607,7 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 			value.put(new Integer(i), new String("Object_" + i));
 		}
 	}
-	
+
 	/**
 	 * 印出結果
 	 * 
@@ -617,6 +625,6 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 		//
 		System.out.println(timesCounter.get() + " rows, " + byteCounter.get() + " bytes / " + dur + " ms. = " + result
 				+ " BYTES/MS, " + kresult + " K/S, " + mbresult + " MB/S");
-	}	
+	}
 
 }
