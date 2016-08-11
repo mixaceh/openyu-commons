@@ -5,7 +5,6 @@ import java.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
-import org.openyu.commons.lang.ArrayHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +28,9 @@ public final class LocaleHelper extends BaseHelperSupporter {
 					locale = Locale.getDefault();
 				}
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				// ex.printStackTrace();
+				LOGGER.warn("Exception encountered during Static()", ex);
+				locale = Locale.getDefault();
 			}
 		}
 	}
