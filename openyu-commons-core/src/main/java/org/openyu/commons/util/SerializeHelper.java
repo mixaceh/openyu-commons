@@ -58,7 +58,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 */
 	private static SoftReferenceCacheFactory<SerializeProcessor> serializeProcessorCacheFactory;
 
-	public static final int BUFFER_SIZE = 4096;
+	public static final int BUFFER_SIZE = 512 * 1024;
 
 	static {
 		new Static();
