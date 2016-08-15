@@ -16,11 +16,11 @@ public final class LocaleHelper extends BaseHelperSupporter {
 
 	private static Locale locale = null;
 
-	static {
-		new Static();
-	}
-
 	protected static class Static {
+		static {
+			new Static();
+		}
+
 		public Static() {
 			try {
 				locale = toLocale(ConfigHelper.getString(LOCALE));

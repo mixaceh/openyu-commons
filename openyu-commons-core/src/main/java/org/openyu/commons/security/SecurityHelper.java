@@ -222,6 +222,7 @@ public final class SecurityHelper extends BaseHelperSupporter {
 						.getObject();
 
 			} catch (Exception ex) {
+				// LOGGER.warn("Exception encountered during Static()", ex);
 				throw new HelperException("new Static() Initializing failed", ex);
 			}
 		}
