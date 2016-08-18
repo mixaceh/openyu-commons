@@ -14,9 +14,12 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.openyu.commons.lock.MysqlLock;
 import org.openyu.commons.lock.ex.DistributedLockException;
 import org.openyu.commons.lock.supporter.DistributedLockSupporter;
+import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.support.JdbcUtils;
+
+import com.newegg.commons.util.AssertUtil;
 
 public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock {
 
@@ -67,6 +70,10 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 
 	public MysqlLockImpl(DataSource dataSource, String id, int timeout) {
 		this(dataSource, id, timeout, DEFAULT_LOCK_SQL, DEFAULT_UNLOCK_SQL);
+	}
+
+	public MysqlLockImpl() {
+		this(null, null, 0, DEFAULT_LOCK_SQL, DEFAULT_UNLOCK_SQL);
 	}
 
 	@Override
@@ -148,6 +155,9 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 	@Override
 	protected boolean doTryLock(long timeout, TimeUnit unit) throws InterruptedException {
 		boolean reuslt = false;
+		//
+		AssertHelper.notNull(dataSource, "The DataSource must not be null");
+		AssertHelper.notNull(dataSource, "The Id must not be null");
 		//
 		Integer locked = null;
 		ResultSet rs = null;
