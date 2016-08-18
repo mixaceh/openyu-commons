@@ -44,8 +44,6 @@ public class MysqlLockImplTest extends BaseTestSupporter {
 		assertNotNull(commonDataSource);
 	}
 
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 50, warmupRounds = 0, concurrency = 25)
 	// 25, 15
 	// round: 5.85 [+- 2.17], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 13.37, time.warmup: 0.02,
@@ -60,13 +58,16 @@ public class MysqlLockImplTest extends BaseTestSupporter {
 	// round: 1.66 [+- 1.09], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 4.67, time.warmup: 0.01,
 	// time.bench: 4.66
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 50, warmupRounds = 0, concurrency = 25)
 	public void lock() {
 		// maxTotal=10
-		MysqlLock lock = new MysqlLockImpl(commonDataSource, "aaa" + NumberHelper.randomInt(10), 30);
+		MysqlLock lock = new MysqlLockImpl(commonDataSource, "aaa", 5);
 		lock.lock();
 		try {
 			System.out.println(
-					"T[" + Thread.currentThread().getId() + "] " + counter.incrementAndGet() + ": do something...");
+					"T[" + Thread.currentThread().getId() + "], " + counter.incrementAndGet() + ": do something...");
+			// ThreadHelper.sleep(60 * 60 * 1000);
 			ThreadHelper.sleep(500);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,16 +77,17 @@ public class MysqlLockImplTest extends BaseTestSupporter {
 	}
 
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 50, warmupRounds = 0, concurrency = 25)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 2)
 	public void lockInterruptibly() {
 		// maxTotal=10
-		MysqlLock lock = new MysqlLockImpl(commonDataSource, "aaa" + NumberHelper.randomInt(10), 30);
+		String lockName = "aaa";
+		MysqlLock lock = new MysqlLockImpl(commonDataSource, lockName, 5);
 		try {
 			lock.lockInterruptibly();
 			try {
-				System.out.println(
-						"T[" + Thread.currentThread().getId() + "] " + counter.incrementAndGet() + ": do something...");
-				ThreadHelper.sleep(500);
+				System.out.println("T[" + Thread.currentThread().getId() + "], " + counter.incrementAndGet()
+						+ ": do something...");
+				ThreadHelper.sleep(60 * 60 * 1000);
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {

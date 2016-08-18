@@ -13,12 +13,18 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.exception.NestableRuntimeException;
 import org.openyu.commons.lock.MysqlLock;
+import org.openyu.commons.lock.ex.DistributedLockException;
 import org.openyu.commons.lock.supporter.DistributedLockSupporter;
+import org.openyu.commons.service.supporter.BaseServiceSupporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.support.JdbcUtils;
 
 public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock {
 
 	private static final long serialVersionUID = -323114105619677559L;
+
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(MysqlLockImpl.class);
 
 	/**
 	 * 連線池
@@ -118,11 +124,15 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 	@Override
 	protected void doLock() {
 		// doTryLock(Integer.MAX_VALUE, TimeUnit.SECONDS);
-		doTryLock(this.timeout, TimeUnit.SECONDS);
+		try {
+			doTryLock(this.timeout, TimeUnit.SECONDS);
+		} catch (Throwable e) {
+			throw new DistributedLockException("Could not acquire lock: " + name, e);
+		}
 	}
 
 	@Override
-	protected void doLockInterruptibly() {
+	protected void doLockInterruptibly() throws InterruptedException {
 		// doTryLock(Integer.MAX_VALUE, TimeUnit.SECONDS);
 		doTryLock(this.timeout, TimeUnit.SECONDS);
 	}
@@ -130,11 +140,15 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 	@Override
 	protected boolean doTryLock() {
 		// return doTryLock(0, TimeUnit.SECONDS);
-		return doTryLock(this.timeout, TimeUnit.SECONDS);
+		try {
+			return doTryLock(this.timeout, TimeUnit.SECONDS);
+		} catch (Throwable e) {
+			throw new DistributedLockException("Could not acquire lock: " + name, e);
+		}
 	}
 
 	@Override
-	protected boolean doTryLock(long timeout, TimeUnit unit) {
+	protected boolean doTryLock(long timeout, TimeUnit unit) throws InterruptedException {
 		boolean reuslt = false;
 		//
 		Integer locked = null;
@@ -163,9 +177,13 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 			if (locked != null && locked == 1) {
 				reuslt = true;
 				this.locked.set(locked);
+			} else {
+				throw new DistributedLockException("Could not acquire lock: " + name);
 			}
-		} catch (Exception e) {
-			throw new NestableRuntimeException(e);
+		} catch (DistributedLockException e) {
+			throw e;
+		} catch (Throwable e) {
+			throw new DistributedLockException("Could not acquire lock: " + name, e);
 		} finally {
 			JdbcUtils.closeResultSet(rs);
 			JdbcUtils.closeStatement(ps);
@@ -198,8 +216,13 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 					unlocked = null;
 				}
 			}
-		} catch (Exception e) {
-			throw new NestableRuntimeException(e);
+			//
+			if (unlocked == null || unlocked == 0) {
+				// 無法釋放鎖, 有可能是重複釋放, 只寫log, 不拋出ex
+				LOGGER.warn("Could not release lock: " + name);
+			}
+		} catch (Throwable e) {
+			throw new DistributedLockException("Could not release lock: " + name, e);
 		} finally {
 			JdbcUtils.closeResultSet(rs);
 			JdbcUtils.closeStatement(ps);
