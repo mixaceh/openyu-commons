@@ -17,13 +17,13 @@ public interface MysqlLock extends DistributedLock {
 	void setDataSource(DataSource dataSource);
 
 	/**
-	 * 鎖的名稱
+	 * 鎖的id
 	 * 
 	 * @return
 	 */
-	String getName();
+	String getId();
 
-	void setName(String name);
+	void setId(String id);
 
 	/**
 	 * 逾時秒數

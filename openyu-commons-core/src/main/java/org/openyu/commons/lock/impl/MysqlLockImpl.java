@@ -30,9 +30,9 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 	private transient DataSource dataSource;
 
 	/**
-	 * 鎖的名稱
+	 * 鎖的id
 	 */
-	private String name;
+	private String id;
 
 	/**
 	 * 逾時秒數
@@ -57,16 +57,16 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 
 	private transient final AtomicReference<Integer> locked = new AtomicReference<Integer>();
 
-	public MysqlLockImpl(DataSource dataSource, String name, int timeout, String lockSql, String unlockSql) {
+	public MysqlLockImpl(DataSource dataSource, String id, int timeout, String lockSql, String unlockSql) {
 		this.dataSource = dataSource;
-		this.name = name;
+		this.id = id;
 		this.timeout = timeout;
 		this.lockSql = lockSql;
 		this.unlockSql = unlockSql;
 	}
 
-	public MysqlLockImpl(DataSource dataSource, String name, int timeout) {
-		this(dataSource, name, timeout, DEFAULT_LOCK_SQL, DEFAULT_UNLOCK_SQL);
+	public MysqlLockImpl(DataSource dataSource, String id, int timeout) {
+		this(dataSource, id, timeout, DEFAULT_LOCK_SQL, DEFAULT_UNLOCK_SQL);
 	}
 
 	@Override
@@ -80,13 +80,13 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 	}
 
 	@Override
-	public String getName() {
-		return name;
+	public String getId() {
+		return id;
 	}
 
 	@Override
-	public void setName(String name) {
-		this.name = name;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 		try {
 			doTryLock(this.timeout, TimeUnit.SECONDS);
 		} catch (Throwable e) {
-			throw new DistributedLockException("Could not acquire lock: " + name, e);
+			throw new DistributedLockException("Could not acquire lock: " + id, e);
 		}
 	}
 
@@ -141,7 +141,7 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 		try {
 			return doTryLock(this.timeout, TimeUnit.SECONDS);
 		} catch (Throwable e) {
-			throw new DistributedLockException("Could not acquire lock: " + name, e);
+			throw new DistributedLockException("Could not acquire lock: " + id, e);
 		}
 	}
 
@@ -158,8 +158,8 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 			this.connection.set(conn);
 			//
 			ps = this.connection.get().prepareStatement(this.lockSql);
-			// lock name
-			ps.setString(1, this.name);
+			// lock id
+			ps.setString(1, this.id);
 			//
 			int lockTimeout = (int) TimeUnit.SECONDS.convert(timeout, unit);
 			// get lock timeout
@@ -176,12 +176,12 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 				reuslt = true;
 				this.locked.set(locked);
 			} else {
-				throw new DistributedLockException("Could not acquire lock: " + name);
+				throw new DistributedLockException("Could not acquire lock: " + id);
 			}
 		} catch (DistributedLockException e) {
 			throw e;
 		} catch (Throwable e) {
-			throw new DistributedLockException("Could not acquire lock: " + name, e);
+			throw new DistributedLockException("Could not acquire lock: " + id, e);
 		} finally {
 			JdbcUtils.closeResultSet(rs);
 			JdbcUtils.closeStatement(ps);
@@ -204,8 +204,8 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 		try {
 			conn = this.connection.get();
 			ps = conn.prepareStatement(this.unlockSql);
-			// lock name
-			ps.setString(1, this.name);
+			// lock id
+			ps.setString(1, this.id);
 			//
 			rs = ps.executeQuery();
 			if (rs.next()) {
@@ -217,10 +217,10 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 			//
 			if (unlocked == null || unlocked == 0) {
 				// 無法釋放鎖, 有可能是重複釋放, 只寫log, 不拋出ex
-				LOGGER.warn("Could not release lock: " + name);
+				LOGGER.warn("Could not release lock: " + id);
 			}
 		} catch (Throwable e) {
-			throw new DistributedLockException("Could not release lock: " + name, e);
+			throw new DistributedLockException("Could not release lock: " + id, e);
 		} finally {
 			JdbcUtils.closeResultSet(rs);
 			JdbcUtils.closeStatement(ps);
@@ -239,20 +239,20 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 			return true;
 		}
 		MysqlLockImpl other = (MysqlLockImpl) object;
-		if (name == null || other.name == null) {
+		if (id == null || other.id == null) {
 			return false;
 		}
-		return new EqualsBuilder().append(name, other.name).isEquals();
+		return new EqualsBuilder().append(id, other.id).isEquals();
 	}
 
 	public int hashCode() {
-		return new HashCodeBuilder().append(name).toHashCode();
+		return new HashCodeBuilder().append(id).toHashCode();
 	}
 
 	public String toString() {
 		ToStringBuilder builder = new ToStringBuilder(this);
 		builder.appendSuper(super.toString());
-		builder.append("name", name);
+		builder.append("id", id);
 		builder.append("timeout", timeout);
 		builder.append("lockSql", lockSql);
 		builder.append("unlockSql", unlockSql);
