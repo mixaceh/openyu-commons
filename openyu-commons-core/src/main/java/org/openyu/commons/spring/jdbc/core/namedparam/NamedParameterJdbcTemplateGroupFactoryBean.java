@@ -2,7 +2,6 @@ package org.openyu.commons.spring.jdbc.core.namedparam;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.openyu.commons.service.supporter.BaseFactoryBeanSupporter;
 import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
@@ -156,7 +155,7 @@ public class NamedParameterJdbcTemplateGroupFactoryBean extends BaseFactoryBeanS
 	@Override
 	public Class<?> getObjectType() {
 		return ((this.namedParameterJdbcTemplates != null) ? this.namedParameterJdbcTemplates.getClass()
-				: BasicDataSource[].class);
+				: NamedParameterJdbcTemplate[].class);
 	}
 
 	@Override
