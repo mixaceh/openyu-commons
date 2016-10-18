@@ -9,15 +9,23 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.jdbc.Work;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
+
+import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
+import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+
 import org.openyu.commons.dao.supporter.CommonDaoSupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.service.CommonService;
 
 public class ApplicationContextDatabaseTest extends BaseTestSupporter {
+
+	@Rule
+	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -37,6 +45,22 @@ public class ApplicationContextDatabaseTest extends BaseTestSupporter {
 		System.out.println("connection: " + bean.getConnection());
 		System.out.println("autoCommit: " + bean.getConnection().getAutoCommit());
 		System.out.println("transactionIsolation: " + bean.getConnection().getTransactionIsolation());
+	}
+
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 0, concurrency = 100)
+	public void openConnection() throws Exception {
+		DataSource bean = (DataSource) applicationContext.getBean("commonDataSource");
+		//
+		try {
+			Connection conn = bean.getConnection();
+			if (conn != null) {
+				System.out.println("counter: " + counter.incrementAndGet() + ", " + conn);
+			}
+		} catch (Exception ex) {
+			// System.out.println(ex.getMessage());
+			ex.printStackTrace();
+		}
 	}
 
 	@Test

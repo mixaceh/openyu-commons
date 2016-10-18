@@ -88,6 +88,11 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 	protected static double usedMemory = 0d;// bytes = 0;
 
 	/**
+	 * 計數器
+	 */
+	protected AtomicLong counter = new AtomicLong(0);
+
+	/**
 	 * Instantiates a new base test supporter.
 	 */
 	public BaseTestSupporter() {

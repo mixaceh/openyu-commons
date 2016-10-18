@@ -19,8 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.support.JdbcUtils;
 
-import com.newegg.commons.util.AssertUtil;
-
 public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock {
 
 	private static final long serialVersionUID = -323114105619677559L;
@@ -128,36 +126,26 @@ public class MysqlLockImpl extends DistributedLockSupporter implements MysqlLock
 
 	@Override
 	protected void doLock() {
-		// doTryLock(Integer.MAX_VALUE, TimeUnit.SECONDS);
-		try {
-			doTryLock(this.timeout, TimeUnit.SECONDS);
-		} catch (Throwable e) {
-			throw new DistributedLockException("Could not acquire lock: " + id, e);
-		}
+		doTryLock(Integer.MAX_VALUE, TimeUnit.SECONDS);
 	}
 
 	@Override
 	protected void doLockInterruptibly() throws InterruptedException {
-		// doTryLock(Integer.MAX_VALUE, TimeUnit.SECONDS);
-		doTryLock(this.timeout, TimeUnit.SECONDS);
+		doTryLock(Integer.MAX_VALUE, TimeUnit.SECONDS);
 	}
 
 	@Override
 	protected boolean doTryLock() {
-		// return doTryLock(0, TimeUnit.SECONDS);
-		try {
-			return doTryLock(this.timeout, TimeUnit.SECONDS);
-		} catch (Throwable e) {
-			throw new DistributedLockException("Could not acquire lock: " + id, e);
-		}
+		return doTryLock(0, TimeUnit.SECONDS);
 	}
 
 	@Override
-	protected boolean doTryLock(long timeout, TimeUnit unit) throws InterruptedException {
-		boolean reuslt = false;
-		//
+	protected boolean doTryLock(long timeout, TimeUnit unit) {// throws
+																// InterruptedException
+																// {
 		AssertHelper.notNull(dataSource, "The DataSource must not be null");
 		AssertHelper.notNull(dataSource, "The Id must not be null");
+		boolean reuslt = false;
 		//
 		Integer locked = null;
 		ResultSet rs = null;
