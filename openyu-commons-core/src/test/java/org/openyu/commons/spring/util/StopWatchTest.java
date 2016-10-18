@@ -33,7 +33,7 @@ public class StopWatchTest extends BaseTestSupporter {
 		ThreadHelper.sleep(2000);
 		sw.stop();
 		//
-		// sw.printResult();
+		sw.printResult();
 		//
 		LOGGER.info(sw.prettyPrint());
 	}

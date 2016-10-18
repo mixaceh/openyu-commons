@@ -46,7 +46,6 @@ public final class BasicDataSourceGroupFactoryBean extends BasicDataSourceFactor
 				BasicDataSource dataSource = createBasicDataSource(i);
 				result[i] = dataSource;
 			}
-
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during createBasicDataSources()").toString(), e);
 			try {
@@ -59,6 +58,7 @@ public final class BasicDataSourceGroupFactoryBean extends BasicDataSourceFactor
 		return result;
 	}
 
+	@Override
 	protected BasicDataSource shutdownBasicDataSource() throws Exception {
 		return null;
 	}

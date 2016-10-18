@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -87,11 +88,17 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
 	@Test
 	public void reflectionFactory() throws Exception {
-		@SuppressWarnings("unchecked")
-		Constructor<ClassWithExpensiveConstructor> silentConstructor = ReflectionFactory.getReflectionFactory()
+		int result;
+		//
+		Constructor<?> constructor = ReflectionFactory.getReflectionFactory()
 				.newConstructorForSerialization(ClassWithExpensiveConstructor.class, Object.class.getConstructor());
-		silentConstructor.setAccessible(true);
-		assertEquals(0, silentConstructor.newInstance().getValue());
+		constructor.setAccessible(true);
+		//
+		ClassWithExpensiveConstructor instance = (ClassWithExpensiveConstructor) constructor.newInstance();
+		result = instance.getValue();
+		//
+		System.out.println(result);
+		assertEquals(0, result);
 	}
 
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
@@ -109,6 +116,7 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 		System.out.println(result);
 	}
 
+	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
 	@Test
 	public void objectAllocation() throws Exception {
 		Unsafe unsafe = UnsafeHelper.getUnsafe();
@@ -138,14 +146,14 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 		}
 	}
 
+	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)
 	@Test
 	public void strangeReflectionFactory() throws Exception {
-		@SuppressWarnings("unchecked")
-		Constructor<ClassWithExpensiveConstructor> silentConstructor = ReflectionFactory.getReflectionFactory()
-				.newConstructorForSerialization(ClassWithExpensiveConstructor.class,
-						OtherClass.class.getDeclaredConstructor());
-		silentConstructor.setAccessible(true);
-		ClassWithExpensiveConstructor instance = silentConstructor.newInstance();
+		Constructor<?> constructor = ReflectionFactory.getReflectionFactory().newConstructorForSerialization(
+				ClassWithExpensiveConstructor.class, OtherClass.class.getDeclaredConstructor());
+		constructor.setAccessible(true);
+		//
+		ClassWithExpensiveConstructor instance = (ClassWithExpensiveConstructor) constructor.newInstance();
 		assertEquals(10, instance.getValue());
 		assertEquals(ClassWithExpensiveConstructor.class, instance.getClass());
 		assertEquals(Object.class, instance.getClass().getSuperclass());
@@ -495,7 +503,7 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 
 	public class A {
 	}
-	
+
 	public class B {
 		private B b;
 	}

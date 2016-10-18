@@ -8,9 +8,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * BasicDataSource工廠Supporter
+ * 
+ * @param <T>
  */
 public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBeanSupporter<T> {
-
 
 	private static final long serialVersionUID = -6210590177807586233L;
 
@@ -181,7 +182,7 @@ public abstract class BasicDataSourceFactorySupporter<T> extends BaseFactoryBean
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during createBasicDataSource()").toString(), e);
 			try {
-				result = (BasicDataSource) shutdownBasicDataSource();
+				result = shutdownBasicDataSource();
 			} catch (Exception sie) {
 				throw sie;
 			}

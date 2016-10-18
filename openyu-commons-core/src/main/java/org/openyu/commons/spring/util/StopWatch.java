@@ -165,11 +165,4 @@ public class StopWatch extends BaseModelSupporter {
 		return this.toString();
 	}
 
-	// 無法抓到原始行數
-	// public void printResult() {
-	// if (enabled) {
-	// logger.info(prettyPrint());
-	// }
-	// }
-
 }
