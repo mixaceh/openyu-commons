@@ -253,7 +253,8 @@ public class XmppFactoryImpl extends BaseServiceSupporter implements XmppFactory
 
 			// setup reconnect
 			ReconnectionManager reconnectMgmt = ReconnectionManager.getInstanceFor(result);
-			reconnectMgmt.enableAutomaticReconnection();
+			//reconnectMgmt.enableAutomaticReconnection();
+			reconnectMgmt.disableAutomaticReconnection();
 
 			// connect
 			result.connect();
