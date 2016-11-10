@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<bean
+		id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close"> 
+        <!-- url、user、password -->
+		<property
+			name="url"
+			value="jdbc:hsqldb:hsql://127.0.0.1:9001/commons" />
+		<property
+			name="username"
+			value="SA" />
+		<property
+			name="password"
+			value="" />
+
+      <!-- 初始化大小、最小、最大 -->
+		<property
+			name="initialSize"
+			value="1" />
+		<property
+			name="minIdle"
+			value="1" />
+		<property
+			name="maxActive"
+			value="10" />
+
+		<property
+			name="maxIdle"
+			value="10" />
+
+      <!-- 獲取連接等待超時的時間 -->
+		<property
+			name="maxWait"
+			value="60000" />
+
+      <!-- 間隔多久才進行一次檢測，檢測需要關閉的空閒連接，單位是毫秒 -->
+		<property
+			name="timeBetweenEvictionRunsMillis"
+			value="60000" />
+
+		<property
+			name="numTestsPerEvictionRun"
+			value="3" />
+
+      <!-- 一個連接在池中最小生存的時間，單位是毫秒 -->
+		<property
+			name="minEvictableIdleTimeMillis"
+			value="300000" />
+
+		<property
+			name="validationQuery"
+			value="SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS" />
+		<property
+			name="testWhileIdle"
+			value="true" />
+		<property
+			name="testOnBorrow"
+			value="false" />
+		<property
+			name="testOnReturn"
+			value="false" />
+
+      <!-- 打開PSCache，並且指定每個連接上PSCache的大小 -->
+		<property
+			name="poolPreparedStatements"
+			value="false" />
+	</bean>
+
+	<bean
+		id="dataSource2"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close"> 
+        <!-- url、user、password -->
+		<property
+			name="url"
+			value="jdbc:hsqldb:hsql://127.0.0.1:9001/commons" />
+		<property
+			name="username"
+			value="SA" />
+		<property
+			name="password"
+			value="" />
+
+      <!-- 初始化大小、最小、最大 -->
+		<property
+			name="initialSize"
+			value="1" />
+		<property
+			name="minIdle"
+			value="1" />
+		<property
+			name="maxActive"
+			value="10" />
+
+		<property
+			name="maxIdle"
+			value="10" />
+
+      <!-- 獲取連接等待超時的時間 -->
+		<property
+			name="maxWait"
+			value="60000" />
+
+      <!-- 間隔多久才進行一次檢測，檢測需要關閉的空閒連接，單位是毫秒 -->
+		<property
+			name="timeBetweenEvictionRunsMillis"
+			value="60000" />
+
+		<property
+			name="numTestsPerEvictionRun"
+			value="3" />
+
+      <!-- 一個連接在池中最小生存的時間，單位是毫秒 -->
+		<property
+			name="minEvictableIdleTimeMillis"
+			value="300000" />
+
+		<property
+			name="validationQuery"
+			value="SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS" />
+		<property
+			name="testWhileIdle"
+			value="true" />
+		<property
+			name="testOnBorrow"
+			value="false" />
+		<property
+			name="testOnReturn"
+			value="false" />
+
+      <!-- 打開PSCache，並且指定每個連接上PSCache的大小 -->
+		<property
+			name="poolPreparedStatements"
+			value="false" />
+	</bean>
+	
+	<!-- group -->
+	<bean
+		id="basicDataSourceGroupFactoryBean"
+		class="org.openyu.commons.commons.dbcp.impl.BasicDataSourceGroupFactoryBean"
+		parent="baseFactoryBeanSupporter">
+		<property name="basicDataSources">
+			<array>
+				<ref bean="dataSource" />
+				<ref bean="dataSource2" />
+			</array>
+		</property>
+	</bean>
+</beans>

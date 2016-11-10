@@ -63,7 +63,7 @@ public abstract class DriverManagerDataSourceFactorySupporter<T> extends BaseFac
 			 * extendedProperties
 			 */
 			String url = nextUrl(extendedProperties.getString(URL, DEFAULT_URL), i);
-			LOGGER.info("driver manager[" + i + "]: " + url);
+			LOGGER.info("driver[" + i + "]: " + url);
 			result.setUrl(url);
 			//
 			result.setDriverClassName(extendedProperties.getString(DRIVER_CLASSNAME, DEFAULT_DRIVER_CLASSNAME));
