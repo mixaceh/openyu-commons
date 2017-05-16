@@ -210,7 +210,6 @@ public final class ArrayHelper extends BaseHelperSupporter {
 	 * @return the byte[]
 	 */
 	public static byte[] add(final byte[] x, final byte[] y) {
-		byte[] result = new byte[x.length + y.length];
 		// 1. round: 0.01
 		// for (int i = 0; x != null && i < x.length; i++) {
 		// result[i] = x[i];
@@ -226,8 +225,19 @@ public final class ArrayHelper extends BaseHelperSupporter {
 		// }
 
 		// 2.System.arraycopy round: 0.01
-		System.arraycopy(x, 0, result, 0, x.length);
-		System.arraycopy(y, 0, result, x.length, y.length);
+		byte[] result = new byte[0];
+		if (x == null || x.length == 0) {
+			result = new byte[y.length];
+			System.arraycopy(y, 0, result, 0, y.length);
+		} else if (y == null || y.length == 0) {
+			result = new byte[x.length];
+			System.arraycopy(x, 0, result, 0, x.length);
+
+		} else {
+			result = new byte[x.length + y.length];
+			System.arraycopy(x, 0, result, 0, x.length);
+			System.arraycopy(y, 0, result, x.length, y.length);
+		}
 
 		// 3.ByteArrayOutputStream round: 0.08
 		// ByteArrayOutputStream out = null;
@@ -253,8 +263,9 @@ public final class ArrayHelper extends BaseHelperSupporter {
 
 		// 5.ArrayUtils.addAll round: 0.01 (System.arraycopy)
 		// result = ArrayUtils.addAll(x, y);
-		//
+
 		return result;
+
 	}
 
 	/**
