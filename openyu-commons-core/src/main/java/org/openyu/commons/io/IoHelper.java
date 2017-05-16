@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -20,9 +21,13 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.jar.JarFile;
 
-//#issue: 不支援中文檔名
-//import java.util.zip.ZipOutputStream;
-//#fix 改apache zip
+/**
+ * #issue: 不支援中文檔名
+ * 
+ * import java.util.zip.ZipOutputStream;
+ * 
+ * #fix 改apache zip
+ */
 import org.apache.tools.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.openyu.commons.helper.ex.HelperException;
@@ -34,15 +39,11 @@ import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.thread.ThreadHelper;
 import org.openyu.commons.util.AssertHelper;
 import org.openyu.commons.util.ConfigHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 將save/load -> 改成read/write
  */
 public final class IoHelper extends BaseHelperSupporter implements Supporter {
-
-	private static final transient Logger LOGGER = LoggerFactory.getLogger(IoHelper.class);
 
 	/**
 	 * 預設讀取重試次數
@@ -234,13 +235,12 @@ public final class IoHelper extends BaseHelperSupporter implements Supporter {
 	 * @param reader
 	 */
 	public static void close(Reader reader) {
-
-		try {
-			if (reader != null) {
+		if (reader != null) {
+			try {
 				reader.close();
+			} catch (Exception e) {
+				//
 			}
-		} catch (Exception ex) {
-			// ex.printStackTrace();
 		}
 	}
 
@@ -250,12 +250,12 @@ public final class IoHelper extends BaseHelperSupporter implements Supporter {
 	 * @param writer
 	 */
 	public static void close(Writer writer) {
-		try {
-			if (writer != null) {
+		if (writer != null) {
+			try {
 				writer.close();
+			} catch (Exception e) {
+				//
 			}
-		} catch (Exception ex) {
-			// ex.printStackTrace();
 		}
 	}
 
@@ -265,12 +265,12 @@ public final class IoHelper extends BaseHelperSupporter implements Supporter {
 	 * @param in
 	 */
 	public static void close(InputStream in) {
-		try {
-			if (in != null) {
+		if (in != null) {
+			try {
 				in.close();
+			} catch (Exception e) {
+				//
 			}
-		} catch (Exception ex) {
-			// ex.printStackTrace();
 		}
 	}
 
@@ -280,13 +280,12 @@ public final class IoHelper extends BaseHelperSupporter implements Supporter {
 	 * @param out
 	 */
 	public static void close(OutputStream out) {
-
-		try {
-			if (out != null) {
+		if (out != null) {
+			try {
 				out.close();
+			} catch (Exception e) {
+				//
 			}
-		} catch (Exception ex) {
-			// ex.printStackTrace();
 		}
 	}
 
@@ -296,13 +295,12 @@ public final class IoHelper extends BaseHelperSupporter implements Supporter {
 	 * @param in
 	 */
 	public static void close(ObjectInput in) {
-
-		try {
-			if (in != null) {
+		if (in != null) {
+			try {
 				in.close();
+			} catch (Exception e) {
+				//
 			}
-		} catch (Exception ex) {
-			// ex.printStackTrace();
 		}
 	}
 
@@ -312,13 +310,27 @@ public final class IoHelper extends BaseHelperSupporter implements Supporter {
 	 * @param out
 	 */
 	public static void close(ObjectOutput out) {
-
-		try {
-			if (out != null) {
+		if (out != null) {
+			try {
 				out.close();
+			} catch (Exception e) {
+				//
 			}
-		} catch (Exception ex) {
-			// ex.printStackTrace();
+		}
+	}
+
+	/**
+	 * 關閉
+	 *
+	 * @param closeable
+	 */
+	public static void close(Closeable closeable) {
+		if (closeable != null) {
+			try {
+				closeable.close();
+			} catch (Exception e) {
+				//
+			}
 		}
 	}
 

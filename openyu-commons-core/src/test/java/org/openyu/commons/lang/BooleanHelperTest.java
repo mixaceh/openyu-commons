@@ -25,6 +25,7 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
+	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void BooleanHelper() throws Exception {
 		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.lang.BooleanHelper");
@@ -40,7 +41,7 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * Creates the boolean.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.81, time.warmup: 0.80,
 	// time.bench: 0.01
@@ -69,7 +70,7 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * To boolean.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.81, time.warmup: 0.80,
 	// time.bench: 0.01
@@ -116,7 +117,7 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * Random booleanz.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.72, time.warmup: 0.71,
 	// time.bench: 0.01
@@ -132,7 +133,7 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * Safe get.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.73, time.warmup: 0.73,
 	// time.bench: 0.01
@@ -152,7 +153,7 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * To stringz.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.73, time.warmup: 0.73,
 	// time.bench: 0.01
@@ -178,7 +179,7 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * To int.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.73, time.warmup: 0.73,
 	// time.bench: 0.01
@@ -204,7 +205,7 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	 * True false.
 	 */
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	// round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.73, time.warmup: 0.73,
 	// time.bench: 0.01
