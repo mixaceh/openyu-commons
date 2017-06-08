@@ -2,6 +2,7 @@ package org.openyu.commons.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.InputStream;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
@@ -206,7 +207,13 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		ObjectInput input = null;
 		try {
 			input = new ObjectInputStream(in);
-			result = (T) input.readObject();
+			// https://community.oracle.com/thread/1153653?start=0
+			try {
+				while (true)
+					result = (T) input.readObject();
+			} catch (EOFException eof) {
+				// end of file reached, do nothing
+			}
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during dejdk()").toString(), e);
 		} finally {

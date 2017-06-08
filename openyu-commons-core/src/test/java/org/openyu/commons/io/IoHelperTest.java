@@ -5,9 +5,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,11 +18,18 @@ import org.apache.http.conn.EofSensorInputStream;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipOutputStream;
 import org.junit.Test;
+import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.ByteHelper;
 
-public class IoHelperTest {
+import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
+import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+
+public class IoHelperTest extends BaseTestSupporter {
+
+	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void write() throws Exception {
 		final String FILE_NAME = "custom/output/test.log";
 		final int LENGTH_OF_BYTES = 10 * 1024;// 10k
@@ -41,6 +50,7 @@ public class IoHelperTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void createInputStream() throws Exception {
 		final String FILE_NAME = "custom/output/test.log";
 		//
@@ -54,6 +64,7 @@ public class IoHelperTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void createOutputStream() {
 		final String FILE_NAME = "custom/output/outputStream.log";
 		//
@@ -68,6 +79,7 @@ public class IoHelperTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void createZipOutputStream() throws Exception {
 		final String FILE_NAME = "custom/output/zipOutputStream.zip";
 		//
@@ -86,6 +98,7 @@ public class IoHelperTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void createWriter() {
 		final String FILE_NAME = "custom/output/writer.log";
 		//
@@ -98,6 +111,7 @@ public class IoHelperTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void createPrintWriter() {
 		final String FILE_NAME = "custom/output/printWriter.log";
 		//
@@ -110,6 +124,7 @@ public class IoHelperTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void available() {
 		final String FILE_NAME = "custom/output/test.log";
 		//
@@ -128,6 +143,7 @@ public class IoHelperTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void availableWithAutoCloseInputStream() throws Exception {
 		final String FILE_NAME = "custom/output/test.log";
 		//
@@ -147,6 +163,7 @@ public class IoHelperTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void availableWithEofSensorInputStream() throws Exception {
 		final String FILE_NAME = "custom/output/test.log";
 		//
@@ -167,6 +184,7 @@ public class IoHelperTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void read() {
 		final String FILE_NAME = "pom.xml";
 		InputStream value = IoHelper.createInputStream(FILE_NAME);
@@ -185,6 +203,7 @@ public class IoHelperTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void readWithFileName() {
 		final String FILE_NAME = "pom.xml";
 
@@ -198,6 +217,7 @@ public class IoHelperTest {
 	}
 
 	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void readWithAction() {
 		final String FILE_NAME = "pom.xml";
 		File file = new File(FILE_NAME);
@@ -208,28 +228,26 @@ public class IoHelperTest {
 		InputStream value = IoHelper.createInputStream(file);
 		//
 		final int BLOCK_LENGTH = 16;
-		int expectedBlockCount = (int) Math
-				.ceil((length / (BLOCK_LENGTH * 1.0d)));
+		int expectedBlockCount = (int) Math.ceil((length / (BLOCK_LENGTH * 1.0d)));
 		System.out.println("expectedBlockCount: " + expectedBlockCount);
 		//
 		final AtomicInteger actualBlockCount = new AtomicInteger();
-		
+
 		// true=繼續往下一段byte[], false=中斷
 		final boolean READ_NEXT_BLOCK = false;
 		//
-		byte[] buff = IoHelper.read(value, BLOCK_LENGTH,
-				new InputStreamCallback() {
-					public boolean doInAction(byte[] blockArray) {
-						// System.out
-						// .println("block length: " + blockArray.length);
+		byte[] buff = IoHelper.read(value, BLOCK_LENGTH, new InputStreamCallback() {
+			public boolean doInAction(byte[] blockArray) {
+				// System.out
+				// .println("block length: " + blockArray.length);
 
-						actualBlockCount.incrementAndGet();
+				actualBlockCount.incrementAndGet();
 
-						// true=繼續往下一段byte[], false=中斷
-						return READ_NEXT_BLOCK;
-						// return false;
-					}
-				});
+				// true=繼續往下一段byte[], false=中斷
+				return READ_NEXT_BLOCK;
+				// return false;
+			}
+		});
 
 		System.out.println("actualBlockCount: " + actualBlockCount);
 		System.out.println("byteArray length: " + buff.length);// 358912
@@ -246,107 +264,30 @@ public class IoHelperTest {
 		IoHelper.close(value);
 	}
 
-	// @Test
-	// // 1000 times: 1815 mills.
-	// // 1000 times: 1831 mills.
-	// // 1000 times: 1815 mills.
-	// public void writeToJson() throws Exception {
-	// Date date = new Date();
-	// int count = 1;
-	// long beg = System.currentTimeMillis();
-	// String result = null;
-	// for (int i = 0; i < count; i++) {
-	// // 1.data/json/java.util.Date.json
-	// result = IoHelper.writeToJson(Date.class.getName(), date);
-	// }
-	// //
-	// long end = System.currentTimeMillis();
-	// System.out.println(count + " times: " + (end - beg) + " mills. ");
-	// //
-	// System.out.println(result);
-	//
-	// // 2.data/json/Date.json
-	// result = IoHelper.writeToJson(Date.class, date);
-	// System.out.println(result);
-	//
-	// // 3.data/json/xxxDate.json
-	// FileOutputStream fos = new FileOutputStream(new File(
-	// "data/json/xxxDate.json"));
-	// BufferedOutputStream bos = new BufferedOutputStream(fos);
-	// boolean booleanResult = IoHelper.writeToJson(bos, date);
-	// System.out.println(booleanResult);
-	//
-	// // 4.System.out
-	// booleanResult = IoHelper.writeToJson(System.out, date);
-	// System.out.println(booleanResult);
-	// }
-	//
-	// @Test
-	// // 1000 times: 1327 mills.
-	// // 1000 times: 1335 mills.
-	// // 1000 times: 1316 mills.
-	// public void readFromJson() throws Exception {
-	// Date date = null;
-	// int count = 1;
-	// long beg = System.currentTimeMillis();
-	// for (int i = 0; i < count; i++) {
-	// // 1.data/json/java.util.Date.json
-	// date = IoHelper.readFromJson(Date.class.getName(), Date.class);
-	// }
-	// //
-	// long end = System.currentTimeMillis();
-	// System.out.println(count + " times: " + (end - beg) + " mills. ");
-	// //
-	// System.out.println(date);
-	//
-	// // 2.data/ser/Date.json
-	// date = IoHelper.readFromJson(Date.class);
-	// System.out.println(date);
-	//
-	// // 3.data/ser/xxxDate.ser
-	// FileInputStream fis = new FileInputStream(new File(
-	// "data/json/xxxDate.json"));
-	// BufferedInputStream bis = new BufferedInputStream(fis);
-	// date = IoHelper.readFromJson(bis, Date.class);
-	// System.out.println(date);
-	// }
-
 	@Test
-	// 1000 times: 1327 mills.
-	// 1000 times: 1335 mills.
-	// 1000 times: 1316 mills.
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void readString() {
 		String result = null;
-		int count = 1;
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			// 1.data/json/java.util.Date.json
-			result = IoHelper.readString("data/json/java.util.Date.json");
-		}
-		//
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		// 1.data/json/java.util.Date.json
+		result = IoHelper.readString("data/json/java.util.Date.json");
 		//
 		System.out.println(result);
 	}
 
 	@Test
-	// 1000 times: 1327 mills.
-	// 1000 times: 1335 mills.
-	// 1000 times: 1316 mills.
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void writeToString() {
 		boolean result = false;
-		int count = 1;
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			// 1.data/json/java.util.Date.json
-			result = IoHelper.writeToString("data/json/test.txt", "test123");
-		}
-		//
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		// 1.data/json/java.util.Date.json
+		result = IoHelper.writeToString("data/json/test.txt", "test123");
 		//
 		System.out.println(result);
 	}
 
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	public void closeCloseable() throws FileNotFoundException {
+		RandomAccessFile file = new RandomAccessFile(new File("pom.xml").getAbsoluteFile(), "rw");
+		IoHelper.close(file);
+	}
 }

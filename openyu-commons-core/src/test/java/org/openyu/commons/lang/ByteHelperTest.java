@@ -2,7 +2,10 @@ package org.openyu.commons.lang;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.junit.Rule;
@@ -499,5 +502,23 @@ public class ByteHelperTest {
 
 	public void newByteArray(byte[] value) {
 		value = new byte[] { 99 };
+	}
+
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	public void toObject() {
+		Object result = null;
+		// 非jdk序列化,所以用反序列化會失敗, 丟出EOFException
+		// byte[] value = ByteUtil.toBytes(new Boolean(false));
+
+		// 使用jdk序列化, 可以正常反序列化
+		byte[] value = ByteHelper.toByteArray((Serializable) new Boolean(false));
+
+		// java.lang.Date也可以測
+		// byte[] value = ByteUtil.toBytes(new Date());
+		result = ByteHelper.toObject(value);
+		System.out.println(result);
+		assertNotNull(result);
+		assertFalse(((Boolean) result).booleanValue());
 	}
 }
