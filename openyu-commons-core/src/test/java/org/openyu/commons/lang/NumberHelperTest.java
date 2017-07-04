@@ -212,8 +212,7 @@ public class NumberHelperTest {
 	// 1000000 times: 109 mills.
 	// 1000000 times: 94 mills.
 	public void toBytes() {
-		Byte[] values = new Byte[] { new Byte((byte) 1), null,
-				new Byte((byte) 128) };
+		Byte[] values = new Byte[] { new Byte((byte) 1), null, new Byte((byte) 128) };
 		SystemHelper.println(values);
 
 		byte[] results = null;
@@ -259,8 +258,7 @@ public class NumberHelperTest {
 	// 1000000 times: 33 mills.
 	// 1000000 times: 35 mills.
 	public void toShorts() {
-		Short[] values = new Short[] { new Short((short) 1), null,
-				new Short((short) 32768) };
+		Short[] values = new Short[] { new Short((short) 1), null, new Short((short) 32768) };
 		SystemHelper.println(values);
 
 		short[] results = null;
@@ -306,8 +304,7 @@ public class NumberHelperTest {
 	// 1000000 times: 109 mills.
 	// 1000000 times: 94 mills.
 	public void toFloats() {
-		Float[] values = new Float[] { new Float(1), null, new Float(100),
-				Float.NaN };
+		Float[] values = new Float[] { new Float(1), null, new Float(100), Float.NaN };
 		SystemHelper.println(values);
 
 		float[] results = null;
@@ -359,8 +356,7 @@ public class NumberHelperTest {
 	// 1000000 times: 109 mills.
 	// 1000000 times: 94 mills.
 	public void toDoubles() {
-		Double[] values = new Double[] { new Double(1), null, new Double(100),
-				Double.NaN };
+		Double[] values = new Double[] { new Double(1), null, new Double(100), Double.NaN };
 		SystemHelper.println(values);
 
 		double[] results = null;
@@ -844,14 +840,7 @@ public class NumberHelperTest {
 	// verified
 	public void randomShort() {
 		short result = 0;
-		int count = 1000000;
-
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = NumberHelper.randomShort();
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		result = NumberHelper.randomShort();
 
 		System.out.println(result);// 17359,-17582
 		//
@@ -867,15 +856,7 @@ public class NumberHelperTest {
 	// verified
 	public void randomInt() {
 		int result = 0;
-		int count = 1000000;
-
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = NumberHelper.randomInt(0, 100);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
-
+		result = NumberHelper.randomInt(0, 100);
 		System.out.println(result);
 		assertTrue(result >= 0);
 		//
@@ -890,6 +871,23 @@ public class NumberHelperTest {
 		//
 		result = NumberHelper.randomInt();
 		System.out.println(result);// 248922116,-733928975
+		//
+		result = NumberHelper.randomInt(5, 5);
+		System.out.println(result);
+		//
+		result = NumberHelper.randomInt(-2, -1);
+		System.out.println(result);
+		//
+		result = NumberHelper.randomInt(0, 1);
+		System.out.println(result);
+		//
+		result = NumberHelper.randomInt(1, 5);
+		System.out.println(result);
+		//
+		for (int i = 0; i < 10; i++) {
+			result = NumberHelper.randomInt(1, 2);
+			System.out.println(result);
+		}
 	}
 
 	@Test
@@ -898,16 +896,12 @@ public class NumberHelperTest {
 	// 1000000 times: 163 mills.
 	public void randomUniqueInt() {
 		int[] numbers = null;
-		int count = 1000000;
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			numbers = NumberHelper.randomUniqueInt(0, 3, 2);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
 		//
-		SystemHelper.println(numbers);
-		assertEquals(2, numbers.length);
+		for (int i = 0; i < 10; i++) {
+			numbers = NumberHelper.randomUniqueInt(0, 3, 2);
+			SystemHelper.println(numbers);
+			assertEquals(2, numbers.length);
+		}
 	}
 
 	@Test
@@ -918,15 +912,7 @@ public class NumberHelperTest {
 	// verified
 	public void randomLong() {
 		long result = 0L;
-		int count = 1000000;
-
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = NumberHelper.randomLong(0, 100);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
-
+		result = NumberHelper.randomLong(0, 100);
 		System.out.println(result);
 		assertTrue(result >= 0);
 		//
@@ -935,6 +921,10 @@ public class NumberHelperTest {
 		//
 		result = NumberHelper.randomLong();
 		System.out.println(result);// 8662847137822939746,-6641512979589146752
+		for (int i = 0; i < 10; i++) {
+			result = NumberHelper.randomLong(1L, 5L);
+			System.out.println(result);
+		}
 	}
 
 	@Test
@@ -945,14 +935,7 @@ public class NumberHelperTest {
 	// verified
 	public void randomFloat() {
 		float result = 0f;
-		int count = 1000000;
-
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = NumberHelper.randomFloat(0, 100);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		result = NumberHelper.randomFloat(0, 100);
 
 		System.out.println(result);
 		assertTrue(result >= 0);
@@ -962,6 +945,9 @@ public class NumberHelperTest {
 		//
 		result = NumberHelper.randomFloat();
 		System.out.println(result);// 0.8514332,0.7591181
+		//
+		result = NumberHelper.randomFloat(1f, 5f);
+		System.out.println(result);
 	}
 
 	@Test
@@ -972,14 +958,7 @@ public class NumberHelperTest {
 	// verified
 	public void randomDouble() {
 		double result = 0d;
-		int count = 1000000;
-
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = NumberHelper.randomDouble(0, 100);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		result = NumberHelper.randomDouble(0, 100);
 
 		System.out.println(result);
 		assertTrue(result >= 0);
@@ -989,6 +968,10 @@ public class NumberHelperTest {
 		//
 		result = NumberHelper.randomDouble();
 		System.out.println(result);// 0.6000276081360958
+		//
+		//
+		result = NumberHelper.randomDouble(1, 5);
+		System.out.println(result);
 	}
 
 	@Test
@@ -1104,8 +1087,7 @@ public class NumberHelperTest {
 			// System.out.println(treasure);
 			if (treasure.getWeight() <= 1) {
 				bingo += 1;
-				System.out.println("中大獎: " + treasure.getName() + " 總計次數: "
-						+ bingo);
+				System.out.println("中大獎: " + treasure.getName() + " 總計次數: " + bingo);
 			}
 		}
 		long end = System.currentTimeMillis();
@@ -1183,8 +1165,7 @@ public class NumberHelperTest {
 		}
 
 		public String toString() {
-			return ToStringBuilder.reflectionToString(this,
-					ToStringStyle.MULTI_LINE_STYLE);
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 		}
 
 		public Object clone() {

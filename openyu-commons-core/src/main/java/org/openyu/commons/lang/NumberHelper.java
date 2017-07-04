@@ -1229,7 +1229,7 @@ public final class NumberHelper extends BaseHelperSupporter {
 	}
 
 	/**
-	 * 隨機短整數 0 <= i < maxValue,無檢查是否重覆
+	 * 隨機短整數 0 <= i <= maxValue,無檢查是否重覆
 	 *
 	 * This would return a value from 0 (inclusive) to maxvalue (exclusive).
 	 *
@@ -1262,21 +1262,18 @@ public final class NumberHelper extends BaseHelperSupporter {
 	}
 
 	/**
-	 * 隨機整數 minValue <= i < maxValue,無檢查是否重覆
+	 * 隨機整數 minValue <= i <= maxValue,無檢查是否重覆
 	 *
 	 * @param minValue
 	 * @param maxValue
 	 * @return
 	 */
 	public static int randomInt(int minValue, int maxValue) {
-		if (maxValue - minValue <= 0) {
-			maxValue = minValue + 1;
-		}
-		return random.nextInt(maxValue - minValue) + minValue;
+		return random.nextInt(maxValue - minValue + 1) + minValue;
 	}
 
 	/**
-	 * 隨機整數 minValue <= i < maxValue,有檢查是否重覆
+	 * 隨機整數 minValue <= i <= maxValue,有檢查是否重覆
 	 *
 	 * @param minValue
 	 * @param maxValue
@@ -1284,30 +1281,24 @@ public final class NumberHelper extends BaseHelperSupporter {
 	 */
 	public static int[] randomUniqueInt(int minValue, int maxValue, int amount) {
 		if (minValue >= maxValue) {
-			return null;
+			return new int[0];
 		}
-		int size = maxValue - minValue;
+		int index = maxValue - minValue;
+		int size = index + 1;
 		if (size < amount) {
-			return null;
+			return new int[0];
 		}
 		int[] ret = new int[size];
 		for (int i = 0; i < size; i++) {
 			ret[i] = i + minValue;
 		}
 		for (int i = 0; i < size - 1; i++) {
-			int randomIndex = randomInt(i, size);
+			int randomIndex = randomInt(i, index);
 			int temp = ret[i];
 			ret[i] = ret[randomIndex];
 			ret[randomIndex] = temp;
 		}
 		return Arrays.copyOfRange(ret, 0, amount);
-	}
-
-	public static int ___randomInt(int minValue, int maxValue) {
-		if (maxValue - minValue <= 0) {
-			maxValue = minValue + 1;
-		}
-		return (int) (minValue + Math.random() * (maxValue - minValue));
 	}
 
 	/**
@@ -1339,20 +1330,13 @@ public final class NumberHelper extends BaseHelperSupporter {
 	}
 
 	/**
-	 * 隨機長整數 minValue <= i < maxValue,無檢查是否重覆
+	 * 隨機長整數 minValue <= i <= maxValue,無檢查是否重覆
 	 *
 	 * @param minValue
 	 * @param maxValue
 	 */
 	public static long randomLong(long minValue, long maxValue) {
-		if (maxValue - minValue <= 0) {
-			maxValue = minValue;
-		}
-		// #issue 不正確
-		// return seed.nextLong() * (maxValue - minValue) + minValue;
-
-		// #fix
-		return randomLong(maxValue - minValue) + minValue;
+		return randomLong(maxValue - minValue + 1) + minValue;
 	}
 
 	/**
@@ -1374,16 +1358,13 @@ public final class NumberHelper extends BaseHelperSupporter {
 	}
 
 	/**
-	 * 隨機單精倍數 minValue <= i < maxValue,無檢查是否重覆
+	 * 隨機單精倍數 minValue <= i <= maxValue,無檢查是否重覆
 	 *
 	 * @param minValue
 	 * @param maxValue
 	 */
 	public static float randomFloat(float minValue, float maxValue) {
-		if (maxValue - minValue <= 0) {
-			maxValue = minValue;
-		}
-		return random.nextFloat() * (maxValue - minValue) + minValue;
+		return random.nextFloat() * (maxValue - minValue + 1) + minValue;
 	}
 
 	/**
@@ -1406,17 +1387,14 @@ public final class NumberHelper extends BaseHelperSupporter {
 	}
 
 	/**
-	 * 隨機雙精倍數 minValue <= i < maxValue,無檢查是否重覆
+	 * 隨機雙精倍數 minValue <= i <= maxValue,無檢查是否重覆
 	 *
 	 * @param minValue
 	 * @param maxValue
 	 * @return
 	 */
 	public static double randomDouble(double minValue, double maxValue) {
-		if (maxValue - minValue <= 0) {
-			return minValue;
-		}
-		return random.nextDouble() * (maxValue - minValue) + minValue;
+		return random.nextDouble() * (maxValue - minValue + 1) + minValue;
 	}
 
 	/**
@@ -1441,16 +1419,13 @@ public final class NumberHelper extends BaseHelperSupporter {
 	}
 
 	/**
-	 * 隨機整數 minValue <= i < maxValue,無檢查是否重覆
+	 * 隨機整數 minValue <= i <= maxValue,無檢查是否重覆
 	 *
 	 * @param minValue
 	 * @param maxValue
 	 */
 	public static int secureRandomInt(int minValue, int maxValue) {
-		if (maxValue - minValue <= 0) {
-			maxValue = minValue + 1;
-		}
-		return secureRandom.nextInt(maxValue - minValue) + minValue;
+		return secureRandom.nextInt(maxValue - minValue + 1) + minValue;
 	}
 
 	public static byte safeGet(Byte value) {
