@@ -1,6 +1,7 @@
 package org.openyu.commons.bitronix;
 
 import org.openyu.commons.service.supporter.BaseFactoryBeanSupporter;
+import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,68 +9,72 @@ import bitronix.tm.resource.jdbc.PoolingDataSource;
 
 public class PoolingDataSourceGroupFactoryBean extends BaseFactoryBeanSupporter<PoolingDataSource[]> {
 
+	private static final long serialVersionUID = -6427732289033240266L;
+
 	private static transient final Logger LOGGER = LoggerFactory.getLogger(PoolingDataSourceGroupFactoryBean.class);
 	// props
 	public static final String MAX_DATA_SOURCE_SIZE = "maxDataSourceSize";
 
 	public static final int DEFAULT_MAX_DATA_SOURCE_SIZE = 1;
 
-	public static final String URL = "url";
-
-	public static final String DEFAULT_URL = null;
-
-	public static final String UNIQUE_RESOURCE_NAME = "uniqueResourceName";
-
-	public static final String DEFAULT_UNIQUE_RESOURCE_NAME = null;
-
-	public static final String XA_DATA_SOURCE_CLASSNAME = "xaDataSourceClassName";
-
-	public static final String DEFAULT_XA_DATA_SOURCE_CLASSNAME = null;
-
-	public static final String USER = "user";
-
-	public static final String DEFAULT_USER = null;
-
-	public static final String PASSWORD = "password";
-
-	public static final String DEFAULT_PASSWORD = null;
+	// public static final String URL = "url";
 	//
-	public static final String MAX_POOL_SIZE = "maxPoolSize";
-
-	public static final int DEFAULT_MAX_POOL_SIZE = 8;
-
-	public static final String MIN_POOL_SIZE = "minPoolSize";
-
-	public static final int DEFAULT_MIN_POOL_SIZE = 1;
-
-	public static final String TEST_QUERY = "testQuery";
-
-	public static final String DEFAULT_TEST_QUERY = null;
-
-	public static final String MAX_LIFE_TIME = "maxLifetime";
-
-	public static final int DEFAULT_MAX_LIFE_TIME = 0;
-
-	public static final String MAX_IDLE_TIME = "maxIdleTime";
-
-	public static final int DEFAULT_MAX_IDLE_TIME = 60;
-
+	// public static final String DEFAULT_URL = null;
 	//
-	public static final String BORROW_CONNECTION_TIMEOUT = "borrowConnectionTimeout";
-
-	public static final int DEFAULT_BORROW_CONNECTION_TIMEOUT = 30;
-
-	public static final String REAP_TIMEOUT = "reapTimeout";
-
-	public static final int DEFAULT_REAP_TIMEOUT = 0;
-
-	public static final String MAINTENANCE_INTERVAL = "maintenanceInterval";
-
-	public static final int DEFAULT_MAINTENANCE_INTERVAL = 60;
-
-	public static final String LOGIN_TIMEOUT = "loginTimeout";
-
-	public static final int DEFAULT_LOGIN_TIMEOUT = 0;
+	// public static final String UNIQUE_RESOURCE_NAME = "uniqueResourceName";
+	//
+	// public static final String DEFAULT_UNIQUE_RESOURCE_NAME = null;
+	//
+	// public static final String XA_DATA_SOURCE_CLASSNAME =
+	// "xaDataSourceClassName";
+	//
+	// public static final String DEFAULT_XA_DATA_SOURCE_CLASSNAME = null;
+	//
+	// public static final String USER = "user";
+	//
+	// public static final String DEFAULT_USER = null;
+	//
+	// public static final String PASSWORD = "password";
+	//
+	// public static final String DEFAULT_PASSWORD = null;
+	// //
+	// public static final String MAX_POOL_SIZE = "maxPoolSize";
+	//
+	// public static final int DEFAULT_MAX_POOL_SIZE = 8;
+	//
+	// public static final String MIN_POOL_SIZE = "minPoolSize";
+	//
+	// public static final int DEFAULT_MIN_POOL_SIZE = 1;
+	//
+	// public static final String TEST_QUERY = "testQuery";
+	//
+	// public static final String DEFAULT_TEST_QUERY = null;
+	//
+	// public static final String MAX_LIFE_TIME = "maxLifetime";
+	//
+	// public static final int DEFAULT_MAX_LIFE_TIME = 0;
+	//
+	// public static final String MAX_IDLE_TIME = "maxIdleTime";
+	//
+	// public static final int DEFAULT_MAX_IDLE_TIME = 60;
+	//
+	// //
+	// public static final String BORROW_CONNECTION_TIMEOUT =
+	// "borrowConnectionTimeout";
+	//
+	// public static final int DEFAULT_BORROW_CONNECTION_TIMEOUT = 30;
+	//
+	// public static final String REAP_TIMEOUT = "reapTimeout";
+	//
+	// public static final int DEFAULT_REAP_TIMEOUT = 0;
+	//
+	// public static final String MAINTENANCE_INTERVAL = "maintenanceInterval";
+	//
+	// public static final int DEFAULT_MAINTENANCE_INTERVAL = 60;
+	//
+	// public static final String LOGIN_TIMEOUT = "loginTimeout";
+	//
+	// public static final int DEFAULT_LOGIN_TIMEOUT = 0;
 
 	private PoolingDataSource[] poolingDataSourceArray;
 
@@ -77,19 +82,12 @@ public class PoolingDataSourceGroupFactoryBean extends BaseFactoryBeanSupporter<
 
 	}
 
-	public void init() throws RuntimeException {
-		super.init();
-		//
-		try {
-			if (poolingDataSourceArray != null) {
-				LOGGER.info(new StringBuilder().append("Inject from setPoolingDataSourceArray()").toString());
-			} else {
-				LOGGER.info("Using createPoolingDataSourceArray()");
-				this.poolingDataSourceArray = createPoolingDataSourceArray();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public PoolingDataSource[] getPoolingDataSourceArray() {
+		return poolingDataSourceArray;
+	}
+
+	public void setPoolingDataSourceArray(PoolingDataSource[] poolingDataSourceArray) {
+		this.poolingDataSourceArray = poolingDataSourceArray;
 	}
 
 	/**
@@ -105,6 +103,9 @@ public class PoolingDataSourceGroupFactoryBean extends BaseFactoryBeanSupporter<
 		//
 		for (int i = 0; i < result.length; i++) {
 			PoolingDataSource dataSource = new PoolingDataSource();
+			
+			// TODO createPoolingDataSource()
+			
 			// // dataSource, dataSource_2...
 			// dataSource.setUniqueResourceName(
 			// extendedProperties.getString(UNIQUE_RESOURCE_NAME,
@@ -156,15 +157,36 @@ public class PoolingDataSourceGroupFactoryBean extends BaseFactoryBeanSupporter<
 	}
 
 	/**
-	 * jdbc:mysql://127.0.0.1:3306/commons?useUnicode=yes&
-	 * characterEncoding=UTF-8
+	 * 內部啟動
+	 */
+	@Override
+	protected void doStart() throws Exception {
+		if (poolingDataSourceArray != null) {
+			LOGGER.info(new StringBuilder().append("Inject from setPoolingDataSourceArray()").toString());
+		} else {
+			LOGGER.info("Using createPoolingDataSourceArray()");
+			this.poolingDataSourceArray = createPoolingDataSourceArray();
+		}
+	}
+
+	/**
+	 * 內部關閉
+	 */
+	@Override
+	protected void doShutdown() throws Exception {
+		// TODO shutdownPoolingDataSourceArray()
+		// this.poolingDataSourceArray = shutdownPoolingDataSourceArray();
+	}
+
+	/**
+	 * jdbc:mysql://127.0.0.1:3306/commons?useUnicode=yes& characterEncoding=UTF-8
 	 * 
 	 * @param url
 	 * @param i
 	 * @return
 	 */
 	protected String nextUrl(String url, int i) {
-		AssertUtil.notNull(url, "The Url must not be null");
+		AssertHelper.notNull(url, "The Url must not be null");
 		//
 		StringBuilder result = new StringBuilder();
 		if (i < 1) {
@@ -196,14 +218,6 @@ public class PoolingDataSourceGroupFactoryBean extends BaseFactoryBeanSupporter<
 	@Override
 	public PoolingDataSource[] getObject() throws Exception {
 		return poolingDataSourceArray;
-	}
-
-	public PoolingDataSource[] getPoolingDataSourceArray() {
-		return poolingDataSourceArray;
-	}
-
-	public void setPoolingDataSourceArray(PoolingDataSource[] poolingDataSourceArray) {
-		this.poolingDataSourceArray = poolingDataSourceArray;
 	}
 
 	@Override
