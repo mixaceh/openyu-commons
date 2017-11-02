@@ -1,5 +1,7 @@
 package org.openyu.commons.thread.supporter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
@@ -7,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import org.openyu.commons.thread.LoopQueue;
 import org.openyu.commons.thread.ThreadHelper;
 import org.openyu.commons.thread.ThreadService;
+import org.openyu.commons.util.CollectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,7 +103,8 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 	 * 執行
 	 */
 	protected void execute() throws Exception {
-		E e = null;
+		// E e = null;
+		List<E> list = new ArrayList<E>();
 		try {
 			// issue: synchronized慢
 			// synchronized (elements) {
@@ -121,23 +125,39 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 			this.lock.lockInterruptibly();
 			try {
 				while (!elements.isEmpty()) {
-					try {
-						e = elements.poll();
-						if (e != null) {
-							doExecute(e);
-						}
-					} catch (Throwable ex) {
-						LOGGER.error(new StringBuilder("Exception encountered during execute()").toString(), ex);
+					// try {
+					E e = elements.poll();
+					if (e != null) {
+						// doExecute(e);
+						list.add(e);
 					}
+					// } catch (Throwable ex) {
+					// LOGGER.error(new StringBuilder("Exception encountered during
+					// execute()").toString(), ex);
+					// }
 				}
 			} catch (Throwable ex) {
 				throw ex;
 			} finally {
 				this.lock.unlock();
 			}
+			//
+			if (CollectionHelper.notEmpty(list)) {
+				doList(list);
+			}
 		} catch (InterruptedException ex) {
 			LOGGER.error(new StringBuilder("Exception encountered during execute()").toString(), ex);
 			throw ex;
+		}
+	}
+
+	protected void doList(List<E> list) {
+		for (E e : list) {
+			try {
+				doExecute(e);
+			} catch (Exception ex) {
+				LOGGER.error("Exception encountered during doExecute()", ex);
+			}
 		}
 	}
 
