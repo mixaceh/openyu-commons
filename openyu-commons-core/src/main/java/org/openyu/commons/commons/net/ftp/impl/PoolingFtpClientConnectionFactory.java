@@ -1,11 +1,11 @@
 package org.openyu.commons.commons.net.ftp.impl;
 
-
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.pool.ObjectPool;
 import org.openyu.commons.commons.net.ftp.FtpClientConnectionFactory;
 import org.openyu.commons.commons.net.ftp.ex.FtpClientException;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
+import org.openyu.commons.util.AssertHelper;
 
 public class PoolingFtpClientConnectionFactory extends BaseServiceSupporter implements FtpClientConnectionFactory {
 
@@ -38,11 +38,15 @@ public class PoolingFtpClientConnectionFactory extends BaseServiceSupporter impl
 	}
 
 	public void setPool(ObjectPool<FTPClient> pool) throws IllegalStateException, NullPointerException {
-		if (null != this.pool)
-			throw new IllegalStateException("Pool already set");
-		if (null == pool) {
-			throw new NullPointerException("Pool must not be null.");
-		}
+		// if (null != this.pool) {
+		// throw new IllegalStateException("Pool already set");
+		// }
+		// if (null == pool) {
+		// throw new NullPointerException("Pool must not be null.");
+		// }
+		AssertHelper.isNull(this.pool, "Pool already set");
+		AssertHelper.notNull(pool, "Pool must not be null");
+
 		this.pool = pool;
 	}
 

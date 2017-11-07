@@ -53,12 +53,12 @@ public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter impleme
 
 	private volatile boolean restartNeeded;
 
-	private GenericObjectPool.Config config = new GenericObjectPool.Config();
-
 	//
 	private volatile FtpClientConnectionFactory instance;
 
 	protected GenericObjectPool<FTPClient> objectPool;
+
+	private GenericObjectPool.Config config = new GenericObjectPool.Config();
 
 	private boolean closed;
 
@@ -331,8 +331,9 @@ public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter impleme
 		createPoolableFtpClientFactory(ftpClientFactory);
 		createInstance();
 		try {
-			for (int i = 0; i < this.initialSize; ++i)
+			for (int i = 0; i < this.initialSize; ++i) {
 				this.objectPool.addObject();
+			}
 		} catch (Exception e) {
 			throw new IOException("Error preloading the pool", e);
 		}
@@ -363,7 +364,7 @@ public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter impleme
 		PoolableFtpClientFactory result = null;
 		try {
 			result = new PoolableFtpClientFactory(ftpClientFactory, this.objectPool);
-			validateConnectionFactory(result);
+			validatePoolableFtpClientFactory(result);
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {
@@ -372,7 +373,7 @@ public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter impleme
 		}
 	}
 
-	protected void validateConnectionFactory(PoolableFtpClientFactory poolableFactory) throws Exception {
+	protected void validatePoolableFtpClientFactory(PoolableFtpClientFactory poolableFactory) throws Exception {
 		FTPClient ftpClient = null;
 		try {
 			ftpClient = (FTPClient) poolableFactory.makeObject();
