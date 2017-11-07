@@ -151,8 +151,8 @@ public final class NumberHelper extends BaseHelperSupporter {
 
 	/**
 	 *
-	 * double -> BigDecimal,要用Double.toString(value)轉成string, 再new BigDecimal
-	 * Double -> BigDecimal,要用value.toString()轉成string, 再new BigDecimal
+	 * double -> BigDecimal,要用Double.toString(value)轉成string, 再new BigDecimal Double
+	 * -> BigDecimal,要用value.toString()轉成string, 再new BigDecimal
 	 *
 	 * 否則會有誤差
 	 *
@@ -343,6 +343,18 @@ public final class NumberHelper extends BaseHelperSupporter {
 	}
 
 	// --------------------------------------------------------
+	public static int toInt(long value) {
+		int result = 0;
+		if (value >= Integer.MAX_VALUE) {
+			result = Integer.MAX_VALUE;
+		} else if (value <= Integer.MIN_VALUE) {
+			result = Integer.MIN_VALUE;
+		} else {
+			result = (int) value;
+		}
+		return result;
+	}
+
 	public static int toInt(Object value) {
 		return toInt(value, DEFAULT_INT);
 	}
@@ -369,7 +381,12 @@ public final class NumberHelper extends BaseHelperSupporter {
 		try {
 			StringBuilder sb = new StringBuilder();
 			if (value instanceof Number) {
-				result = ((Number) value).intValue();
+				if (value instanceof Long) {
+					Long longValue = (Long) value;
+					result = toInt(longValue.longValue());
+				} else {
+					result = ((Number) value).intValue();
+				}
 			} else if (value instanceof String) {
 				sb.append(value);
 			}
