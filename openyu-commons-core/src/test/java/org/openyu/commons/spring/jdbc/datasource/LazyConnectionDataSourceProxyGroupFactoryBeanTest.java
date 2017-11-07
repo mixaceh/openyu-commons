@@ -32,7 +32,7 @@ public class LazyConnectionDataSourceProxyGroupFactoryBeanTest extends BaseTestS
 	}
 
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void lazyConnectionDataSourceProxys() throws Exception {
 		System.out.println(lazyConnectionDataSourceProxys);
 		assertNotNull(lazyConnectionDataSourceProxys);

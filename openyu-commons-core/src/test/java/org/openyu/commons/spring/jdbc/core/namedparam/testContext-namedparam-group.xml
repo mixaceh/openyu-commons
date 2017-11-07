@@ -10,7 +10,7 @@
 	<bean id="basicDataSourceGroupFactoryBean"
 		class="org.openyu.commons.commons.dbcp.impl.BasicDataSourceGroupFactoryBean"
 		parent="baseFactoryBeanSupporter">
-		<property name="configLocation" value="file:src/test/config/etc/dbcp.properties" />
+		<property name="configLocation" value="file:src/test/config/etc/bak/dbcp.properties" />
 	</bean>
 
 	<bean id="namedParameterJdbcTemplateGroupFactoryBean"

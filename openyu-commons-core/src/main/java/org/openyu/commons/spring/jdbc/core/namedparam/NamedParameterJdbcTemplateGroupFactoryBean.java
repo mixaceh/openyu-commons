@@ -20,11 +20,10 @@ public class NamedParameterJdbcTemplateGroupFactoryBean extends BaseFactoryBeanS
 	private NamedParameterJdbcTemplate[] namedParameterJdbcTemplates;
 
 	public NamedParameterJdbcTemplateGroupFactoryBean(DataSource[] dataSources) {
-		this.dataSources = dataSources;
+		setDataSources(dataSources);
 	}
 
 	public NamedParameterJdbcTemplateGroupFactoryBean() {
-		this(null);
 	}
 
 	public DataSource[] getDataSources() {

@@ -25,7 +25,6 @@ public class LazyConnectionDataSourceProxyGroupFactoryBean
 	}
 
 	public LazyConnectionDataSourceProxyGroupFactoryBean() {
-		this(null);
 	}
 
 	public DataSource[] getDataSources() {

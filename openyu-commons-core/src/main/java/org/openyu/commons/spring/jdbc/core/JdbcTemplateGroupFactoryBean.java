@@ -19,11 +19,10 @@ public class JdbcTemplateGroupFactoryBean extends BaseFactoryBeanSupporter<JdbcT
 	private JdbcTemplate[] jdbcTemplates;
 
 	public JdbcTemplateGroupFactoryBean(DataSource[] dataSources) {
-		this.dataSources = dataSources;
+		setDataSources( dataSources);
 	}
 
 	public JdbcTemplateGroupFactoryBean() {
-		this(null);
 	}
 
 	public DataSource[] getDataSources() {

@@ -18,7 +18,7 @@
 			value="true" />
 		<property name="locations">
 			<list>
-				<value>file:src/test/config/etc/dbcp.properties</value>
+				<value>file:src/test/config/etc/bak/dbcp.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -106,7 +106,7 @@
 		parent="baseFactoryBeanSupporter">
 		<property
 			name="configLocation"
-			value="file:src/test/config/etc/dbcp.properties" />
+			value="file:src/test/config/etc/bak/dbcp.properties" />
 	</bean>
 
 </beans>

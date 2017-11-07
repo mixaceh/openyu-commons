@@ -16,7 +16,7 @@
 		parent="baseFactoryBeanSupporter">
 		<property
 			name="configLocation"
-			value="file:src/test/config/etc/dbcp.properties" />
+			value="file:src/test/config/etc/bak/dbcp.properties" />
 	</bean>
 
 	<bean

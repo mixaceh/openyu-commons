@@ -31,7 +31,7 @@ public class InjectBasicDataSourceGroupFactoryBeanTest extends BaseTestSupporter
 	}
 
 	@Test
-	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 0, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void basicDataSources() throws Exception {
 		System.out.println(basicDataSources);
 		assertNotNull(basicDataSources);
