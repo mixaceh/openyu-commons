@@ -43,7 +43,8 @@
 		resource="classpath:org/openyu/commons/freemarker/applicationContext-freemarker.xml" />
 
 	<!-- quartz -->
-	<import resource="classpath:org/openyu/commons/quartz/applicationContext-quartz.xml" />
+	<import
+		resource="classpath:org/openyu/commons/quartz/applicationContext-quartz.xml" />
 
 	<!-- configHelper -->
 	<bean
@@ -51,12 +52,23 @@
 		class="org.openyu.commons.util.ConfigHelperFactoryBean"
 		p:configLocation="file:src/test/config/etc/ConfigHelper.properties" />
 
+	<!--  
+	<context:property-placeholder
+		location="file:src/test/config/etc/???.properties,file:src/test/config/etc/???.properties"
+		order="1"
+		file-encoding="UTF-8"
+		ignore-unresolvable="true" />
+	-->	
+		
 	<bean
 		id="propertyPlaceholderConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property
 			name="order"
 			value="1" />
+		<property
+			name="fileEncoding"
+			value="UTF-8" />
 		<property
 			name="ignoreUnresolvablePlaceholders"
 			value="true" />
@@ -75,6 +87,9 @@
 		<property
 			name="order"
 			value="2" />
+		<property
+			name="fileEncoding"
+			value="UTF-8" />
 		<property
 			name="ignoreUnresolvablePlaceholders"
 			value="true" />
