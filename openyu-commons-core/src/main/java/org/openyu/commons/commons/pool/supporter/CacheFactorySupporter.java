@@ -90,7 +90,7 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter impl
 			}
 		} catch (NullPointerException ex) {
 			if (objectPool == null) {
-				throw new CacheException("ObjectPool is required. Call initialize()", ex);
+				throw new CacheException("ObjectPool is required.", ex);
 			}
 			throw new CacheException("Could not open Cache", ex);
 		} catch (Exception ex) {
