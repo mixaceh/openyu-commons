@@ -91,6 +91,8 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 			session = getSession();
 			result = action.doInAction(session);
 			return result;
+		} catch (FtpClientTemplateException ex) {
+			throw ex;
 		} catch (Exception ex) {
 			throw new FtpClientTemplateException(ex);
 		} finally {
@@ -103,6 +105,10 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	// --------------------------------------------------
 
 	public String[] listNames(final String pathname) throws IOException {
+		if (pathname == null) {
+			return null;
+		}
+		//
 		return execute(new FtpClientCallback<String[]>() {
 			public String[] doInAction(FtpClientSession session) throws FtpClientTemplateException {
 				try {
@@ -127,6 +133,10 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	}
 
 	public FTPFile[] listFiles(final String pathname) throws IOException {
+		if (pathname == null) {
+			return null;
+		}
+		//
 		return execute(new FtpClientCallback<FTPFile[]>() {
 			public FTPFile[] doInAction(FtpClientSession session) throws FtpClientTemplateException {
 				try {
@@ -151,6 +161,10 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	}
 
 	public FTPFile[] listFiles(final String pathname, final FTPFileFilter filter) throws IOException {
+		if (pathname == null || filter == null) {
+			return null;
+		}
+		//
 		return execute(new FtpClientCallback<FTPFile[]>() {
 			public FTPFile[] doInAction(FtpClientSession session) throws FtpClientTemplateException {
 				try {
@@ -175,6 +189,10 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	}
 
 	public FTPFile[] listDirectories(final String parent) throws IOException {
+		if (parent == null) {
+			return null;
+		}
+		//
 		return execute(new FtpClientCallback<FTPFile[]>() {
 			public FTPFile[] doInAction(FtpClientSession session) throws FtpClientTemplateException {
 				try {
@@ -189,6 +207,10 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	// --------------------------------------------------
 
 	public boolean read(final String remote, final OutputStream local) throws IOException {
+		if (remote == null || local == null) {
+			return false;
+		}
+		//
 		return execute(new FtpClientCallback<Boolean>() {
 			public Boolean doInAction(FtpClientSession session) throws FtpClientTemplateException {
 				try {
@@ -201,6 +223,10 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	}
 
 	public boolean write(final String remote, final InputStream local) throws IOException {
+		if (remote == null || local == null) {
+			return false;
+		}
+		//
 		return execute(new FtpClientCallback<Boolean>() {
 			public Boolean doInAction(FtpClientSession session) throws FtpClientTemplateException {
 				try {
@@ -213,6 +239,10 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	}
 
 	public boolean mkdir(final String pathname) throws IOException {
+		if (pathname == null) {
+			return false;
+		}
+		//
 		return execute(new FtpClientCallback<Boolean>() {
 			public Boolean doInAction(FtpClientSession session) throws FtpClientTemplateException {
 				try {
@@ -225,6 +255,10 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	}
 
 	public boolean delete(final String path) throws IOException {
+		if (path == null) {
+			return false;
+		}
+		//
 		return execute(new FtpClientCallback<Boolean>() {
 			public Boolean doInAction(FtpClientSession session) throws FtpClientTemplateException {
 				try {
@@ -237,6 +271,10 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	}
 
 	public boolean rename(final String from, final String to) throws IOException {
+		if (from == null || to == null) {
+			return false;
+		}
+		//
 		return execute(new FtpClientCallback<Boolean>() {
 			public Boolean doInAction(FtpClientSession session) throws FtpClientTemplateException {
 				try {
@@ -249,6 +287,10 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	}
 
 	public boolean exists(final String path) throws IOException {
+		if (path == null) {
+			return false;
+		}
+		//
 		return execute(new FtpClientCallback<Boolean>() {
 			public Boolean doInAction(FtpClientSession session) throws FtpClientTemplateException {
 				String currentWorkingPath = null;
