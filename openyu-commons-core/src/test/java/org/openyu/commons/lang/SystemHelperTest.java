@@ -12,6 +12,8 @@ import org.junit.Test;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+import com.esotericsoftware.kryo.Kryo;
+
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
 /**
@@ -97,11 +99,19 @@ public class SystemHelperTest extends BaseTestSupporter {
 	 */
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
-	// round: 0.00
 	public void println() {
 		SystemHelper.println("Test");
+		SystemHelper.println("Title: ", 100);
 		//
 		SystemHelper.println(new Integer[] { 1, 2, 3 });
 	}
 
+	/**
+	 * Println.
+	 */
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
+	public void printlnMemory() {
+		SystemHelper.printlnMemory(new Kryo());
+	}
 }
