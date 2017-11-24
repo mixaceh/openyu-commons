@@ -65,4 +65,14 @@ public class MemoryHelperTest extends BaseTestSupporter {
 		System.out.println("StringBuilder mem size: " + result + " bytes, " + ByteUnit.BYTE.toKB(result) + " KB");
 	}
 
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	public void println() {
+		MemoryHelper.println("Test");
+		MemoryHelper.println("Title: ", 100);
+		//
+		MemoryHelper.println(new Integer[] { 1, 2, 3 });
+		MemoryHelper.println(new byte[] { 1, 2, 3 });
+		MemoryHelper.println(new Kryo());
+	}
 }

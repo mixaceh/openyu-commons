@@ -94,24 +94,4 @@ public class SystemHelperTest extends BaseTestSupporter {
 		assertFalse(result);
 	}
 
-	/**
-	 * Println.
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
-	public void println() {
-		SystemHelper.println("Test");
-		SystemHelper.println("Title: ", 100);
-		//
-		SystemHelper.println(new Integer[] { 1, 2, 3 });
-	}
-
-	/**
-	 * Println.
-	 */
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
-	public void printlnMemory() {
-		SystemHelper.printlnMemory(new Kryo());
-	}
 }

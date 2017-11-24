@@ -121,8 +121,6 @@ public final class SystemHelper extends BaseHelperSupporter {
 	/** The Constant USER_NAME. */
 	public static final String USER_NAME = getProperty("user.name");
 
-	private final static String MEMORY_PATTERN = "{0} bytes, {1} KB, {2} MB";
-
 	private SystemHelper() {
 		throw new HelperException(
 				new StringBuilder().append(SystemHelper.class.getName()).append(" can not construct").toString());
@@ -411,8 +409,7 @@ public final class SystemHelper extends BaseHelperSupporter {
 	}
 
 	public static <T> void println(String title, final T[] values) {
-		System.out.print(title);
-		System.out.println(ObjectHelper.toString(values));
+		println(title, ObjectHelper.toString(values));
 	}
 
 	public static void println(final byte[] values) {
@@ -420,38 +417,6 @@ public final class SystemHelper extends BaseHelperSupporter {
 	}
 
 	public static void println(String title, final byte[] values) {
-		System.out.print(title);
-		System.out.println(ObjectHelper.toString(values));
-	}
-
-	/**
-	 * PrintlnMemory.
-	 *
-	 * @param <T>
-	 *            the generic type
-	 * @param value
-	 *            the value
-	 */
-	public static <T> void printlnMemory(final T value) {
-		printlnMemory("", value);
-	}
-
-	/**
-	 * PrintlnMemory.
-	 *
-	 * @param <T>
-	 *            the generic type
-	 * @param title
-	 *            the title
-	 * @param value
-	 *            the value
-	 */
-	public static <T> void printlnMemory(String title, final T value) {
-		double bytes = MemoryHelper.sizeOf(value);
-		double kb = NumberHelper.round(ByteUnit.BYTE.toKiB(bytes), 1);
-		double mb = NumberHelper.round(ByteUnit.BYTE.toMiB(bytes), 1);
-		//
-		System.out.print(title);
-		System.out.println(MessageFormat.format(MEMORY_PATTERN, bytes, kb, mb, 1));
+		println(title, ObjectHelper.toString(values));
 	}
 }
