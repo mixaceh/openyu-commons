@@ -1,5 +1,7 @@
 package org.openyu.commons.freemarker;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.HashMap;
@@ -7,12 +9,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
+import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 
@@ -20,6 +23,10 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 
 public class FreeMarkerTest extends BaseTestSupporter {
+
+	@Rule
+	public BenchmarkRule benchmarkRule = new BenchmarkRule();
+
 	private static Configuration freemarkerConfiguration;
 
 	@BeforeClass
@@ -30,6 +37,13 @@ public class FreeMarkerTest extends BaseTestSupporter {
 		});
 
 		freemarkerConfiguration = (Configuration) applicationContext.getBean("freemarkerConfiguration");
+	}
+
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
+	public void freemarkerConfiguration() {
+		System.out.println(freemarkerConfiguration);
+		assertNotNull(freemarkerConfiguration);
 	}
 
 	@Test
