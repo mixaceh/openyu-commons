@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<bean
+		id="dataSourceConfig"
+		class="com.zaxxer.hikari.HikariConfig">
+		<property
+			name="poolName"
+			value="dataSource" />
+		<property
+			name="connectionTestQuery"
+			value="SELECT 1" />
+		<property
+			name="dataSourceClassName"
+			value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
+		<property
+			name="readOnly"
+			value="false" />
+		<property
+			name="connectionTimeout"
+			value="60000" />
+		<property
+			name="idleTimeout"
+			value="60000" />
+		<property
+			name="maxLifetime"
+			value="180000" />
+		<property
+			name="maximumPoolSize"
+			value="350" />
+		<property name="dataSourceProperties">
+			<props>
+				<prop key="url">jdbc:mysql://localhost:3306/commons</prop>
+				<prop key="user">root</prop>
+				<prop key="password">1111</prop>
+
+				<prop key="useUnicode">yes</prop>
+				<prop key="characterEncoding">UTF-8</prop>
+				<prop key="pinGlobalTxToPhysicalConnection">true</prop>
+				<prop key="autoReconnect">true</prop>
+				<prop key="useSSL">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean
+		id="dataSourceTarget"
+		class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="shutdown">
+		<constructor-arg ref="dataSourceConfig" />
+	</bean>
+
+	<bean
+		id="dataSource"
+		class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource">
+			<ref bean="dataSourceTarget" />
+		</property>
+	</bean>
+
+	<bean
+		id="jdbcTemplate"
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+
+
+</beans>
