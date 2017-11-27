@@ -4,7 +4,6 @@ import java.text.MessageFormat;
 
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
-import org.openyu.commons.lang.BooleanHelper;
 import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.util.memory.MemoryCounter;
 
@@ -62,7 +61,7 @@ public final class MemoryHelper extends BaseHelperSupporter {
 		double mb = NumberHelper.round(ByteUnit.BYTE.toMiB(bytes), 1);
 		//
 		System.out.print(title);
-		System.out.println(MessageFormat.format(MEMORY_PATTERN, bytes, kb, mb, 1));
+		System.out.println(MessageFormat.format(MEMORY_PATTERN, bytes, kb, mb));
 	}
 
 }
