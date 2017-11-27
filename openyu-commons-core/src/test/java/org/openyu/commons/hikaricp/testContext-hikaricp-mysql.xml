@@ -33,7 +33,7 @@
 			value="180000" />
 		<property
 			name="maximumPoolSize"
-			value="350" />
+			value="10" />
 		<property name="dataSourceProperties">
 			<props>
 				<prop key="url">jdbc:mysql://localhost:3306/commons</prop>
