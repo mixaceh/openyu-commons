@@ -25,7 +25,7 @@ public class BaseTestSupporterTest {
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
 	// round: 0.00
-	public void printBeans() throws Exception {
+	public void printBean() throws Exception {
 		//
 		final int COUNT = 10000;
 		for (int i = 0; i < COUNT; i++) {

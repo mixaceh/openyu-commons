@@ -46,6 +46,7 @@ import org.openyu.commons.util.AssertHelper;
 import org.openyu.commons.util.ByteUnit;
 import org.openyu.commons.util.CalendarHelper;
 import org.openyu.commons.util.DateHelper;
+import org.openyu.commons.util.MemoryHelper;
 
 /**
  * The Class BaseTestSupporter.
@@ -528,12 +529,14 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 		//
 		RuntimeHelper.gc();
 		usedMemory = Math.max(usedMemory, (RuntimeHelper.usedMemory() - memory));
-		double usedMemoryMB = NumberHelper.round(ByteUnit.BYTE.toMB(usedMemory), 2);
+		double kb = NumberHelper.round(ByteUnit.BYTE.toKiB(usedMemory), 1);
+		double mb = NumberHelper.round(ByteUnit.BYTE.toMiB(usedMemory), 1);
+		double sizeOf = NumberHelper.round(ByteUnit.BYTE.toMiB(MemoryHelper.sizeOf(applicationContext)), 1);
 		//
 		System.out.println("=========================================");
-		final String sumaryPattern = "count: {0}, time: {1} mills., {2} bytes ({3} MB) memory used";
+		final String MEMORY_PATTERN = "count: {0}, time: {1} mills., {2} bytes, {3} KB, {4} MB, sizeOf: {5} MB memory used";
 		StringBuilder msg = new StringBuilder(
-				MessageFormat.format(sumaryPattern, beanNames.length, durTime, usedMemory, usedMemoryMB));
+				MessageFormat.format(MEMORY_PATTERN, beanNames.length, durTime, usedMemory, kb, mb, sizeOf));
 		System.out.println(msg);
 	}
 
