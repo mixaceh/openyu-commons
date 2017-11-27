@@ -24,7 +24,7 @@ public class BasicDataSourceFactoryBeanTest extends BaseTestSupporter {
 	public static void setUpBeforeClass() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext(new String[] { //
 				"applicationContext-init.xml", //
-				"org/openyu/commons/commons/dbcp2/testContext-dbcp2.xml",//
+				"org/openyu/commons/commons/dbcp2/testContext-dbcp.xml",//
 
 		});
 		basicDataSource = applicationContext.getBean("basicDataSourceFactoryBean", BasicDataSource.class);
