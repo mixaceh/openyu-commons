@@ -73,7 +73,7 @@ public class BenchmarkDatabaseTestSupporter extends BaseTestSupporter {
 	public void createTable() throws Exception {
 		StringBuilder sql = new StringBuilder();
 		// sql.append(useMysql());
-		sql.append(useHsql());
+		sql.append(createTableWithHsql());
 		//
 		Connection connection = createConnection();
 		Statement stmt = connection.createStatement();
@@ -87,7 +87,7 @@ public class BenchmarkDatabaseTestSupporter extends BaseTestSupporter {
 	 * 
 	 * @return
 	 */
-	protected static String useMysql() {
+	protected static String createTableWithMysql() {
 		StringBuilder sql = new StringBuilder();
 		// mysql
 		sql.append("CREATE TABLE TEST_BENCHMARK ");
@@ -106,7 +106,7 @@ public class BenchmarkDatabaseTestSupporter extends BaseTestSupporter {
 	 * 
 	 * @return
 	 */
-	protected static String useHsql() {
+	protected static String createTableWithHsql() {
 		StringBuilder sql = new StringBuilder();
 		// hsql
 		sql.append("CREATE TABLE TEST_BENCHMARK ");
