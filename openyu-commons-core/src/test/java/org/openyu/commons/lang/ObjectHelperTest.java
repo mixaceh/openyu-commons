@@ -49,22 +49,14 @@ public class ObjectHelperTest extends BaseTestSupporter {
 	}
 
 	@Test
-	// 1000000 times: 92 mills.
-	// 1000000 times: 91 mills.
-	// 1000000 times: 90 mills.
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void equals() {
 		Class<?>[] x = new Class[] { String.class };
 		Class<?>[] y = new Class[] { String.class };
 
 		boolean result = false;
 
-		int count = 1000000;// 100w
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = ObjectHelper.equals(x, y);// true
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		result = ObjectHelper.equals(x, y);// true
 
 		System.out.println(result);
 		assertEquals(true, result);
@@ -83,45 +75,26 @@ public class ObjectHelperTest extends BaseTestSupporter {
 	}
 
 	@Test
-	// 1000000 times: 92 mills.
-	// 1000000 times: 91 mills.
-	// 1000000 times: 90 mills.
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void toStringz() {
 		double[] values = new double[] { 0d, 1d, 2d };
 
 		String result = null;
 
-		int count = 1;// 100w
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = ObjectHelper.toString(values);// 0.0, 1.0, 2.0
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
-
+		result = ObjectHelper.toString(values);// 0.0, 1.0, 2.0
 		System.out.println(result);
 		assertEquals("0.0, 1.0, 2.0", result);
-		//
-
 	}
 
 	@Test
-	// 1000000 times: 92 mills.
-	// 1000000 times: 91 mills.
-	// 1000000 times: 90 mills.
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void toStringByArray() {
 		double[][] values = new double[][] { { 0d, 0d }, { 0d, 1d } };
 		// double[][][] values = new double[][][] { { { 0d, 0d }, { 0d, 1d } },
 		// { { 1d, 0d }, { 1d, 1d } } };
 		String result = null;
 
-		int count = 1000000;// 100w
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = ObjectHelper.toString(values);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		result = ObjectHelper.toString(values);
 
 		System.out.println(result);
 		assertEquals("0.0, 0.0, 0.0, 1.0", result);
