@@ -34,6 +34,7 @@ import org.openyu.commons.bean.SeqBean;
 import org.openyu.commons.entity.SeqEntity;
 import org.openyu.commons.enumz.EnumHelper;
 import org.openyu.commons.junit.BaseTest;
+import org.openyu.commons.lang.ArrayHelper;
 import org.openyu.commons.lang.BooleanHelper;
 import org.openyu.commons.lang.CharHelper;
 import org.openyu.commons.lang.ClassHelper;
@@ -255,9 +256,55 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 			Object[] expectedsArray = expecteds.toArray();
 			Object[] actualsArray = actuals.toArray();
 			for (int i = 0; i < expectedsArray.length; i++) {
-				Assert.assertEquals("collection first differed at entry [" + i + "]", expectedsArray[i],
-						actualsArray[i]);
+				Object expected = expectedsArray[i];
+				Object actual = actualsArray[i];
+				// 陣列
+				boolean isArray = ArrayHelper.isArray(expected);
+				if (isArray) {
+					assertArrayEquals(i, expected, actual);
+				} else {
+					Assert.assertEquals("differed at entry [" + i + "]", expected, actual);
+				}
 			}
+		}
+	}
+
+	protected static void assertArrayEquals(int index, Object expected, Object actual) {
+		if (expected instanceof boolean[]) {
+			Assert.assertArrayEquals("differed at entry [" + index + "]", ((boolean[]) expected),
+					((boolean[]) actual));
+		} else if (expected instanceof char[]) {
+			Assert.assertArrayEquals("differed at entry [" + index + "]", ((char[]) expected),
+					((char[]) actual));
+		} else if (expected instanceof byte[]) {
+			Assert.assertArrayEquals("differed at entry [" + index + "]", ((byte[]) expected),
+					((byte[]) actual));
+		} else if (expected instanceof short[]) {
+			Assert.assertArrayEquals("differed at entry [" + index + "]", ((short[]) expected),
+					((short[]) actual));
+		} else if (expected instanceof int[]) {
+			Assert.assertArrayEquals("differed at entry [" + index + "]", ((int[]) expected),
+					((int[]) actual));
+		} else if (expected instanceof long[]) {
+			Assert.assertArrayEquals("differed at entry [" + index + "]", ((long[]) expected),
+					((long[]) actual));
+		} else if (expected instanceof float[]) {
+			// While delta is the maximum difference (delta) between expected and actual for
+			// which both numbers are still considered equal.
+			// https://stackoverflow.com/questions/7554281/junit-assertions-make-the-assertion-between-floats
+
+			float delta = 0.0f;
+			Assert.assertArrayEquals("differed at entry [" + index + "]", ((float[]) expected),
+					((float[]) actual), delta);
+
+		} else if (expected instanceof double[]) {
+			double delta = 0.0d;
+			Assert.assertArrayEquals("differed at entry [" + index + "]", ((double[]) expected),
+					((double[]) actual), delta);
+
+		} else if (expected instanceof Object[]) {
+			Assert.assertArrayEquals("differed at entry [" + index + "]", ((Object[]) expected),
+					((Object[]) actual));
 		}
 	}
 
@@ -296,11 +343,24 @@ public class BaseTestSupporter implements BaseTest, Supporter {
 				K expectedKey = (K) expectedsKeyArray[i];
 				@SuppressWarnings("unchecked")
 				K actualKey = (K) actualsKeyArray[i];
-				Assert.assertEquals("map first differed at key", expectedKey, actualKey);
+				// 陣列
+				boolean isArrayExpectedKey = ArrayHelper.isArray(expectedKey);
+				if (isArrayExpectedKey) {
+					assertArrayEquals(i, expectedKey, actualKey);
+				} else {
+					Assert.assertEquals("differed at key", expectedKey, actualKey);
+				}
+
 				// value
 				V expectedValue = expecteds.get(expectedKey);
 				V actualValue = actuals.get(actualKey);
-				Assert.assertEquals("map first differed at value [" + expectedKey + "]", expectedValue, actualValue);
+				// 陣列
+				boolean isArrayExpectedValue = ArrayHelper.isArray(expectedValue);
+				if (isArrayExpectedValue) {
+					assertArrayEquals(i, expectedValue, actualValue);
+				} else {
+					Assert.assertEquals("differed at value [" + expectedKey + "]", expectedValue, actualValue);
+				}
 			}
 		}
 	}
