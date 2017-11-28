@@ -13,6 +13,7 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import com.esotericsoftware.kryo.Kryo;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
+import org.openyu.commons.lang.ByteHelper;
 import org.openyu.commons.lang.NumberHelper;
 
 public class SerializeHelperTest extends BaseTestSupporter {
@@ -20,47 +21,87 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	public static LinkedList<String> mockLinkedList() {
-		LinkedList<String> result = new LinkedList<String>();
+	public static List<Object> mockLinkedList() {
+		LinkedList<Object> result = new LinkedList<Object>();
 		result.add("TEST_STRING");
 		result.add("測試字串");
-		result.add(new String(new byte[307200]));// 300k
+		result.add(new String(new byte[307200]));// 300K
+		//
+		result.add(ByteHelper.randomByteArray(10 * 1024 * 1024));// 10M
+		result.add(new short[] { 1, 2, 3 });
+		result.add(new int[] { 10, 20, 30 });
+		result.add(new long[] { 100L, 200L, 300L });
+		result.add(new float[] { 1000f, 2000f, 3000f });
+		result.add(new double[] { 10000d, 20000d, 30000d });
+		//
+		result.add(new Integer[] { 1, 2, 3 });
 		return result;
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 1, concurrency = 10)
 	@Test
-	// round: 0.99 [+- 0.10], round.block: 0.00 [+- 0.01], round.gc: 0.00 [+-
-	// 0.00], GC.calls: 7, GC.time: 0.05, time.total: 1.06, time.warmup: 0.00,
-	// time.bench: 1.06
+	// round: 6.45 [+- 2.00], round.block: 0.04 [+- 0.03], round.gc: 0.00 [+- 0.00],
+	// GC.calls: 1, GC.time: 0.02, time.total: 7.78, time.warmup: 0.00, time.bench:
+	// 7.78
+	public void bufferSize() {
+		List<Object> value = mockLinkedList();
+		//
+		int result = SerializeHelper.bufferSize(value);
+		// 10485896 bytes, 10240.1328125 K, 10.000129699707031 MB
+		// 11100328 bytes, 10840.1640625 K, 10.586097717285156 MB
+		System.out.println(
+				result + " bytes, " + ByteUnit.BYTE.toKiB(result) + " K, " + ByteUnit.BYTE.toMiB(result) + " MB");
+		//
+		result = SerializeHelper.bufferSize(new byte[0]);
+		System.out.println(result + " bytes");
+	}
+
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 1, concurrency = 10)
+	@Test
+	// round: 6.23 [+- 1.90], round.block: 0.04 [+- 0.05], round.gc: 0.00 [+- 0.00],
+	// GC.calls: 2, GC.time: 0.04, time.total: 7.61, time.warmup: 0.00, time.bench:
+	// 7.61
 	public void jdk() {
-		List<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] result = null;
 		//
 		result = SerializeHelper.jdk(value);
 		//
-		System.out.println(result.length);// 614486
-		// System.out.println(new String(result));
+		System.out.println(result.length);// 11100269
+	}
+
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 1, concurrency = 10)
+	@Test
+	// round: 4.46 [+- 1.43], round.block: 0.04 [+- 0.02], round.gc: 0.00 [+- 0.00],
+	// GC.calls: 3, GC.time: 0.06, time.total: 5.01, time.warmup: 0.02, time.bench:
+	// 5.00
+	public void jdkWithBufferSize() {
+		List<Object> value = mockLinkedList();
+		byte[] result = null;
+		//
+		result = SerializeHelper.jdk(value, 4096);// 不會爆掉
+		//
+		System.out.println(result.length);// 11100269
 	}
 
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 1, concurrency = 1)
 	@Test(expected = IllegalArgumentException.class)
 	public void jdkException() {
-		List<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		//
 		SerializeHelper.jdk(value, null);
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 1, concurrency = 10)
 	@Test
-	// round: 1.01 [+- 0.10], round.block: 0.01 [+- 0.02], round.gc: 0.00 [+-
-	// 0.00], GC.calls: 9, GC.time: 0.05, time.total: 1.10, time.warmup: 0.00,
-	// time.bench: 1.10
+	// round: 8.54 [+- 2.77], round.block: 0.14 [+- 0.10], round.gc: 0.00 [+- 0.00],
+	// GC.calls: 3, GC.time: 0.11, time.total: 9.49, time.warmup: 0.00, time.bench:
+	// 9.49
 	public void dejdk() {
-		List<String> list = mockLinkedList();
+		List<Object> list = mockLinkedList();
 		byte[] value = SerializeHelper.jdk(list);
 
-		List<String> result = null;
+		List<Object> result = null;
 		//
 		result = SerializeHelper.dejdk(value);
 		System.out.println(result.size());
@@ -74,7 +115,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	// 0.00], GC.calls: 5, GC.time: 0.05, time.total: 0.95, time.warmup: 0.01,
 	// time.bench: 0.94
 	public void ___fst2() {
-		LinkedList<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] result = null;
 		//
 		result = SerializeHelper.___fst2(value);
@@ -90,7 +131,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	// 0.00], GC.calls: 14, GC.time: 0.35, time.total: 1.31, time.warmup: 0.00,
 	// time.bench: 1.31
 	public void ___defst2() {
-		LinkedList<String> list = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] value = SerializeHelper.___fst2(list);
 		List<String> result = null;
 		//
@@ -107,7 +148,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	// 0.00], GC.calls: 6, GC.time: 0.05, time.total: 0.96, time.warmup: 0.00,
 	// time.bench: 0.96
 	public void fst() {
-		LinkedList<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] result = null;
 		//
 		result = SerializeHelper.fst(value);
@@ -137,7 +178,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	@Test
 	// round: 1.28, GC: 80
 	public void jgroup() {
-		LinkedList<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] result = null;
 		//
 		result = SerializeHelper.jgroup(value);
@@ -159,115 +200,128 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		assertCollectionEquals(list, result);
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 1, concurrency = 10)
 	@Test
-	// round: 0.95 [+- 0.10], round.block: 0.05 [+- 0.02], round.gc: 0.00 [+-
-	// 0.00], GC.calls: 6, GC.time: 0.04, time.total: 0.99, time.warmup: 0.00,
-	// time.bench: 0.99
+	// round: 8.86 [+- 0.64], round.block: 0.04 [+- 0.03], round.gc: 0.00 [+- 0.00],
+	// GC.calls: 3, GC.time: 0.05, time.total: 9.25, time.warmup: 0.00, time.bench:
+	// 9.25
 	public void kryo() {
-		LinkedList<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] result = null;
 		//
 		result = SerializeHelper.kryo(new Kryo(), value);
 		//
-		System.out.println(result.length);// 307235
-		// System.out.println(new String(result));
+		System.out.println(result.length);// 10793004
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 0, concurrency = 100)
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 0, concurrency = 10)
 	@Test
-	// round: 1.03 [+- 0.01], round.block: 0.06 [+- 0.02], round.gc: 0.00 [+-
-	// 0.00], GC.calls: 5, GC.time: 0.04, time.total: 1.05, time.warmup: 0.00,
-	// time.bench: 1.05
+	// 2017/11/28
+	// round: 4.66 [+- 0.16], round.block: 0.05 [+- 0.04], round.gc: 0.00 [+- 0.00],
+	// GC.calls: 3, GC.time: 0.07, time.total: 4.76, time.warmup: 0.00, time.bench:
+	// 4.76
 	public void kryoWithBufferSize() {
-		LinkedList<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] result = null;
 		//
-		double sizeOf = MemoryHelper.sizeOf(value);
-		int bufferSize = NumberHelper.toInt(sizeOf) + 128;
+		int bufferSize = SerializeHelper.bufferSize(value);
 		result = SerializeHelper.kryo(new Kryo(), value, bufferSize);
 		//
-		System.out.println(result.length);// 307235
-		// System.out.println(new String(result));
+		System.out.println(result.length);// 10793004
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 1, concurrency = 10)
 	@Test
 	// round: 1.02 [+- 0.10], round.block: 0.12 [+- 0.02], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 7, GC.time: 0.04, time.total: 1.07, time.warmup: 0.00,
 	// time.bench: 1.07
+
+	// round: 6.27 [+- 1.76], round.block: 0.03 [+- 0.02], round.gc: 0.00 [+- 0.00],
+	// GC.calls: 4, GC.time: 0.07, time.total: 7.52, time.warmup: 0.00, time.bench:
+	// 7.52
 	public void dekryo() {
-		LinkedList<String> list = mockLinkedList();
+		List<Object> list = mockLinkedList();
 		byte[] value = SerializeHelper.kryo(new Kryo(), list);
 
-		List<String> result = null;
+		List<Object> result = null;
 		//
 		result = SerializeHelper.dekryo(new Kryo(), value, LinkedList.class);
 		//
-		System.out.println(result.size());
+		System.out.println(result.size());// 4
 		assertCollectionEquals(list, result);
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 1, concurrency = 10)
 	@Test
 	// round: 1.02 [+- 0.10], round.block: 0.12 [+- 0.02], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 7, GC.time: 0.04, time.total: 1.07, time.warmup: 0.00,
 	// time.bench: 1.07
+
+	// round: 5.70 [+- 1.81], round.block: 0.02 [+- 0.02], round.gc: 0.00 [+- 0.00],
+	// GC.calls: 4, GC.time: 0.07, time.total: 7.24, time.warmup: 0.00, time.bench:
+	// 7.24
 	public void dekryoWithBufferSize() {
-		LinkedList<String> list = mockLinkedList();
+		List<Object> list = mockLinkedList();
 		byte[] value = SerializeHelper.kryo(new Kryo(), list);
 
-		List<String> result = null;
+		List<Object> result = null;
 		//
-		int bufferSize = value.length + 128;
+		int bufferSize = SerializeHelper.bufferSize(value);
 		result = SerializeHelper.dekryo(new Kryo(), value, bufferSize, LinkedList.class);
 		//
 		System.out.println(result.size());
 		assertCollectionEquals(list, result);
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 1, concurrency = 10)
 	@Test
 	// round: 0.80 [+- 0.08], round.block: 0.03 [+- 0.01], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 4, GC.time: 0.01, time.total: 0.82, time.warmup: 0.00,
 	// time.bench: 0.82
+
+	// 2017/11/24
+	// round: 7.20 [+- 1.48], round.block: 0.03 [+- 0.04], round.gc: 0.00 [+- 0.00],
+	// GC.calls: 3, GC.time: 0.05, time.total: 8.03, time.warmup: 0.00, time.bench:
+	// 8.03
 	public void kryoWriteClass() {
-		LinkedList<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] result = null;
 		//
 		result = SerializeHelper.kryoWriteClass(new Kryo(), value);
 		//
-		System.out.println(result.length);// 307257
-		// System.out.println(new String(result));
+		System.out.println(result.length);// 10793137
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 0, concurrency = 100)
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 0, concurrency = 10)
 	@Test
-	// round: 1.03 [+- 0.01], round.block: 0.06 [+- 0.02], round.gc: 0.00 [+-
-	// 0.00], GC.calls: 5, GC.time: 0.04, time.total: 1.05, time.warmup: 0.00,
-	// time.bench: 1.05
+	// round: 5.31 [+- 1.91], round.block: 0.05 [+- 0.03], round.gc: 0.00 [+- 0.00],
+	// GC.calls: 3, GC.time: 0.06, time.total: 6.66, time.warmup: 0.00, time.bench:
+	// 6.66
 	public void kryoWriteClassWithBufferSize() {
-		LinkedList<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] result = null;
 		//
-		double sizeOf = MemoryHelper.sizeOf(value);
-		int bufferSize = NumberHelper.toInt(sizeOf) + 128;
+		int bufferSize = SerializeHelper.bufferSize(value);
 		result = SerializeHelper.kryoWriteClass(new Kryo(), value, bufferSize);
 		//
-		System.out.println(result.length);// 307257
-		// System.out.println(new String(result));
+		System.out.println(result.length);// 10793137
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 1, concurrency = 10)
 	@Test
 	// round: 1.02 [+- 0.10], round.block: 0.11 [+- 0.03], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 7, GC.time: 0.05, time.total: 1.07, time.warmup: 0.00,
 	// time.bench: 1.07
+
+	// 2017/11/28
+	// round: 4.49 [+- 1.44], round.block: 0.15 [+- 0.19], round.gc: 0.00 [+- 0.00],
+	// GC.calls: 4, GC.time: 0.10, time.total: 5.11, time.warmup: 0.00, time.bench:
+	// 5.11
 	public void dekryoReadClass() {
-		LinkedList<String> list = mockLinkedList();
+		List<Object> list = mockLinkedList();
 		byte[] value = SerializeHelper.kryoWriteClass(new Kryo(), list);
 
-		List<String> result = null;
+		List<Object> result = null;
 		//
 		result = SerializeHelper.dekryoReadClass(new Kryo(), value);
 		//
@@ -275,38 +329,39 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		assertCollectionEquals(list, result);
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	@BenchmarkOptions(benchmarkRounds = 10, warmupRounds = 1, concurrency = 10)
 	@Test
 	// round: 1.01 [+- 0.10], round.block: 0.03 [+- 0.01], round.gc: 0.00 [+-
 	// 0.00], GC.calls: 3, GC.time: 0.01, time.total: 1.02, time.warmup: 0.01,
 	// time.bench: 1.02
+
+	// round: 5.49 [+- 1.89], round.block: 0.04 [+- 0.04], round.gc: 0.00 [+- 0.00],
+	// GC.calls: 4, GC.time: 0.07, time.total: 7.15, time.warmup: 0.00, time.bench:
+	// 7.15
 	public void dekryoReadClassWithBufferSize() {
-		LinkedList<String> list = mockLinkedList();
+		List<Object> list = mockLinkedList();
 		byte[] value = SerializeHelper.kryoWriteClass(new Kryo(), list);
 
-		List<String> result = null;
+		List<Object> result = null;
 		//
-		int bufferSize = value.length + 128;
+		int bufferSize = SerializeHelper.bufferSize(value);
 		result = SerializeHelper.dekryoReadClass(new Kryo(), value, bufferSize);
 		//
 		System.out.println(result.size());
 		assertCollectionEquals(list, result);
 	}
 
-	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
+	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 1, concurrency = 1)
 	@Test
 	// round: 10.91, GC: 205
 	public void jackson() {
-		LinkedList<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] result = null;
 		//
-		int count = 500;
-		for (int i = 0; i < count; i++) {
-			result = SerializeHelper.jackson(value);
-		}
+		result = SerializeHelper.jackson(value);
 		//
-		System.out.println(result.length + " ," + result);// 1,843,233 bytes
-		System.out.println(new String(result));
+		System.out.println(result.length);// 1,843,233 bytes
+		// System.out.println(new String(result));
 	}
 
 	@BenchmarkOptions(benchmarkRounds = 3, warmupRounds = 2, concurrency = 1)
@@ -331,7 +386,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	@Test
 	// round: 0.44, GC: 33
 	public void smile() {
-		LinkedList<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] result = null;
 		//
 		int count = 500;
@@ -365,7 +420,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	@Test
 	// round: 0.40, GC: 37
 	public void smileJaxrs() {
-		LinkedList<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] result = null;
 		//
 		int count = 500;
@@ -401,7 +456,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	// 0.00], GC.calls: 3, GC.time: 0.03, time.total: 0.64, time.warmup: 0.00,
 	// time.bench: 0.64
 	public void serializeWithProcessor() {
-		LinkedList<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] result = null;
 		//
 		result = SerializeHelper.serializeWithProcessor(value);
@@ -416,7 +471,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	// 0.00], GC.calls: 4, GC.time: 0.04, time.total: 0.74, time.warmup: 0.00,
 	// time.bench: 0.74
 	public void deserializeWithProcessor() {
-		LinkedList<String> value = mockLinkedList();
+		List<Object> value = mockLinkedList();
 		byte[] serialize = SerializeHelper.serializeWithProcessor(value);
 
 		List<String> result = null;

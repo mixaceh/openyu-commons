@@ -112,6 +112,19 @@ public final class SerializeHelper extends BaseHelperSupporter {
 
 	}
 
+	public static int bufferSize(Object value) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		long sizeOf = MemoryHelper.sizeOf(value);
+		return NumberHelper.toInt(sizeOf + 64);
+	}
+
+	public static int bufferSize(byte[] value) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		return value.length;
+	}
+
 	/**
 	 * jdk 序列化
 	 * 
@@ -123,10 +136,26 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	public static byte[] jdk(Object value) {
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
+		int bufferSize = bufferSize(value);
+		return jdk(value, bufferSize);
+	}
+
+	/**
+	 * jdk 序列化
+	 * 
+	 * object -> byte[]
+	 * 
+	 * @param value
+	 * @param bufferSize
+	 * @return
+	 */
+	public static byte[] jdk(Object value, int bufferSize) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
 		byte[] result = new byte[0];
 		ByteArrayOutputStream baos = null;
 		try {
-			baos = new ByteArrayOutputStream();
+			baos = new ByteArrayOutputStream(bufferSize);
 			boolean serialized = jdk(value, baos);
 			if (serialized) {
 				result = baos.toByteArray();
@@ -506,10 +535,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		AssertHelper.notNull(kryo, "The Kryo must not be null");
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
-		double sizeOf = MemoryHelper.sizeOf(value);
-		AssertHelper.isTrue(sizeOf > 0, "The SizeOf must be greater than zero");
-		//
-		int bufferSize = NumberHelper.toInt(sizeOf) + 128;
+		int bufferSize = bufferSize(value);
 		return kryo(kryo, value, bufferSize);
 	}
 
@@ -595,7 +621,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		AssertHelper.notNull(value, "The Value must not be null");
 		AssertHelper.notNull(clazz, "The Class must not be null");
 		//
-		int bufferSize = value.length + 128;
+		int bufferSize = bufferSize(value);
 		return dekryo(kryo, value, bufferSize, clazz);
 	}
 
@@ -638,6 +664,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 
 	 * byte[] -> object
 	 * 
+	 * @param kryo
 	 * @param in
 	 * @param bufferSize
 	 * @param clazz
@@ -662,6 +689,17 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
+	/**
+	 * kryo 序列化
+	 * 
+	 * 也會把class資訊一同序列化
+	 * 
+	 * object -> byte[]
+	 * 
+	 * @param kryo
+	 * @param value
+	 * @return
+	 */
 	public static byte[] kryoWriteClass(Kryo kryo, Object value) {
 		AssertHelper.notNull(kryo, "The Kryo must not be null");
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -680,6 +718,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 
 	 * object -> byte[]
 	 * 
+	 * @param kryo
 	 * @param value
 	 * @param bufferSize
 	 * @return
@@ -711,6 +750,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 
 	 * object -> byte[]
 	 * 
+	 * @param kryo
 	 * @param value
 	 * @param out
 	 * @param bufferSize
@@ -736,6 +776,17 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
+	/**
+	 * kryo 反序列化
+	 * 
+	 * 也會把class資訊一同反序列化, 不需指定反序列化class
+	 * 
+	 * byte[] -> object
+	 * 
+	 * @param kryo
+	 * @param value
+	 * @return
+	 */
 	public static <T> T dekryoReadClass(Kryo kryo, byte[] value) {
 		AssertHelper.notNull(kryo, "The Kryo must not be null");
 		AssertHelper.notNull(value, "The Value must not be null");
@@ -751,6 +802,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 
 	 * byte[] -> object
 	 * 
+	 * @param kryo
 	 * @param value
 	 * @param bufferSize
 	 * @return
@@ -779,6 +831,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 
 	 * byte[] -> object
 	 * 
+	 * @param kryo
 	 * @param in
 	 * @param bufferSize
 	 * @return
@@ -810,13 +863,32 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static byte[] jackson(Object value) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		double sizeOf = MemoryHelper.sizeOf(value);
+		AssertHelper.isTrue(sizeOf > 0, "The SizeOf must be greater than zero");
+		//
+		int bufferSize = NumberHelper.toInt(sizeOf) + 128;
+		return jackson(value, bufferSize);
+	}
+
+	/**
+	 * jackson 序列化
+	 * 
+	 * object -> byte[]
+	 * 
+	 * @param value
+	 * @param bufferSize
+	 * @return
+	 */
+	public static byte[] jackson(Object value, int bufferSize) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		ByteArrayOutputStream baos = null;
 		try {
-			baos = new ByteArrayOutputStream();
+			baos = new ByteArrayOutputStream(bufferSize);
 			boolean serialized = jackson(value, baos);
 			if (serialized) {
 				result = baos.toByteArray();
