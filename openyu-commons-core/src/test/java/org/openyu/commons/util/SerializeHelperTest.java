@@ -10,8 +10,10 @@ import org.junit.Test;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+import com.esotericsoftware.kryo.Kryo;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
+import org.openyu.commons.lang.NumberHelper;
 
 public class SerializeHelperTest extends BaseTestSupporter {
 
@@ -166,7 +168,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		LinkedList<String> value = mockLinkedList();
 		byte[] result = null;
 		//
-		result = SerializeHelper.kryo(value);
+		result = SerializeHelper.kryo(new Kryo(), value);
 		//
 		System.out.println(result.length);// 307235
 		// System.out.println(new String(result));
@@ -181,7 +183,9 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		LinkedList<String> value = mockLinkedList();
 		byte[] result = null;
 		//
-		result = SerializeHelper.kryo(value, 102400);
+		double sizeOf = MemoryHelper.sizeOf(value);
+		int bufferSize = NumberHelper.toInt(sizeOf) + 128;
+		result = SerializeHelper.kryo(new Kryo(), value, bufferSize);
 		//
 		System.out.println(result.length);// 307235
 		// System.out.println(new String(result));
@@ -194,11 +198,11 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	// time.bench: 1.07
 	public void dekryo() {
 		LinkedList<String> list = mockLinkedList();
-		byte[] value = SerializeHelper.kryo(list);
+		byte[] value = SerializeHelper.kryo(new Kryo(), list);
 
 		List<String> result = null;
 		//
-		result = SerializeHelper.dekryo(value, LinkedList.class);
+		result = SerializeHelper.dekryo(new Kryo(), value, LinkedList.class);
 		//
 		System.out.println(result.size());
 		assertCollectionEquals(list, result);
@@ -211,11 +215,12 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	// time.bench: 1.07
 	public void dekryoWithBufferSize() {
 		LinkedList<String> list = mockLinkedList();
-		byte[] value = SerializeHelper.kryo(list);
+		byte[] value = SerializeHelper.kryo(new Kryo(), list);
 
 		List<String> result = null;
 		//
-		result = SerializeHelper.dekryo(value, 102400, LinkedList.class);
+		int bufferSize = value.length + 128;
+		result = SerializeHelper.dekryo(new Kryo(), value, bufferSize, LinkedList.class);
 		//
 		System.out.println(result.size());
 		assertCollectionEquals(list, result);
@@ -230,7 +235,7 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		LinkedList<String> value = mockLinkedList();
 		byte[] result = null;
 		//
-		result = SerializeHelper.kryoWriteClass(value);
+		result = SerializeHelper.kryoWriteClass(new Kryo(), value);
 		//
 		System.out.println(result.length);// 307257
 		// System.out.println(new String(result));
@@ -245,7 +250,9 @@ public class SerializeHelperTest extends BaseTestSupporter {
 		LinkedList<String> value = mockLinkedList();
 		byte[] result = null;
 		//
-		result = SerializeHelper.kryoWriteClass(value, 102400);
+		double sizeOf = MemoryHelper.sizeOf(value);
+		int bufferSize = NumberHelper.toInt(sizeOf) + 128;
+		result = SerializeHelper.kryoWriteClass(new Kryo(), value, bufferSize);
 		//
 		System.out.println(result.length);// 307257
 		// System.out.println(new String(result));
@@ -258,11 +265,11 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	// time.bench: 1.07
 	public void dekryoReadClass() {
 		LinkedList<String> list = mockLinkedList();
-		byte[] value = SerializeHelper.kryoWriteClass(list);
+		byte[] value = SerializeHelper.kryoWriteClass(new Kryo(), list);
 
 		List<String> result = null;
 		//
-		result = SerializeHelper.dekryoReadClass(value);
+		result = SerializeHelper.dekryoReadClass(new Kryo(), value);
 		//
 		System.out.println(result.size());
 		assertCollectionEquals(list, result);
@@ -275,11 +282,12 @@ public class SerializeHelperTest extends BaseTestSupporter {
 	// time.bench: 1.02
 	public void dekryoReadClassWithBufferSize() {
 		LinkedList<String> list = mockLinkedList();
-		byte[] value = SerializeHelper.kryoWriteClass(list);
+		byte[] value = SerializeHelper.kryoWriteClass(new Kryo(), list);
 
 		List<String> result = null;
 		//
-		result = SerializeHelper.dekryoReadClass(value, 102400);
+		int bufferSize = value.length + 128;
+		result = SerializeHelper.dekryoReadClass(new Kryo(), value, bufferSize);
 		//
 		System.out.println(result.size());
 		assertCollectionEquals(list, result);

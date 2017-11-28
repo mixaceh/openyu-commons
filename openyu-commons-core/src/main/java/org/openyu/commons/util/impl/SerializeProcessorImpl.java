@@ -168,7 +168,7 @@ public class SerializeProcessorImpl extends BaseProcessorSupporter implements Se
 			break;
 		}
 		case KRYO: {
-			result = SerializeHelper.kryo(value);
+			result = SerializeHelper.kryoWriteClass(value);
 			break;
 		}
 		case JACKSON: {

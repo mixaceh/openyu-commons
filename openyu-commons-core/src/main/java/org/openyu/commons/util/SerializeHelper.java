@@ -23,6 +23,7 @@ import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.io.IoHelper;
 import org.openyu.commons.lang.ByteHelper;
+import org.openyu.commons.lang.NumberHelper;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -490,8 +491,26 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
-	public static byte[] kryo(Object value) {
-		return kryo(value, BUFFER_SIZE);
+	/**
+	 * kryo 序列化
+	 * 
+	 * 不會把class資訊一同序列化
+	 * 
+	 * object -> byte[]
+	 * 
+	 * @param kryo
+	 * @param value
+	 * @return
+	 */
+	public static byte[] kryo(Kryo kryo, Object value) {
+		AssertHelper.notNull(kryo, "The Kryo must not be null");
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		double sizeOf = MemoryHelper.sizeOf(value);
+		AssertHelper.isTrue(sizeOf > 0, "The SizeOf must be greater than zero");
+		//
+		int bufferSize = NumberHelper.toInt(sizeOf) + 128;
+		return kryo(kryo, value, bufferSize);
 	}
 
 	/**
@@ -501,17 +520,20 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 
 	 * object -> byte[]
 	 * 
+	 * @param kryo
 	 * @param value
+	 * @param bufferSize
 	 * @return
 	 */
-	public static byte[] kryo(Object value, int bufferSize) {
+	public static byte[] kryo(Kryo kryo, Object value, int bufferSize) {
+		AssertHelper.notNull(kryo, "The Kryo must not be null");
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		byte[] result = new byte[0];
 		ByteArrayOutputStream baos = null;
 		try {
-			baos = new ByteArrayOutputStream();
-			boolean serialized = kryo(value, baos, bufferSize);
+			baos = new ByteArrayOutputStream(bufferSize);
+			boolean serialized = kryo(kryo, value, baos, bufferSize);
 			if (serialized) {
 				result = baos.toByteArray();
 			}
@@ -523,10 +545,6 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
-	public static boolean kryo(Object value, OutputStream out) {
-		return kryo(value, out, BUFFER_SIZE);
-	}
-
 	/**
 	 * keyo 序列化
 	 * 
@@ -534,22 +552,22 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 
 	 * object -> byte[]
 	 * 
+	 * @param kryo
 	 * @param value
 	 * @param out
+	 * @param bufferSize
 	 * @return
 	 */
-	public static boolean kryo(Object value, OutputStream out, int bufferSize) {
+	public static boolean kryo(Kryo kryo, Object value, OutputStream out, int bufferSize) {
+		AssertHelper.notNull(kryo, "The Kryo must not be null");
 		AssertHelper.notNull(value, "The Value must not be null");
 		AssertHelper.notNull(out, "The OutputStream must not be null");
 		//
 		boolean result = false;
-		Kryo kryo = null;
 		Output output = null;
 		try {
-			kryo = new Kryo();
 			output = new Output(out, bufferSize);
 			kryo.writeObject(output, value);
-			output.flush();
 			result = true;
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during kryo()").toString(), e);
@@ -560,8 +578,25 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
-	public static <T> T dekryo(byte[] value, Class<?> clazz) {
-		return dekryo(value, BUFFER_SIZE, clazz);
+	/**
+	 * kryo 反序列化
+	 * 
+	 * 需指定反序列化class
+	 * 
+	 * byte[] -> object
+	 * 
+	 * @param kryo
+	 * @param value
+	 * @param clazz
+	 * @return
+	 */
+	public static <T> T dekryo(Kryo kryo, byte[] value, Class<?> clazz) {
+		AssertHelper.notNull(kryo, "The Kryo must not be null");
+		AssertHelper.notNull(value, "The Value must not be null");
+		AssertHelper.notNull(clazz, "The Class must not be null");
+		//
+		int bufferSize = value.length + 128;
+		return dekryo(kryo, value, bufferSize, clazz);
 	}
 
 	/**
@@ -571,20 +606,23 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 
 	 * byte[] -> object
 	 * 
+	 * @param kryo
 	 * @param value
 	 * @param bufferSize
 	 * @param clazz
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T dekryo(byte[] value, int bufferSize, Class<?> clazz) {
+	public static <T> T dekryo(Kryo kryo, byte[] value, int bufferSize, Class<?> clazz) {
+		AssertHelper.notNull(kryo, "The Kryo must not be null");
 		AssertHelper.notNull(value, "The Value must not be null");
+		AssertHelper.notNull(clazz, "The Class must not be null");
 		//
 		T result = null;
 		ByteArrayInputStream bais = null;
 		try {
 			bais = new ByteArrayInputStream(value);
-			result = (T) dekryo(bais, bufferSize, clazz);
+			result = (T) dekryo(kryo, bais, bufferSize, clazz);
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during dekryo()").toString(), e);
 		} finally {
@@ -601,34 +639,18 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * byte[] -> object
 	 * 
 	 * @param in
-	 * @param clazz
-	 * @return
-	 */
-	public static <T> T dekryo(InputStream in, Class<T> clazz) {
-		return dekryo(in, BUFFER_SIZE, clazz);
-	}
-
-	/**
-	 * kryo 反序列化
-	 * 
-	 * 需指定反序列化class
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param in
 	 * @param bufferSize
 	 * @param clazz
 	 * @return
 	 */
-	public static <T> T dekryo(InputStream in, int bufferSize, Class<T> clazz) {
+	public static <T> T dekryo(Kryo kryo, InputStream in, int bufferSize, Class<T> clazz) {
+		AssertHelper.notNull(kryo, "The Kryo must not be null");
 		AssertHelper.notNull(in, "The InputStream must not be null");
 		AssertHelper.notNull(clazz, "The Class must not be null");
 		//
 		T result = null;
-		Kryo kryo = null;
 		Input input = null;
 		try {
-			kryo = new Kryo();
 			input = new Input(in, bufferSize);
 			result = kryo.readObject(input, clazz);
 		} catch (Exception e) {
@@ -640,18 +662,15 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
-	/**
-	 * kryo 序列化
-	 * 
-	 * 也會把class資訊一同序列化
-	 * 
-	 * object -> byte[]
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static byte[] kryoWriteClass(Object value) {
-		return kryoWriteClass(value, BUFFER_SIZE);
+	public static byte[] kryoWriteClass(Kryo kryo, Object value) {
+		AssertHelper.notNull(kryo, "The Kryo must not be null");
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		double sizeOf = MemoryHelper.sizeOf(value);
+		AssertHelper.isTrue(sizeOf > 0, "The SizeOf must be greater than zero");
+		//
+		int bufferSize = NumberHelper.toInt(sizeOf) + 128;
+		return kryoWriteClass(kryo, value, bufferSize);
 	}
 
 	/**
@@ -665,14 +684,15 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param bufferSize
 	 * @return
 	 */
-	public static byte[] kryoWriteClass(Object value, int bufferSize) {
+	public static byte[] kryoWriteClass(Kryo kryo, Object value, int bufferSize) {
+		AssertHelper.notNull(kryo, "The Kryo must not be null");
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		byte[] result = new byte[0];
 		ByteArrayOutputStream baos = null;
 		try {
-			baos = new ByteArrayOutputStream();
-			boolean serialized = kryoWriteClass(value, baos, bufferSize);
+			baos = new ByteArrayOutputStream(bufferSize);
+			boolean serialized = kryoWriteClass(kryo, value, baos, bufferSize);
 			if (serialized) {
 				result = baos.toByteArray();
 			}
@@ -696,18 +716,16 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param bufferSize
 	 * @return
 	 */
-	public static boolean kryoWriteClass(Object value, OutputStream out, int bufferSize) {
+	public static boolean kryoWriteClass(Kryo kryo, Object value, OutputStream out, int bufferSize) {
+		AssertHelper.notNull(kryo, "The Kryo must not be null");
 		AssertHelper.notNull(value, "The Value must not be null");
 		AssertHelper.notNull(out, "The OutputStream must not be null");
 		//
 		boolean result = false;
-		Kryo kryo = null;
 		Output output = null;
 		try {
-			kryo = new Kryo();
 			output = new Output(out, bufferSize);
 			kryo.writeClassAndObject(output, value);
-			output.flush();
 			result = true;
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during kryoWriteClass()").toString(), e);
@@ -718,18 +736,12 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
-	/**
-	 * kryo 反序列化
-	 * 
-	 * 也會把class資訊一同反序列化, 不需指定反序列化class
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static <T> T dekryoReadClass(byte[] value) {
-		return dekryoReadClass(value, BUFFER_SIZE);
+	public static <T> T dekryoReadClass(Kryo kryo, byte[] value) {
+		AssertHelper.notNull(kryo, "The Kryo must not be null");
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		int bufferSize = value.length + 128;
+		return dekryoReadClass(kryo, value, bufferSize);
 	}
 
 	/**
@@ -743,14 +755,15 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param bufferSize
 	 * @return
 	 */
-	public static <T> T dekryoReadClass(byte[] value, int bufferSize) {
+	public static <T> T dekryoReadClass(Kryo kryo, byte[] value, int bufferSize) {
+		AssertHelper.notNull(kryo, "The Kryo must not be null");
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		T result = null;
 		ByteArrayInputStream bais = null;
 		try {
 			bais = new ByteArrayInputStream(value);
-			result = dekryoReadClass(bais, bufferSize);
+			result = dekryoReadClass(kryo, bais, bufferSize);
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during dekryoReadClass()").toString(), e);
 		} finally {
@@ -767,32 +780,17 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * byte[] -> object
 	 * 
 	 * @param in
-	 * @return
-	 */
-	public static <T> T dekryoReadClass(InputStream in) {
-		return dekryoReadClass(in, BUFFER_SIZE);
-	}
-
-	/**
-	 * kryo 反序列化
-	 * 
-	 * 也會把class資訊一同反序列化, 不需指定反序列化class
-	 * 
-	 * byte[] -> object
-	 * 
-	 * @param in
 	 * @param bufferSize
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T dekryoReadClass(InputStream in, int bufferSize) {
+	public static <T> T dekryoReadClass(Kryo kryo, InputStream in, int bufferSize) {
+		AssertHelper.notNull(kryo, "The Kryo must not be null");
 		AssertHelper.notNull(in, "The InputStream must not be null");
 		//
 		T result = null;
-		Kryo kryo = null;
 		Input input = null;
 		try {
-			kryo = new Kryo();
 			input = new Input(in, bufferSize);
 			result = (T) kryo.readClassAndObject(input);
 		} catch (Exception e) {
