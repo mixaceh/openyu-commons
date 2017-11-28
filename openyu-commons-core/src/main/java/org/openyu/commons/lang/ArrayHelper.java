@@ -323,12 +323,16 @@ public final class ArrayHelper extends BaseHelperSupporter {
 	public static <T> boolean isArray(final T value) {
 		boolean result = false;
 		if (value != null) {
-			Class<?> clazz = value.getClass().getComponentType();
-			if (clazz != null) {
-				result = true;
-			} else {
-				result = false;
-			}
+
+			// Class<?> clazz = value.getClass().getComponentType();
+			// if (clazz != null) {
+			// result = true;
+			// } else {
+			// result = false;
+			// }
+
+			//2017/11/28
+			result = value.getClass().isArray();
 		}
 		return result;
 	}
