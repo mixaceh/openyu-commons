@@ -1,13 +1,12 @@
 package org.openyu.commons.misc;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertArrayEquals;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import org.apache.poi.util.SystemOutLogger;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -356,7 +355,7 @@ public class UnsafeHelperTest extends BaseTestSupporter {
 		}
 		//
 		System.out.println(ByteHelper.toString(result));
-		assertArrayEquals(buf, result);
+		Assert.assertArrayEquals(buf, result);
 	}
 
 	@BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 1, concurrency = 1)

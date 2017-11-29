@@ -9,7 +9,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -252,6 +251,13 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
+	public static byte[] fstWithFactory(Object value) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		int bufferSize = bufferSize(value);
+		return fstWithFactory(value, bufferSize);
+	}
+
 	/**
 	 * fst 序列化
 	 * 
@@ -260,17 +266,18 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * 
 	 * object -> byte[]
 	 * 
+	 * @param bufferSize
 	 * @param value
 	 * @return
 	 */
-	public static byte[] ___fst2(Serializable value) {
+	public static byte[] fstWithFactory(Object value, int bufferSize) {
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		byte[] result = new byte[0];
 		ByteArrayOutputStream baos = null;
 		try {
-			baos = new ByteArrayOutputStream();
-			boolean serialized = ___fst2(value, baos);
+			baos = new ByteArrayOutputStream(bufferSize);
+			boolean serialized = fstWithFactory(value, baos);
 			if (serialized) {
 				result = baos.toByteArray();
 			}
@@ -294,7 +301,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param outputStream
 	 * @return
 	 */
-	public static boolean ___fst2(Serializable value, OutputStream outputStream) {
+	public static boolean fstWithFactory(Object value, OutputStream outputStream) {
 		AssertHelper.notNull(value, "The Value must not be null");
 		AssertHelper.notNull(outputStream, "The OutputStream must not be null");
 		//
@@ -305,7 +312,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			out.writeObject(value);
 			result = true;
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during ___fst2()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during fstWithFactory()").toString(), e);
 		} finally {
 			try {
 				if (out != null) {
@@ -329,16 +336,16 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static <T> T ___defst2(byte[] value) {
+	public static <T> T defstWithFactory(byte[] value) {
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		T result = null;
 		ByteArrayInputStream bais = null;
 		try {
 			bais = new ByteArrayInputStream(value);
-			result = ___defst2(bais);
+			result = defstWithFactory(bais);
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during ___defst2()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during defstWithFactory()").toString(), e);
 		} finally {
 			IoHelper.close(bais);
 		}
@@ -354,7 +361,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T ___defst2(InputStream inputStream) {
+	public static <T> T defstWithFactory(InputStream inputStream) {
 		AssertHelper.notNull(inputStream, "The InputStream must not be null");
 		//
 		T result = null;
@@ -363,7 +370,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			in = fstConfiguration.getObjectInput(inputStream);
 			result = (T) in.readObject();
 		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during ___defst2()").toString(), e);
+			LOGGER.error(new StringBuilder("Exception encountered during defstWithFactory()").toString(), e);
 		} finally {
 			// DON'T: in.close(); here prevents reuse and will result in an
 			// exception
@@ -380,13 +387,29 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @return
 	 */
 	public static byte[] fst(Object value) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		int bufferSize = bufferSize(value);
+		return fst(value, bufferSize);
+	}
+
+	/**
+	 * fst 序列化
+	 * 
+	 * object -> byte[]
+	 * 
+	 * @param value
+	 * @param bufferSize
+	 * @return
+	 */
+	public static byte[] fst(Object value, int bufferSize) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		ByteArrayOutputStream baos = null;
 		try {
-			baos = new ByteArrayOutputStream();
+			baos = new ByteArrayOutputStream(bufferSize);
 			boolean serialized = fst(value, baos);
 			if (serialized) {
 				result = baos.toByteArray();
@@ -417,7 +440,6 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		try {
 			output = new FSTObjectOutput(out);
 			output.writeObject(value);
-			output.flush();
 			result = true;
 		} catch (Exception e) {
 			LOGGER.error(new StringBuilder("Exception encountered during fst()").toString(), e);
@@ -865,10 +887,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	public static byte[] jackson(Object value) {
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
-		double sizeOf = MemoryHelper.sizeOf(value);
-		AssertHelper.isTrue(sizeOf > 0, "The SizeOf must be greater than zero");
-		//
-		int bufferSize = NumberHelper.toInt(sizeOf) + 128;
+		int bufferSize = bufferSize(value);
 		return jackson(value, bufferSize);
 	}
 
@@ -1001,7 +1020,8 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		//
 		ByteArrayInputStream bais = null;
 		try {
-			bais = new ByteArrayInputStream(ByteHelper.toByteArray(value));
+			byte[] bytes = ByteHelper.toByteArray(value);
+			bais = new ByteArrayInputStream(bytes);
 			result = (T) dejackson(bais, clazz);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -1011,22 +1031,30 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
+	public static byte[] smile(Object value) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		int bufferSize = bufferSize(value);
+		return smile(value, bufferSize);
+	}
+
 	/**
 	 * smile 序列化
 	 * 
 	 * object -> byte[]
 	 * 
+	 * @param bufferSize
 	 * @param value
 	 * @return
 	 */
-	public static byte[] smile(Object value) {
+	public static byte[] smile(Object value, int bufferSize) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		ByteArrayOutputStream baos = null;
 		try {
-			baos = new ByteArrayOutputStream();
+			baos = new ByteArrayOutputStream(bufferSize);
 			boolean serialized = smile(value, baos);
 			if (serialized) {
 				result = baos.toByteArray();
@@ -1122,6 +1150,13 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 
+	public static byte[] smileJaxrs(Object value) {
+		AssertHelper.notNull(value, "The Value must not be null");
+		//
+		int bufferSize = bufferSize(value);
+		return smileJaxrs(value, bufferSize);
+	}
+
 	/**
 	 * smile jaxrs序列化
 	 * 
@@ -1130,14 +1165,14 @@ public final class SerializeHelper extends BaseHelperSupporter {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] smileJaxrs(Object value) {
+	public static byte[] smileJaxrs(Object value, int bufferSize) {
 		byte[] result = new byte[0];
 		//
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
 		ByteArrayOutputStream baos = null;
 		try {
-			baos = new ByteArrayOutputStream();
+			baos = new ByteArrayOutputStream(bufferSize);
 			boolean serialized = smileJaxrs(value, baos);
 			if (serialized) {
 				result = baos.toByteArray();
@@ -1259,9 +1294,3 @@ public final class SerializeHelper extends BaseHelperSupporter {
 		return result;
 	}
 }
-
-// XMLOutputFactory2 xmlif = (XMLOutputFactory2) XMLOutputFactory2
-// .newInstance();
-// xmlif.configureForSpeed();
-// XMLEventWriter writer = xmlif
-// .createXMLEventWriter(outputStream);
