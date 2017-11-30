@@ -2,7 +2,6 @@ package org.openyu.commons.commons.pool.supporter;
 
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.ObjectPoolFactory;
-import org.openyu.commons.commons.pool.CacheCallback;
 import org.openyu.commons.commons.pool.CacheFactory;
 import org.openyu.commons.commons.pool.CacheableObjectFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
@@ -68,7 +67,6 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter impl
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		AssertHelper.notNull(cacheableObjectFactory, "The CacheableObjectFactory is required");
 	}
 
 	/**
@@ -112,31 +110,6 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter impl
 		}
 	}
 
-	public Object execute(CacheCallback<T> action) throws CacheException {
-		return doExecute(action);
-	}
-
-	protected Object doExecute(CacheCallback<T> action) throws CacheException {
-		Object result = null;
-		//
-		AssertHelper.notNull(action, "The CacheCallback must not be null");
-		//
-		T cache = null;
-		try {
-			cache = openCache();
-			result = action.doInAction(cache);
-			return result;
-		} catch (CacheException e) {
-			throw e;
-		} catch (Throwable e) {
-			throw new CacheException(e);
-		} finally {
-			if (cache != null) {
-				closeCache();
-			}
-		}
-	}
-
 	/**
 	 * 關閉
 	 * 
@@ -158,6 +131,11 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter impl
 		} catch (Exception ex) {
 			throw new CacheException("Cannot close pool", ex);
 		}
+	}
+
+	@Override
+	public boolean isClosed() {
+		return closed;
 	}
 
 	public synchronized void clear() throws CacheException {
@@ -185,7 +163,6 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter impl
 	public synchronized int getNumActive() {
 		return objectPool.getNumActive();
 	}
-
 }
 
 // private void cleanThreadLocals(Thread thread) throws NoSuchFieldException,
