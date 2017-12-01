@@ -49,7 +49,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		AssertHelper.notNull(hzSessionFactory, "The HzSessionFactory is required");
+		// AssertHelper.notNull(hzSessionFactsory, "The HzSessionFactory is required");
 	}
 
 	/**
@@ -367,7 +367,7 @@ public class HzTemplateImpl extends BaseServiceSupporter implements HzTemplate {
 
 	public boolean checkAndDelete(String tableName, final byte[] paramArrayOfByte1, final byte[] paramArrayOfByte2,
 			final byte[] paramArrayOfByte3, final byte[] paramArrayOfByte4, final Delete paramDelete)
-					throws IOException {
+			throws IOException {
 		return execute(tableName, new HzTableCallback<Boolean>() {
 			public Boolean doInAction(HTableInterface table) throws HzTemplateException {
 				try {

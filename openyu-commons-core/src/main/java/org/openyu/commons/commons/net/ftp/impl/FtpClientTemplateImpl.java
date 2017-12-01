@@ -7,15 +7,14 @@ import java.io.OutputStream;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
+import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 import org.openyu.commons.commons.net.ftp.FtpClientCallback;
 import org.openyu.commons.commons.net.ftp.FtpClientSession;
 import org.openyu.commons.commons.net.ftp.FtpClientSessionFactory;
 import org.openyu.commons.commons.net.ftp.FtpClientTemplate;
 import org.openyu.commons.commons.net.ftp.ex.FtpClientTemplateException;
-import org.openyu.commons.util.AssertHelper;
 
 public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpClientTemplate {
 
@@ -38,7 +37,8 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		AssertHelper.notNull(ftpClientSessionFactory, "The FtpClientSessionFactory is required");
+		// AssertHelper.notNull(ftpClientSessionFactory, "The FtpClientSessionFactory is
+		// required");
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	 * @throws FtpClientTemplateException
 	 */
 	protected <T> T doExecute(FtpClientCallback<T> action) throws FtpClientTemplateException {
-		Assert.notNull(action, "FtpClientCallback must not be null");
+		AssertHelper.notNull(action, "The FtpClientCallback must not be null");
 		//
 		T result = null;
 		FtpClientSession session = null;

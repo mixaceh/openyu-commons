@@ -56,10 +56,9 @@ public class CacheTemplateImpl<T> extends BaseServiceSupporter implements CacheT
 	}
 
 	protected Object doExecute(CacheCallback<T> action) throws CacheException {
-		Object result = null;
-		//
 		AssertHelper.notNull(action, "The CacheCallback must not be null");
 		//
+		Object result = null;
 		T cache = null;
 		try {
 			cache = openCache();
@@ -81,7 +80,7 @@ public class CacheTemplateImpl<T> extends BaseServiceSupporter implements CacheT
 	 */
 	@Override
 	protected void doStart() throws Exception {
-
+		// AssertHelper.notNull(cacheFactory, "The CacheFactory is required");
 	}
 
 	/**

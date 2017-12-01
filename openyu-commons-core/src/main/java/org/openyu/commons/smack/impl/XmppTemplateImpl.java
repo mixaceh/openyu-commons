@@ -11,7 +11,6 @@ import org.openyu.commons.smack.ex.XmppTemplateException;
 import org.openyu.commons.util.AssertHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.util.Assert;
 
 public class XmppTemplateImpl extends BaseServiceSupporter implements XmppTemplate {
 
@@ -34,7 +33,8 @@ public class XmppTemplateImpl extends BaseServiceSupporter implements XmppTempla
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		AssertHelper.notNull(xmppSessionFactory, "The XmppSessionFactory is required");
+		// AssertHelper.notNull(xmppSessionFactory, "The XmppSessionFactory is
+		// required");
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class XmppTemplateImpl extends BaseServiceSupporter implements XmppTempla
 	 * @throws XmppTemplateException
 	 */
 	protected <T> T doExecute(XmppCallback<T> action) throws XmppTemplateException {
-		Assert.notNull(action, "XmppCallback must not be null");
+		AssertHelper.notNull(action, "The XmppCallback must not be null");
 		//
 		T result = null;
 		XmppSession session = null;
