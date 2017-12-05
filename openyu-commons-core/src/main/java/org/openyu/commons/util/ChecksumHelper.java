@@ -9,7 +9,7 @@ import org.openyu.commons.commons.pool.CacheCallback;
 import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
 import org.openyu.commons.commons.pool.impl.SoftReferenceCacheFactoryFactoryBean;
-import org.openyu.commons.commons.pool.supporter.CacheableObjectFactorySupporter;
+import org.openyu.commons.commons.pool.supporter.PoolableCacheFactorySupporter;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.io.IoHelper;
@@ -57,7 +57,7 @@ public final class ChecksumHelper extends BaseHelperSupporter {
 			try {
 				checksumProcessorCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<ChecksumProcessor, SoftReferenceCacheFactory<ChecksumProcessor>>();
 				checksumProcessorCacheFactoryFactoryBean
-						.setCacheableObjectFactory(new CacheableObjectFactorySupporter<ChecksumProcessor>() {
+						.setCacheableObjectFactory(new PoolableCacheFactorySupporter<ChecksumProcessor>() {
 
 							private static final long serialVersionUID = -2745795176962911555L;
 

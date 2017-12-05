@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.openyu.commons.commons.pool.CacheCallback;
 import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
-import org.openyu.commons.commons.pool.supporter.CacheableObjectFactorySupporter;
+import org.openyu.commons.commons.pool.supporter.PoolableCacheFactorySupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.NumberHelper;
 import org.openyu.commons.thread.ThreadHelper;
@@ -67,7 +67,7 @@ public class SoftReferenceCacheFactoryImplTest extends BaseTestSupporter {
 
 		// 改用FactoryBean
 		softReferenceCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<Parser, SoftReferenceCacheFactory<Parser>>();
-		softReferenceCacheFactoryFactoryBean.setCacheableObjectFactory(new CacheableObjectFactorySupporter<Parser>() {
+		softReferenceCacheFactoryFactoryBean.setCacheableObjectFactory(new PoolableCacheFactorySupporter<Parser>() {
 
 			private static final long serialVersionUID = -5161964541145838308L;
 

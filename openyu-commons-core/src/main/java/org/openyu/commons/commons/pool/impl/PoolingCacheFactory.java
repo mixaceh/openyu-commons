@@ -1,26 +1,25 @@
-package org.openyu.commons.commons.pool.supporter;
+package org.openyu.commons.commons.pool.impl;
 
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.ObjectPoolFactory;
 import org.openyu.commons.commons.pool.CacheFactory;
-import org.openyu.commons.commons.pool.CacheableObjectFactory;
+import org.openyu.commons.commons.pool.PoolableCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
-import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter implements CacheFactory<T> {
+public class PoolingCacheFactory<T> extends BaseServiceSupporter implements CacheFactory<T> {
 
 	private static final long serialVersionUID = 34344492443615151L;
 
-	private static final transient Logger LOGGER = LoggerFactory.getLogger(CacheFactorySupporter.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(PoolingCacheFactory.class);
 
 	protected ObjectPoolFactory<T> objectPoolFactory;
 
 	protected ObjectPool<T> objectPool;
 
-	protected CacheableObjectFactory<T> cacheableObjectFactory;
+	protected PoolableCacheFactory<T> poolableCacheFactory;
 
 	protected transient ThreadLocal<T> cacheHolder = new ThreadLocal<T>();
 
@@ -34,11 +33,11 @@ public abstract class CacheFactorySupporter<T> extends BaseServiceSupporter impl
 	 */
 	private boolean cleared;
 
-	public CacheFactorySupporter(CacheableObjectFactory<T> cacheableObjectFactory) {
-		this.cacheableObjectFactory = cacheableObjectFactory;
+	public PoolingCacheFactory(PoolableCacheFactory<T> poolableCacheFactory) {
+		this.poolableCacheFactory = poolableCacheFactory;
 	}
 
-	public CacheFactorySupporter() {
+	public PoolingCacheFactory() {
 		this(null);
 	}
 

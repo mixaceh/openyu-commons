@@ -1,14 +1,14 @@
 package org.openyu.commons.commons.pool.supporter;
 
-import org.openyu.commons.commons.pool.CacheableObjectFactory;
+import org.openyu.commons.commons.pool.PoolableCacheFactory;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
 
-public abstract class CacheableObjectFactorySupporter<T> extends
-		BaseServiceSupporter implements CacheableObjectFactory<T> {
+public abstract class PoolableCacheFactorySupporter<T> extends
+		BaseServiceSupporter implements PoolableCacheFactory<T> {
 
 	private static final long serialVersionUID = 2017177244010565594L;
 
-	public CacheableObjectFactorySupporter() {
+	public PoolableCacheFactorySupporter() {
 
 	}
 

@@ -1,12 +1,11 @@
 package org.openyu.commons.commons.pool.impl;
 
-import org.openyu.commons.commons.pool.CacheableObjectFactory;
+import org.openyu.commons.commons.pool.PoolableCacheFactory;
 import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
-import org.openyu.commons.commons.pool.supporter.CacheFactorySupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SoftReferenceCacheFactoryImpl<T> extends CacheFactorySupporter<T>
+public class SoftReferenceCacheFactoryImpl<T> extends PoolingCacheFactory<T>
 		implements SoftReferenceCacheFactory<T> {
 
 	private static final long serialVersionUID = 8416281904106156439L;
@@ -15,7 +14,7 @@ public class SoftReferenceCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 			.getLogger(SoftReferenceCacheFactoryImpl.class);
 
 	public SoftReferenceCacheFactoryImpl(
-			CacheableObjectFactory<T> cacheableObjectFactory) {
+			PoolableCacheFactory<T> cacheableObjectFactory) {
 		super(cacheableObjectFactory);
 	}
 
@@ -56,7 +55,7 @@ public class SoftReferenceCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 		super.doStart();
 		//
 		this.objectPoolFactory = new SoftReferenceObjectPoolFactory<T>(
-				cacheableObjectFactory);
+				poolableCacheFactory);
 		//
 		this.objectPool = objectPoolFactory.createPool();
 	}

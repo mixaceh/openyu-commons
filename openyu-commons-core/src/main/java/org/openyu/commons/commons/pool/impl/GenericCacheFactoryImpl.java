@@ -1,33 +1,37 @@
 package org.openyu.commons.commons.pool.impl;
 
 import org.apache.commons.pool.impl.GenericObjectPool;
-import org.apache.commons.pool.impl.GenericObjectPoolFactory;
-import org.openyu.commons.commons.pool.CacheableObjectFactory;
+import org.openyu.commons.commons.pool.PoolableCacheFactory;
+import org.openyu.commons.commons.pool.ex.CacheException;
+import org.openyu.commons.service.supporter.BaseServiceSupporter;
 import org.openyu.commons.commons.pool.GenericCacheFactory;
-import org.openyu.commons.commons.pool.supporter.CacheFactorySupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GenericCacheFactoryImpl<T> extends CacheFactorySupporter<T>
-		implements GenericCacheFactory<T> {
+public class GenericCacheFactoryImpl<T> extends BaseServiceSupporter implements GenericCacheFactory<T> {
 
 	private static final long serialVersionUID = -5019167084750351983L;
 
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(GenericCacheFactoryImpl.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(GenericCacheFactoryImpl.class);
+
+	//
+	private int initialSize = 1;
+
+	private volatile boolean restartNeeded;
+
+	private volatile GenericCacheFactory<T> instance;
+	
+	private	PoolableCacheFactory<T> poolableCacheFactory;
 
 	private GenericObjectPool.Config config;
 
-	public GenericCacheFactoryImpl(
-			CacheableObjectFactory<T> cacheableObjectFactory,
-			GenericObjectPool.Config config) {
-		this.cacheableObjectFactory = cacheableObjectFactory;
+	public GenericCacheFactoryImpl(PoolableCacheFactory<T> poolableCacheFactory, GenericObjectPool.Config config) {
+		this.poolableCacheFactory = poolableCacheFactory;
 		this.config = config;
 	}
 
-	public GenericCacheFactoryImpl(
-			CacheableObjectFactory<T> cacheableObjectFactory) {
-		this(cacheableObjectFactory, new GenericObjectPool.Config());
+	public GenericCacheFactoryImpl(PoolableCacheFactory<T> poolableCacheFactory) {
+		this(poolableCacheFactory, new GenericObjectPool.Config());
 	}
 
 	public GenericCacheFactoryImpl() {
@@ -87,8 +91,7 @@ public class GenericCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 		return this.config.timeBetweenEvictionRunsMillis;
 	}
 
-	public synchronized void setTimeBetweenEvictionRunsMillis(
-			long timeBetweenEvictionRunsMillis) {
+	public synchronized void setTimeBetweenEvictionRunsMillis(long timeBetweenEvictionRunsMillis) {
 		this.config.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis;
 	}
 
@@ -96,8 +99,7 @@ public class GenericCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 		return this.config.numTestsPerEvictionRun;
 	}
 
-	public synchronized void setNumTestsPerEvictionRun(
-			int numTestsPerEvictionRun) {
+	public synchronized void setNumTestsPerEvictionRun(int numTestsPerEvictionRun) {
 		this.config.numTestsPerEvictionRun = numTestsPerEvictionRun;
 	}
 
@@ -105,8 +107,7 @@ public class GenericCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 		return this.config.minEvictableIdleTimeMillis;
 	}
 
-	public synchronized void setMinEvictableIdleTimeMillis(
-			long minEvictableIdleTimeMillis) {
+	public synchronized void setMinEvictableIdleTimeMillis(long minEvictableIdleTimeMillis) {
 		this.config.minEvictableIdleTimeMillis = minEvictableIdleTimeMillis;
 	}
 
@@ -130,8 +131,7 @@ public class GenericCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 		return config.softMinEvictableIdleTimeMillis;
 	}
 
-	public synchronized void setSoftMinEvictableIdleTimeMillis(
-			long softMinEvictableIdleTimeMillis) {
+	public synchronized void setSoftMinEvictableIdleTimeMillis(long softMinEvictableIdleTimeMillis) {
 		this.config.softMinEvictableIdleTimeMillis = softMinEvictableIdleTimeMillis;
 	}
 
@@ -143,44 +143,58 @@ public class GenericCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 		this.config.lifo = lifo;
 	}
 
-//	/**
-//	 * new建構
-//	 * 
-//	 * remove to GenericCacheFactoryFactoryBean.createService()
-//	 * 
-//	 * @return
-//	 */
-//	public static <T> GenericCacheFactory<T> createInstance(
-//			CacheableObjectFactory<T> cacheableObjectFactory,
-//			GenericObjectPool.Config config) {
-//		GenericCacheFactoryImpl<T> result = null;
-//		try {
-//			result = new GenericCacheFactoryImpl<T>(cacheableObjectFactory,
-//					config);
-//			result.setCreateInstance(true);
-//			// 啟動
-//			result.start();
-//		} catch (Exception e) {
-//			LOGGER.error(
-//					new StringBuilder().append(
-//							"Exception encountered during createInstance()")
-//							.toString(), e);
-//			result = (GenericCacheFactoryImpl<T>) shutdownInstance(result);
-//		}
-//		return result;
-//	}
-
 	/**
 	 * 內部啟動
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		super.doStart();
-		//
-		this.objectPoolFactory = new GenericObjectPoolFactory<T>(
-				cacheableObjectFactory, config);
-		//
-		this.objectPool = objectPoolFactory.createPool();
+//		super.doStart();
+//		//
+//		this.objectPoolFactory = new GenericObjectPoolFactory<T>(poolableCacheFactory, config);
+//		//
+//		this.objectPool = objectPoolFactory.createPool();
+	}
+
+	@Override
+	public T openCache() throws CacheException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void closeCache() throws CacheException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void close() throws CacheException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isClosed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void clear() throws CacheException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isCleared() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected void doShutdown() throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

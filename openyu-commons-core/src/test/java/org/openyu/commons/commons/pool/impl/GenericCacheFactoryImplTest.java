@@ -11,7 +11,7 @@ import org.openyu.commons.commons.pool.GenericCacheFactory;
 import org.openyu.commons.commons.pool.GenericCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
 import org.openyu.commons.commons.pool.impl.GenericCacheFactoryImplTest.Parser;
-import org.openyu.commons.commons.pool.supporter.CacheableObjectFactorySupporter;
+import org.openyu.commons.commons.pool.supporter.PoolableCacheFactorySupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.NumberHelper;
 
@@ -63,7 +63,7 @@ public class GenericCacheFactoryImplTest extends BaseTestSupporter {
 
 		// 改用FactoryBean
 		genericCacheFactoryFactoryBean = new GenericCacheFactoryFactoryBean<Parser, GenericCacheFactory<Parser>>();
-		genericCacheFactoryFactoryBean.setCacheableObjectFactory(new CacheableObjectFactorySupporter<Parser>() {
+		genericCacheFactoryFactoryBean.setCacheableObjectFactory(new PoolableCacheFactorySupporter<Parser>() {
 
 			private static final long serialVersionUID = -5161964541145838308L;
 

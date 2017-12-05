@@ -1,6 +1,6 @@
 package org.openyu.commons.commons.pool.impl;
 
-import org.openyu.commons.commons.pool.CacheableObjectFactory;
+import org.openyu.commons.commons.pool.PoolableCacheFactory;
 import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
 import org.openyu.commons.service.supporter.BaseServiceFactoryBeanSupporter;
 import org.slf4j.Logger;
@@ -21,16 +21,16 @@ public final class SoftReferenceCacheFactoryFactoryBean<T, U extends SoftReferen
 	 */
 	public final static String[] ALL_PROPERTIES = {};
 
-	protected CacheableObjectFactory<T> cacheableObjectFactory;
+	protected PoolableCacheFactory<T> cacheableObjectFactory;
 
 	public SoftReferenceCacheFactoryFactoryBean() {
 	}
 
-	public CacheableObjectFactory<T> getCacheableObjectFactory() {
+	public PoolableCacheFactory<T> getCacheableObjectFactory() {
 		return cacheableObjectFactory;
 	}
 
-	public void setCacheableObjectFactory(CacheableObjectFactory<T> cacheableObjectFactory) {
+	public void setCacheableObjectFactory(PoolableCacheFactory<T> cacheableObjectFactory) {
 		this.cacheableObjectFactory = cacheableObjectFactory;
 	}
 

@@ -1,13 +1,12 @@
 package org.openyu.commons.commons.pool.impl;
 
 import org.apache.commons.pool.impl.StackObjectPoolFactory;
-import org.openyu.commons.commons.pool.CacheableObjectFactory;
+import org.openyu.commons.commons.pool.PoolableCacheFactory;
 import org.openyu.commons.commons.pool.StackCacheFactory;
-import org.openyu.commons.commons.pool.supporter.CacheFactorySupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StackCacheFactoryImpl<T> extends CacheFactorySupporter<T>
+public class StackCacheFactoryImpl<T> extends PoolingCacheFactory<T>
 		implements StackCacheFactory<T> {
 
 	private static final long serialVersionUID = -5019167084750351983L;
@@ -16,7 +15,7 @@ public class StackCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 			.getLogger(StackCacheFactoryImpl.class);
 
 	public StackCacheFactoryImpl(
-			CacheableObjectFactory<T> cacheableObjectFactory) {
+			PoolableCacheFactory<T> cacheableObjectFactory) {
 		super(cacheableObjectFactory);
 	}
 
@@ -56,7 +55,7 @@ public class StackCacheFactoryImpl<T> extends CacheFactorySupporter<T>
 		super.doStart();
 		//
 		// this.objectPool = new StackObjectPool<T>(cacheableObjectFactory);
-		this.objectPoolFactory = new StackObjectPoolFactory<T>(cacheableObjectFactory);
+		this.objectPoolFactory = new StackObjectPoolFactory<T>(poolableCacheFactory);
 		this.objectPool = objectPoolFactory.createPool();
 	}
 

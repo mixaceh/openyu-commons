@@ -17,7 +17,7 @@ import org.openyu.commons.commons.pool.CacheCallback;
 import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
 import org.openyu.commons.commons.pool.impl.SoftReferenceCacheFactoryFactoryBean;
-import org.openyu.commons.commons.pool.supporter.CacheableObjectFactorySupporter;
+import org.openyu.commons.commons.pool.supporter.PoolableCacheFactorySupporter;
 import org.openyu.commons.helper.ex.HelperException;
 import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.io.IoHelper;
@@ -71,7 +71,7 @@ public final class SerializeHelper extends BaseHelperSupporter {
 			try {
 				serializeProcessorCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<SerializeProcessor, SoftReferenceCacheFactory<SerializeProcessor>>();
 				serializeProcessorCacheFactoryFactoryBean
-						.setCacheableObjectFactory(new CacheableObjectFactorySupporter<SerializeProcessor>() {
+						.setCacheableObjectFactory(new PoolableCacheFactorySupporter<SerializeProcessor>() {
 
 							private static final long serialVersionUID = -7294494524764181899L;
 
