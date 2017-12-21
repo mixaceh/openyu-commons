@@ -56,7 +56,7 @@ public class FtpClientConnectionFactoryImpl extends BaseServiceSupporter impleme
 	//
 	private volatile FtpClientConnectionFactory instance;
 
-	protected GenericObjectPool<FTPClient> objectPool;
+	private GenericObjectPool<FTPClient> objectPool;
 
 	private GenericObjectPool.Config config = new GenericObjectPool.Config();
 
