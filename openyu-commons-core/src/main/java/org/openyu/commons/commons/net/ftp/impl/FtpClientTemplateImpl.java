@@ -37,8 +37,7 @@ public class FtpClientTemplateImpl extends BaseServiceSupporter implements FtpCl
 	 */
 	@Override
 	protected void doStart() throws Exception {
-		// AssertHelper.notNull(ftpClientSessionFactory, "The FtpClientSessionFactory is
-		// required");
+		AssertHelper.notNull(ftpClientSessionFactory, "The FtpClientSessionFactory is required");
 	}
 
 	/**
