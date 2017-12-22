@@ -6,11 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.openyu.commons.commons.pool.CacheCallback;
 import org.openyu.commons.commons.pool.GenericCacheFactory;
-import org.openyu.commons.commons.pool.GenericCacheFactory;
-import org.openyu.commons.commons.pool.ex.CacheException;
-import org.openyu.commons.commons.pool.impl.GenericCacheFactoryImplTest.Parser;
 import org.openyu.commons.commons.pool.supporter.PoolableCacheFactorySupporter;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.NumberHelper;
@@ -23,10 +19,11 @@ public class GenericCacheFactoryImplTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	private static GenericCacheFactoryFactoryBean<Parser, GenericCacheFactory<Parser>> genericCacheFactoryFactoryBean;
+	protected static GenericCacheFactoryFactoryBean<Parser, GenericCacheFactory<Parser>> genericCacheFactoryFactoryBean;
 
-	private static GenericCacheFactoryImpl<Parser> genericCacheFactoryImpl;
+	protected static GenericCacheFactoryImpl<Parser> genericCacheFactoryImpl;
 
+	@SuppressWarnings("unchecked")
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		// genericCacheFactory = new GenericCacheFactoryImpl<Parser>(
@@ -63,7 +60,7 @@ public class GenericCacheFactoryImplTest extends BaseTestSupporter {
 
 		// 改用FactoryBean
 		genericCacheFactoryFactoryBean = new GenericCacheFactoryFactoryBean<Parser, GenericCacheFactory<Parser>>();
-		genericCacheFactoryFactoryBean.setCacheableObjectFactory(new PoolableCacheFactorySupporter<Parser>() {
+		genericCacheFactoryFactoryBean.setPoolableCacheFactory(new PoolableCacheFactorySupporter<Parser>() {
 
 			private static final long serialVersionUID = -5161964541145838308L;
 
@@ -180,25 +177,6 @@ public class GenericCacheFactoryImplTest extends BaseTestSupporter {
 
 	@Test
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	public void execute() {
-		genericCacheFactoryImpl.execute(new CacheCallback<Parser>() {
-			public Object doInAction(Parser cache) throws CacheException {
-				Object result = null;
-				try {
-					result = cache.parse();
-					System.out.println(result);
-				} catch (Exception ex) {
-					throw new CacheException(ex);
-				}
-				//
-				System.out.println("[" + Thread.currentThread().getName() + "] " + cache);
-				return result;
-			}
-		});
-	}
-
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void outOfMemory() {
 		Parser result = genericCacheFactoryImpl.openCache();
 		assertNotNull(result);
@@ -233,6 +211,7 @@ public class GenericCacheFactoryImplTest extends BaseTestSupporter {
 	}
 
 	protected static class Parser {
+
 		public Parser() {
 		}
 
@@ -241,15 +220,15 @@ public class GenericCacheFactoryImplTest extends BaseTestSupporter {
 		}
 
 		public void flush() {
-			System.out.println("flush");
+			System.out.println("do flush");
 		}
 
 		public void reset() {
-			System.out.println("reset");
+			System.out.println("do reset");
 		}
 
 		public void close() {
-			System.out.println("close");
+			System.out.println("do close");
 		}
 	}
 }
