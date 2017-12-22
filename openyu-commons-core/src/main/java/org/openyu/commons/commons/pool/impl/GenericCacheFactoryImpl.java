@@ -3,31 +3,31 @@ package org.openyu.commons.commons.pool.impl;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.openyu.commons.commons.pool.PoolableCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
-import org.openyu.commons.service.supporter.BaseServiceSupporter;
+import org.openyu.commons.commons.pool.supporter.CacheFactorySupporter;
+import org.openyu.commons.commons.pool.CacheFactory;
 import org.openyu.commons.commons.pool.GenericCacheFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GenericCacheFactoryImpl<T> extends BaseServiceSupporter implements GenericCacheFactory<T> {
+public class GenericCacheFactoryImpl<T> extends CacheFactorySupporter<T> implements GenericCacheFactory<T> {
 
 	private static final long serialVersionUID = -5019167084750351983L;
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(GenericCacheFactoryImpl.class);
 
-	//
-	private int initialSize = 1;
+	/**
+	 * 物件池
+	 */
+	private GenericObjectPool<T> objectPool;
 
-	private volatile boolean restartNeeded;
+	/**
+	 * 物件池設定
+	 */
+	private GenericObjectPool.Config poolConfig;
 
-	private volatile GenericCacheFactory<T> instance;
-	
-	private	PoolableCacheFactory<T> poolableCacheFactory;
-
-	private GenericObjectPool.Config config;
-
-	public GenericCacheFactoryImpl(PoolableCacheFactory<T> poolableCacheFactory, GenericObjectPool.Config config) {
-		this.poolableCacheFactory = poolableCacheFactory;
-		this.config = config;
+	public GenericCacheFactoryImpl(PoolableCacheFactory<T> poolableCacheFactory, GenericObjectPool.Config poolConfig) {
+		super(poolableCacheFactory);
+		this.poolConfig = poolConfig;
 	}
 
 	public GenericCacheFactoryImpl(PoolableCacheFactory<T> poolableCacheFactory) {
@@ -40,161 +40,161 @@ public class GenericCacheFactoryImpl<T> extends BaseServiceSupporter implements 
 
 	// GenericObjectPool.Config
 	public synchronized int getMaxActive() {
-		return config.maxActive;
+		return poolConfig.maxActive;
 	}
 
 	public synchronized void setMaxActive(int maxActive) {
-		this.config.maxActive = maxActive;
+		this.poolConfig.maxActive = maxActive;
 	}
 
 	public synchronized int getMaxIdle() {
-		return config.maxIdle;
+		return poolConfig.maxIdle;
 	}
 
 	public synchronized void setMaxIdle(int maxIdle) {
-		this.config.maxIdle = maxIdle;
+		this.poolConfig.maxIdle = maxIdle;
 	}
 
 	public synchronized int getMinIdle() {
-		return config.minIdle;
+		return poolConfig.minIdle;
 	}
 
 	public synchronized void setMinIdle(int minIdle) {
-		this.config.minIdle = minIdle;
+		this.poolConfig.minIdle = minIdle;
 	}
 
 	public synchronized long getMaxWait() {
-		return config.maxWait;
+		return poolConfig.maxWait;
 	}
 
 	public synchronized void setMaxWait(long maxWait) {
-		this.config.maxWait = maxWait;
+		this.poolConfig.maxWait = maxWait;
 	}
 
 	public synchronized boolean isTestOnBorrow() {
-		return config.testOnBorrow;
+		return poolConfig.testOnBorrow;
 	}
 
 	public synchronized void setTestOnBorrow(boolean testOnBorrow) {
-		this.config.testOnBorrow = testOnBorrow;
+		this.poolConfig.testOnBorrow = testOnBorrow;
 	}
 
 	public synchronized boolean isTestOnReturn() {
-		return config.testOnReturn;
+		return poolConfig.testOnReturn;
 	}
 
 	public synchronized void setTestOnReturn(boolean testOnReturn) {
-		this.config.testOnReturn = testOnReturn;
+		this.poolConfig.testOnReturn = testOnReturn;
 	}
 
 	public synchronized long getTimeBetweenEvictionRunsMillis() {
-		return this.config.timeBetweenEvictionRunsMillis;
+		return this.poolConfig.timeBetweenEvictionRunsMillis;
 	}
 
 	public synchronized void setTimeBetweenEvictionRunsMillis(long timeBetweenEvictionRunsMillis) {
-		this.config.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis;
+		this.poolConfig.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis;
 	}
 
 	public synchronized int getNumTestsPerEvictionRun() {
-		return this.config.numTestsPerEvictionRun;
+		return this.poolConfig.numTestsPerEvictionRun;
 	}
 
 	public synchronized void setNumTestsPerEvictionRun(int numTestsPerEvictionRun) {
-		this.config.numTestsPerEvictionRun = numTestsPerEvictionRun;
+		this.poolConfig.numTestsPerEvictionRun = numTestsPerEvictionRun;
 	}
 
 	public synchronized long getMinEvictableIdleTimeMillis() {
-		return this.config.minEvictableIdleTimeMillis;
+		return this.poolConfig.minEvictableIdleTimeMillis;
 	}
 
 	public synchronized void setMinEvictableIdleTimeMillis(long minEvictableIdleTimeMillis) {
-		this.config.minEvictableIdleTimeMillis = minEvictableIdleTimeMillis;
+		this.poolConfig.minEvictableIdleTimeMillis = minEvictableIdleTimeMillis;
 	}
 
 	public synchronized boolean isTestWhileIdle() {
-		return config.testWhileIdle;
+		return poolConfig.testWhileIdle;
 	}
 
 	public synchronized void setTestWhileIdle(boolean testWhileIdle) {
-		this.config.testWhileIdle = testWhileIdle;
+		this.poolConfig.testWhileIdle = testWhileIdle;
 	}
 
 	public synchronized byte getWhenExhaustedAction() {
-		return config.whenExhaustedAction;
+		return poolConfig.whenExhaustedAction;
 	}
 
 	public synchronized void setWhenExhaustedAction(byte whenExhaustedAction) {
-		this.config.whenExhaustedAction = whenExhaustedAction;
+		this.poolConfig.whenExhaustedAction = whenExhaustedAction;
 	}
 
 	public synchronized long getSoftMinEvictableIdleTimeMillis() {
-		return config.softMinEvictableIdleTimeMillis;
+		return poolConfig.softMinEvictableIdleTimeMillis;
 	}
 
 	public synchronized void setSoftMinEvictableIdleTimeMillis(long softMinEvictableIdleTimeMillis) {
-		this.config.softMinEvictableIdleTimeMillis = softMinEvictableIdleTimeMillis;
+		this.poolConfig.softMinEvictableIdleTimeMillis = softMinEvictableIdleTimeMillis;
 	}
 
 	public synchronized boolean isLifo() {
-		return config.lifo;
+		return poolConfig.lifo;
 	}
 
 	public synchronized void setLifo(boolean lifo) {
-		this.config.lifo = lifo;
+		this.poolConfig.lifo = lifo;
 	}
 
 	/**
-	 * 內部啟動
+	 * 建立工廠
+	 * 
+	 * @return
+	 * @throws CacheException
 	 */
 	@Override
-	protected void doStart() throws Exception {
-//		super.doStart();
-//		//
-//		this.objectPoolFactory = new GenericObjectPoolFactory<T>(poolableCacheFactory, config);
-//		//
-//		this.objectPool = objectPoolFactory.createPool();
+	protected synchronized CacheFactory<T> createCacheFactory() throws CacheException {
+		if (this.instance != null) {
+			if (this.instance.isClosed()) {
+				throw new CacheException("PoolingCacheFactory was already closed");
+			}
+			return this.instance;
+		}
+		// 建立物件池
+		createObjectPool();
+		// 建立副本
+		createInstance();
+		//
+		try {
+			// 檢驗可池化工廠
+			validatePoolableFactory();
+			// 初始大小
+			for (int i = 0; i < getInitialSize(); ++i) {
+				this.objectPool.addObject();
+			}
+		} catch (Exception e) {
+			throw new CacheException("Error preloading the pool", e);
+		}
+		//
+		LOGGER.info("Create CacheFactory");
+		return this.instance;
 	}
 
+	/**
+	 * 建立物件池
+	 */
 	@Override
-	public T openCache() throws CacheException {
-		// TODO Auto-generated method stub
-		return null;
+	protected void createObjectPool() {
+		// 設定factory
+		GenericObjectPool<T> objectPool = new GenericObjectPool<T>(getPoolableCacheFactory());
+		objectPool.setConfig(poolConfig);
+		this.objectPool = objectPool;
 	}
 
+	/**
+	 * 建立副本
+	 * 
+	 * @throws CacheException
+	 */
 	@Override
-	public void closeCache() throws CacheException {
-		// TODO Auto-generated method stub
-		
+	protected void createInstance() throws CacheException {
+		this.instance = new PoolingCacheFactory<T>(this.objectPool);
 	}
-
-	@Override
-	public void close() throws CacheException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isClosed() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void clear() throws CacheException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isCleared() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	protected void doShutdown() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
