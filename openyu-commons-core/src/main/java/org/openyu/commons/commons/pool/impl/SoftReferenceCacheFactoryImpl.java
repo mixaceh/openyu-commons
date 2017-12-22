@@ -1,62 +1,84 @@
 package org.openyu.commons.commons.pool.impl;
 
+import org.apache.commons.pool.impl.SoftReferenceObjectPool;
 import org.openyu.commons.commons.pool.PoolableCacheFactory;
 import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
+import org.openyu.commons.commons.pool.ex.CacheException;
+import org.openyu.commons.commons.pool.supporter.CacheFactorySupporter;
+import org.openyu.commons.commons.pool.CacheFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SoftReferenceCacheFactoryImpl<T> extends PoolingCacheFactory<T>
-		implements SoftReferenceCacheFactory<T> {
+public class SoftReferenceCacheFactoryImpl<T> extends CacheFactorySupporter<T> implements SoftReferenceCacheFactory<T> {
 
-	private static final long serialVersionUID = 8416281904106156439L;
+	private static final long serialVersionUID = -5019167084750351983L;
 
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(SoftReferenceCacheFactoryImpl.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(GenericCacheFactoryImpl.class);
 
-	public SoftReferenceCacheFactoryImpl(
-			PoolableCacheFactory<T> cacheableObjectFactory) {
-		super(cacheableObjectFactory);
+	/**
+	 * 物件池
+	 */
+	private SoftReferenceObjectPool<T> objectPool;
+
+	public SoftReferenceCacheFactoryImpl(PoolableCacheFactory<T> poolableCacheFactory) {
+		super(poolableCacheFactory);
 	}
 
 	public SoftReferenceCacheFactoryImpl() {
 		this(null);
 	}
 
-//	/**
-//	 * new建構
-//	 * remove to SoftReferenceCacheFactoryFactoryBean.createService()
-//	 * 
-//	 * @return
-//	 */
-//	public static <T> SoftReferenceCacheFactory<T> createInstance(
-//			CacheableObjectFactory<T> cacheableObjectFactory) {
-//		SoftReferenceCacheFactoryImpl<T> result = null;
-//		try {
-//			result = new SoftReferenceCacheFactoryImpl<T>(
-//					cacheableObjectFactory);
-//			result.setCreateInstance(true);
-//			// 啟動
-//			result.start();
-//		} catch (Exception e) {
-//			LOGGER.error(
-//					new StringBuilder().append(
-//							"Exception encountered during createInstance()")
-//							.toString(), e);
-//			result = (SoftReferenceCacheFactoryImpl<T>) shutdownInstance(result);
-//		}
-//		return result;
-//	}
-
 	/**
-	 * 內部啟動
+	 * 建立工廠
+	 * 
+	 * @return
+	 * @throws CacheException
 	 */
 	@Override
-	protected void doStart() throws Exception {
-		super.doStart();
+	protected synchronized CacheFactory<T> createCacheFactory() throws CacheException {
+		if (this.instance != null) {
+			if (this.instance.isClosed()) {
+				throw new CacheException("PoolingCacheFactory was already closed");
+			}
+			return this.instance;
+		}
+		// 建立物件池
+		createObjectPool();
+		// 建立副本
+		createInstance();
 		//
-		this.objectPoolFactory = new SoftReferenceObjectPoolFactory<T>(
-				poolableCacheFactory);
+		try {
+			// 檢驗可池化工廠
+			validatePoolableFactory();
+			// 初始大小
+			for (int i = 0; i < getInitialSize(); ++i) {
+				this.objectPool.addObject();
+			}
+		} catch (Exception e) {
+			throw new CacheException("Error preloading the pool", e);
+		}
 		//
-		this.objectPool = objectPoolFactory.createPool();
+		LOGGER.info("Create CacheFactory");
+		return this.instance;
+	}
+
+	/**
+	 * 建立物件池
+	 */
+	@Override
+	protected void createObjectPool() {
+		// 設定factory
+		SoftReferenceObjectPool<T> objectPool = new SoftReferenceObjectPool<T>(getPoolableCacheFactory());
+		this.objectPool = objectPool;
+	}
+
+	/**
+	 * 建立副本
+	 * 
+	 * @throws CacheException
+	 */
+	@Override
+	protected void createInstance() throws CacheException {
+		this.instance = new PoolingCacheFactory<T>(this.objectPool);
 	}
 }
