@@ -31,6 +31,22 @@ public class CacheTemplateImpl<T> extends BaseServiceSupporter implements CacheT
 	public void setCacheFactory(CacheFactory<T> cacheFactory) {
 		this.cacheFactory = cacheFactory;
 	}
+	
+	/**
+	 * 內部啟動
+	 */
+	@Override
+	protected void doStart() throws Exception {
+		AssertHelper.notNull(cacheFactory, "The CacheFactory is required");
+	}
+
+	/**
+	 * 內部關閉
+	 */
+	@Override
+	protected void doShutdown() throws Exception {
+
+	}	
 
 	@Override
 	public T openCache() throws CacheException {
@@ -73,21 +89,5 @@ public class CacheTemplateImpl<T> extends BaseServiceSupporter implements CacheT
 				closeCache();
 			}
 		}
-	}
-
-	/**
-	 * 內部啟動
-	 */
-	@Override
-	protected void doStart() throws Exception {
-		// AssertHelper.notNull(cacheFactory, "The CacheFactory is required");
-	}
-
-	/**
-	 * 內部關閉
-	 */
-	@Override
-	protected void doShutdown() throws Exception {
-
 	}
 }
