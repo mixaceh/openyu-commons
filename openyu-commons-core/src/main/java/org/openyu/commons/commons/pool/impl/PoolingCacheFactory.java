@@ -1,11 +1,10 @@
 package org.openyu.commons.commons.pool.impl;
 
 import org.apache.commons.pool.ObjectPool;
-import org.apache.commons.pool.ObjectPoolFactory;
 import org.openyu.commons.commons.pool.CacheFactory;
-import org.openyu.commons.commons.pool.PoolableCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
 import org.openyu.commons.service.supporter.BaseServiceSupporter;
+import org.openyu.commons.util.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,13 +14,9 @@ public class PoolingCacheFactory<T> extends BaseServiceSupporter implements Cach
 
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(PoolingCacheFactory.class);
 
-	protected ObjectPoolFactory<T> objectPoolFactory;
+	private ObjectPool<T> objectPool;
 
-	protected ObjectPool<T> objectPool;
-
-	protected PoolableCacheFactory<T> poolableCacheFactory;
-
-	protected transient ThreadLocal<T> cacheHolder = new ThreadLocal<T>();
+	private transient ThreadLocal<T> cacheHolder = new ThreadLocal<T>();
 
 	/**
 	 * 是否已關閉
@@ -33,32 +28,12 @@ public class PoolingCacheFactory<T> extends BaseServiceSupporter implements Cach
 	 */
 	private boolean cleared;
 
-	public PoolingCacheFactory(PoolableCacheFactory<T> poolableCacheFactory) {
-		this.poolableCacheFactory = poolableCacheFactory;
+	public PoolingCacheFactory(ObjectPool<T> objectPool) {
+		this.objectPool = objectPool;
 	}
 
 	public PoolingCacheFactory() {
 		this(null);
-	}
-
-	/**
-	 * 關閉
-	 * 
-	 * @return
-	 */
-	public static <T> CacheFactory<T> shutdownInstance(CacheFactory<T> cacheFactory) {
-		try {
-			if (cacheFactory instanceof CacheFactory) {
-				CacheFactory<T> oldInstance = cacheFactory;
-				//
-				oldInstance.shutdown();
-				cacheFactory = null;
-			}
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder().append("Exception encountered during shutdownInstance(CacheFactory)")
-					.toString(), e);
-		}
-		return cacheFactory;
 	}
 
 	/**
@@ -73,8 +48,37 @@ public class PoolingCacheFactory<T> extends BaseServiceSupporter implements Cach
 	 */
 	@Override
 	protected void doShutdown() throws Exception {
-		close();
+
 	}
+
+	public void setPool(ObjectPool<T> objectPool) throws IllegalStateException, NullPointerException {
+		AssertHelper.isNull(this.objectPool, "ObjectPool already set");
+		AssertHelper.notNull(objectPool, "ObjectPool must not be null");
+		//
+		this.objectPool = objectPool;
+	}
+
+	// /**
+	// * 關閉
+	// *
+	// * @return
+	// */
+	// public static <T> CacheFactory<T> shutdownInstance(CacheFactory<T>
+	// cacheFactory) {
+	// try {
+	// if (cacheFactory instanceof CacheFactory) {
+	// CacheFactory<T> oldInstance = cacheFactory;
+	// //
+	// oldInstance.shutdown();
+	// cacheFactory = null;
+	// }
+	// } catch (Exception e) {
+	// LOGGER.error(new StringBuilder().append("Exception encountered during
+	// shutdownInstance(CacheFactory)")
+	// .toString(), e);
+	// }
+	// return cacheFactory;
+	// }
 
 	public T openCache() throws CacheException {
 		T result = null;
@@ -133,7 +137,7 @@ public class PoolingCacheFactory<T> extends BaseServiceSupporter implements Cach
 	}
 
 	@Override
-	public boolean isClosed() {
+	public synchronized boolean isClosed() {
 		return closed;
 	}
 
