@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.openyu.commons.commons.pool.CacheCallback;
 import org.openyu.commons.commons.pool.SoftReferenceCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
 import org.openyu.commons.commons.pool.supporter.PoolableCacheFactorySupporter;
@@ -67,7 +66,7 @@ public class SoftReferenceCacheFactoryImplTest extends BaseTestSupporter {
 
 		// 改用FactoryBean
 		softReferenceCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<Parser, SoftReferenceCacheFactory<Parser>>();
-		softReferenceCacheFactoryFactoryBean.setCacheableObjectFactory(new PoolableCacheFactorySupporter<Parser>() {
+		softReferenceCacheFactoryFactoryBean.setPoolableCacheFactory(new PoolableCacheFactorySupporter<Parser>() {
 
 			private static final long serialVersionUID = -5161964541145838308L;
 
@@ -184,25 +183,6 @@ public class SoftReferenceCacheFactoryImplTest extends BaseTestSupporter {
 		}
 		//
 		ThreadHelper.sleep(5 * 1000);
-	}
-
-	@Test
-	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
-	public void execute() {
-		softReferenceCacheFactoryImpl.execute(new CacheCallback<Parser>() {
-			public Object doInAction(Parser cache) throws CacheException {
-				Object result = null;
-				try {
-					result = cache.parse();
-					System.out.println(result);
-				} catch (Exception ex) {
-					throw new CacheException(ex);
-				}
-				//
-				System.out.println("[" + Thread.currentThread().getName() + "] " + cache);
-				return result;
-			}
-		});
 	}
 
 	@Test
