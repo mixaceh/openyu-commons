@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.openyu.commons.commons.pool.CacheCallback;
 import org.openyu.commons.commons.pool.StackCacheFactory;
 import org.openyu.commons.commons.pool.ex.CacheException;
 import org.openyu.commons.commons.pool.supporter.PoolableCacheFactorySupporter;
@@ -63,7 +62,7 @@ public class StackCacheFactoryImplTest extends BaseTestSupporter {
 
 		// 改用FactoryBean
 		stackCacheFactoryFactoryBean = new StackCacheFactoryFactoryBean<Parser, StackCacheFactory<Parser>>();
-		stackCacheFactoryFactoryBean.setCacheableObjectFactory(new PoolableCacheFactorySupporter<Parser>() {
+		stackCacheFactoryFactoryBean.setPoolableCacheFactory(new PoolableCacheFactorySupporter<Parser>() {
 
 			private static final long serialVersionUID = -5161964541145838308L;
 
@@ -175,24 +174,6 @@ public class StackCacheFactoryImplTest extends BaseTestSupporter {
 		}
 		//
 		ThreadHelper.sleep(5 * 1000);
-	}
-
-	@Test
-	public void execute() {
-		stackCacheFactoryImpl.execute(new CacheCallback<Parser>() {
-			public Object doInAction(Parser cache) throws CacheException {
-				Object result = null;
-				try {
-					result = cache.parse();
-					System.out.println(result);
-				} catch (Exception ex) {
-					throw new CacheException(ex);
-				}
-				//
-				System.out.println("[" + Thread.currentThread().getName() + "] " + cache);
-				return result;
-			}
-		});
 	}
 
 	@Test
