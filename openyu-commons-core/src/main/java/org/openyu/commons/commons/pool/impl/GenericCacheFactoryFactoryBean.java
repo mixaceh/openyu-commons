@@ -21,17 +21,17 @@ public final class GenericCacheFactoryFactoryBean<T, U extends GenericCacheFacto
 	 */
 	public final static String[] ALL_PROPERTIES = {};
 
-	protected PoolableCacheFactory<T> cacheableObjectFactory;
+	protected PoolableCacheFactory<T> poolableCacheFactory;
 
 	public GenericCacheFactoryFactoryBean() {
 	}
 
-	public PoolableCacheFactory<T> getCacheableObjectFactory() {
-		return cacheableObjectFactory;
+	public PoolableCacheFactory<T> getPoolableCacheFactory() {
+		return poolableCacheFactory;
 	}
 
-	public void setCacheableObjectFactory(PoolableCacheFactory<T> cacheableObjectFactory) {
-		this.cacheableObjectFactory = cacheableObjectFactory;
+	public void setPoolableCacheFactory(PoolableCacheFactory<T> poolableCacheFactory) {
+		this.poolableCacheFactory = poolableCacheFactory;
 	}
 
 	/**
@@ -42,7 +42,8 @@ public final class GenericCacheFactoryFactoryBean<T, U extends GenericCacheFacto
 	protected GenericCacheFactory<T> createService() throws Exception {
 		GenericCacheFactoryImpl<T> result = null;
 		try {
-			result = new GenericCacheFactoryImpl<T>(cacheableObjectFactory);
+			result = new GenericCacheFactoryImpl<T>(poolableCacheFactory);
+			// result.setPoolableCacheFactory(poolableCacheFactory);
 			//
 			result.setApplicationContext(applicationContext);
 			result.setBeanFactory(beanFactory);
