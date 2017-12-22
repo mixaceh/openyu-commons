@@ -21,17 +21,17 @@ public final class StackCacheFactoryFactoryBean<T, U extends StackCacheFactory<T
 	 */
 	public final static String[] ALL_PROPERTIES = {};
 
-	protected PoolableCacheFactory<T> cacheableObjectFactory;
+	protected PoolableCacheFactory<T> poolableCacheFactory;
 
 	public StackCacheFactoryFactoryBean() {
 	}
 
-	public PoolableCacheFactory<T> getCacheableObjectFactory() {
-		return cacheableObjectFactory;
+	public PoolableCacheFactory<T> getPoolableCacheFactory() {
+		return poolableCacheFactory;
 	}
 
-	public void setCacheableObjectFactory(PoolableCacheFactory<T> cacheableObjectFactory) {
-		this.cacheableObjectFactory = cacheableObjectFactory;
+	public void setPoolableCacheFactory(PoolableCacheFactory<T> poolableCacheFactory) {
+		this.poolableCacheFactory = poolableCacheFactory;
 	}
 
 	/**
@@ -42,7 +42,8 @@ public final class StackCacheFactoryFactoryBean<T, U extends StackCacheFactory<T
 	protected StackCacheFactory<T> createService() throws Exception {
 		StackCacheFactoryImpl<T> result = null;
 		try {
-			result = new StackCacheFactoryImpl<T>(cacheableObjectFactory);
+			result = new StackCacheFactoryImpl<T>(poolableCacheFactory);
+			// result.setPoolableCacheFactory(poolableCacheFactory);
 			//
 			result.setApplicationContext(applicationContext);
 			result.setBeanFactory(beanFactory);
