@@ -41,15 +41,6 @@ public interface CacheFactory<T> extends BaseService {
 	 */
 	void closeCache() throws CacheException;
 
-	// /**
-	// * 使用回呼, 不需開啟cache與關閉cache
-	// *
-	// * @param action
-	// * @return
-	// * @throws CacheException
-	// */
-	// Object execute(CacheCallback<T> action) throws CacheException;
-
 	/**
 	 * 關閉
 	 * 
