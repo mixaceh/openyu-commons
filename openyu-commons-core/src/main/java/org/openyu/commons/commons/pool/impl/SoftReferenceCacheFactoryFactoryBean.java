@@ -21,19 +21,19 @@ public final class SoftReferenceCacheFactoryFactoryBean<T, U extends SoftReferen
 	 */
 	public final static String[] ALL_PROPERTIES = {};
 
-	protected PoolableCacheFactory<T> cacheableObjectFactory;
+	protected PoolableCacheFactory<T> poolableCacheFactory;
 
 	public SoftReferenceCacheFactoryFactoryBean() {
 	}
 
-	public PoolableCacheFactory<T> getCacheableObjectFactory() {
-		return cacheableObjectFactory;
+	public PoolableCacheFactory<T> getPoolableCacheFactory() {
+		return poolableCacheFactory;
 	}
 
-	public void setCacheableObjectFactory(PoolableCacheFactory<T> cacheableObjectFactory) {
-		this.cacheableObjectFactory = cacheableObjectFactory;
+	public void setPoolableCacheFactory(PoolableCacheFactory<T> poolableCacheFactory) {
+		this.poolableCacheFactory = poolableCacheFactory;
 	}
-
+	
 	/**
 	 * 建構
 	 * 
@@ -42,7 +42,8 @@ public final class SoftReferenceCacheFactoryFactoryBean<T, U extends SoftReferen
 	protected SoftReferenceCacheFactory<T> createService() throws Exception {
 		SoftReferenceCacheFactoryImpl<T> result = null;
 		try {
-			result = new SoftReferenceCacheFactoryImpl<T>(cacheableObjectFactory);
+			result = new SoftReferenceCacheFactoryImpl<T>(poolableCacheFactory);
+			// result.setPoolableCacheFactory(poolableCacheFactory);
 			//
 			result.setApplicationContext(applicationContext);
 			result.setBeanFactory(beanFactory);
