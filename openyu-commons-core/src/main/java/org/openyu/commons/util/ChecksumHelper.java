@@ -57,7 +57,7 @@ public final class ChecksumHelper extends BaseHelperSupporter {
 			try {
 				checksumProcessorCacheFactoryFactoryBean = new SoftReferenceCacheFactoryFactoryBean<ChecksumProcessor, SoftReferenceCacheFactory<ChecksumProcessor>>();
 				checksumProcessorCacheFactoryFactoryBean
-						.setCacheableObjectFactory(new PoolableCacheFactorySupporter<ChecksumProcessor>() {
+						.setPoolableCacheFactory(new PoolableCacheFactorySupporter<ChecksumProcessor>() {
 
 							private static final long serialVersionUID = -2745795176962911555L;
 
@@ -116,6 +116,25 @@ public final class ChecksumHelper extends BaseHelperSupporter {
 		return crc32(ByteHelper.toByteArray(value, charsetName));
 	}
 
+	/**
+	 * crc32
+	 * 
+	 * @param in
+	 * @return
+	 */
+	public static long crc32(InputStream in) {
+		AssertHelper.notNull(in, "The InputStream must not be null");
+		//
+		byte[] value = IoHelper.read(in);
+		return crc32(value);
+	}	
+	
+	/**
+	 * crc32
+	 * 
+	 * @param value
+	 * @return
+	 */
 	public static long crc32(final byte[] value) {
 		AssertHelper.notNull(value, "The Value must not be null");
 		//
@@ -128,34 +147,6 @@ public final class ChecksumHelper extends BaseHelperSupporter {
 			LOGGER.error(new StringBuilder("Exception encountered during crc32()").toString(), e);
 		}
 		//
-		return result;
-	}
-
-	/**
-	 * crc32
-	 * 
-	 * @param in
-	 * @return
-	 */
-	public static long crc32(InputStream in) {
-		AssertHelper.notNull(in, "The InputStream must not be null");
-		//
-		long result = 0;
-		try {
-			Checksum checksum = new CRC32();
-			// int read = 0;
-			// byte[] value = new byte[BUFFER_LENGTH];
-			// while ((read = in.read(value, 0, BUFFER_LENGTH)) > -1) {
-			// checksum.update(value, 0, read);
-			// }
-			// result = checksum.getValue();
-
-			byte[] value = IoHelper.read(in);
-			checksum.update(value, 0, value.length);
-			result = checksum.getValue();
-		} catch (Exception e) {
-			LOGGER.error(new StringBuilder("Exception encountered during crc32()").toString(), e);
-		}
 		return result;
 	}
 
