@@ -30,7 +30,7 @@
 	<properties>
 		<com.name>openyu</com.name>
 		<package.name>org.openyu.commons</package.name>
-		<jdk.version>1.7</jdk.version>
+		<jdk.version>1.8</jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>		
 		<!--  
@@ -55,6 +55,7 @@
 	</properties>
 
 	<dependencies>
+		<!--  
 		<dependency>
 			<groupId>jdk.tools</groupId>
 			<artifactId>jdk.tools</artifactId>
@@ -62,6 +63,7 @@
 			<scope>system</scope>
 			<systemPath>${JAVA_1_7_HOME}/lib/tools.jar</systemPath>
 		</dependency>
+		-->
 
 		<dependency>
 			<groupId>javax.activation</groupId>
@@ -2430,7 +2432,9 @@
 						<encoding>${project.build.sourceEncoding}</encoding>
 						<verbose>true</verbose>
 						<fork>true</fork>
-						<executable>${JAVA_1_7_HOME}/bin/javac</executable>
+						<!--
+						<executable>${JAVA_1_8_HOME}/bin/javac</executable>
+						-->
 						<meminitial>256m</meminitial>
 						<maxmem>768m</maxmem>
 					</configuration>
