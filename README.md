@@ -4,10 +4,8 @@ mixaceh <mixaceh@gmail.com>
 
 1.openyu-commons-core
 
-2.openyu-commons-docker
+2.openyu-gradle
 
-3.openyu-gradle
+3.openyu-maven
 
-4.openyu-maven
-
-5.openyu-scala
+4.openyu-scala

@@ -1,4 +1,4 @@
-package openyu;
+package org.openyu;
 
 /**
  * Hello world!
