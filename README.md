@@ -7,5 +7,3 @@ mixaceh <mixaceh@gmail.com>
 2.openyu-gradle
 
 3.openyu-maven
-
-4.openyu-scala
