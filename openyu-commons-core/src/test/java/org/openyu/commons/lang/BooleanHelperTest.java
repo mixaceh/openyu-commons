@@ -15,6 +15,7 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.openyu.commons.helper.ex.HelperException;
 
 /**
  * The Class BooleanHelperTest.
@@ -25,7 +26,7 @@ public class BooleanHelperTest extends BaseTestSupporter {
 	@Rule
 	public BenchmarkRule benchmarkRule = new BenchmarkRule();
 
-	@Test
+	@Test(expected = Exception.class)
 	@BenchmarkOptions(benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
 	public void BooleanHelper() throws Exception {
 		Constructor<?> constructor = getDeclaredConstructor("org.openyu.commons.lang.BooleanHelper");
