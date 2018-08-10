@@ -160,17 +160,17 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 	public BaseServiceSupporter() {
 	}
 
-	// public ApplicationContext getApplicationContext() {
-	// return applicationContext;
-	// }
+	public ApplicationContext getApplicationContext() {
+		return applicationContext;
+	}
 
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
 
-	// public BeanFactory getBeanFactory() {
-	// return beanFactory;
-	// }
+	public BeanFactory getBeanFactory() {
+		return beanFactory;
+	}
 
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
 		this.beanFactory = (DefaultListableBeanFactory) beanFactory;
@@ -181,8 +181,16 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 		}
 	}
 
+	public String getBeanName() {
+		return beanName;
+	}
+
 	public void setBeanName(String beanName) {
 		this.beanName = beanName;
+	}
+
+	public ResourceLoader getResourceLoader() {
+		return resourceLoader;
 	}
 
 	public void setResourceLoader(ResourceLoader resourceLoader) {
