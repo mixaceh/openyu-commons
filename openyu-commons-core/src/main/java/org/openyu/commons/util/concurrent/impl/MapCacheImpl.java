@@ -42,34 +42,27 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements MapCache<K
 	 */
 	private Lock writeLock = lock.writeLock();
 
-	/**
-	 * 停用
-	 */
-	private AtomicBoolean disable = new AtomicBoolean(false);
-
 	public MapCacheImpl() {
 	}
 
 	@Override
 	public V get(K key) {
 		V result = null;
-		if (!disable.get()) {
+		try {
+			// #issue must lock
+			// #fix 讀鎖
+			// read.lock();
+			readLock.lockInterruptibly();
 			try {
-				// #issue must lock
-				// #fix 讀鎖
-				// read.lock();
-				readLock.lockInterruptibly();
-				try {
 
-					result = cache.get(key);
-				} finally {
-					readLock.unlock();
-				}
-			} catch (InterruptedException ex) {
-				// System.out.println("get thread[" +
-				// Thread.currentThread().getId() + "] InterruptedException");
-				ex.printStackTrace();
+				result = cache.get(key);
+			} finally {
+				readLock.unlock();
 			}
+		} catch (InterruptedException ex) {
+			// System.out.println("get thread[" +
+			// Thread.currentThread().getId() + "] InterruptedException");
+			ex.printStackTrace();
 		}
 		return result;
 	}
@@ -77,26 +70,24 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements MapCache<K
 	@Override
 	public V put(K key, V value) {
 		V result = null;
-		if (!disable.get()) {
-			// #issue must lock
-			// #fix 寫鎖
+		// #issue must lock
+		// #fix 寫鎖
+		try {
+			writeLock.lockInterruptibly();
 			try {
-				writeLock.lockInterruptibly();
-				try {
-					if (value != null) {
-						result = cache.put(key, value);
-					} else {
-						// 存放value=null的key
-						nullValueKeys.add(key);
-					}
-				} finally {
-					writeLock.unlock();
+				if (value != null) {
+					result = cache.put(key, value);
+				} else {
+					// 存放value=null的key
+					nullValueKeys.add(key);
 				}
-			} catch (InterruptedException ex) {
-				// System.out.println("put thread[" +
-				// Thread.currentThread().getId() + "] InterruptedException");
-				ex.printStackTrace();
+			} finally {
+				writeLock.unlock();
 			}
+		} catch (InterruptedException ex) {
+			// System.out.println("put thread[" +
+			// Thread.currentThread().getId() + "] InterruptedException");
+			ex.printStackTrace();
 		}
 		return result;
 
@@ -104,23 +95,17 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements MapCache<K
 
 	@Override
 	public void lock() {
-		if (!disable.get()) {
-			writeLock.lock();
-		}
+		writeLock.lock();
 	}
 
 	@Override
 	public void unlock() {
-		if (!disable.get()) {
-			writeLock.unlock();
-		}
+		writeLock.unlock();
 	}
 
 	@Override
 	public void lockInterruptibly() throws InterruptedException {
-		if (!disable.get()) {
-			writeLock.lockInterruptibly();
-		}
+		writeLock.lockInterruptibly();
 	}
 
 	protected boolean isNullValue(K key) {
@@ -128,9 +113,7 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements MapCache<K
 		try {
 			readLock.lockInterruptibly();
 			try {
-				if (!disable.get()) {
-					result = nullValueKeys.contains(key);
-				}
+				result = nullValueKeys.contains(key);
 			} finally {
 				readLock.unlock();
 			}
@@ -166,27 +149,25 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements MapCache<K
 	@Override
 	public V remove(K k) {
 		V result = null;
-		if (!disable.get()) {
-			// #issue must lock
-			// #fix 寫鎖
+		// #issue must lock
+		// #fix 寫鎖
+		try {
+			writeLock.lockInterruptibly();
 			try {
-				writeLock.lockInterruptibly();
-				try {
-					if (k != null) {
-						if (cache.containsKey(k)) {
-							result = cache.remove(k);
-						} else if (nullValueKeys.contains(k)) {
-							nullValueKeys.remove(k);
-						}
+				if (k != null) {
+					if (cache.containsKey(k)) {
+						result = cache.remove(k);
+					} else if (nullValueKeys.contains(k)) {
+						nullValueKeys.remove(k);
 					}
-				} finally {
-					writeLock.unlock();
 				}
-			} catch (InterruptedException ex) {
-				// System.out.println("put thread[" +
-				// Thread.currentThread().getId() + "] InterruptedException");
-				ex.printStackTrace();
+			} finally {
+				writeLock.unlock();
 			}
+		} catch (InterruptedException ex) {
+			// System.out.println("put thread[" +
+			// Thread.currentThread().getId() + "] InterruptedException");
+			ex.printStackTrace();
 		}
 		return result;
 	}
@@ -232,7 +213,6 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements MapCache<K
 		ToStringBuilder builder = new ToStringBuilder(this);
 		// builder.append("readLock", readLock);
 		// builder.append("writeLock", writeLock);
-		builder.append("disable", disable);
 		builder.append("cache", cache);
 		builder.append("nullValueKeys", nullValueKeys);
 		return builder.toString();
