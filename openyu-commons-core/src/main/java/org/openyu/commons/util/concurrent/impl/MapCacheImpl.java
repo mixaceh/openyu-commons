@@ -16,8 +16,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.openyu.commons.model.supporter.BaseModelSupporter;
 import org.openyu.commons.util.concurrent.MapCache;
 
-public class MapCacheImpl<K, V> extends BaseModelSupporter implements
-		MapCache<K, V> {
+public class MapCacheImpl<K, V> extends BaseModelSupporter implements MapCache<K, V> {
 
 	private static final long serialVersionUID = -2410205759813960541L;
 
@@ -51,6 +50,7 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements
 	public MapCacheImpl() {
 	}
 
+	@Override
 	public V get(K key) {
 		V result = null;
 		if (!disable.get()) {
@@ -74,6 +74,7 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements
 		return result;
 	}
 
+	@Override
 	public V put(K key, V value) {
 		V result = null;
 		if (!disable.get()) {
@@ -101,18 +102,21 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements
 
 	}
 
+	@Override
 	public void lock() {
 		if (!disable.get()) {
 			writeLock.lock();
 		}
 	}
 
+	@Override
 	public void unlock() {
 		if (!disable.get()) {
 			writeLock.unlock();
 		}
 	}
 
+	@Override
 	public void lockInterruptibly() throws InterruptedException {
 		if (!disable.get()) {
 			writeLock.lockInterruptibly();
@@ -139,18 +143,12 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements
 	/**
 	 * 是否為value!=null的key
 	 */
+	@Override
 	public boolean isNotNullValue(K key) {
 		return !isNullValue(key);
 	}
 
-	public boolean isDisable() {
-		return disable.get();
-	}
-
-	public void setDisable(boolean disable) {
-		this.disable.set(disable);
-	}
-
+	@Override
 	public void clear() {
 		try {
 			writeLock.lockInterruptibly();
@@ -165,6 +163,7 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements
 		}
 	}
 
+	@Override
 	public V remove(K k) {
 		V result = null;
 		if (!disable.get()) {
@@ -192,6 +191,7 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements
 		return result;
 	}
 
+	@Override
 	public boolean contains(K k) {
 		return cache.containsKey(k);
 	}
@@ -204,6 +204,7 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements
 		this.cache = cache;
 	}
 
+	@Override
 	public List<K> getKeys() {
 		List<K> result = new LinkedList<K>();
 		for (K key : cache.keySet()) {
@@ -212,6 +213,7 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements
 		return result;
 	}
 
+	@Override
 	public List<V> getValues() {
 		List<V> result = new LinkedList<V>();
 		for (V value : cache.values()) {
@@ -220,10 +222,12 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements
 		return result;
 	}
 
+	@Override
 	public int size() {
 		return cache.size();
 	}
 
+	@Override
 	public String toString() {
 		ToStringBuilder builder = new ToStringBuilder(this);
 		// builder.append("readLock", readLock);
@@ -234,6 +238,7 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements
 		return builder.toString();
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public Object clone() {
 		MapCacheImpl<K, V> copy = null;
