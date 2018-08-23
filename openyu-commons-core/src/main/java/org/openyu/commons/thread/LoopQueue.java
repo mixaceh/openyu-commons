@@ -1,5 +1,7 @@
 package org.openyu.commons.thread;
 
+import java.util.Comparator;
+
 /**
  * 輪循佇列
  */
@@ -14,4 +16,12 @@ public interface LoopQueue<E> extends BaseRunnableQueue<E> {
 
 	void setListenMills(long listenMills);
 
+	/**
+	 * 排序比較器
+	 * 
+	 * @return
+	 */
+	Comparator<E> getComparator();
+
+	void setComparator(Comparator<E> comparator);
 }

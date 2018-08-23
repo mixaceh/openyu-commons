@@ -1,6 +1,8 @@
 package org.openyu.commons.thread.supporter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -29,6 +31,11 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 	 */
 	private long listenMills = DEFAULT_LISTEN_MILLS;
 
+	/**
+	 * 排序比較器
+	 */
+	private Comparator<E> comparator;
+
 	public LoopQueueSupporter(ThreadService threadService) {
 		super(threadService);
 	}
@@ -47,6 +54,14 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 
 	public void setListenMills(long listenMills) {
 		this.listenMills = listenMills;
+	}
+
+	public Comparator<E> getComparator() {
+		return comparator;
+	}
+
+	public void setComparator(Comparator<E> comparator) {
+		this.comparator = comparator;
 	}
 
 	public final boolean offer(E e) {
@@ -143,6 +158,10 @@ public abstract class LoopQueueSupporter<E> extends BaseRunnableQueueSupporter<E
 			}
 			//
 			if (CollectionHelper.notEmpty(list)) {
+				// 排序
+				if (comparator != null) {
+					Collections.sort(list, comparator);
+				}
 				doList(list);
 			}
 		} catch (InterruptedException ex) {
