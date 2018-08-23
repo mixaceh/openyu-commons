@@ -25,8 +25,8 @@ import org.openyu.commons.helper.supporter.BaseHelperSupporter;
 import org.openyu.commons.util.ConfigHelper;
 import org.openyu.commons.util.AssertHelper;
 import org.openyu.commons.util.CollectionHelper;
-import org.openyu.commons.util.concurrent.MapCache;
-import org.openyu.commons.util.concurrent.impl.MapCacheImpl;
+import org.openyu.commons.util.concurrent.NullValueMap;
+import org.openyu.commons.util.concurrent.impl.NullValueMapImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,43 +68,43 @@ public final class ClassHelper extends BaseHelperSupporter {
 
 	private static final Map<Class<?>, Object> defaultValueCache = new LinkedHashMap<Class<?>, Object>();
 
-	private static MapCache<String, Class<?>> forNameAndCache = new MapCacheImpl<String, Class<?>>();
+	private static NullValueMap<String, Class<?>> forNameAndCache = new NullValueMapImpl<String, Class<?>>();
 
 	/**
 	 * Field
 	 */
-	private static MapCache<Class<?>, Field[]> getFieldsAndCache = new MapCacheImpl<Class<?>, Field[]>();
+	private static NullValueMap<Class<?>, Field[]> getFieldsAndCache = new NullValueMapImpl<Class<?>, Field[]>();
 
-	private static MapCache<Class<?>, Field[]> getDeclaredFieldsAndCache = new MapCacheImpl<Class<?>, Field[]>();
+	private static NullValueMap<Class<?>, Field[]> getDeclaredFieldsAndCache = new NullValueMapImpl<Class<?>, Field[]>();
 
 	/**
 	 * Method
 	 */
-	private static MapCache<Class<?>, Method[]> getMethodsAndCache = new MapCacheImpl<Class<?>, Method[]>();
+	private static NullValueMap<Class<?>, Method[]> getMethodsAndCache = new NullValueMapImpl<Class<?>, Method[]>();
 
-	private static MapCache<Class<?>, Method[]> getDeclaredMethodsAndCache = new MapCacheImpl<Class<?>, Method[]>();
+	private static NullValueMap<Class<?>, Method[]> getDeclaredMethodsAndCache = new NullValueMapImpl<Class<?>, Method[]>();
 
-	private static MapCache<Class<?>, MapCacheImpl<Method, Class<?>[]>> getMethodParameterTypesAndCache = new MapCacheImpl<Class<?>, MapCacheImpl<Method, Class<?>[]>>();
+	private static NullValueMap<Class<?>, NullValueMapImpl<Method, Class<?>[]>> getMethodParameterTypesAndCache = new NullValueMapImpl<Class<?>, NullValueMapImpl<Method, Class<?>[]>>();
 
-	private static MapCache<Class<?>, Class<?>[]> getInterfacesAndCache = new MapCacheImpl<Class<?>, Class<?>[]>();
+	private static NullValueMap<Class<?>, Class<?>[]> getInterfacesAndCache = new NullValueMapImpl<Class<?>, Class<?>[]>();
 
 	//
 	public final static String PO2VOS = "classHelper.po2vos";
 
 	private static Map<String, String> po2vos = new LinkedHashMap<String, String>();
 
-	private static MapCache<Class<?>, Class<?>> getConventionClassAndCache = new MapCacheImpl<Class<?>, Class<?>>();
+	private static NullValueMap<Class<?>, Class<?>> getConventionClassAndCache = new NullValueMapImpl<Class<?>, Class<?>>();
 
-	private static MapCache<Class<?>, Object[]> getEnumConstantsAndCache = new MapCacheImpl<Class<?>, Object[]>();
+	private static NullValueMap<Class<?>, Object[]> getEnumConstantsAndCache = new NullValueMapImpl<Class<?>, Object[]>();
 
 	/**
 	 * Constructor
 	 */
-	private static MapCache<Class<?>, Constructor<?>[]> getConstructorsAndCache = new MapCacheImpl<Class<?>, Constructor<?>[]>();
+	private static NullValueMap<Class<?>, Constructor<?>[]> getConstructorsAndCache = new NullValueMapImpl<Class<?>, Constructor<?>[]>();
 
-	private static MapCache<Class<?>, Constructor<?>[]> getDeclaredConstructorsAndCache = new MapCacheImpl<Class<?>, Constructor<?>[]>();
+	private static NullValueMap<Class<?>, Constructor<?>[]> getDeclaredConstructorsAndCache = new NullValueMapImpl<Class<?>, Constructor<?>[]>();
 
-	private static MapCache<Class<?>, MapCacheImpl<Constructor<?>, Class<?>[]>> getConstructorParameterTypesAndCache = new MapCacheImpl<Class<?>, MapCacheImpl<Constructor<?>, Class<?>[]>>();
+	private static NullValueMap<Class<?>, NullValueMapImpl<Constructor<?>, Class<?>[]>> getConstructorParameterTypesAndCache = new NullValueMapImpl<Class<?>, NullValueMapImpl<Constructor<?>, Class<?>[]>>();
 
 	static {
 		new Static();
@@ -1054,9 +1054,9 @@ public final class ClassHelper extends BaseHelperSupporter {
 		try {
 			getMethodParameterTypesAndCache.lockInterruptibly();
 			try {
-				MapCacheImpl<Method, Class<?>[]> methodParameterTypes = getMethodParameterTypesAndCache.get(clazz);
+				NullValueMapImpl<Method, Class<?>[]> methodParameterTypes = getMethodParameterTypesAndCache.get(clazz);
 				if (methodParameterTypes == null) {
-					methodParameterTypes = new MapCacheImpl<Method, Class<?>[]>();
+					methodParameterTypes = new NullValueMapImpl<Method, Class<?>[]>();
 					getMethodParameterTypesAndCache.put(clazz, methodParameterTypes);
 				}
 				// System.out.println(method);
@@ -2344,10 +2344,10 @@ public final class ClassHelper extends BaseHelperSupporter {
 		try {
 			getConstructorParameterTypesAndCache.lockInterruptibly();
 			try {
-				MapCacheImpl<Constructor<?>, Class<?>[]> constructorParameterTypes = getConstructorParameterTypesAndCache
+				NullValueMapImpl<Constructor<?>, Class<?>[]> constructorParameterTypes = getConstructorParameterTypesAndCache
 						.get(clazz);
 				if (constructorParameterTypes == null) {
-					constructorParameterTypes = new MapCacheImpl<Constructor<?>, Class<?>[]>();
+					constructorParameterTypes = new NullValueMapImpl<Constructor<?>, Class<?>[]>();
 					getConstructorParameterTypesAndCache.put(clazz, constructorParameterTypes);
 				}
 				// System.out.println(constructor);

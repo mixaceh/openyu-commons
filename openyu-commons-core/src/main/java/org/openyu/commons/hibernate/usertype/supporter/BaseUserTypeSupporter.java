@@ -31,8 +31,8 @@ import org.openyu.commons.lang.ObjectHelper;
 import org.openyu.commons.lang.StringHelper;
 import org.openyu.commons.mark.Supporter;
 import org.openyu.commons.util.LocaleHelper;
-import org.openyu.commons.util.concurrent.MapCache;
-import org.openyu.commons.util.concurrent.impl.MapCacheImpl;
+import org.openyu.commons.util.concurrent.NullValueMap;
+import org.openyu.commons.util.concurrent.impl.NullValueMapImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,7 +80,7 @@ public abstract class BaseUserTypeSupporter implements BaseUserType, Supporter {
 	/**
 	 * <1,Enum>
 	 */
-	private MapCache<String, Enum<?>> valueOfIntCache = new MapCacheImpl<String, Enum<?>>();
+	private NullValueMap<String, Enum<?>> valueOfIntCache = new NullValueMapImpl<String, Enum<?>>();
 
 	public BaseUserTypeSupporter() {
 	}

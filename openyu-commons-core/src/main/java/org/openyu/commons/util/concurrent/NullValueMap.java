@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.openyu.commons.model.BaseModel;
 
-public interface MapCache<K, V> extends BaseModel {
+public interface NullValueMap<K, V> extends BaseModel {
 
 	V get(K key);
 

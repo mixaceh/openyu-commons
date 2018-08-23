@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import org.openyu.commons.junit.supporter.BaseTestSupporter;
 import org.openyu.commons.lang.NumberHelper;
-import org.openyu.commons.util.concurrent.impl.MapCacheImpl;
+import org.openyu.commons.util.concurrent.impl.NullValueMapImpl;
 
 public class MapCacheImplTest extends BaseTestSupporter
 {
@@ -40,13 +40,13 @@ public class MapCacheImplTest extends BaseTestSupporter
 	//1000000 times: 1525 mills.
 	public void createMapCache()
 	{
-		MapCache<String, Class<?>> cache = null;
+		NullValueMap<String, Class<?>> cache = null;
 
 		int count = 1000000;// 100w
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++)
 		{
-			cache = new MapCacheImpl<String, Class<?>>();
+			cache = new NullValueMapImpl<String, Class<?>>();
 		}
 		//
 		long end = System.currentTimeMillis();
@@ -67,7 +67,7 @@ public class MapCacheImplTest extends BaseTestSupporter
 	//1000000 times: 32 mills.
 	public void putAndGet()
 	{
-		MapCache<String, Class<?>> cache = new MapCacheImpl<String, Class<?>>();
+		NullValueMap<String, Class<?>> cache = new NullValueMapImpl<String, Class<?>>();
 		String key = String.class.getName();
 		Class<?> value = String.class;
 
@@ -108,7 +108,7 @@ public class MapCacheImplTest extends BaseTestSupporter
 	//1000000 times: 32 mills.
 	public void putAndGetByNull()
 	{
-		MapCache<String, Class<?>> cache = new MapCacheImpl<String, Class<?>>();
+		NullValueMap<String, Class<?>> cache = new NullValueMapImpl<String, Class<?>>();
 		String key = "nullKey";
 		Class<?> value = null;
 
@@ -143,7 +143,7 @@ public class MapCacheImplTest extends BaseTestSupporter
 	//1000000 times: 100 mills.
 	public void lockInterruptibly()
 	{
-		MapCache<String, Class<?>> cache = new MapCacheImpl<String, Class<?>>();
+		NullValueMap<String, Class<?>> cache = new NullValueMapImpl<String, Class<?>>();
 		String key = String.class.getName();
 		Class<?> value = String.class;
 		//
@@ -195,7 +195,7 @@ public class MapCacheImplTest extends BaseTestSupporter
 	//1000000 times: 90 mills.
 	public void lockInterruptiblyByNull()
 	{
-		MapCache<String, Class<?>> cache = new MapCacheImpl<String, Class<?>>();
+		NullValueMap<String, Class<?>> cache = new NullValueMapImpl<String, Class<?>>();
 		String key = "nullKey";
 		Class<?> value = null;
 		//
@@ -247,7 +247,7 @@ public class MapCacheImplTest extends BaseTestSupporter
 	//1000000 times: 411 mills.
 	public void getKeys()
 	{
-		MapCache<String, Integer> cache = new MapCacheImpl<String, Integer>();
+		NullValueMap<String, Integer> cache = new NullValueMapImpl<String, Integer>();
 		//
 		cache.put(randomString(), randomInt(100));
 		cache.put(randomString(), randomInt(100));
@@ -276,7 +276,7 @@ public class MapCacheImplTest extends BaseTestSupporter
 	//1000000 times: 411 mills.
 	public void getValues()
 	{
-		MapCache<String, Integer> cache = new MapCacheImpl<String, Integer>();
+		NullValueMap<String, Integer> cache = new NullValueMapImpl<String, Integer>();
 		//
 		cache.put(randomString(), randomInt(100));
 		cache.put(randomString(), randomInt(100));
@@ -333,7 +333,7 @@ public class MapCacheImplTest extends BaseTestSupporter
 	 */
 	public static class Helper
 	{
-		private static MapCache<String, Integer> mapCache = new MapCacheImpl<String, Integer>();
+		private static NullValueMap<String, Integer> mapCache = new NullValueMapImpl<String, Integer>();
 
 		public Helper()
 		{}

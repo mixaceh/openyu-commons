@@ -24,8 +24,8 @@ import org.openyu.commons.service.event.BeanEvent;
 import org.openyu.commons.service.event.BeanListener;
 import org.openyu.commons.service.ex.CommonServiceException;
 import org.openyu.commons.util.CollectionHelper;
-import org.openyu.commons.util.concurrent.MapCache;
-import org.openyu.commons.util.concurrent.impl.MapCacheImpl;
+import org.openyu.commons.util.concurrent.NullValueMap;
+import org.openyu.commons.util.concurrent.impl.NullValueMapImpl;
 
 /**
  * 使用@CommnoTx
@@ -68,7 +68,7 @@ public abstract class CommonServiceSupporter extends BaseServiceSupporter implem
 	 * 
 	 * <id,bean>
 	 */
-	protected MapCache<String, Object> beans = new MapCacheImpl<String, Object>();
+	protected NullValueMap<String, Object> beans = new NullValueMapImpl<String, Object>();
 
 	public CommonServiceSupporter() {
 		addServiceCallback("StartCallbacker", new StartCallbacker());
@@ -129,7 +129,7 @@ public abstract class CommonServiceSupporter extends BaseServiceSupporter implem
 		// move to ShutdownCallbacker.doInAction()
 	}
 
-	public MapCache<String, Object> getBeans() {
+	public NullValueMap<String, Object> getBeans() {
 		return beans;
 	}
 

@@ -1,7 +1,7 @@
 package org.openyu.commons.service;
 
 import org.openyu.commons.service.event.BeanListener;
-import org.openyu.commons.util.concurrent.MapCache;
+import org.openyu.commons.util.concurrent.NullValueMap;
 
 /**
  * Jdbc+Generic服務
@@ -12,7 +12,7 @@ public interface CommonService extends JdbcService, GenericService {
 	 * 
 	 * @return
 	 */
-	MapCache<String, Object> getBeans();
+	NullValueMap<String, Object> getBeans();
 
 	/**
 	 * 設定監聽器

@@ -14,9 +14,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import org.openyu.commons.model.supporter.BaseModelSupporter;
-import org.openyu.commons.util.concurrent.MapCache;
+import org.openyu.commons.util.concurrent.NullValueMap;
 
-public class MapCacheImpl<K, V> extends BaseModelSupporter implements MapCache<K, V> {
+public class NullValueMapImpl<K, V> extends BaseModelSupporter implements NullValueMap<K, V> {
 
 	private static final long serialVersionUID = -2410205759813960541L;
 
@@ -42,7 +42,7 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements MapCache<K
 	 */
 	private Lock writeLock = lock.writeLock();
 
-	public MapCacheImpl() {
+	public NullValueMapImpl() {
 	}
 
 	@Override
@@ -221,8 +221,8 @@ public class MapCacheImpl<K, V> extends BaseModelSupporter implements MapCache<K
 	@Override
 	@SuppressWarnings("unchecked")
 	public Object clone() {
-		MapCacheImpl<K, V> copy = null;
-		copy = (MapCacheImpl<K, V>) super.clone();
+		NullValueMapImpl<K, V> copy = null;
+		copy = (NullValueMapImpl<K, V>) super.clone();
 		copy.lock = new ReentrantReadWriteLock();
 		copy.readLock = lock.readLock();
 		copy.writeLock = lock.readLock();
