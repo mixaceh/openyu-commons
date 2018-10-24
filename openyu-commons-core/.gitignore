@@ -2,7 +2,6 @@ ehcache-log/
 ehcache/
 target/
 search/
-lib/
 lib-provided/
 *.lck
 *.log
