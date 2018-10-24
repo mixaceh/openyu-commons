@@ -57,6 +57,7 @@
 		<cxf.version>3.0.2</cxf.version>
 	</properties>
 	
+	<!--  
     <distributionManagement>
         <snapshotRepository>
             <id>maven-snapshots</id>
@@ -73,7 +74,8 @@
             <id>public</id>
             <url>http://127.0.0.1:8081/repository/maven-public</url>
         </repository>
-    </repositories>	
+    </repositories>
+    -->	
 
 	<dependencies>
 		<!--  
