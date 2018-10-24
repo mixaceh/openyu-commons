@@ -18,7 +18,6 @@ import javax.sql.DataSource;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openyu.commons.commons.dbcp.BenchmarkDbcpTest;
 import org.openyu.commons.lang.ArrayHelper;
 import org.openyu.commons.lang.ByteHelper;
 import org.openyu.commons.thread.ThreadHelper;
@@ -195,7 +194,7 @@ public class BenchmarkDatabaseTestSupporter extends BaseTestSupporter {
 	// ---------------------------------------------------
 	// native
 	// ---------------------------------------------------
-	public static class NativeTest extends BenchmarkDbcpTest {
+	public static class NativeTest {
 
 		@Test
 		// insert: 10000 rows, 102400000 bytes / 38545 ms. = 2656.64 BYTES/MS,
