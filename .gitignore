@@ -1,2 +1,11 @@
-/target/
-/lib/
+ehcache-log/
+ehcache/
+target/
+search/
+lib/
+lib-provided/
+*.lck
+*.log
+log/
+bin/
+build/
