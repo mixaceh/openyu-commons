@@ -15,7 +15,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.junit.Test;
 import org.openyu.commons.security.SecurityHelper;
-import org.openyu.commons.util.LocaleHelper;
 
 public class NumberHelperTest {
 
@@ -972,35 +971,23 @@ public class NumberHelperTest {
 	// 1000000 times: 262 mills.
 	//
 	// verified
-	public void secureRandomInt() {
+	public void randomInt2() {
 		int result = 0;
-		int count = 1000000;
 
-		long beg = System.currentTimeMillis();
-		for (int i = 0; i < count; i++) {
-			result = NumberHelper.secureRandomInt(0, 100);
-		}
-		long end = System.currentTimeMillis();
-		System.out.println(count + " times: " + (end - beg) + " mills. ");
+		result = NumberHelper.randomInt(0, 100);
 
 		System.out.println(result);
 		assertTrue(result >= 0);
 		//
-		result = NumberHelper.secureRandomInt(100);
+		result = NumberHelper.randomInt(100);
 		System.out.println(result);
 		//
-		result = NumberHelper.secureRandomInt();
+		result = NumberHelper.randomInt();
 		System.out.println(result);// -1667663275,1879823349
-		//
-		byte[] bytes = SecurityHelper.md("" + result);
-		String encodeByHex = EncodingHelper.encodeHex(bytes);// e19db4f307a5ae5fb82260e3ff043e0e
-		System.out.println("encodeByHex: " + encodeByHex);
-		//
 
 		byte[] randomBytes = new byte[32];
 		SecureRandom secureRandom = new SecureRandom();
 		secureRandom.nextBytes(randomBytes);
-		System.out.println(secureRandom.nextInt());
 		System.out.println(secureRandom.nextInt());
 	}
 
@@ -1031,6 +1018,12 @@ public class NumberHelperTest {
 	@Test
 	public void toHexString() {
 		System.out.println(Integer.toHexString(100));// 64
+	}
+
+	@Test
+	public void randomChar() {
+		char reuslt = NumberHelper.randomChar();
+		System.out.println(reuslt);
 	}
 
 	// --------------------------------------------------------

@@ -316,8 +316,7 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 空白函數
 	 *
-	 * @param length
-	 *            int 長度
+	 * @param length int 長度
 	 * @return
 	 */
 	public static String space(int length) {
@@ -327,10 +326,8 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 左取字串函數
 	 *
-	 * @param source
-	 *            String 來源字串
-	 * @param length
-	 *            int 長度
+	 * @param source String 來源字串
+	 * @param length int 長度
 	 * @return
 	 */
 	public static String left(String source, int length) {
@@ -343,10 +340,8 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 右取字串函數
 	 *
-	 * @param source
-	 *            String 來源字串
-	 * @param length
-	 *            int 長度
+	 * @param source String 來源字串
+	 * @param length int 長度
 	 * @return
 	 */
 	public static String right(String source, int length) {
@@ -360,10 +355,8 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 填充函數
 	 *
-	 * @param source
-	 *            String
-	 * @param length
-	 *            int 長度
+	 * @param source String
+	 * @param length int 長度
 	 * @return
 	 */
 	public static String pad(String source, int length) {
@@ -381,8 +374,7 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 移除左邊空白函數 消左邊空白函數
 	 *
-	 * @param value
-	 *            String
+	 * @param value String
 	 * @return
 	 */
 	public static String leftTrim(String value) {
@@ -401,8 +393,7 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 移除右邊空白函數
 	 *
-	 * @param value
-	 *            String
+	 * @param value String
 	 * @return
 	 */
 	public static String rightTrim(String value) {
@@ -423,8 +414,7 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 反轉字串函數
 	 *
-	 * @param source
-	 *            String
+	 * @param source String
 	 * @return
 	 */
 	public static String reverse(String source) {
@@ -441,8 +431,7 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 字首為大寫函數
 	 *
-	 * @param value
-	 *            String
+	 * @param value String
 	 * @return String
 	 */
 	public static String capitalize(String value) {
@@ -452,8 +441,7 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 字首為小寫函數
 	 *
-	 * @param value
-	 *            String
+	 * @param value String
 	 * @return String
 	 */
 	public static String uncapitalize(String value) {
@@ -494,10 +482,8 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 重覆字串函數,與fill(String source, int length)不同 times為次數,不像fill為長度
 	 *
-	 * @param source
-	 *            String 來源字串
-	 * @param times
-	 *            int 次數
+	 * @param source String 來源字串
+	 * @param times  int 次數
 	 * @return
 	 */
 	public static String repeat(String source, int times) {
@@ -518,12 +504,9 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 右邊補充總長度為length
 	 *
-	 * @param source
-	 *            String
-	 * @param length
-	 *            int
-	 * @param regex
-	 *            String
+	 * @param source String
+	 * @param length int
+	 * @param regex  String
 	 * @return String
 	 */
 	public static String rightPad(String source, int length, String regex) {
@@ -549,12 +532,9 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 左邊補充總長度為length
 	 *
-	 * @param source
-	 *            String
-	 * @param length
-	 *            int
-	 * @param regex
-	 *            String
+	 * @param source String
+	 * @param length int
+	 * @param regex  String
 	 * @return String
 	 */
 	public static String leftPad(String source, int length, String regex) {
@@ -576,12 +556,9 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 傳回姓名,組合依國家有所不同
 	 *
-	 * @param firstName
-	 *            String
-	 * @param mi
-	 *            String
-	 * @param lastName
-	 *            String
+	 * @param firstName String
+	 * @param mi        String
+	 * @param lastName  String
 	 * @return
 	 */
 	public static String formatUserName(String firstName, String mi, String lastName, Locale locale) {
@@ -678,10 +655,8 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 結合陣列為字串 combine({"a","b"},", ") -> a, b
 	 *
-	 * @param values
-	 *            String[]
-	 * @param regex
-	 *            String
+	 * @param values String[]
+	 * @param regex  String
 	 * @return String
 	 */
 	public static String combine(String[] values, String regex) {
@@ -725,14 +700,10 @@ public final class StringHelper extends BaseHelperSupporter {
 	 * 
 	 * 5.接續步驟三直到全部找完為止
 	 * 
-	 * @param value
-	 *            資料
-	 * @param patten
-	 *            要換掉的文字
-	 * @param replacement
-	 *            要改成的文字
-	 * @param pos
-	 *            那段文字在哪
+	 * @param value       資料
+	 * @param patten      要換掉的文字
+	 * @param replacement 要改成的文字
+	 * @param pos         那段文字在哪
 	 * @return
 	 */
 	public static String replace(String value, String patten, String replacement, int pos) {
@@ -829,8 +800,7 @@ public final class StringHelper extends BaseHelperSupporter {
 	 * 判斷 null, length() == 0, 含有空白字串,如"  "
 	 * </pre>
 	 *
-	 * @param value
-	 *            String
+	 * @param value String
 	 * @return boolean
 	 */
 	public static boolean isBlank(String value) {
@@ -860,8 +830,7 @@ public final class StringHelper extends BaseHelperSupporter {
 	 * 判斷 !=null, length() > 0, 不含有空白字串,如"  "
 	 * </pre>
 	 *
-	 * @param value
-	 *            String
+	 * @param value String
 	 * @return boolean
 	 */
 	public static boolean notBlank(String value) {
@@ -889,8 +858,7 @@ public final class StringHelper extends BaseHelperSupporter {
 	 * 只判斷 null, length() == 0
 	 * </pre>
 	 *
-	 * @param value
-	 *            String
+	 * @param value String
 	 * @return boolean
 	 */
 	public static boolean isEmpty(String value) {
@@ -911,8 +879,7 @@ public final class StringHelper extends BaseHelperSupporter {
 	 * 只判斷 !=null, length() > 0
 	 * </pre>
 	 *
-	 * @param value
-	 *            String
+	 * @param value String
 	 * @return boolean
 	 */
 	public static boolean notEmpty(String value) {
@@ -939,10 +906,8 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 去除第一個字串
 	 *
-	 * @param value
-	 *            String
-	 * @param regex
-	 *            String
+	 * @param value String
+	 * @param regex String
 	 * @return String
 	 */
 	public static String excludeFirst(String value, String regex) {
@@ -971,10 +936,8 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 取出第一個字串
 	 *
-	 * @param value
-	 *            String
-	 * @param regex
-	 *            String
+	 * @param value String
+	 * @param regex String
 	 * @return String
 	 */
 	public static String extractFirst(String value, String regex) {
@@ -1003,10 +966,8 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 去除最後一個字串
 	 *
-	 * @param value
-	 *            String
-	 * @param regex
-	 *            String
+	 * @param value String
+	 * @param regex String
 	 * @return String
 	 */
 	public static String excludeLast(String value, String regex) {
@@ -1034,10 +995,8 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 取出最後一個字串
 	 *
-	 * @param value
-	 *            String
-	 * @param regex
-	 *            String
+	 * @param value String
+	 * @param regex String
 	 * @return String
 	 */
 	public static String extractLast(String value, String regex) {
@@ -1065,12 +1024,9 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 取出中間字串
 	 *
-	 * @param value
-	 *            String
-	 * @param begRegex
-	 *            String
-	 * @param endRegex
-	 *            String
+	 * @param value    String
+	 * @param begRegex String
+	 * @param endRegex String
 	 * @return String
 	 */
 	public static String extractBetween(String value, String begRegex, String endRegex) {
@@ -1329,8 +1285,7 @@ public final class StringHelper extends BaseHelperSupporter {
 	/**
 	 * 隨機ip
 	 *
-	 * @param prefixIp
-	 *            前綴 192.168.1.1-254
+	 * @param prefixIp 前綴 192.168.1.1-254
 	 * @return
 	 */
 	public static String randomIp(String prefixIp) {
@@ -1339,6 +1294,31 @@ public final class StringHelper extends BaseHelperSupporter {
 			result.append(prefixIp);
 			result.append(".");
 			result.append(NumberHelper.randomInt(1, 255));
+		}
+		return result.toString();
+	}
+
+	/**
+	 * 產生UUID
+	 * 
+	 * @param length     長度
+	 * @param spacing    空白
+	 * @param spacerChar 空白字元
+	 * @return
+	 * 
+	 * randomUUID(16,-1,'\0')
+	 */
+	public static String randomUUID(int length, int spacing, char spacerChar) {
+		StringBuilder result = new StringBuilder();
+		int spacer = 0;
+		while (length > 0) {
+			if (spacer == spacing) {
+				result.append(spacerChar);
+				spacer = 0;
+			}
+			length--;
+			spacer++;
+			result.append(NumberHelper.randomChar());
 		}
 		return result.toString();
 	}

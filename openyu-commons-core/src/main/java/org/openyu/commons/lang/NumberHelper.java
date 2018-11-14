@@ -91,10 +91,13 @@ public final class NumberHelper extends BaseHelperSupporter {
 
 	public static final Double DOUBLE_MINUS_ONE = new Double(-1d);
 
+	// 基本算法: linear congruential pseudorandom number generator (LGC),
 	// 每次執行,若seed都是一樣,則都會得到相同的結果
-	public static final Random random = new Random(System.nanoTime());
+	// 缺點: 可以從結果容易計算出種子值, 因此可以預測出下一個結果的隨機數
+	// 改善: 改用SecureRandom
+	// public static final Random random = new Random(System.nanoTime());
 
-	private static SecureRandom secureRandom = null;
+	private static Random random = null;
 
 	public static final String SHA1PRNG = "SHA1PRNG";
 
@@ -107,6 +110,8 @@ public final class NumberHelper extends BaseHelperSupporter {
 	// 萬位數
 	public static final int TEN_THOUSAND_DIGIT = 10000;
 
+	private static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz1234567890";
+
 	static {
 		new Static();
 	}
@@ -114,8 +119,8 @@ public final class NumberHelper extends BaseHelperSupporter {
 	protected static class Static {
 		public Static() {
 			try {
-				secureRandom = SecureRandom.getInstance(SHA1PRNG);
-				secureRandom.setSeed(System.nanoTime());
+				random = SecureRandom.getInstance(SHA1PRNG);
+				random.setSeed(System.nanoTime());
 			} catch (NoSuchAlgorithmException ex) {
 				ex.printStackTrace();
 			}
@@ -879,8 +884,7 @@ public final class NumberHelper extends BaseHelperSupporter {
 	/**
 	 * 除法,預設精確到小數點以下10位
 	 *
-	 * @param value
-	 *            Object
+	 * @param value Object
 	 * @return double
 	 */
 	public static double divide(Object value1, Object value2, int scale, double defaultValue1, double defaultValue2,
@@ -1043,10 +1047,8 @@ public final class NumberHelper extends BaseHelperSupporter {
 	 * <li>比較兩個 -0.0==+0.0 => true,=> 改為 false;
 	 * <ul>
 	 *
-	 * @param value1
-	 *            double
-	 * @param value2
-	 *            double
+	 * @param value1 double
+	 * @param value2 double
 	 * @return int
 	 */
 	public static int compare(double value1, double value2) {
@@ -1094,10 +1096,8 @@ public final class NumberHelper extends BaseHelperSupporter {
 	 * <li>比較兩個 -0.0==+0.0 => true,=> 改為 false;
 	 * <ul>
 	 *
-	 * @param value1
-	 *            float
-	 * @param value2
-	 *            float
+	 * @param value1 float
+	 * @param value2 float
 	 * @return int
 	 */
 	public static int compare(float value1, float value2) {
@@ -1183,8 +1183,7 @@ public final class NumberHelper extends BaseHelperSupporter {
 	/**
 	 * 如:70%機率 -> randomWin(7000,10000) ->70/10000
 	 *
-	 * @param rateValue
-	 *            成功機率 0 <= rateValue < maxValue
+	 * @param rateValue 成功機率 0 <= rateValue < maxValue
 	 * @return
 	 */
 	public static boolean randomWin(int rateValue, int maxValue) {
@@ -1198,8 +1197,7 @@ public final class NumberHelper extends BaseHelperSupporter {
 	/**
 	 * 如:70%機率 -> randomWin(0.7)
 	 *
-	 * @param rateValue
-	 *            成功機率 0 <= rate < 1
+	 * @param rateValue 成功機率 0 <= rate < 1
 	 * @return
 	 */
 	public static boolean randomWin(double rateValue) {
@@ -1213,6 +1211,17 @@ public final class NumberHelper extends BaseHelperSupporter {
 	 */
 	public static boolean randomBoolean() {
 		return random.nextBoolean();
+	}
+
+	/**
+	 * 隨機字元
+	 * 
+	 * abcdefghijklmnopqrstuvwxyz1234567890
+	 * 
+	 * @return
+	 */
+	public static char randomChar() {
+		return ALPHABET.charAt(random.nextInt(ALPHABET.length()));
 	}
 
 	/**
@@ -1414,36 +1423,36 @@ public final class NumberHelper extends BaseHelperSupporter {
 		return random.nextDouble() * (maxValue - minValue + 1) + minValue;
 	}
 
-	/**
-	 * 隨機整數 Integer.MIN_VALUE <= i < Integer.MAX_VALUE,無檢查是否重覆
-	 *
-	 * @return
-	 */
-	public static int secureRandomInt() {
-		return secureRandom.nextInt();
-	}
-
-	/**
-	 * 隨機整數 0 <= i < maxValue,無檢查是否重覆
-	 *
-	 * This would return a value from 0 (inclusive) to maxvalue (exclusive).
-	 *
-	 * @param maxValue
-	 * @return
-	 */
-	public static int secureRandomInt(int maxValue) {
-		return secureRandom.nextInt(maxValue);
-	}
-
-	/**
-	 * 隨機整數 minValue <= i <= maxValue,無檢查是否重覆
-	 *
-	 * @param minValue
-	 * @param maxValue
-	 */
-	public static int secureRandomInt(int minValue, int maxValue) {
-		return secureRandom.nextInt(maxValue - minValue + 1) + minValue;
-	}
+//	/**
+//	 * 隨機整數 Integer.MIN_VALUE <= i < Integer.MAX_VALUE,無檢查是否重覆
+//	 *
+//	 * @return
+//	 */
+//	public static int secureRandomInt() {
+//		return random.nextInt();
+//	}
+//
+//	/**
+//	 * 隨機整數 0 <= i < maxValue,無檢查是否重覆
+//	 *
+//	 * This would return a value from 0 (inclusive) to maxvalue (exclusive).
+//	 *
+//	 * @param maxValue
+//	 * @return
+//	 */
+//	public static int secureRandomInt(int maxValue) {
+//		return secureRandom.nextInt(maxValue);
+//	}
+//
+//	/**
+//	 * 隨機整數 minValue <= i <= maxValue,無檢查是否重覆
+//	 *
+//	 * @param minValue
+//	 * @param maxValue
+//	 */
+//	public static int secureRandomInt(int minValue, int maxValue) {
+//		return secureRandom.nextInt(maxValue - minValue + 1) + minValue;
+//	}
 
 	public static byte safeGet(Byte value) {
 		return (value != null ? value : DEFAULT_BYTE);
@@ -1540,8 +1549,7 @@ public final class NumberHelper extends BaseHelperSupporter {
 	/**
 	 * 比例, rate/10000
 	 *
-	 * @param rate
-	 *            萬分數
+	 * @param rate 萬分數
 	 * @return
 	 */
 	public static double ratio(int rate) {

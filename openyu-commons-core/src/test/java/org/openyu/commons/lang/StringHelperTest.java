@@ -355,4 +355,11 @@ public class StringHelperTest extends BaseTestSupporter {
 		assertTrue(result.size() > 0);
 	}
 
+	@Test
+	@BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 1, concurrency = 100)
+	public void randomUUID() {
+		String result = StringHelper.randomUUID(16, -1, '\0');
+		System.out.println(result);
+	}
+
 }
