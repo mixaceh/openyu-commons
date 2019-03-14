@@ -2,6 +2,7 @@ package org.openyu.commons.io;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.Path;
 import java.util.*;
 
 //#issue: jdk不支援中文檔名
@@ -24,6 +25,8 @@ import org.openyu.commons.model.supporter.BaseModelSupporter;
 import org.openyu.commons.security.SecurityHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 
 public class FileHelper implements Supporter {
 
@@ -412,7 +415,7 @@ public class FileHelper implements Supporter {
 	 * @param name
 	 * @return
 	 */
-	public static InputStream getResourceStream(String name) {
+	public static InputStream getResourceAsStream(String name) {
 		if (name == null) {
 			return null;
 		}
@@ -430,13 +433,13 @@ public class FileHelper implements Supporter {
 		Properties result = null;
 		InputStream in = null;
 		try {
-			in = getResourceStream(name);
+			in = getResourceAsStream(name);
 			if (in != null) {
 				result = new Properties();
 				result.load(in);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		} finally {
 			// 關閉串流
 			IoHelper.close(in);
@@ -461,8 +464,7 @@ public class FileHelper implements Supporter {
 	 * 可建立不存在的子目錄
 	 * 
 	 * @param pathName
-	 * @param includeFileName
-	 *            目錄名稱是否包含檔名
+	 * @param includeFileName 目錄名稱是否包含檔名
 	 * @return
 	 */
 	public static boolean md(String pathName, boolean includeFileName) {
@@ -493,7 +495,7 @@ public class FileHelper implements Supporter {
 				}
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		}
 		return result;
 	}
@@ -507,12 +509,8 @@ public class FileHelper implements Supporter {
 	public static boolean md(File file) {
 		boolean result = false;
 		//
-		try {
-			if (isNotExist(file)) {
-				result = file.mkdirs();
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		if (isNotExist(file)) {
+			result = file.mkdirs();
 		}
 		return result;
 	}
@@ -576,7 +574,7 @@ public class FileHelper implements Supporter {
 				}
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		}
 
 		return result;
@@ -681,7 +679,7 @@ public class FileHelper implements Supporter {
 				}
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		}
 		//
 		return result;
@@ -735,7 +733,7 @@ public class FileHelper implements Supporter {
 				}
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		}
 		//
 		return result.toString();
@@ -805,7 +803,7 @@ public class FileHelper implements Supporter {
 				}
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		}
 		//
 		return result;
@@ -947,7 +945,7 @@ public class FileHelper implements Supporter {
 				result.setOrigFile(file);
 				result.setDestName(encryptDir + File.separator + encryptFileName);
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				// ex.printStackTrace();
 			} finally {
 				// 關閉串流
 				IoHelper.close(writer);
@@ -1004,7 +1002,7 @@ public class FileHelper implements Supporter {
 				// 檔名,decryptFromHex
 				String decryptFileName = ByteHelper
 						.toString(SecurityHelper.decryptHex(file.getName(), secretKey, algorithm));
-						// System.out.println("fileName: " + decryptFileName);
+				// System.out.println("fileName: " + decryptFileName);
 
 				// 內容,decryptFromBase64
 				byte[] contents = IoHelper.read(file);
@@ -1021,7 +1019,7 @@ public class FileHelper implements Supporter {
 				result.setDestName(decryptDir + File.separator + decryptFileName);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		} finally {
 			// 關閉串流
 			IoHelper.close(out);
@@ -1052,10 +1050,8 @@ public class FileHelper implements Supporter {
 	 * 
 	 * 支援中文目錄名,檔名
 	 * 
-	 * @param pathName
-	 *            來源目錄
-	 * @param zipName
-	 *            目的zip檔
+	 * @param pathName 來源目錄
+	 * @param zipName  目的zip檔
 	 * @return
 	 */
 	public static File zipDir(File file, String zipName) {
@@ -1086,7 +1082,7 @@ public class FileHelper implements Supporter {
 				result = new File(zipName);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		} finally {
 			// 關閉串流
 			IoHelper.close(out);
@@ -1121,10 +1117,8 @@ public class FileHelper implements Supporter {
 	/**
 	 * 解壓縮
 	 * 
-	 * @param zipName
-	 *            來源zip檔
-	 * @param pathName
-	 *            輸出目錄
+	 * @param zipName  來源zip檔
+	 * @param pathName 輸出目錄
 	 * @return
 	 */
 	public static String unzip(File zipName, String pathName) {
@@ -1162,7 +1156,7 @@ public class FileHelper implements Supporter {
 								out.write(contents, 0, len);
 							}
 						} catch (Exception ex) {
-							ex.printStackTrace();
+							// ex.printStackTrace();
 						} finally {
 							// 關閉串流
 							IoHelper.close(out);
@@ -1180,7 +1174,7 @@ public class FileHelper implements Supporter {
 					}
 				}
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				// ex.printStackTrace();
 			}
 		}
 		return result;
@@ -1207,5 +1201,27 @@ public class FileHelper implements Supporter {
 	 */
 	public static boolean delete(File file) {
 		return FileUtils.deleteQuietly(file);
+	}
+
+	/**
+	 * 載入檔案成為資源
+	 * 
+	 * @param path
+	 * @param fileName
+	 * @return
+	 */
+	public static Resource loadFileAsResource(Path path, String fileName) {
+		Resource result = null;
+		try {
+			Path filePath = path.resolve(fileName).normalize();
+			result = new UrlResource(filePath.toUri());
+			if (result.exists()) {
+				return result;
+			}
+		} catch (MalformedURLException ex) {
+			// ex.printStackTrace();
+		}
+		//
+		return result;
 	}
 }

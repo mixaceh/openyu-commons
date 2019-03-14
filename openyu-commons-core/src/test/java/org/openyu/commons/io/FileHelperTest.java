@@ -247,7 +247,7 @@ public class FileHelperTest {
 		int count = 1;// 100w
 		long beg = System.currentTimeMillis();
 		for (int i = 0; i < count; i++) {
-			result = FileHelper.getResourceStream(value);
+			result = FileHelper.getResourceAsStream(value);
 		}
 		long end = System.currentTimeMillis();
 		System.out.println(count + " times: " + (end - beg) + " mills. ");
@@ -258,7 +258,7 @@ public class FileHelperTest {
 
 		// 少了個 "/"
 		value = "log4j.properties";
-		result = FileHelper.getResourceStream(value);
+		result = FileHelper.getResourceAsStream(value);
 		// null
 		System.out.println(result);
 		assertNull(result);
