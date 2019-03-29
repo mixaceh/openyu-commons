@@ -495,7 +495,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 				throw e;
 			} catch (Throwable e) {
 				LOGGER.error(new StringBuilder("Exception encountered during start()").toString(), e);
-				throw new ServiceException(e);
+				throw new ServiceException(new StringBuilder("Initialization of Service failed").toString(), e);
 			} finally {
 				this.lock.unlock();
 			}
@@ -591,7 +591,7 @@ public abstract class BaseServiceSupporter extends BaseModelSupporter
 				throw e;
 			} catch (Throwable e) {
 				LOGGER.error(new StringBuilder("Exception encountered during shutdown()").toString(), e);
-				throw new ServiceException(e);
+				throw new ServiceException(new StringBuilder("Uninitialization of Service failed").toString(), e);
 			} finally {
 				this.lock.unlock();
 			}
