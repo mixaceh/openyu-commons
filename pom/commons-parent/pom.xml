@@ -49,7 +49,7 @@
 		<!--  
 		<spring.version>3.2.13.RELEASE</spring.version>
 		-->
-		<spring.version>4.2.5.RELEASE</spring.version>
+		<spring.version>5.3.19</spring.version>
 		<!--  
 		<hibernate.version>3.6.10.Final</hibernate.version>
 		-->
