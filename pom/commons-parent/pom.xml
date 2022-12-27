@@ -1844,7 +1844,7 @@
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast</artifactId>
-			<version>3.3.2</version>
+			<version>3.12.13</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.woodstox</groupId>
